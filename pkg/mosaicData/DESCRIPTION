@@ -1,0 +1,14 @@
+Package: mosaicData
+Type: Package
+Title: Project MOSAIC data sets
+Version: 0.0-0
+Date: 2011-1-12
+Author: Kevin M. Middleton <kmm@csusb.edu>, Randall Pruim <rpruim@calvin.edu>
+Maintainer: Kevin M. Middleton <kmm@csusb.edu>, Randall Pruim <rpruim@calvin.edu>
+Depends: R (>= 2.10), 
+Suggests:
+Description: Data sets for Project MOSAIC packages.
+License: GPL-2
+LazyLoad: yes
+LazyData: yes
+Encoding: UTF-8
