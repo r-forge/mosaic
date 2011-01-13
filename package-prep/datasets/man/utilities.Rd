@@ -19,9 +19,9 @@
     \item{\code{ccf}}{a numeric vector}
     \item{\code{thermsPerDay}}{a numeric vector}
     \item{\code{dur}}{a numeric vector}
-    \item{\code{totalbill}}{a numeric vector}
-    \item{\code{gasbill}}{a numeric vector}
-    \item{\code{elecbill}}{a numeric vector}
+    \item{\code{totalBill}}{a numeric vector}
+    \item{\code{gasBill}}{a numeric vector}
+    \item{\code{elecBill}}{a numeric vector}
     \item{\code{notes}}{a factor with levels \code{} \code{5.46 credit for "cost of gas"} \code{away for 10 days on vacation} \code{bad meter reading} \code{empty house} \code{high efficiency gas furnace and gas water heater installed} \code{housesitters} \code{transfer back from England}}
   }
 }
