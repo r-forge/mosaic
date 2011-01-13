@@ -1,0 +1,20 @@
+
+Project Mosaic Wish List
+------------------------
+
+Add things you wish were in our package below.  
+Add your name if you volunteer to get it done.
+
+col.mosaic() -- a lattice theme for project Mosaic 
+	(Randy will do, feel free to suggest colors)
+
+select and add data sets from Danny's stuff
+	(Danny?)
+
+document data sets from Danny's stuff
+	(Danny)
+
+D and antiD
+	(Randy will make a first go at this)
+
+
