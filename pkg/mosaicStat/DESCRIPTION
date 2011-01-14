@@ -3,7 +3,7 @@ Type: Package
 Title: Data sets and utilities from Project MOSAIC (mosaic-web.org)
 Version: 0.1-1
 Date: 2011-01-14
-Depends: lattice, grid
+Depends: lattice, grid, mosaicData
 Suggests: mosaicData
 Author: Randall Pruimm <rpruim@calvin.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edut>
