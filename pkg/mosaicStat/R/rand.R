@@ -7,5 +7,8 @@ rand = function(df=1, rdist=rnorm, args=list(), nr, seed=NULL ){
 	if (!is.null(seed)){
 		set.seed(seed)
 	}
-	return( matrix( do.call( rdist, args=c(list(n=df*nr), args) ), nr=nr ) )
+
+	result <-  matrix( do.call( rdist, args=c(list(n=df*nr), args) ), nr=nr ) 
+#	colnames(result) <- paste('rand',1:df,sep="")
+	return(result)
 }
