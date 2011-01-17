@@ -15,18 +15,16 @@ fplot <- function(f, xlim, ylim, n=100, args=list(), type='l', xlab, ylab,
 		stop( "Unable convert to a function." )
 	}
 
-	fList <- f
-	if (is.function(f) ) { 
+	if (! is.list(f) ) { 
 	 	fList = list(f)
 	}
 
-	if (missing(ylab)) {
-		if (length(fList) == 1) {
-			ylab=as.character(substitute(fList[[1]]))
+	if (missing(ylab)) { 
+		if ( is.character(fList[[1]]) ) {
+			ylab <- fList[[1]]
 		} else {
-			ylab="function value"
+			ylab='function value' 
 		}
-		ylab = as.character(f[[1]])
 	}
 
 	fList <- lapply(fList, makeFunction) 
