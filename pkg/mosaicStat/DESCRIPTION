@@ -1,10 +1,10 @@
 Package: mosaicStat
 Type: Package
 Title: Data sets and utilities from Project MOSAIC (mosaic-web.org)
-Version: 0.1-1
-Date: 2011-01-14
-Depends: lattice, grid, mosaicData
-Suggests: mosaicData
+Version: 0.1-3
+Date: 2011-01-17
+Depends: lattice, grid, mosaicData, mosaicCore
+Suggests: mosaic
 Author: Randall Pruimm <rpruim@calvin.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edut>
 Description: Data sets and utilities from Project MOSAIC (mosaic-web.org)

@@ -1,12 +1,12 @@
 Package: mosaicData
 Type: Package
 Title: Project MOSAIC data sets
-Version: 0.1-1
-Date: 2011-1-14
+Version: 0.1-3
+Date: 2011-1-17
 Author: Randall Pruim <rpruim@calvin.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edu>
-Depends: R (>= 2.10), 
-Suggests:
+Depends: R (>= 2.10), mosaicCore
+Suggests: mosaic
 Description: Data sets for Project MOSAIC packages.
 License: GPL-2
 LazyLoad: yes
