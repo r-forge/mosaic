@@ -16,7 +16,9 @@ fplot <- function(f, xlim, ylim, n=100, args=list(), type='l', xlab, ylab,
 	}
 
 	if (! is.list(f) ) { 
-	 	fList = list(f)
+	 	fList <- list(f)
+	} else {
+		fList <- f
 	}
 
 	if (missing(ylab)) { 
