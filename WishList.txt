@@ -5,6 +5,9 @@ Project Mosaic Wish List
 Add things you wish were in our package below.  
 Add your name if you volunteer to get it done.
 
+Wishes
+------
+
 col.mosaic() -- a lattice theme for project Mosaic 
 	(Randy will do, feel free to suggest colors)
 
@@ -14,6 +17,10 @@ select and add data sets from Danny's stuff
 document data sets from Danny's stuff
 	(Danny)
 
+method of easy fetching of data via web
+	* should look for rda, then csv, then tbl, then txt
+	* want a flexible way to specify places to look
+
 add capability to access an Apple Xgrid using R
 	(Nick)
 
@@ -22,4 +29,5 @@ Wishes Fulfilled
 D and antiD
 	(Randy did this -- but Danny should check)
 
+do, rand, sample, shuffle, etc. exist in first draft
 
