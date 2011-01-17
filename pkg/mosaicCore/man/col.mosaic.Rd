@@ -3,7 +3,7 @@
 \title{ Lattice Theme }
 \description{ A theme for use with lattice graphics. }
 \usage{
-col.fastR(bw = FALSE, lty=1:7)
+col.mosaic(bw = FALSE, lty=1:7)
 }
 \arguments{
   \item{bw}{whether color scheme should be "black and white"}
@@ -22,9 +22,9 @@ Randall Pruim
 \code{\link{show.settings}} 
 }
 \examples{
-trellis.par.set(theme=col.fastR(bw=TRUE))
+trellis.par.set(theme=col.mosaic(bw=TRUE))
 show.settings()
-trellis.par.set(theme=col.fastR())
+trellis.par.set(theme=col.mosaic())
 show.settings()
 }
 \keyword{ graphics }
