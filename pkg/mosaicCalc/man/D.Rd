@@ -41,8 +41,8 @@ Danny Kaplan
 %}
 
 \examples{
-plot(D(sin),xlim=c(-2*pi,2*pi))
-plot(antiD(sin),xlim=c(-2*pi,2*pi))
+fplot(D(sin),xlim=c(-2*pi,2*pi))
+fplot(antiD(sin),xlim=c(-2*pi,2*pi))
 f <- antiD(cos)
 f(1)
 sin(1)

@@ -9,6 +9,10 @@ R CMD check mosaicData
 R CMD check mosaicCalc
 R CMD check mosaicStat
 R CMD check mosaic
-sudo R CMD install mosaic*gz
+sudo R CMD install mosaicCore
+sudo R CMD install mosaicData
+sudo R CMD install mosaicCalc
+sudo R CMD install mosaicStat
+sudo R CMD install mosaic
 mv mosaic*gz Builds
 ls -lrth Builds

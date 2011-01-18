@@ -2,6 +2,12 @@
 fplot <- function(f, xlim, ylim, n=100, args=list(), type='l', xlab, ylab, 
 	... ) 
 {
+	if (is.character(f)) {
+		temp_ylab = f
+	} else {
+		temp_ylab = deparse(substitute(f))
+	}
+
 	makeFunction <- function(f) {
 		if ( is.function(f) ) {
 			return(f)
@@ -20,12 +26,14 @@ fplot <- function(f, xlim, ylim, n=100, args=list(), type='l', xlab, ylab,
 	} else {
 		fList <- f
 	}
+	f <- fList[[1]]
 
 	if (missing(ylab)) { 
-		if ( is.character(fList[[1]]) ) {
-			ylab <- fList[[1]]
-		} else {
+		if (length(fList) > 1) {
 			ylab='function value' 
+		} else {
+			ylab = temp_ylab
+#	    	ylab = paste(deparse(substitute(f)), "", sep="")
 		}
 	}
 
