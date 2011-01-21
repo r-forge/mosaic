@@ -1,0 +1,23 @@
+Package: RcmdrPlugin.mosaic
+Version: 0.1-1
+Date: 2011/1/21
+Title: Rcmdr plugin for use with mosaic packages
+Author: Randall Pruim <rpruim@calvin.edu> based on Rcmdr by John Fox 
+		<jfox@mcmaster.ca>, with contributions from Michael
+        Ash, Philippe Grosjean, Martin Maechler, Dan Putler, and Peter
+        Wolf.
+Maintainer: Randall Pruim <rpruim@calvin.edu>
+Depends: R (>= 2.1.0), tcltk
+Suggests: abind, car (>= 1.0-15), effects (>= 1.0-7), foreign, grid,
+        lattice, lmtest, MASS, mgcv, multcomp, nlme, nnet, relimp, Hmisc,
+		mosaicData, mosaicCalc, mosaicStat
+LazyLoad: yes
+LazyData: yes
+Description: Primarily this adds some lattice graphics counterparts to
+	the standard graphics options in Rcmdr.
+License: GPL (>=2)
+URL: http://www.r-project.org,
+        http://socserv.socsci.mcmaster.ca/jfox/Misc/Rcmdr/,
+        http://www.calvin.edu/~rpruim/R/
+Log-Exceptions:
+Models:

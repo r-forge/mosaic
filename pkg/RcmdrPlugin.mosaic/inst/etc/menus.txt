@@ -1,0 +1,14 @@
+# Some Rcmdr menus for the Calvin package
+# When the plug-in is loaded, these menus are merged with the standard Rcmdr menus
+
+# last modified: 13 Aug 2009 by R. Pruim
+
+#   type    menu/item      operation/parent  label                              command/menu                activation    install?
+    menu    latticeMenu     graphsMenu      ""                                  ""                          ""            ""
+    item    graphsMenu      cascade         "*Lattice Graphics..."              latticeMenu                 ""            "packageAvailable('lattice')"
+    item    summariesMenu   command         "*Numerical summaries..."           HmiscStatisticsTable        "numericP()"  "packageAvailable('Hmisc')"
+    item    latticeMenu     command         "*Select Lattice theme..."          latticeTheme                ""            "packageAvailable('lattice')"
+    item    latticeMenu     command         "*Show Lattice settings"            latticeShowSettings         ""            "packageAvailable('lattice')"
+    item    latticeMenu     command         "*Lattice histogram..."             latticeHistogram            "numericP(1)" "packageAvailable('lattice')"
+    item    latticeMenu     command         "*Lattice bwplot..."                bwPlot                      "numericP(1)" "packageAvailable('lattice')"
+    item    latticeMenu     command         "*Lattice xyplot..."                xyPlot                      "numericP(2)" "packageAvailable('lattice')"
