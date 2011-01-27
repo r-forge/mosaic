@@ -1,4 +1,5 @@
 #! /bin/bash
+mv mosaic*gz Builds
 R CMD build mosaicCore
 R CMD build mosaicData
 R CMD build mosaicCalc
@@ -14,5 +15,4 @@ sudo R CMD install mosaicData
 sudo R CMD install mosaicCalc
 sudo R CMD install mosaicStat
 sudo R CMD install mosaic
-mv mosaic*gz Builds
-ls -lrth Builds
+ls -lrthd *.tar.gz
