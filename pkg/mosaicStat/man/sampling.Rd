@@ -5,6 +5,7 @@
 \alias{sample.data.frame}
 \alias{deal}
 \alias{shuffle}
+\alias{flip}
 
 \title{ Random Samples and Permutations}
 \description{
@@ -27,6 +28,9 @@ shuffle(x, replace = TRUE, prob = NULL,
 deal(x, size, replace = FALSE, prob = NULL, 
 	groups = groups, orig.ids = FALSE)
 
+fplip(n=1, prob=.5, quiet=FALSE, verbose=!quiet)
+qfplip(n=1, prob=.5)
+
 }
 
 \arguments{
@@ -34,10 +38,12 @@ deal(x, size, replace = FALSE, prob = NULL,
 }
   \item{size}{ size of the sample
 }
+\item{n}{ number of coins to toss}
+
   \item{replace}{ a logical indicating whether sampling is to be done with
   replacement.
 }
-  \item{prob}{ A vector of probability weights for obtaining the elements of the object being sampled.
+  \item{prob}{ A vector of probability weights for obtaining the elements of the object being sampled, or the probability of heads for \code{flip} and \code{qflip}.
 }
   \item{groups}{ if present, shuffling is done within groups given by
   this vector ans \code{size}, if present, is ignored
@@ -45,6 +51,8 @@ deal(x, size, replace = FALSE, prob = NULL,
   \item{orig.ids}{ if \code{TRUE} and \code{x} is a data frame or a matrix,
   then the original locations of the data is recorded in the object returned.
 }
+	\item{quiet}{ If \code{TRUE}, suppress output.}
+	\item{verbose}{ If \code{FALSE}, suppress output.}
 }
 \value{
 an object of the same type as \code{x} unless \code{x} is an integer, which

@@ -15,6 +15,52 @@ shuffle <- function(x, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE)
 	return( sample(x, replace=replace, prob=prob) )
 }
 
+##############################################
+# coin toss
+#
+
+qflip <- function(...) {
+	as.numeric( flip(...) )
+}
+
+flip <- function(n=1, prob=.5, quiet=FALSE, save.flips=FALSE, verbose = !quiet) {
+	if ( ( prob > 1 && is.integer(prob) ) ) {  
+		# swap n and prob
+		temp <- prob
+		prob <- n
+		n <- temp
+	}
+	r <- rbinom(n,1,prob)
+	result <- c('T','H')[ 1 + r ]
+	heads <- sum(r)
+	attr(heads,"n") <- n
+	attr(heads,"prob") <- prob 
+	attr(heads,"sequence") <- result
+	attr(heads,"verbose") <- verbose
+	class(heads) <- 'cointoss'
+	return(heads)
+
+	# return(structure(heads, heads=heads, n=n, prob=prob, sequence=result, verbose=verbose, 
+	# class='cointoss'))
+
+}
+
+
+print.cointoss <- function(x) {
+	heads <- as.numeric(x)
+	other <- attributes(x)
+	if (other$verbose) {
+		cat(paste('\nFlipping ', other$n, ' coins [ Prob(Heads) = ', other$prob, ' ] ...\n', sep=""))
+	}
+
+	if (attributes(x)$verbose) {
+			cat('\n')
+			cat(paste(other$sequence, sep=" "))
+			cat('\n')
+			cat(paste('\nResult: ', heads, ' heads.\n\n', sep=""))
+	}
+}
+
 
 ##############################################
 # override base::sample with something fancier
