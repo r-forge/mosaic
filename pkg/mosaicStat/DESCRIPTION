@@ -1,8 +1,8 @@
 Package: mosaicStat
 Type: Package
 Title: Data sets and utilities from Project MOSAIC (mosaic-web.org)
-Version: 0.1-3
-Date: 2011-01-17
+Version: 0.1-4
+Date: 2011-01-30
 Depends: lattice, grid, mosaicData, mosaicCore
 Suggests: mosaic
 Author: Randall Pruimm <rpruim@calvin.edu>
