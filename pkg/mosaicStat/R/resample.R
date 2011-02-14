@@ -23,7 +23,7 @@ qflip <- function(...) {
 	as.numeric( flip(...) )
 }
 
-flip <- function(n=1, prob=.5, quiet=FALSE, save.flips=FALSE, verbose = !quiet) {
+flip <- function(n=1, prob=.5, quiet=FALSE, verbose = !quiet) {
 	if ( ( prob > 1 && is.integer(prob) ) ) {  
 		# swap n and prob
 		temp <- prob

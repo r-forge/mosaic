@@ -1,5 +1,5 @@
-\name{RcmdrPlugin.Calvin-internal}
-\title{Internal RcmdrPlugin.Calvin objects}
+\name{RcmdrPlugin.mosaic-internal}
+\title{Internal RcmdrPlugin.mosaic objects}
 \alias{meansd}
 \alias{fvnum}
 \alias{favstats}
@@ -14,6 +14,6 @@
 \alias{latticeHistogram}
 \alias{HmiscStatisticsTable}
 \alias{conditionBox}
-\description{Internal RcmdrPlugin.Calvin objects.}
+\description{Internal RcmdrPlugin.mosaic objects.}
 \details{These are not intended to be called by the user, but
 favstats and meansd could be of some use.}

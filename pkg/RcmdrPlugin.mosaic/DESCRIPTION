@@ -1,6 +1,6 @@
 Package: RcmdrPlugin.mosaic
-Version: 0.1-1
-Date: 2011/1/21
+Version: 0.1-2
+Date: 2011/2/13
 Title: Rcmdr plugin for use with mosaic packages
 Author: Randall Pruim <rpruim@calvin.edu> based on Rcmdr by John Fox 
 		<jfox@mcmaster.ca>, with contributions from Michael

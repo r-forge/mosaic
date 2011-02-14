@@ -28,8 +28,8 @@ shuffle(x, replace = TRUE, prob = NULL,
 deal(x, size, replace = FALSE, prob = NULL, 
 	groups = groups, orig.ids = FALSE)
 
-fplip(n=1, prob=.5, quiet=FALSE, verbose=!quiet)
-qfplip(n=1, prob=.5)
+flip(n=1, prob=.5, quiet=FALSE, verbose=!quiet)
+qflip(n=1, prob=.5)
 
 }
 
@@ -74,5 +74,10 @@ set.seed(52)
 deal(cards, 13)      # same as sample(cards, 13)
 resample(cards, 20)  # same as sample(..., replace=TRUE)
 sample(cards, groups=rep(1:4, each=13))
+flip()               # flip 1 coin
+flip(20)             # flip 20 coins
+qflip(20)            # flip 20 coins and only show the number of heads
+table(do(1000) * qflip(20))   # a table based on flipping 20 coins 1000 times
+table(do(1000) * qflip(20,.25))   # a table based on flipping 20 biased coins 1000 times
 }
 \keyword{ random }
