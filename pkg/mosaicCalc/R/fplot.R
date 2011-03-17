@@ -1,13 +1,13 @@
 
 fplot <- function(x, ...) { UseMethod('fplot') }
 
-fplot.default <- function(f, xlim, ylim, n=100, args=list(), type='l', xlab, ylab, 
+fplot.default <- function(x, xlim, ylim, n=100, args=list(), type='l', xlab, ylab, 
 	... ) 
 {
-	if (is.character(f)) {
-		temp_ylab = f
+	if (is.character(x)) {
+		temp_ylab = x
 	} else {
-		temp_ylab = deparse(substitute(f))
+		temp_ylab = deparse(substitute(x))
 	}
 
 	makeFunction <- function(f) {
@@ -23,10 +23,10 @@ fplot.default <- function(f, xlim, ylim, n=100, args=list(), type='l', xlab, yla
 		stop( "Unable convert to a function." )
 	}
 
-	if (! is.list(f) ) { 
-	 	fList <- list(f)
+	if (! is.list(x) ) { 
+	 	fList <- list(x)
 	} else {
-		fList <- f
+		fList <- x
 	}
 	f <- fList[[1]]
 
@@ -42,7 +42,7 @@ fplot.default <- function(f, xlim, ylim, n=100, args=list(), type='l', xlab, yla
 	fList <- lapply(fList, makeFunction) 
 
 	if ( !all( unlist( lapply(fList, is.function) ) ) ) {
-		stop('f must be a function or list of functions') 
+		stop('first argument must be a function or list of functions') 
 	}
 	if (missing(xlab)) {
 		xlab=names(formals(fList[[1]]))[1]
