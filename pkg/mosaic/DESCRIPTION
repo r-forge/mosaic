@@ -1,4 +1,4 @@
-Package: mosaicStat
+Package: mosaic
 Type: Package
 Title: Data sets and utilities from Project MOSAIC (mosaic-web.org)
 Version: 0.1-7
