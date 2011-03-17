@@ -1,8 +1,8 @@
 Package: mosaicCalc
 Type: Package
 Title: Calculus utilities from Project MOSAIC (mosaic-web.org)
-Version: 0.1-3
-Date: 2011-01-17
+Version: 0.1-4
+Date: 2011-03-16
 Depends: lattice, grid, mosaicCore
 Author: Randall Pruimm <rpruim@calvin.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edut>

@@ -1,8 +1,8 @@
 Package: mosaicCore
 Type: Package
 Title: Core data sets and utilities from Project MOSAIC (mosaic-web.org)
-Version: 0.1-3
-Date: 2011-01-17
+Version: 0.1-4
+Date: 2011-03-16
 Depends: lattice, grid
 Suggests: mosaic
 Author: Randall Pruimm <rpruim@calvin.edu>

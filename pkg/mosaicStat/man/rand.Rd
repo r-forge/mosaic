@@ -7,16 +7,16 @@ Random Regressors
 A utility function for producing random regressors.
 }
 \usage{
-rand(df = 1, seed = NULL, rdist=rnorm, args=list(...))
+rand(df=1, rdist=rnorm, args=list(), nr, seed=NULL )
 }
+
 \arguments{
   \item{df}{degrees of freedom, i.e., number of regressors}
   \item{rdist}{random distribution function for sampling}
   \item{args}{arguments for \code{rdist} }
   \item{nr}{number of rows in resulting matrix.  This can often be omitted in
-  the context of functions like \code{lm} where it is inferred from
-  the data frame, if one is provided.
-  }
+  the context of functions like \code{lm} where it is inferred from the data frame, 
+  if one is provided.}
   \item{seed}{seed for random number generation }
 }
 \value{

@@ -15,28 +15,35 @@
 }
 
 qdata <- function(p, vals, ... ) {
-	.check_for_quant_input(x)
+	.check_for_quant_input(vals)
 	if (any(p > 1) | any(p < 0) ) {
 		stop("Prob outside of range 0 to 1.  Do you perhaps want pdata?")
 	}
 	quantile(vals, probs=p, na.rm=TRUE, ... )
 }
 
-pdata = function(q, vals, ... ) {
-  .check_for_quant_input(x)
+pdata = function(q, vals, lower.tail=TRUE, ... ) {
+  .check_for_quant_input(vals)
 #  L = length(q)
 #  res = rep(0,L)
-  n <- sum( ! is.na(x) )
-  sapply( q, function(q) { sum( vals <= q , na.rm=TRUE ) } ) / n
+  n <- sum( ! is.na(vals) )
+  probs <- sapply( q, function(q) { sum( vals <= q , na.rm=TRUE ) } ) / n
+  if (lower.tail) { 
+  	return(probs)
+  } else {
+	return( 1 - probs )
+  }
 }
 
 rdata = function(n, vals, replace=TRUE, ... ) {
   sample( vals, n, ...)
 }
 
-ddata = function(x, vals, ...) {
+ddata = function(x, vals, log=FALSE, ...) {
 	n <- sum( ! is.na(vals) )
 	print(n)
-	sapply(x, function(x) { sum( vals == x, na.rm=TRUE ) /n } )
+	probs <- sapply(x, function(x) { sum( vals == x, na.rm=TRUE ) / n } )
+	if (log) { probs <- log(probs) }
+	return (probs)
 }
 

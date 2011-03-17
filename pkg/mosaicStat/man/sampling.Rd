@@ -1,11 +1,14 @@
 \name{sample}
 \alias{sample}
+\alias{resample}
 \alias{sample.matrix}
 \alias{sample.default}
 \alias{sample.data.frame}
 \alias{deal}
 \alias{shuffle}
-\alias{flip}
+\alias{rflip}
+\alias{nflip}
+\alias{print.cointoss}
 
 \title{ Random Samples and Permutations}
 \description{
@@ -14,22 +17,26 @@ randomization tests easier.
 }
 
 \usage{
-sample(x, size, replace = FALSE, prob = NULL, 
-	groups = NULL, orig.ids = FALSE) 
-sample.matrix(x, size, replace = FALSE, prob = NULL, 
-	groups = NULL, orig.ids = FALSE)
-sample.data.frame(x, size, replace = FALSE, prob = NULL, 
-	groups = NULL, orig.ids = FALSE)
-sample.default(x, size, replace = FALSE, prob = NULL, groups = NULL, 
-    orig.ids = FALSE) 
+sample(x, size, replace = FALSE, ...)
+
+\method{sample}{matrix}(x, size, replace = FALSE, prob = NULL, 
+	groups = NULL, orig.ids = FALSE, ...)
+\method{sample}{data.frame}(x, size, replace = FALSE, prob = NULL, 
+	groups = NULL, orig.ids = TRUE, ...)
+\method{sample}{default}(x, size, replace = FALSE, prob = NULL, groups = NULL, 
+    orig.ids = FALSE, ...) 
+
+resample (x, size, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE, ...) 
 
 shuffle(x, replace = TRUE, prob = NULL, 
 	groups = NULL, orig.ids = FALSE)
 deal(x, size, replace = FALSE, prob = NULL, 
-	groups = groups, orig.ids = FALSE)
+	groups = NULL, orig.ids = FALSE)
 
-flip(n=1, prob=.5, quiet=FALSE, verbose=!quiet)
-qflip(n=1, prob=.5)
+rflip(n=1, prob=.5, quiet=FALSE, verbose=!quiet)
+nflip(n=1, prob=.5, ...)
+
+\method{print}{cointoss}(x,...)
 
 }
 
@@ -43,7 +50,9 @@ qflip(n=1, prob=.5)
   \item{replace}{ a logical indicating whether sampling is to be done with
   replacement.
 }
-  \item{prob}{ A vector of probability weights for obtaining the elements of the object being sampled, or the probability of heads for \code{flip} and \code{qflip}.
+  \item{prob}{ A vector of probability weights for obtaining the elements of
+  the object being sampled, or the probability of heads for \code{rflip} and 
+  \code{nflip}.
 }
   \item{groups}{ if present, shuffling is done within groups given by
   this vector ans \code{size}, if present, is ignored
@@ -53,6 +62,7 @@ qflip(n=1, prob=.5)
 }
 	\item{quiet}{ If \code{TRUE}, suppress output.}
 	\item{verbose}{ If \code{FALSE}, suppress output.}
+	\item{\dots}{ Additional arguments.}
 }
 \value{
 an object of the same type as \code{x} unless \code{x} is an integer, which
@@ -74,10 +84,10 @@ set.seed(52)
 deal(cards, 13)      # same as sample(cards, 13)
 resample(cards, 20)  # same as sample(..., replace=TRUE)
 sample(cards, groups=rep(1:4, each=13))
-flip()               # flip 1 coin
-flip(20)             # flip 20 coins
-qflip(20)            # flip 20 coins and only show the number of heads
-table(do(1000) * qflip(20))   # a table based on flipping 20 coins 1000 times
-table(do(1000) * qflip(20,.25))   # a table based on flipping 20 biased coins 1000 times
+rflip()              # flip 1 coin
+rflip(20)            # flip 20 coins
+nflip(20)            # flip 20 coins and only show the number of heads
+table(do(1000) * nflip(20))   # a table based on flipping 20 coins 1000 times
+table(do(1000) * nflip(20,.25))   # a table based on flipping 20 biased coins 1000 times
 }
 \keyword{ random }

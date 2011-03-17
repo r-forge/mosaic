@@ -4,8 +4,8 @@
 deal    <- function(x, size, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FALSE) {
 	sample(x, size, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids )
 }
-resample <- function(x, size, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE) {
-	sample(x, size, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids )
+resample <- function(x, size, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE, ...) {
+	sample(x, size, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids, ...)
 }
 shuffle <- function(x, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE) 
 {
@@ -19,11 +19,11 @@ shuffle <- function(x, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE)
 # coin toss
 #
 
-qflip <- function(...) {
-	as.numeric( flip(...) )
+nflip <- function(n=1, prob=.5, ...) {
+	as.numeric( rflip(n=n, prob=prob, ...) )
 }
 
-flip <- function(n=1, prob=.5, quiet=FALSE, verbose = !quiet) {
+rflip <- function(n=1, prob=.5, quiet=FALSE, verbose = !quiet) {
 	if ( ( prob > 1 && is.integer(prob) ) ) {  
 		# swap n and prob
 		temp <- prob
@@ -46,7 +46,7 @@ flip <- function(n=1, prob=.5, quiet=FALSE, verbose = !quiet) {
 }
 
 
-print.cointoss <- function(x) {
+print.cointoss <- function(x, ...) {
 	heads <- as.numeric(x)
 	other <- attributes(x)
 	if (other$verbose) {
@@ -65,11 +65,11 @@ print.cointoss <- function(x) {
 ##############################################
 # override base::sample with something fancier
 #
-sample <- function (x, size, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FALSE) { 
+sample <- function (x, size, replace=FALSE, ...) {
 	UseMethod('sample') 
 }
 
-.shuffle_within = function( x, groups=NULL, replace=FALSE, prob=NULL, orig.ids=FALSE ){
+.shuffle_within = function( x, groups=NULL, replace=FALSE, prob=NULL, orig.ids=FALSE, ... ){
 	if (is.null(groups)) {
 		stop("Must specify groups to resample within.")
 	}
@@ -104,7 +104,7 @@ sample <- function (x, size, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FAL
 
 
 
-sample.default <- function(x, size, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FALSE) { 
+sample.default <- function(x, size, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FALSE, ...) { 
 	if (! is.null(groups) ) {
 		return(.shuffle_within(x, replace=replace, prob=prob, groups=groups, 
 			orig.ids=orig.ids))
@@ -115,7 +115,7 @@ sample.default <- function(x, size, replace=FALSE, prob=NULL, groups=NULL, orig.
 }
 
 
-sample.data.frame <- function(x, size, replace = FALSE, prob = NULL, groups=NULL, orig.ids=TRUE) {
+sample.data.frame <- function(x, size, replace = FALSE, prob = NULL, groups=NULL, orig.ids=TRUE, ...) {
 	if (! is.null(groups) ) {
 		return(
 			.shuffle_within(x, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids)
@@ -131,7 +131,7 @@ sample.data.frame <- function(x, size, replace = FALSE, prob = NULL, groups=NULL
 		if (length(ids) < 50) { return(data) } else {invisible(data)}
 }
 
-sample.matrix <- function(x, size, replace = FALSE, prob = NULL, groups=NULL, orig.ids=FALSE) {
+sample.matrix <- function(x, size, replace = FALSE, prob = NULL, groups=NULL, orig.ids=FALSE, ...) {
 	if (! is.null(groups) ) {
 		return(
 			.shuffle_within(x, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids)

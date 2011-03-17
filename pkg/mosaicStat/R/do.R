@@ -83,7 +83,7 @@ do = function(n=1, mode=NULL) {
 
 "*.repeater" = .do_repeats
 
-print.repeater = function(x) {
+print.repeater = function(x, ...) {
   print(paste('This repeats a command',x$n,'times. Use with *.'))
   invisible(x)
 }
