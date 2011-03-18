@@ -36,7 +36,7 @@ pdata = function(q, vals, lower.tail=TRUE, ... ) {
 }
 
 rdata = function(n, vals, replace=TRUE, ... ) {
-  sample( vals, n, ...)
+  sample( vals, n, replace=replace, ...)
 }
 
 ddata = function(x, vals, log=FALSE, ...) {
