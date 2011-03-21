@@ -20,7 +20,7 @@ rgeo <- function( n, long=c(-180,180), lat=c(-90,90), verbose=FALSE ) {
 	y <- y/r
 	z <- z/r
 
-	# now convert this to longitude and latitude
+	# now convert this to latitude and longitude 
 
 	lat <- asin(z) * 180 / pi
 	long1 <- asin(y) * 180 / pi
@@ -28,5 +28,5 @@ rgeo <- function( n, long=c(-180,180), lat=c(-90,90), verbose=FALSE ) {
 	if (verbose) {
 		return(data.frame(long=long, lat=lat, x=x, y=y, z=z))
 	}
-	return(data.frame(long=long, lat=lat))
+	return(data.frame(lat=lat, long=long))
 }
