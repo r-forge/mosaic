@@ -1,4 +1,6 @@
 \name{undocumented}
+\alias{dotPlot}
+\alias{panel.dotPlot}
 \alias{surround}
 \alias{adapt_seq}
 \alias{cps}

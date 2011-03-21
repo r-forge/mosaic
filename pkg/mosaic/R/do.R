@@ -27,7 +27,8 @@ do = function(n=1, mode=NULL) {
 		return( object$coef$fixed )
 	}
 	if (any(class(object)=='lm') ) {
-		return( coef(object) )
+		sobject <- summary(object)
+		return( c( coef(object), sigma=sobject$sigma, "r-squared" = sobject$r.squared ) )
 	}
 	return(object)
 }
