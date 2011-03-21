@@ -1,4 +1,5 @@
 \name{undocumented}
+\alias{surround}
 \alias{adapt_seq}
 \alias{cps}
 \alias{galton}
