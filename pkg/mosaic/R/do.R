@@ -28,7 +28,10 @@ do = function(n=1, mode=NULL) {
 	}
 	if (any(class(object)=='lm') ) {
 		sobject <- summary(object)
-		return( c( coef(object), sigma=sobject$sigma, "r-squared" = sobject$r.squared ) )
+		result <-  c( coef(object), sigma=sobject$sigma, "r-squared" = sobject$r.squared ) 
+		names(result) <- gsub('\\(','', names(result))
+		names(result) <- gsub('\\)','', names(result))
+		return(result)
 	}
 	if (any(class(object)=='cointoss')) {
 		return( c(n=attr(object,'n'), 
