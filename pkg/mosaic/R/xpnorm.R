@@ -2,12 +2,11 @@ xpnorm <-
 function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4, 
     lower.tail = TRUE, log.p = FALSE, xlim, ylim, ...) 
 {
-    p = pnorm(q, mean = mean, sd = sd, lower.tail = lower.tail, 
-        log.p = log.p)
+    p = pnorm(q, mean = mean, sd = sd) 
     z = (q - mean)/sd
     if (verbose) {
 		cat("\n")
-		cat(paste("If X ~ N(",mean,",",sd,"), then \n\n"))
+		cat(paste("If X ~ N(",mean,",",sd,"), then \n\n",sep=""))
         cat(paste("\tP(X <= ", q, ") = P(Z <= ", round(z, 3), 
             ") = ", round(p,digits), "\n", sep = ""))
         cat(paste("\tP(X >  ", q, ") = P(Z >  ", round(z, 3), 
@@ -40,8 +39,8 @@ function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4,
                   textloc = c(q, ymax * 0.8)
                   textloc = c(q, 1.2 * ymax)
                 }
-                panel.segments(q, 0, q, 1.1 * ymax, #textloc[2] - 0.1 * ymax, 
-                  col = "forestgreen", lwd=2)
+                panel.segments(q, 0, q, unit(ymax,'native') + unit(1.5,'lines'), 
+                  col = "forestgreen", lwd=3)
                 #panel.segments(q, textloc[2] + 0.1 * ymax, q, 
                 #  ylim[2], col = "forestgreen")
                 grid.text(x=q, y=unit(ymax,'native') + unit(2.4,'lines'),  default.units='native',
@@ -50,14 +49,28 @@ function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4,
                 grid.text(x=q, y=unit(ymax,'native') + unit(2.4,'lines'), default.units='native',
                   paste("(z=", round(z, 3), ")", sep = ""), 
 					just = c('center','top'),  gp=gpar(cex = 1.2))
-                grid.text(x=q, y=unit(ymax,'native') + unit(.3,'lines'), default.units='native',
-					paste(round(p, digits), "<-- "), 
+				grid.lines( gp=gpar(lwd=1.5),
+					x=unit.c( unit(q,'native'), unit(q,'native') - unit(2,'char') ),
+					y=unit(ymax,'native') + unit(.6,'lines'),
+					arrow=arrow(angle=20,length=unit(.75,'char'))
+					)
+                grid.text(
+					x=unit(q,'native') - unit(2,'char'), 
+					y=unit(ymax,'native') + unit(.3,'lines'), default.units='native',
+					paste(round(p, digits), ""), 
 					just = c('right','bottom'),  gp=gpar(cex = 1.2))
-                grid.text(x=q, y=unit(ymax,'native') + unit(.3,'lines'), default.units='native',
-					paste(" -->", round(1 - p, digits)), 
+				grid.lines( gp=gpar(lwd=1.5),
+					x=unit.c( unit(q,'native'), unit(q,'native') + unit(2,'char') ),
+					y=unit(ymax,'native') + unit(.6,'lines'),
+					arrow=arrow(angle=20,length=unit(.75,'char'))
+					)
+                grid.text(
+					x=unit(q,'native') + unit(2,'char'), 
+					y=unit(ymax,'native') + unit(.3,'lines'), default.units='native',
+					paste("", round(1 - p, digits)), 
 					just = c('left','bottom'),  gp=gpar(cex = 1.2))
             }, ...)
         print(plot)
     }
-    return(p)
+    return(pnorm(q, mean = mean, sd = sd, lower.tail = lower.tail, log.p = log.p))
 }
