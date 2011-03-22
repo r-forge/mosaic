@@ -94,7 +94,7 @@ do = function(n=1, mode=NULL) {
 		result[k,] <- .cull_for_do(f()); # was (...)
 	}
 
-	if (dim(result)[2] == 1 & is.null(nm) ) return(c(result)) else return(result);
+	if (dim(result)[2] == 1 & is.null(nm) ) return(data.frame(result=result[,1])) else return(result);
 }
 
 "*.repeater" = .do_repeats
