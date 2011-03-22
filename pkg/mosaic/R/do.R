@@ -31,10 +31,22 @@ do = function(n=1, mode=NULL) {
 		return( c( coef(object), sigma=sobject$sigma, "r-squared" = sobject$r.squared ) )
 	}
 	if (any(class(object)=='cointoss')) {
-		return( c(n=attr(object,'n'), heads=sum(attr(object,'sequence')=='H')) )
+		return( c(n=attr(object,'n'), 
+				heads=sum(attr(object,'sequence')=='H'),
+				tails=sum(attr(object,'sequence')=='T')
+				) )
 	}
-	return(object)
-}
+	if (is.matrix(object) && ncol(object) == 1) {
+		nn <- rownames(object)
+		object <- as.vector(object)
+		if (is.null(nn)) {
+			names(object) <- paste('v',1:length(object),sep="")
+		} else {
+			names(object) <- nn
+		}
+		return(object)
+	}
+	return(object) }
 
 
 .do_repeats= function(a,f){
