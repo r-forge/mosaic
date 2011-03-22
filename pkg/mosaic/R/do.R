@@ -30,6 +30,9 @@ do = function(n=1, mode=NULL) {
 		sobject <- summary(object)
 		return( c( coef(object), sigma=sobject$sigma, "r-squared" = sobject$r.squared ) )
 	}
+	if (any(class(object)=='cointoss')) {
+		return( c(n=attr(object,'n'), heads=sum(attr(object,'sequence')=='H')) )
+	}
 	return(object)
 }
 
