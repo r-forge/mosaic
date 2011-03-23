@@ -8,7 +8,7 @@
 \usage{
 fplot(x, ...)
 
-\method{fplot}{default} (x, xlim, ylim, n = 100, args = list(), type = "l", xlab, ylab, ...) 
+\method{fplot}{default} (x, xlim, ylim, n = 200, args = list(), type = "l", xlab, ylab, ...) 
 
 }
 

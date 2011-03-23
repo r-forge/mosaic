@@ -16,9 +16,7 @@ removed from their names.
 \usage{
 xchisq.test(...)
 
-xhistogram(x, data, ..., type = "density", labels = F, density = FALSE, 
-	panel=panel.xhistogram,
-    fit = NULL, start = NULL, groups=NULL) 
+xhistogram(x, data, ...)
 
 xpnorm(q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4, 
 	lower.tail = TRUE, log.p = FALSE, xlim, ylim, ...)
@@ -32,6 +30,16 @@ panel.xqqmath(x, qqmathline = !(fitline || idline), idline = FALSE, fitline = FA
     slope = NULL, intercept = NULL, overlines = FALSE, groups=NULL, ...,
     col.line = trellis.par.get("add.line")$col, pch = 16, lwd = 2, 
     lty = 2 ) 
+
+panel.xhistogram(x, 
+	dcol = trellis.par.get("plot.line")$col, dlwd = 2, 
+    gcol = trellis.par.get("add.line")$col, glwd = 2, 
+	fcol = trellis.par.get("superpose.polygon")$col,
+	dmath = dnorm, 
+	verbose = FALSE,
+    dn = 100, args = NULL, labels = FALSE, density = FALSE, fit = NULL, 
+    start = NULL, type = "density", v, h, groups=NULL, breaks, 
+	stripes=c('vertical','horizontal','none'), alpha=1, ...) 
 }
 \arguments{
   \item{\dots}{ arguments passed to other functions. }

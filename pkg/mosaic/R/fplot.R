@@ -1,7 +1,7 @@
 
 fplot <- function(x, ...) { UseMethod('fplot') }
 
-fplot.default <- function(x, xlim, ylim, n=100, args=list(), type='l', xlab, ylab, 
+fplot.default <- function(x, xlim, ylim, n=200, args=list(), type='l', xlab, ylab, 
 	... ) 
 {
 	if (is.character(x)) {

@@ -1,11 +1,17 @@
-xhistogram <-
-function (x, data, ..., type = "density", labels = F, density = FALSE, 
-	panel=panel.xhistogram,
-    fit = NULL, start = NULL, groups=NULL) 
-{
-    histogram(x, data, groups, ..., panel = panel, type = type, fit = fit, 
-        start = start, labels = labels, density = density)
+.drop_from_list <- function( l, names ) {
+	for (n in names) {
+		if (n %in% names(l) ) {
+			dots[[n]] <- NULL
+		}
+	}
 }
+
+xhistogram <- function (x, data=NULL, ...) {
+  dots <- list(...)
+  .drop_from_list(dots, c('type', 'panel'))
+  histogram(x, data=data, panel=panel.xhistogram, type='density', ...)
+}
+
 
 
 panel.xhistogram <-
@@ -14,6 +20,7 @@ function (x,
     gcol = trellis.par.get("add.line")$col, glwd = 2, 
 	fcol = trellis.par.get("superpose.polygon")$col,
 	dmath = dnorm, 
+	verbose = FALSE,
     dn = 100, args = NULL, labels = FALSE, density = FALSE, fit = NULL, 
     start = NULL, type = "density", v, h, groups=NULL, breaks, 
 	stripes=c('vertical','horizontal','none'), alpha=1, ...) 
@@ -83,7 +90,7 @@ function (x,
 				)
 			}
 		}
-		print(hist.master)
+		if (verbose) { print(hist.master) }
 	} else {
     	panel.histogram(x, type = type, breaks=breaks, ...)
 	}
@@ -98,14 +105,14 @@ function (x,
         else if (type == "percent") {
             ss <- sum(h$counts)
             aa <- max(0.01 * h$counts/ss)
-            cat(h$counts)
-            cat("\n")
-            cat(h$counts/ss)
-            cat("\n")
-            cat(ss)
-            cat("\n")
-            print(h)
-            cat("\n")
+#            cat(h$counts)
+#            cat("\n")
+#            cat(h$counts/ss)
+#            cat("\n")
+#            cat(ss)
+#            cat("\n")
+#            print(h)
+#            cat("\n")
             grid.text(label = as.character(round(h$counts/ss, 
                 3)), x = h$mids, y = aa + (h$counts/ss), just = c("centre", 
                 "bottom"), default.units = "native")
@@ -157,8 +164,10 @@ function (x,
         args = list(mean = mean(x, na.rm = T), sd = sd(x, na.rm = T))
     }
     if (density) {
-        cat("args for density function:\n")
-        print(args)
+		if (verbose) {
+        	cat("args for density function:\n")
+        	print(args)
+		}
         panel.mathdensity(dmath = dmath, args = args, n = dn, 
             col = dcol, lwd = dlwd)
     }
