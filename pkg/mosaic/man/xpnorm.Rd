@@ -26,6 +26,7 @@ xqnorm(p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 5,
 \item{lower.tail}{logical.  If FALSE, use upper tail probabilities.}
 \item{log.p}{logical.  If TRUE, uses the log of probabilities.}
 \item{xlim, ylim}{limits for plotting.}
+\item{...}{additional arguments.}
 }
 
 \author{
@@ -41,16 +42,13 @@ Randall Pruim
 \code{\link{plot}}. 
 }
 \examples{
-# Physicians' Health Study data
-phs <- cbind(c(104,189),c(10933,10845)) 
-rownames(phs) <- c("aspirin","placebo") 
-colnames(phs) <- c("heart attack","no heart attack") 
-phs 
-xchisq.test(phs) 
+xpnorm(650, 500, 100)
+xqnorm(.75, 500, 100)
 if (require(manipulate)) {
   manipulate( xpnorm(score, 500, 100, verbose=verbose),
     score = slider(200,800),
 	verbose = checkbox(TRUE, label="Verbose Output")
   )
-}
+} 
+
 }

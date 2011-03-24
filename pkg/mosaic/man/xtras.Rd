@@ -16,12 +16,6 @@ xchisq.test(...)
 
 xhistogram(x, data, ...)
 
-xpnorm(q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4, 
-	lower.tail = TRUE, log.p = FALSE, xlim, ylim, ...)
-
-xqnorm(p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 5, 
-	lower.tail = TRUE, log.p = FALSE, ...)
-
 xqqmath(x, data=NULL, panel="panel.xqqmath", ...)
 
 panel.xqqmath(x, qqmathline = !(fitline || idline), idline = FALSE, fitline = FALSE, 
@@ -136,10 +130,4 @@ rownames(phs) <- c("aspirin","placebo")
 colnames(phs) <- c("heart attack","no heart attack") 
 phs 
 xchisq.test(phs) 
-if (require(manipulate)) {
-  manipulate( xpnorm(score, 500, 100, verbose=verbose),
-    score = slider(200,800),
-	verbose = checkbox(TRUE, label="Verbose Output")
-  )
-}
 }
