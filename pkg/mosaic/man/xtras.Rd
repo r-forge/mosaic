@@ -1,8 +1,6 @@
 \name{xtras}
 \alias{xchisq.test}
 \alias{xhistogram}
-\alias{xpnorm}
-\alias{xqnorm}
 \alias{xqqmath}
 \alias{panel.xqqmath}
 \alias{panel.xhistogram}
@@ -138,4 +136,10 @@ rownames(phs) <- c("aspirin","placebo")
 colnames(phs) <- c("heart attack","no heart attack") 
 phs 
 xchisq.test(phs) 
+if (require(manipulate)) {
+  manipulate( xpnorm(score, 500, 100, verbose=verbose),
+    score = slider(200,800),
+	verbose = checkbox(TRUE, label="Verbose Output")
+  )
+}
 }
