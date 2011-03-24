@@ -59,7 +59,7 @@
 				just = c('left','bottom'),  gp=gpar(cex = 1.2))
 		}, ...)
 
-	print(plot)
+	return(plot)
 }
 
 
