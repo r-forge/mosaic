@@ -64,7 +64,7 @@
 
 
 xpnorm <-
-function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4, 
+function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, invisible=FALSE, digits = 4, 
     lower.tail = TRUE, log.p = FALSE, xlim, ylim, ...) 
 {
     p = pnorm(q, mean = mean, sd = sd) 
@@ -81,13 +81,16 @@ function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4,
     if (plot & length(q) == 1) {
 		print(.plotnorm(p=p, q=q, mean, sd, xlim=xlim, ylim=ylim, digits=digits, ...))
     }
+	if (invisible) { 
+    	invisible(pnorm(q, mean = mean, sd = sd, lower.tail = lower.tail, log.p = log.p))
+	}
     return(pnorm(q, mean = mean, sd = sd, lower.tail = lower.tail, log.p = log.p))
 }
 
 
 xqnorm <-
-function (p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 5, 
-    lower.tail = TRUE, log.p = FALSE, xlim, ylim, ...) 
+function (p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4, 
+    lower.tail = TRUE, log.p = FALSE, xlim, ylim, invisible=FALSE, ...) 
 {
     q = qnorm(p, mean = mean, sd = sd, lower.tail = lower.tail, 
         log.p = log.p)
@@ -100,5 +103,8 @@ function (p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 5,
     if (plot & length(p) == 1) {
 		print(.plotnorm(p=p, q=q, mean, sd, xlim=xlim, ylim=ylim, digits=digits, ...))
     }
+	if (invisible) { 
+    	invisible(q)
+	}
     return(q)
 }
