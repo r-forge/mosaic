@@ -9,11 +9,15 @@ These functions all behave similarly to the functions with the initial \code{x}
 removed from their names but add more verbose output and graphics.
 }
 \usage{
-xpnorm(q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, invisible=FALSE, digits = 4, 
-	lower.tail = TRUE, log.p = FALSE, xlim, ylim, ...)
+xpnorm(q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, invisible = FALSE, 
+    digits = 4, lower.tail = TRUE, log.p = FALSE, xlim, ylim, 
+    vlwd = 2, vcol = trellis.par.get("add.line")$col, rot = 45, 
+    ...) 
 
-xqnorm(p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, invisible=FALSE, digits = 4, 
-	lower.tail = TRUE, log.p = FALSE, xlim, ylim, ...)
+xqnorm(p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4, 
+    lower.tail = TRUE, log.p = FALSE, xlim, ylim, invisible = FALSE, 
+    vlwd = 2, vcol = trellis.par.get("add.line")$col, rot = 45, 
+    ...) 
 
 }
 \arguments{
@@ -27,6 +31,8 @@ xqnorm(p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, invisible=FALSE, digits
 \item{lower.tail}{logical.  If FALSE, use upper tail probabilities.}
 \item{log.p}{logical.  If TRUE, uses the log of probabilities.}
 \item{xlim, ylim}{limits for plotting.}
+\item{vlwd, vcol}{line width and color for vertical lines}
+\item{rot}{angle of rotation for text labels}
 \item{...}{additional arguments.}
 }
 

@@ -1,4 +1,62 @@
-.plotnorm <- function(p, q, mean, sd, xlim, ylim, digits=4, ...) {
+
+# midpoints along a sequence
+.mid <- function(x) { 
+	x[-1] - .5 * diff(x)
+}
+
+.plot_multi_norm <- function(p, q, mean, sd, xlim, ylim, digits=4, dlwd=2, 
+    vlwd=2, vcol=trellis.par.get('add.line')$col,
+	rot=0, ...) 
+{
+	dots <- list(...)
+
+	if (! 'lty' %in% names(dots)) { dots$lty <- 1 }
+
+	z <- (q - mean) / sd
+			z <- (q - mean) / sd 
+	zmax = max(4, abs(z) * 1.6)
+	if (missing(xlim)) {
+		xlim = mean + c(-1, 1) * abs(zmax) * sd
+	}
+	ymax = dnorm(mean, mean = mean, sd = sd)
+	if (missing(ylim)) {
+		ylim = c(0, 1.4 * ymax)
+	}
+	xdata = seq(xlim[1], xlim[2], length.out=400)
+	ydata = dnorm(xdata, mean=mean, sd=sd)
+	groups = apply(sapply(xdata, function(x) {x < q}), 2, sum)
+
+	p <- c(0, p, 1)
+	q <- c(xlim[1], q, xlim[2])
+
+	plot <- do.call("xyplot", c(list(
+		ydata ~ xdata, 
+		xlim = xlim, ylim = ylim, 
+		groups = groups, type='h',
+		xlab = "", ylab = "density", 
+		panel = function(x, y, ...) {
+			panel.xyplot(x,y,...)
+			panel.segments(q, 0, q, unit(ymax,'native') + unit(.2,'lines'), 
+			  col = vcol, lwd=vlwd)
+			grid.text(x=.mid(q), y=unit(ymax,'native') + unit(1.0,'lines'), default.units='native',
+				rot=rot,
+				check.overlap=TRUE,
+			  	paste("", round(diff(p), 3), sep = ""), 
+				just = c('center','center'),  gp=gpar(cex = 1.0))
+			panel.mathdensity(dmath = dnorm, args = list(mean = mean, 
+			  sd = sd), lwd = dlwd, n = 100, col = "navy")
+		} 
+		), dots)
+	)
+
+	return(plot)
+}
+
+
+.plot_one_norm <- function(p, q, mean, sd, xlim, ylim, digits=4, 
+    vlwd=2, vcol=trellis.par.get('add.line')$col,
+	...) 
+{
 	z <- (q - mean) / sd
 			z <- (q - mean) / sd 
 	zmax = max(4, abs(z) * 1.6)
@@ -28,7 +86,7 @@
 			  textloc = c(q, 1.2 * ymax)
 			}
 			panel.segments(q, 0, q, unit(ymax,'native') + unit(1.5,'lines'), 
-			  col = "forestgreen", lwd=3)
+			  col = vcol, lwd=vlwd)
 			#panel.segments(q, textloc[2] + 0.1 * ymax, q, 
 			#  ylim[2], col = "forestgreen")
 			grid.text(x=q, y=unit(ymax,'native') + unit(2.4,'lines'),  default.units='native',
@@ -65,7 +123,9 @@
 
 xpnorm <-
 function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, invisible=FALSE, digits = 4, 
-    lower.tail = TRUE, log.p = FALSE, xlim, ylim, ...) 
+    lower.tail = TRUE, log.p = FALSE, xlim, ylim, 
+    vlwd=2, vcol=trellis.par.get('add.line')$col,
+	rot=45, ...) 
 {
     p = pnorm(q, mean = mean, sd = sd) 
     z = (q - mean)/sd
@@ -79,7 +139,12 @@ function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, invisible=FALSE, dig
         cat("\n")
     }
     if (plot & length(q) == 1) {
-		print(.plotnorm(p=p, q=q, mean, sd, xlim=xlim, ylim=ylim, digits=digits, ...))
+		print(.plot_one_norm(p=p, q=q, mean, sd, xlim=xlim, ylim=ylim, digits=digits, 
+		      vlwd=vlwd, vcol=vcol, rot=rot, ...))
+    }
+    if (plot & length(q) > 1) {
+			print(.plot_multi_norm(p=p, q=q, mean, sd, xlim=xlim, ylim=ylim, digits=digits, 
+		      vlwd=vlwd, vcol=vcol, rot=rot, ...))
     }
 	if (invisible) { 
     	invisible(pnorm(q, mean = mean, sd = sd, lower.tail = lower.tail, log.p = log.p))
@@ -90,7 +155,9 @@ function (q, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, invisible=FALSE, dig
 
 xqnorm <-
 function (p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4, 
-    lower.tail = TRUE, log.p = FALSE, xlim, ylim, invisible=FALSE, ...) 
+    lower.tail = TRUE, log.p = FALSE, xlim, ylim, invisible=FALSE, 
+    vlwd=2, vcol=trellis.par.get('add.line')$col,
+	rot=45, ...) 
 {
     q = qnorm(p, mean = mean, sd = sd, lower.tail = lower.tail, 
         log.p = log.p)
@@ -101,7 +168,12 @@ function (p, mean = 0, sd = 1, plot = TRUE, verbose = TRUE, digits = 4,
         cat("\n")
     }
     if (plot & length(p) == 1) {
-		print(.plotnorm(p=p, q=q, mean, sd, xlim=xlim, ylim=ylim, digits=digits, ...))
+		print(.plot_one_norm(p=p, q=q, mean, sd, xlim=xlim, ylim=ylim, digits=digits, 
+		      vlwd=vlwd, vcol=vcol, rot=rot, ...))
+    }
+    if (plot & length(p) > 1) {
+		print(.plot_multi_norm(p=p, q=q, mean, sd, xlim=xlim, ylim=ylim, digits=digits, 
+		      vlwd=vlwd, vcol=vcol, rot=rot, ...))
     }
 	if (invisible) { 
     	invisible(q)
