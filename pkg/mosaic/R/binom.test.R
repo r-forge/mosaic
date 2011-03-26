@@ -22,6 +22,7 @@ binom.test.formula <- function(
 	conf.level = 0.95, success, data.name, ...) 
 {
     formula <- x
+
 	data <- n
     dots <- list(...)
 #    groups <- eval(substitute(groups), data, environment(formula))
@@ -36,8 +37,9 @@ binom.test.formula <- function(
     if (length(cond) == 0) {
         cond <- list(gl(1, length(x)))
     }
+
 	if (missing(data.name)) {
-		data.name <- paste( deparse(substitute(data)), "$", form$right.name, sep="" )
+		data.name <- paste( deparse(substitute(n)), "$", form$right.name, sep="" )
 	}
 
 	binom.test(x, p=p, alternative=alternative, 
