@@ -49,9 +49,18 @@ binom.test.numeric <- function(
 	alternative = c("two.sided", "less", "greater"), 
 	conf.level = 0.95, success, data.name, ...) 
 {
-	if ( length(x) <=2 ) {
-		stats::binom.test(x, n=n, p=p, alternative=alternative,
-			conf.level=conf.level)
+	if ( length(x) == 1 ) {
+		result <-  stats::binom.test(x=x, n=n, p=p, alternative=alternative,
+			conf.level=conf.level) 
+		result$data.name <- paste( deparse(substitute(x)), "and", deparse(substitute(n)) )
+		return(result)
+	}
+
+	if ( length(x) == 2 ) {
+		result <-  stats::binom.test(x=x[1], n=sum(x), p=p, alternative=alternative,
+			conf.level=conf.level) 
+		result$data.name <- deparse(substitute(x))
+		return(result)
 	}
 
 	if (missing(data.name)) { 
