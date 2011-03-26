@@ -24,6 +24,9 @@ do = function(n=1, mode=NULL) {
 # handle objects like models to do the right thing
 .cull_for_do = function(object) {
 	if (any(class(object)=='lme')){ # for mixed effects models
+		result <- object
+		names(result) <- gsub('\\(','', names(result))
+		names(result) <- gsub('\\)','', names(result))
 		return( object$coef$fixed )
 	}
 	if (any(class(object)=='lm') ) {
@@ -31,6 +34,19 @@ do = function(n=1, mode=NULL) {
 		result <-  c( coef(object), sigma=sobject$sigma, "r-squared" = sobject$r.squared ) 
 		names(result) <- gsub('\\(','', names(result))
 		names(result) <- gsub('\\)','', names(result))
+		return(result)
+	}
+	if (any(class(object)=='htest') ) {
+		result <-  c( object$statistic, 
+		              object$parameter,
+					  p.value = object$p.value,
+					  conf.level = attr(object$conf.int,"conf.level"),
+					  lower = object$conf.int[1],
+					  upper = object$conf.int[2],
+					  method = object$method,
+					  alternative = object$alternative,
+					  data = object$data.name
+					  )
 		return(result)
 	}
 	if (any(class(object)=='cointoss')) {
