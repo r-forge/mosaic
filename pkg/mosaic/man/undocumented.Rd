@@ -11,6 +11,12 @@
 \alias{sat}
 \alias{utilities}
 \alias{whickham}
+\alias{googleMapURL}
+\alias{googleMap}
+\alias{latlon2xyz}
+\alias{xyz2latlon}
+\alias{rad2deg}
+\alias{deg2rad}
 
 \title{Undocumented Objects}
 

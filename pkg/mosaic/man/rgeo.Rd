@@ -1,5 +1,6 @@
 \name{rgeo}
 \alias{rgeo}
+\alias{rgeo2}
 \title{Sample longitude and latitude on earth
 }
 \description{
@@ -7,25 +8,38 @@ Randomly sample longitude and latitude on earth so that equal areas are (approxi
 be sampled.  (Approximation assumes earth as a perfect sphere.)
 }
 \usage{
-rgeo(n, long = c(-180, 180), lat = c(-90, 90), verbose=FALSE)
+rgeo(n=1, latlim=c(-90,90), lonlim=c(-180,180), verbose=FALSE ) 
+
+rgeo2(n=1, latlim=c(-90,90), lonlim=c(-180,180), verbose=FALSE ) 
 }
 \arguments{
   \item{n}{
   number of random locations
 }
-  \item{long}{ 
-  range of longitudes to sample within, not yet implemented 
-}
-  \item{lat}{
-  range of latitudes to sample within, not yet implemented 
+  \item{latlim, lonlim}{ 
+  range of latitudes and longitudes to sample within, only implemented for \code{rgeo}.
 }
   \item{verbose}{
   return verbose output that includes Euclidean coordinates on unit sphere as well as longitude and lattitude.
 }
 }
 \value{
-A data frame with variables \code{long} and \code{lat}
+A data frame with variables \code{long} and \code{lat}.  If \code{verbose} is TRUE, then 
+x, y, and z coordinates are included in the data frame.
 }
+\details{
+\code{rgeo} and \code{rgeo2} differ in the algorithms used to generate random positions.  
+Each assumes a spherical globe.  \code{rgeo} uses that fact that each of the x, y and z
+coordinates is uniformly distributed (but not independent of each other).  Furthermore, the 
+angle about the z-axis is uniformly distributed and independent of z.  This provides 
+a straightforward way to generate Euclidean coordinates using \code{runif}.  These are then
+translated into latitude and longitude.
+
+\code{rgeo2} samples points in a cube by independently sampling each coordinate.  It then
+discards any point outside the sphere contained in the cube and projects the non-discarded points
+to the sphere.  This method must oversample to allow for the discarded points.
+}
+
 \author{
 Randall Pruim (\email{rpruim@calvin.edu})
 }

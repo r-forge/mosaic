@@ -1,5 +1,57 @@
+deg2rad <- function(x) {
+	x/180 * base::pi
+}
 
-rgeo <- function( n, long=c(-180,180), lat=c(-90,90), verbose=FALSE ) {
+rad2deg <- function(x) {
+	x / base::pi * 180
+}
+
+xyz2latlon <- function(x,y,z) {
+
+	# rescale to unit sphere
+	R <- sqrt( x^2 + y^2 + z^2)
+	x <- x/R; y <- y/R; z <- z/R;
+
+	r <- sqrt( x^2 + y^2)
+	lat <- rad2deg( asin(z) )
+
+
+	long <- (r>0) * rad2deg( acos(x/r) ) 
+	long <- ( 1 - 2 * (y < 0) ) * long
+	long [ is.na(long) ] <- 0
+	return( cbind(lat=lat, lon=long) )
+}
+
+latlon2xyz <- function(latitude,longitude) {
+	z <- sin(deg2rad(latititude))
+	r <- sqrt(1 - z^2)
+	x <- rad2deg(cos( longitude ))
+	y <- rad2deg(sin( longitude ))
+	return(cbind( x=x, y=y, z=z ))
+}
+
+rgeo <- function( n=1, latlim=c(-90,90), lonlim=c(-180,180), verbose=FALSE ) {
+
+	zlim <- sin(sort(deg2rad(latlim)))
+	z <- runif( n,  zlim[1], zlim[2] )
+
+	#beta <- runif( n, min(deg2rad(lonlim)), max(deg2rad(lonlim)) )
+	blim <- deg2rad(sort(lonlim))
+	beta <- runif( n, blim[1], blim[2] )
+
+	r <- sqrt(1-z^2)
+	x <- r * cos(beta)
+	y <- r * sin(beta)
+
+	# now convert this to latitude and longitude 
+	latlon <- xyz2latlon(x,y,z)
+	if (verbose) {
+		return(data.frame(lat=latlon[,1], lon=latlon[,2], x=x, y=y, z=z))
+	}
+	return(data.frame(lat=latlon[,1], lon=latlon[,2]))
+}
+
+rgeo2 <- function( n=1, latlim=c(-90,90), lonlim=c(-180,180), verbose=FALSE ) {
 
 	# oversample pts in a cube
 
@@ -21,12 +73,61 @@ rgeo <- function( n, long=c(-180,180), lat=c(-90,90), verbose=FALSE ) {
 	z <- z/r
 
 	# now convert this to latitude and longitude 
-
-	lat <- asin(z) * 180 / pi
-	long1 <- asin(y) * 180 / pi
-	long <- (x < 0) * 180 + 1 - 2*(y>0) * long1
+	latlon <- xyz2latlon(x,y,z)
 	if (verbose) {
-		return(data.frame(long=long, lat=lat, x=x, y=y, z=z))
+		return(data.frame(lat=latlon[,1], lon=latlon[,2], x=x, y=y, z=z))
 	}
-	return(data.frame(lat=lat, long=long))
+	return(data.frame(lat=latlon[,1], lon=latlon[,2]))
 }
+
+googleMap <- function(latitude, longitude, position=cbind(lat=latitude,lon=longitude), 
+	zoom=12, 
+	width=600, height=400, 
+	maptype=c('roadmap','satellite','terrain','hybrid'),
+	mark=FALSE,
+	sensor=FALSE,
+	browse=TRUE,
+	...
+	)
+{
+	urls <- googleMapURL( 
+				latitude=latitude, longitude=longitude,
+				position=position, zoom=zoom, width=width, height=height,
+				maptype = maptype, mark=mark, sensor=sensor
+			)
+
+	if (browse) {
+		sapply( urls, function(x) { browseURL(x,...) } ) 
+	} else {
+		return(urls)
+	}
+}
+
+googleMapURL <- function(latitude, longitude, position=cbind(lat=latitude,lon=longitude), 
+	zoom=12, 
+	width=600, height=400, 
+	maptype=c('roadmap','satellite','terain','hybrid'),
+	mark=FALSE,
+	sensor=FALSE
+	) 
+{
+	latitude  <- position[,1]
+	longitude <- position[,2]
+	url <- "http://maps.google.com/maps/api/staticmap?"
+	maptype <- match.arg(maptype)
+	center <- paste(latitude,",",longitude,sep="")
+	size <- paste(width,'x',height,sep="")
+	markString <- ""
+	if (mark == TRUE) { markString <- paste('&markers=size:tiny|', center,sep="") } 
+
+	return(paste(
+		url,
+		'center=', center,
+		markString,
+		'&zoom=', zoom,
+		'&size=', size,
+		'&sensor=', tolower(as.character(sensor)),
+		'&maptype=', maptype,
+		sep=""))
+}
+	
