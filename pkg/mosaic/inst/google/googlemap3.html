@@ -15,7 +15,7 @@
 
 	var paramString = window.top.location.search.substring(1);
 
-	function getParameter ( parameterName ) {
+	function getParameter ( parameterName, defaultVal) {
 	   // Add "=" to the parameter name (i.e. parameterName=value)
 	   var parameterName = parameterName + "=";
 	   if ( paramString.length > 0 ) {
@@ -34,7 +34,7 @@
 		  return unescape ( paramString.substring ( begin, end ) );
 	   }
 	   // Return "null" if no parameter has been found
-	   return "null";
+	   return defaultVal;
 	   }
 	}
 
@@ -42,15 +42,23 @@
 
 <script type="text/javascript">
   function initialize() {
-	var zoomP = getParameter('zoom',8);
+	  var zoomP = getParameter('zoom',"8");
+	  //alert(zoomP)
     var latlng = new google.maps.LatLng(getParameter('lat',42),getParameter('lon',-85));
     var myOptions = {
-      zoom: 8,
+      zoom: parseInt(zoomP),
       center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(document.getElementById("map_canvas"),
-        myOptions);
+			myOptions);
+
+    var mLatlng = new google.maps.LatLng(getParameter('mlat',42),getParameter('mlon',-85));
+	var marker = new google.maps.Marker({
+      position: mLatlng, 
+      map: map, 
+      title:""
+  	  });   
   }
 
 </script>

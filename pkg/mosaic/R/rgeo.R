@@ -157,13 +157,13 @@ googleMapURL <- function(latitude, longitude, position=cbind(lat=latitude,lon=lo
 	center <- paste(latitude,",",longitude,sep="")
 	size <- paste(width,'x',height,sep="")
 	markString <- ""
-	if (mark == TRUE) { markString <- paste('&markers=size:tiny|', center,sep="") } 
+	if (mark == TRUE) { markString <- paste('&mlat=',round(latitude,6),'&mlon=',round(longitude,6) ,sep="") } 
 
 	return(paste(
 		url,
 		'?lat=', round(latitude,6),
 		'&lon=', round(longitude,6),
-		'&mlat=', round(latitude,6),
-		'&mlon=', round(longitude,6),
+		'&zoom=', zoom,
+		markString,
 		sep=""))
 }
