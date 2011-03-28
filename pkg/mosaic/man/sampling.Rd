@@ -55,7 +55,7 @@ nflip(n=1, prob=.5, ...)
   \code{nflip}.
 }
   \item{groups}{ if present, shuffling is done within groups given by
-  this vector ans \code{size}, if present, is ignored
+  this vector.  In this case \code{size}, if present, is ignored.
 }
   \item{orig.ids}{ if \code{TRUE} and \code{x} is a data frame or a matrix,
   then the original locations of the data is recorded in the object returned.

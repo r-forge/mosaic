@@ -23,7 +23,7 @@ xyz2latlon <- function(x,y,z) {
 }
 
 latlon2xyz <- function(latitude,longitude) {
-	z <- sin(deg2rad(latititude))
+	z <- sin(deg2rad(latitude))
 	r <- sqrt(1 - z^2)
 	x <- rad2deg(cos( longitude ))
 	y <- rad2deg(sin( longitude ))
