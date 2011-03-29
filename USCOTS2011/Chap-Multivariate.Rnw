@@ -1,0 +1,27 @@
+\chapter{Multivariate Statistics -- Early?}
+
+
+\SweaveOpts{prefix.string=figures/fig}  % location of 
+\SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
+\SweaveOpts{tidy=F}         % keep.source probably disables this
+\SweaveOpts{pdf=T}          % use pdf for graphics
+\SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
+\SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+
+<<setup,echo=F>>=
+#setCacheDir("cache")
+require(grDevices); require(datasets); require(stats); require(lattice)
+require(grid); require(mosaic); require(fastR)
+trellis.par.set(theme=col.mosaic(bw=FALSE))
+trellis.par.set(fontsize=list(text=9))
+options(keep.blank.line=FALSE); options(width=100)
+xyplot <- function(...) { print(lattice::xyplot(...)) }
+bwplot <- function(...) { print(lattice::bwplot(...)) }
+histogram <- function(...) { print(lattice::histogram(...)) }
+barchart <- function(...) { print(lattice::barchart(...)) }
+mosaic <- function(...) { print(vcd::mosaic(...)) }
+@ 
+
+\section{Danny's Favorite Example}
+
+\section{Danny's Second Favorite Example}

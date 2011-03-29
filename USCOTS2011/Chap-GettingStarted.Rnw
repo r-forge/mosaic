@@ -1,0 +1,195 @@
+\chapter{Getting Started: The First Week With R }
+
+
+\SweaveOpts{prefix.string=figures/fig}  % location of 
+\SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
+\SweaveOpts{tidy=F}         % keep.source probably disables this
+\SweaveOpts{pdf=T}          % use pdf for graphics
+\SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
+\SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+
+<<setup,echo=F>>=
+#setCacheDir("cache")
+require(grDevices); require(datasets); require(stats); require(lattice)
+require(grid); require(mosaic); require(fastR)
+trellis.par.set(theme=col.mosaic(bw=FALSE))
+trellis.par.set(fontsize=list(text=9))
+options(keep.blank.line=FALSE); options(width=100)
+xyplot <- function(...) { print(lattice::xyplot(...)) }
+bwplot <- function(...) { print(lattice::bwplot(...)) }
+histogram <- function(...) { print(lattice::histogram(...)) }
+barchart <- function(...) { print(lattice::barchart(...)) }
+mosaic <- function(...) { print(vcd::mosaic(...)) }
+@ 
+
+\section{Getting Students Familiar with R}
+
+\subsection{Strategies}
+\begin{enumerate}
+\item
+Start right away.
+
+Do something with \R\ on day 1.  Have students do something by the end of week 1.
+
+
+\item Illustrate frequently.
+
+Have \R\ running every class period and use it as needed throughout the course so students
+can see what \R\ does.  Preview topics by showing before asking students to do things.
+
+\item
+Teach \R\ as a programming language.
+
+There is a bit of syntax to learn -- so teach it explicitly.
+\begin{itemize}
+\item
+Capitalization (and spelling) matter
+\item
+Explain carefully (and repeatedly) the syntax of functions.
+\item
+Every object in \R\ has a type (class).  \emph{What type of thing is this?}
+\item
+Get students to think about what arguments are needed for functions:
+\emph{What does this function need to know to do its job?}
+\end{itemize}
+Give more language details in higher level courses
+\begin{itemize}
+\item
+More about \R\ classes
+\item
+User-defined functions
+\item
+Control structures
+\end{itemize}
+
+\item ``Less volume, more creativity."  [Mike McCarthy]
+
+Use a few methods frequently and students will learn how to use them well, flexibly, 
+even creatively. 
+
+Focus on a small number of data types: numerical vectors, character
+strings, data frames.  
+
+Not everything needs to be introduced from first principles.  For
+instance, categorical variables are easily enough understood by
+putting together simple concepts about character strings and vectors.
+
+\item
+Find a way to have computers available for tests.
+
+It makes the test match the rest of the course and is a great motivator for students.
+
+Randy began doing this when my students asked me if there was a way to use computers
+during the test ``\emph{since that's how we do all the homework}."  He has students 
+bring laptops to class.  
+
+\item
+Rethink your course.
+
+If you have taught computer-free or computer-light courses in the past, you may need
+to rethink some things.  With ubiquitous computing, some things disappear from your 
+course:
+\begin{itemize}
+\item
+Reading statistical tables.  
+
+Does anyone still consult a table for values of $\sin$,
+or $\log$?  Why use tables for statistical distributions?
+\item
+``Computational formulas".
+
+Replace them with computation.  Teach only the most intuitive formulas. Focus on
+how they lead to intuition and understanding, \emph{not} computation.
+
+\item
+(Most) hand calculations.
+
+\end{itemize}
+At the same time, other things become possible that were not before:
+\begin{itemize}
+\item
+large data sets
+\item
+beautiful plots
+\item
+simulation/randomization based methods
+\item
+quick computations
+\item
+increased focus on concepts rather than calculations
+\end{itemize}
+Get your students to think that using the computer is just part of how statistics is
+done, rather than an add-on.  
+
+\item
+Anticipate computationally challenged students, but don't give in.
+
+Some students pick up \R\ very easily.  In every course there will be a few students who
+struggle.  Be prepared to help them, but don't  spend time listening to their complaints.
+Focus on diagnosing what they don't know and how to help them ``get it''.
+
+Tell students to copy and paste \R\ code and error messages into email when they
+have trouble.  When you reply, explain how the error message helped you diagnose their
+problem and help them generalize your solution to other situations.
+\end{enumerate}
+
+\subsection{Tactics}
+
+The remainder of this chapter has some of our favorite activities for early 
+in the course.
+
+\section{Graphics and Sampling Early}
+
+Do graphics very early, so that students see that they can get
+impressive output from simple commands.  Try to break away from their
+prior expectation that there is a "steep learning curve."
+
+Accept the defaults --- don't worry about the niceties (good labels,
+nice breaks on histograms, colors) too early.  Let them become
+comfortable with the basic graphics commands and then play (make sure
+it feels like play!) with fancying things up.  
+
+Since sampling drives much of the logic of statistics, introduce the idea of a random sample very
+early, and have students construct their own random sample.  The
+phenomenon of a sampling distribution can be introduced in an
+intuitive way, setting it up as a topic for later discussion and analysis.
+
+
+
+\section{The Lady Tasting Tea}
+
+
+<<lady1>>=
+rflip(10)
+@
+
+<<lady-do,cache=true>>=
+do(10) * rflip(10)
+@
+
+<<lady-dolots,cache=true>>=
+random.ladies <- do(10000) * rflip(10)
+@
+
+<<lady-table>>=
+table(random.ladies$heads)
+table(random.ladies$heads)/nrow(random.ladies)
+@
+
+\begin{center}
+<<lady-hist,fig=T,width=4,height=2>>=
+histogram(~heads, random.ladies, 
+	breaks=-.5 + (0:11),
+	main="Sampling Distribution for the Lady Tasting Tea"
+	)
+@
+\end{center}
+
+\section{Graphical and Numerical Summaries}
+
+\section{An Early Multivariate Example}
+
+Using Francis Galton's data, investigate how an adult child's height depends on the height of the parents.  Is
+it mainly the father's height, mainly the mother's?  What's the role
+of the child's gender, e.g., do boys inherit height from the father
+and girls from the mother?  Make this a research question for the students.  

@@ -1,0 +1,46 @@
+\chapter{Simulation Based Inference}
+
+
+\SweaveOpts{prefix.string=figures/fig}  % location of 
+\SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
+\SweaveOpts{tidy=F}         % keep.source probably disables this
+\SweaveOpts{pdf=T}          % use pdf for graphics
+\SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
+\SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+
+<<setup,echo=F>>=
+#setCacheDir("cache")
+require(grDevices); require(datasets); require(stats); require(lattice)
+require(grid); require(mosaic); require(fastR)
+trellis.par.set(theme=col.mosaic(bw=FALSE))
+trellis.par.set(fontsize=list(text=9))
+options(keep.blank.line=FALSE); options(width=100)
+xyplot <- function(...) { print(lattice::xyplot(...)) }
+bwplot <- function(...) { print(lattice::bwplot(...)) }
+histogram <- function(...) { print(lattice::histogram(...)) }
+barchart <- function(...) { print(lattice::barchart(...)) }
+mosaic <- function(...) { print(vcd::mosaic(...)) }
+@ 
+
+\section{\texttt{mosaic} randomization widgets}
+
+\section{Examples}
+\subsection{Lady Tasting Tea}
+If you don't use the Lady Tasting Tea as a course starter, you can use it as 
+an introduction to testing a proportion.
+
+\subsection{Golfballs in the Yard}
+
+
+
+\section{Bootstrap?}
+
+Do any of us do bootstrap in intro courses?  Other courses?  Do we want to include this?
+Robin Lock is big on bootstrap.  Do we need any bootstrap tools in the \verb!mosaic! 
+package?
+
+Danny responds: We already have good-enough bootstrap tools in the
+package: \texttt{do} and \texttt{resample}.  I don't do bootstrapping
+early in the course, but I do talk about sampling variability from day
+1.  Later on, I introduce bootstrapping as a way to simulate sampling
+variability without having to collect more data.
