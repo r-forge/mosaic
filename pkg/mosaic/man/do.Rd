@@ -10,13 +10,23 @@ Do Things Repeatedly
 with replication methods.
 }
 \usage{
-do(n = 1, mode=NULL) 
+do(n = 1, cull=NULL, mode=NULL) 
 
 \method{print}{repeater} (x, ...)
 \method{*}{repeater} (a,f)
 }
 \arguments{
   \item{n}{ number of times to repeat }
+  \item{cull}{ function for culling output of objects being repeated.  If NULL,
+  a default culling function is used.  The default culling function is 
+  currently aware of objects of types
+  \code{lme},
+  \code{lm},
+  \code{htest},
+  \code{table},
+  \code{cointoss}, and 
+  \code{matrix}.
+  }
   \item{mode}{ target mode for value returned}
   \item{x}{ an object or function to be repeated or a repeater object to be printed}
   \item{a}{ a repeater object }

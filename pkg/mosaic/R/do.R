@@ -8,8 +8,8 @@
 #   return(foo)
 # }
 
-do = function(n=1, mode=NULL) {
-  foo = list(n=n, mode=mode)
+do = function(n=1, cull=NULL, mode=NULL) {
+  foo = list(n=n, cull=cull, mode=mode)
   class(foo) = 'repeater'
   return(foo)
 }
@@ -49,6 +49,12 @@ do = function(n=1, mode=NULL) {
 					  )
 		return(result)
 	}
+	if (any(class(object)=='table') ) {
+		nm <- names(object)
+		result <-  as.vector(object)
+		names(result) <- nm
+		return(result)
+	}
 	if (any(class(object)=='cointoss')) {
 		return( c(n=attr(object,'n'), 
 				heads=sum(attr(object,'sequence')=='H'),
@@ -71,10 +77,16 @@ do = function(n=1, mode=NULL) {
 .do_repeats= function(a,f){
 	fthing = substitute(f)
 	n = a$n
+
+	cull = a$cull
+	if (is.null(cull)) {
+		cull <- .cull_for_do
+	}
+
 	if (class(f) != 'function') {
 		f = function(){eval.parent(fthing, n=2) }
 	}
-	res1 = .cull_for_do(f());  # was (...)
+	res1 = cull(f());  # was (...)
 	if (n < 2) { return (res1) }
 
 	nm = names(res1);
@@ -97,7 +109,7 @@ do = function(n=1, mode=NULL) {
 		result <- list()
 		result[[1]] <- res1
 		for (k in 2:n) {
-			result[[k]] <- .cull_for_do(f()); # was (...)
+			result[[k]] <- cull(f()); # was (...)
 		}
 		return(result)
 	}
@@ -110,7 +122,7 @@ do = function(n=1, mode=NULL) {
 	result[1,] = res1;
 
 	for (k in 2:n) {
-		result[k,] <- .cull_for_do(f()); # was (...)
+		result[k,] <- cull(f()); # was (...)
 	}
 
 	if (dim(result)[2] == 1 & is.null(nm) ) return(data.frame(result=result[,1])) else return(result);

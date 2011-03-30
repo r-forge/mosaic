@@ -4,7 +4,7 @@ Title: Data sets and utilities from Project MOSAIC (mosaic-web.org)
 Version: 0.1-16
 Date: 2011-03-29
 Depends: lattice, grid
-Suggests: MASS, manipulate
+Suggests: MASS 
 Author: Randall Pruim <rpruim@calvin.edu>, Daniel Kaplan <kaplan@macalester.edu>, Nicholas Horton <nhorton@smith.edu>
 Maintainer: Randall Pruim <rpruim@calvin.edu>
 Description: Data sets and utilities from Project MOSAIC (mosaic-web.org)
