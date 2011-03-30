@@ -485,6 +485,9 @@ it mainly the father's height, mainly the mother's?  What's the role
 of the child's gender, e.g., do boys inherit height from the father
 and girls from the mother?  Make this a research question for the students.  
 
+RJP added some plots here just to see what the data looked like.  
+Keep/delete/modify at your discretion.
+
 \begin{center}
 <<galton,fig=T,height=3>>=
 xyplot(height ~ father+mother| sex, galton, type=c('p','r'), auto.key=T, alpha=.6)
