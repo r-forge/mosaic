@@ -22,10 +22,10 @@ barchart <- function(...) { print(lattice::barchart(...)) }
 mosaic <- function(...) { print(vcd::mosaic(...)) }
 @ 
 
-\begin{center}
-\emph{This is a lightly modified version of a handout Randy used with his 
+\begin{quote}
+\emph{This is a lightly modified version of a handout RJP used with his 
 Intro Stats students Spring 2011.}
-\end{center}
+\end{quote}
 
 \label{app:StartingR}
 
@@ -168,7 +168,8 @@ Here are some packages we will use frequently in this course:
 \item \verb!abd!      (a package with data and utilities for our textbook; available on CRAN)
 \end{itemize}
 There may be others that we use from time to time as well.  You should install
-\verb!Hmisc!, \verb!vcd!, \verb!fastR!, and \verb!abd! (in that order) the first time you use \R\ 
+\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
+(in that order) the first time you use \R\ 
 so that they are always available to you.
 You can install these packages 
 by clicking on the ``Install Package" button and following the directions
@@ -179,6 +180,7 @@ install.packages('Hmisc')           # note the quotation marks
 install.packages('vcd')
 install.packages('fastR')
 install.packages('abd')
+install.packages('mosaic')
 @
 
 Once these are installed, you can load them by checking the box in the 
@@ -187,9 +189,10 @@ Once these are installed, you can load them by checking the box in the
 <<require>>=
 require(lattice)
 require(Hmisc)
+require(vcd)
 require(fastR)
 require(abd)
-require(vcd)
+require(mosaic)
 @
 
 \begin{problem}
@@ -333,6 +336,15 @@ In either case, be sure to do the following:
 \item Use each subsequent row for one observational unit.
 \item Give the resulting data frame a good name.
 \end{itemize}
+\authNote{I moved Danny's Simple Relational Database suggestion
+to \ref{sec:manipulatingData}.
+I don't think I would use a grade/courses example for students nor that
+I would introduce \verb!merge()! \emph{et al} to newbies right away.
+My goal was to have this appendix look like something that I would give
+to students as is in the first week.
+In any case, I agree that we should have a section on this somewhere.
+[RJP]
+}%
 
 \begin{problem}
 Enter the following small data set in an Excel or Google spreadsheet and import the 
@@ -353,10 +365,6 @@ into your report.  (Remember to use a fixed width font like Courier for all \R\ 
 output.)
 \end{problem}
 
-\subsection{Simple Relational Database Operations}
-
-Using the grade/courses database, show how to combine data from
-different tables. [DTK]
 
 \section{Summarizing Data}
 

@@ -195,6 +195,7 @@ Then you can go back and edit the file.
 \end{itemize}
 
 \section{Working with Data}
+\label{sec:MoreR-Data}%
 
 \subsection{Data in {\sf R} packages}
 
@@ -327,6 +328,7 @@ This can be convenient when dealing with subsets of very large data sets.
 %There is an \href{http://csg.sph.umich.edu/docs/R/rsql.html}{online document}
 %describing this on the CSG website.
 
+
 \subsection{Generating data}
 \label{sec:generatingData}
 \Rindex{rep()}%
@@ -407,6 +409,8 @@ formats, see the
 
 \subsection{Making Data Available to Students}
 
+\authNote{Need to decide what to say about making data available to 
+students.  Perhaps multiple methods? --RJP}%
 
 \section{Primary \R\ Data Structures}
 
@@ -784,6 +788,7 @@ table(a+b > 50)
 %\includepdf[pages=36-37,landscape,rotateoversize,turn=false,nup=1x2,frame]{Paradis-rdebuts_en.pdf}
 
 \section{Manipulating Data}
+\label{sec:manipulatingData}%
 
 %\subsection{Cross Tabulation with \texttt{xtabs()}}
 %\subsection{\texttt{aggregate()} and \texttt{Hmisc::summary()}}
@@ -803,6 +808,7 @@ summary(iris)
 
 
 \subsection{Slicing and dicing}
+\authNote{This section could probably be improved/expanded --rjp}%
 
 
 &reshape()& provides a flexible way to change the arrangement of data.  
@@ -830,6 +836,42 @@ In simpler cases, &stack()& or &unstack()& may suffice.
 to \verb!reshape()!.
 \Rindex{stack()}%
 \Rindex{unstack()}%
+
+\subsection{Simple Relational Database Operations}
+
+\subsubsection*{Example: Grades/Courses}
+
+Using the grade/courses database, show how to combine data from
+different data frames. [DTK]
+
+\subsubsection{Example: Merging Genotype and Phenotype Data}
+%\label{example:fusion1-glm1}%
+%\myindex{FUSION|exampleidx}%
+%\myindex{logistic regression}%
+The \verb!fusion1! data frame in the \verb!fastR! package contains
+genotypes of subjects from the FUSION study of the genetics of type 
+2 diabetes.
+The \verb!pheno! data frame contains phenotypes (including T2D 
+case/control status) for an intersecting set of individuals.
+We can merge these together to explore the association between
+genotypes and phenotypes using \verb!merge()!.
+\pagebreak
+
+%\Rindex{merge()}%
+<<fusion1-head>>=
+require(fastR)
+head(fusion1,3)
+head(pheno,3)
+@
+
+<<fusion1-merge>>=
+# merge fusion1 and pheno keeping only id's that are in both
+fusion1m <- merge(fusion1, pheno, by='id', all.x=FALSE, all.y=FALSE)
+@
+<<fusion1-xtabs>>=
+head(fusion1m, 3)
+xtabs(~t2d + Gdose + marker, fusion1m)
+@
 
 \section{Functions in \R} %{An introduction to writing functions}
 \label{sec:writingFunctions}
