@@ -1,3 +1,7 @@
+TEXINPUTS := ./inputs//:${TEXINPUTS}
+BIBINPUTS := ./inputs//:${BIBINPUTS}
+
+
 TEXFILES = \
 	  Master-TeachingStatsWithR.tex \
 	  Chap-GettingStarted.tex \
