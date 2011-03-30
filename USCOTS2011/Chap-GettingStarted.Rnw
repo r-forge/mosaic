@@ -484,3 +484,12 @@ Using Francis Galton's data, investigate how an adult child's height depends on 
 it mainly the father's height, mainly the mother's?  What's the role
 of the child's gender, e.g., do boys inherit height from the father
 and girls from the mother?  Make this a research question for the students.  
+
+\begin{center}
+<<galton,fig=T,height=3>>=
+xyplot(height ~ father+mother| sex, galton, type=c('p','r'), auto.key=T, alpha=.6)
+@
+<<galton-parents,fig=T,width=3,height=2.5>>=
+xyplot(father~mother, galton, type=c('p','r'), auto.key=T, alpha=.3)
+@
+\end{center}
