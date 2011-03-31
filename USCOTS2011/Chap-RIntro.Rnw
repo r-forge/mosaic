@@ -18,6 +18,7 @@ options(keep.blank.line=FALSE); options(width=100)
 xyplot <- function(...) { print(lattice::xyplot(...)) }
 bwplot <- function(...) { print(lattice::bwplot(...)) }
 histogram <- function(...) { print(lattice::histogram(...)) }
+dotPlot <- function(...) { print(mosaic::dotPlot(...)) }
 barchart <- function(...) { print(lattice::barchart(...)) }
 mosaic <- function(...) { print(vcd::mosaic(...)) }
 @ 
@@ -424,6 +425,7 @@ plotname( y ~ x | z, data=dataname, groups=grouping_variable, ...)
 \item
 Our most common plots have the following names:
 \begin{itemize}
+\item \verb!dotPlot! (notice the capital P; \verb!dotplot()! does something different)
 \item \verb!histogram!
 \item \verb!bwplot!
 \item \verb!xyplot!
@@ -448,30 +450,65 @@ control just how the plots look.  (But we'll focus on the basics for now.)
 
 %\subsection*{Some Examples}
 
+\subsection{Dot plots: \texttt{dotPlot()}}
 
+A dot plot represents each value of a quantitative variable with a dot.  The values
+are rounded a bit so that the dots line up neatly, and dots are stacked up into little
+towers when the data values cluster near each other.
+
+For a dot plot, the \verb!y! component of the formula is empty since we let \R\
+calculate that for us.
+
+\begin{center}
+<<iris-dotPlot,cache=T,fig=T,width=5,height=3.0>>=
+dotPlot(~Sepal.Length, data=iris, n=20)   # n=20 gives us approximately 20 towers
+@
+\end{center}
+We can use a conditional variable to give us separate dot plots for each species.
+
+<<iris-dotPlot-condA,cache=T,eval=F,fig=F,width=7.0,height=2.5>>=
+dotPlot(~Sepal.Length|Species, data=iris, n=20)
+@
+\begin{center}
+<<iris-dotPlot-condB,cache=T,fig=T,echo=F,width=7.0,height=2.0>>=
+dotPlot(~Sepal.Length|Species, data=iris, n=20, cex=.6)
+@
+\end{center}
 
 \subsection{Histograms: \texttt{histogram()}}
 
-For a histogram, the \verb!y! component of the formula is empty since we let \R\
+Histograms are a lot like dot plots, but the towers of dots are replaced by a vertical bar.
+Again the \verb!y! component of the formula is empty since we let \R\
 compute the heights of the bars for us.
 \begin{center}
 <<iris-histogram,cache=T,fig=T,width=3,height=1.8>>=
-histogram(~Sepal.Length, data=iris)
+histogram(~Sepal.Length, data=iris, n=20)       # n= 20 gives approx. 20 bars
 @
 \end{center}
 We can use a conditional variable to give us separate histograms for each species.
 
 \begin{center}
 <<iris-histogram-cond,cache=T,fig=T,width=4.5,height=2.0>>=
-histogram(~Sepal.Length|Species, data=iris)
+histogram(~Sepal.Length|Species, data=iris, n=20)
 @
 \end{center}
+
+
 In lattice lingo, the three subplots are called panels and the 
 labels at the top are called strips.  (Strips can be placed on the left side if you 
 prefer.)
 
+
 \subsection{Boxplots:  \texttt{bwplot()}}
-Here is a bad way to make side-by-side boxplots.
+
+Boxplots are made pretty much the same way as histograms:
+\begin{center}
+<<iris-bwplot,fig=T,width=3,height=1.3>>=
+bwplot(~Sepal.Length, data=iris)
+@
+\end{center}
+
+We can use conditioning as we did for histograms:
 
 \begin{center}
 <<iris-bwplot-cond,cache=T,fig=T,width=5,height=1.6,print=T>>=
@@ -481,6 +518,7 @@ bwplot(~Sepal.Length|Species, data=iris)
 
 \vspace{-8mm}
 
+But there are betters ways to do this.
 This is better, but the species names run into each other.
 \begin{center}
 <<iris-bwplot-2d,cache=T,fig=T,width=2,height=1.5,print=T>>=
@@ -499,7 +537,7 @@ bwplot(Species ~ Sepal.Length, data=iris)
 
 \vspace{-12mm}
 
-\pagebreak
+%\pagebreak
 
 \subsection{Scatterplots: \texttt{xyplot()}}
 
@@ -602,7 +640,6 @@ symbols, line thicknesses, colors, etc.
 Rather than describe them all here, we'll mention only that groups of these settings 
 can be collected into a theme.  \verb!show.settings()! will show you what the theme looks like.
 
-\newpage
 <<themes-whitbg,cache=T,fig=T,height=4.0>>=
 trellis.par.set(theme=col.whitebg())      # a theme in the lattice package
 show.settings()
@@ -613,13 +650,13 @@ trellis.par.set(theme=col.abd())          # a theme in the abd package
 show.settings()
 @
 
-<<themes-fastR,cache=T,fig=T,height=4>>=
-trellis.par.set(theme=col.fastR())        # a theme in the fastR package
+<<themes-mosaic,cache=T,fig=T,height=4>>=
+trellis.par.set(theme=col.mosaic())        # a theme in the mosaic package
 show.settings()
 @
 
-<<themes-fastRbw,cache=T,fig=T,height=4>>=
-trellis.par.set(theme=col.fastR(bw=TRUE)) # black and white version of previous theme
+<<themes-mosaicbw,cache=T,fig=T,height=4>>=
+trellis.par.set(theme=col.mosaic(bw=TRUE)) # black and white version of previous theme
 show.settings()
 @
 
@@ -1222,6 +1259,7 @@ quantiles of \verb!x!.
 %\rule{4in}{1pt}
 \end{center}
 
+\vspace*{-.5in}
 \section{Exercises}
 
 For these problems, create a single Word document containing all of your work.
