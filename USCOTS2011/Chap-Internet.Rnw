@@ -156,6 +156,28 @@ You may need to zoom in or out a bit to figure this out.
 
 \end{enumerate}
 
+\subsection{Variations on the Google Maps theme}
+
+There are many other quantities one could estimate using these tools.  For example:
+\begin{enumerate}
+\item
+What proportion of you home state is within $m$ miles of a lake?  (The choice of $m$ may depend upon
+your state of interest.)
+\item
+Use two proportion procedures  or chi-squared tests to compare states or continents.  
+Do all continents have roughly the same proportion of land withing $m$ miles of water (for some $m$)?
+Are Utah and Arizona equally roadless?
+
+\item
+In more advanced classes: What is the average distance to the nearest lake (in some region)?
+By using concentric circles, one could estimate this from discretized data indicating, for example,
+whether the nearest lake is within 1/2 mile, between 1/2 mile and 1 mile, between 1 mile and 2 miles,
+between 2 miles, and 4 miles, between 4 miles and 10 miles, or more than 10 miles away.  It may be 
+interesting to discuss what sort of model should be used for distances from random locations to lakes.
+(It probably isn't normally distributed.)
+\authNote{Is this example too complicated?}%
+\end{enumerate}
+
 \subsection{Zillow}
 Nick 
 
