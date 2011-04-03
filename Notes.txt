@@ -1,0 +1,8 @@
+
+eliminating password requests:
+
+	1) make key pair with ssh-keygen
+	2) copy and paste public key to R-forge (Account Maintenance | Edit keys)
+		Note: may be lag of up to an hour before the key is available at R-forge
+	3) ssh-add <path to private key>
+
