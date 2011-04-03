@@ -57,17 +57,11 @@
     var map = new google.maps.Map(document.getElementById("map_canvas"),
 			myOptions);
 
-	radius = getParameter('radius',0)
-	// Create and add a smooth circle
-	var circle1 = new CircleOverlay(map, map.getCenter(), 5*radius, "#000000", 1, 1, '#009900', 0.05, 100);
-	
-	// Create and add the circle with default resolution (40)
-	var circle2 = new CircleOverlay(map, map.getCenter(), 2*radius, "#0000FF", 1, 1, '#0000FF', 0.05);
-	
-	// Create and add a coarse circle
-	var circle3 = new CircleOverlay(map, map.getCenter(), 1*radius, "#FF0000", 1, 1, '#FF0000', 0.05);
-
-
+	radius = getParameter('radius',0);
+	radii = radius.split(",");
+	for ( i = 0; i < radii.length; i++){
+		var circle = new CircleOverlay(map, map.getCenter(), parseFloat(radii[i]), "#000000", 1, 1, '#990099', 0.08, 50);
+	}
 	
     var mLatlng = new google.maps.LatLng(getParameter('mlat',90),getParameter('mlon',0));
 	var marker = new google.maps.Marker({
