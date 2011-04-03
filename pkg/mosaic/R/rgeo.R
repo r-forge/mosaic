@@ -80,35 +80,73 @@ rgeo2 <- function( n=1, latlim=c(-90,90), lonlim=c(-180,180), verbose=FALSE ) {
 	return(data.frame(lat=latlon[,1], lon=latlon[,2]))
 }
 
-googleMap <- function(latitude, longitude, position=cbind(lat=latitude,lon=longitude), 
+googleMap <- function(latitude, longitude, position=NULL,
 	zoom=12, 
-	width=600, height=400, 
 	maptype=c('roadmap','satellite','terrain','hybrid'),
 	mark=FALSE,
-	sensor=FALSE,
+	radius=0,
 	browse=TRUE,
 	...
 	)
 {
-	urls <- googleMapURL( 
+	urls <- .googleMapURL( 
 				latitude=latitude, longitude=longitude,
-				position=position, zoom=zoom, width=width, height=height,
-				maptype = maptype, mark=mark, sensor=sensor
+				position=position, zoom=zoom, 
+				maptype = maptype, mark=mark, radius=radius
 			)
 
 	if (browse) {
-		sapply( urls, function(x) { browseURL(x,...) } ) 
+		invisible( sapply( urls, function(x) { browseURL(x,...) } ) )
 	} else {
-		return(urls)
+		invisible(urls)
 	}
 }
 
-googleMapURL2 <- function(latitude, longitude, position=cbind(lat=latitude,lon=longitude), 
+	
+.googleMapURL <- function(latitude, longitude, position=NULL,
+	zoom=11, 
+	maptype=c('roadmap','satellite','terrain','hybrid'),
+	mark=FALSE,
+	radius=0
+	) 
+{
+	filename <- "googlemap3.html"
+
+	if (FALSE) { # can't get browseURL to accept a file with parameters added on
+		package <- "mosaic"
+		paths <- .find.package(package, verbose = TRUE)
+		paths <- paths[file_test("-d", file.path(paths, "google"))]
+		paths <- file.path(paths, "google")
+		paths <- paths[file_test("-f", file.path(paths, filename))]
+		url <- file.path(paths, filename)
+		url <- paste("file://",url,sep="")
+	}
+	url <- paste('http://mosaic-web.org/',filename,sep="")
+	if (is.null(position)) {
+		position <- data.frame(lat=latitude,lon=longitude)
+	}
+	latitude  <- position[,1]
+	longitude <- position[,2]
+	maptype <- match.arg(maptype)
+	center <- paste(latitude,",",longitude,sep="")
+	markString <- ""
+	if (mark == TRUE) { markString <- paste('&mlat=',round(latitude,6),'&mlon=',round(longitude,6) ,sep="") } 
+
+	invisible(paste(
+		url,
+		'?lat=', round(latitude,6),
+		'&lon=', round(longitude,6),
+		markString,
+		'&zoom=', zoom,
+		'&radius=', paste(as.character(radius),collapse=","),
+		sep=""))
+}
+
+.googleMapURL2 <- function(latitude, longitude, position=NULL,
 	zoom=12, 
 	width=600, height=400, 
 	maptype=c('roadmap','satellite','terrain','hybrid'),
-	mark=FALSE,
-	sensor=FALSE
+	mark=FALSE
 	) 
 {
 	latitude  <- position[,1]
@@ -120,50 +158,13 @@ googleMapURL2 <- function(latitude, longitude, position=cbind(lat=latitude,lon=l
 	markString <- ""
 	if (mark == TRUE) { markString <- paste('&markers=size:tiny|', center,sep="") } 
 
-	return(paste(
+	invisible(paste(
 		url,
 		'center=', center,
 		markString,
 		'&zoom=', zoom,
 		'&size=', size,
-		'&sensor=', tolower(as.character(sensor)),
+		'&sensor=false', 
 		'&maptype=', maptype,
-		sep=""))
-}
-	
-googleMapURL <- function(latitude, longitude, position=cbind(lat=latitude,lon=longitude), 
-	zoom=12, 
-	width=600, height=400, 
-	maptype=c('roadmap','satellite','terrain','hybrid'),
-	mark=FALSE,
-	sensor=FALSE
-	) 
-{
-	filename <- "googlemap3.html"
-	if (FALSE) { # can't get browseURL to accept a file with parameters added on
-		package <- "mosaic"
-		paths <- .find.package(package, verbose = TRUE)
-		paths <- paths[file_test("-d", file.path(paths, "google"))]
-		paths <- file.path(paths, "google")
-		paths <- paths[file_test("-f", file.path(paths, filename))]
-		url <- file.path(paths, filename)
-		url <- paste("file://",url,sep="")
-	}
-	url <- paste('http://mosaic-web.org/',filename,sep="")
-
-	latitude  <- position[,1]
-	longitude <- position[,2]
-	maptype <- match.arg(maptype)
-	center <- paste(latitude,",",longitude,sep="")
-	size <- paste(width,'x',height,sep="")
-	markString <- ""
-	if (mark == TRUE) { markString <- paste('&mlat=',round(latitude,6),'&mlon=',round(longitude,6) ,sep="") } 
-
-	return(paste(
-		url,
-		'?lat=', round(latitude,6),
-		'&lon=', round(longitude,6),
-		'&zoom=', zoom,
-		markString,
 		sep=""))
 }

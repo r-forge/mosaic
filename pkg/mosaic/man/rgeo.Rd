@@ -11,7 +11,9 @@ be sampled.  (Approximation assumes earth as a perfect sphere.)
 rgeo(n=1, latlim=c(-90,90), lonlim=c(-180,180), verbose=FALSE ) 
 
 rgeo2(n=1, latlim=c(-90,90), lonlim=c(-180,180), verbose=FALSE ) 
+
 }
+
 \arguments{
   \item{n}{
   number of random locations
@@ -46,5 +48,7 @@ Randall Pruim (\email{rpruim@calvin.edu})
 
 \examples{
 rgeo(4)
+# sample from a region that contains the continental US
+rgeo( 4, latlim=c(25,50), lonlim=c(-65,-125) )
 }
 \keyword{ random }
