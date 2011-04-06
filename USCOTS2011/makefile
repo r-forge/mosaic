@@ -1,5 +1,5 @@
-TEXINPUTS := ./inputs//:${TEXINPUTS}
-BIBINPUTS := ./inputs//:${BIBINPUTS}
+export TEXINPUTS := ./inputs//:${TEXINPUTS}
+export BIBINPUTS := ./inputs//:${BIBINPUTS}
 
 
 TEXFILES = \
