@@ -1,0 +1,194 @@
+
+\documentclass[twoside]{report}
+
+\usepackage{etoolbox}
+
+\newdimen\Rwidth
+\Rwidth=\textwidth
+
+
+\usepackage[margin=.9in]{geometry}
+\usepackage{probstat}
+\usepackage{hyperref}
+\usepackage[shownotes]{authNote}
+\usepackage[answerdelayed,exercisedelayed,lastexercise]{problems}
+\usepackage{longtable}
+
+%\usepackage{tikz}
+
+\usepackage[nogin]{Sweave}
+
+\usepackage[Bjornstrup]{fncychap}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+
+%% Now begin customising things. See the fancyhdr docs for more info.
+
+\renewcommand{\chaptermark}[1]{\thispagestyle{fancy}\markboth{{#1}}{}}
+\renewcommand{\sectionmark}[1]{\markright{{#1}}{}}
+%\renewcommand{\headrulewidth}{0pt}
+
+\chead{}
+\lhead[\sf \thepage]{\sf \leftmark}
+\rhead[\sf \leftmark]{\sf \thepage}
+\lfoot[\sf USCOTS 2011]{\sf Teaching Statistics With R}
+\rfoot[\sf Teaching Statistics With R]{\sf USCOTS 2011}
+
+\pagestyle{fancy}
+
+
+%\usepackage{titlesec}
+%\titleformat{\chapter}[block]{\huge \sf \bfseries }{\thechapter}{5mm}{}[] 
+
+
+
+\def\R{{\sf R}}
+\def\Rstudio{{\sf RStudio}}
+\def\RStudio{{\sf RStudio}}
+\def\term#1{\textbf{#1}}
+\def\tab#1{{\sf #1}}
+
+\usepackage{sfsect}
+\usepackage{relsize}
+%\usepackage{listings}
+
+\def\myRuleColor{\color{black!50!white}}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim} {fontsize=\small} 
+\DefineVerbatimEnvironment{Soutput}{Verbatim} {fontsize=\small} 
+%\DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=5em} 
+%\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em} 
+\fvset{listparameters={\setlength{\topsep}{0pt}}} 
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}} 
+
+\definecolor{GrayBoxGray}{rgb}{0.94,0.95,0.95}
+\definecolor{GrayBoxGray}{rgb}{0.97,0.98,0.95}
+\colorlet{GrayBoxGray}{blue!10!black!10}
+\colorlet{GrayBoxGray}{blue!7}
+\makeatletter\newenvironment{graybox}{%
+   \begin{lrbox}{\@tempboxa}\begin{minipage}{\Rwidth}}{\end{minipage}\end{lrbox}%
+   \colorbox{GrayBoxGray}{\usebox{\@tempboxa}}
+}\makeatother
+
+\renewenvironment{Schunk}{
+
+\noindent
+\begin{graybox}}{\end{graybox}
+
+}
+
+
+\newlength{\tempfmlength}
+\newsavebox{\fmbox}
+\newenvironment{fmpage}[1]
+     {
+	 \medskip
+	 \setlength{\tempfmlength}{#1}
+	 \begin{lrbox}{\fmbox}
+	   \begin{minipage}{#1}
+		 \vspace*{.02\tempfmlength}
+		 \hfill
+	   \begin{minipage}{.95 \tempfmlength}}
+		 {\end{minipage}\hfill
+		 \vspace*{.015\tempfmlength}
+		 \end{minipage}\end{lrbox}\fbox{\usebox{\fmbox}}
+	 \medskip
+	 }
+
+
+\newenvironment{boxedText}[1][.98\textwidth]%
+{%
+\begin{center}
+\begin{fmpage}{#1}
+}%
+{%
+\end{fmpage}
+\end{center}
+}
+
+\newenvironment{boxedTable}[2][tbp]%
+{%
+\begin{table}[#1]
+  \refstepcounter{table}
+  \begin{center}
+\begin{fmpage}{.98\textwidth}
+  \begin{center}
+	\sf \large Box~\expandafter\thetable. #2
+\end{center}
+\medskip
+}%
+{%
+\end{fmpage}
+\end{center}
+\end{table}		% need to do something about exercises that follow boxedTable
+}
+
+
+
+% indexing
+\newcommand{\printindex}[1]{\relax}
+\newcommand{\indexchap}[1]{\relax}
+\usepackage{amsmidx}
+\newcommand{\exampleidx}[1]{{\it #1}}
+\newcommand{\defidx}[1]{{\bf #1}}
+\newcommand{\mainidx}[1]{{\bf #1}}
+\newcommand{\probidx}[1]{{{\underline{#1}}}}
+
+\makeindex{Rindex}
+\makeindex{mainIndex}
+\newcommand{\Rindex}[1]{\index{Rindex}{#1@\texttt{#1}}}
+\newcommand{\myindex}[1]{\index{mainIndex}{#1}}
+\newcommand{\mathindex}[1]{\index{mainIndex}{$#1$}}
+
+\newcommand{\cran}{\href{http://www.R-project.org/}{CRAN}}
+
+\newcommand{\rterm}[1]{\textbf{#1}}
+
+
+\title{Teaching Statistics with R}
+
+\author{
+Randall Pruim
+\and
+Nicholas Horton 
+\and 
+Daniel Kaplan 
+}
+
+\date{May, 2011}
+
+
+\begin{document}
+%%%%%%%%%%% comment this out if not using highlight %%%%%%%%%%%%%%%%%%%%%%
+\newif\ifhweave
+\ifdef{\hlcomment}{\hweavetrue}{\hweavefalse}
+\ifhweave
+\renewenvironment{Hchunk}%
+{%
+\vspace{0.5em}\noindent\begin{lrbox}{\highlightbox}%
+\begin{minipage}[b]{\Rwidth}%
+}%
+{%
+\end{minipage}%
+\end{lrbox}%
+%\fcolorbox{highlightBorder}{highlightBg}{\usebox{\highlightbox}}%
+\fcolorbox{highlightBg}{highlightBg}{\usebox{\highlightbox}}%
+\vspace{0.5em}}%
+
+\renewcommand{\hlcomment}[1]{\textcolor[rgb]{0.4,0.4,0.3}{#1}}%
+\fi
+%%%%%%%%%%% end highlight specific stuff %%%%%%%%%%%%%%%%%%%%%%
+\Rwidth=\textwidth
+
+\parindent=0pt
+\parskip=3mm
+
+  % location of 
+    % not sure this does anything unless we use pgfSweave
+         % keep.source probably disables this
+          % use pdf for graphics
+  % remove blank lines at beginning and end 
+  % keeps formatting from original; allows ? to work
+
