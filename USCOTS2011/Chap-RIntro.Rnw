@@ -20,6 +20,7 @@ bwplot <- function(...) { print(lattice::bwplot(...)) }
 histogram <- function(...) { print(lattice::histogram(...)) }
 dotPlot <- function(...) { print(mosaic::dotPlot(...)) }
 barchart <- function(...) { print(lattice::barchart(...)) }
+require(vcd)
 mosaic <- function(...) { print(vcd::mosaic(...)) }
 @ 
 
