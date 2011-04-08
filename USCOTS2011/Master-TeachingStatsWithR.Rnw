@@ -310,6 +310,7 @@ the dependencies in \verb!bin/!
 \item \verb!problems.sty! (for problems and solutions)
 \item \verb!authNote.sty! (for author notes)
 \item \verb!probstat.sty! (for some prob/stat macros)
+\item \verb!sfsect.sty! (for san serif section title fonts)
 \end{itemize}
 You may need to set an environment variable to make \LaTeX\ look here.
 \item
