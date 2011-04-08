@@ -7,7 +7,9 @@ Access to Google Maps
 Front end allowing access to google maps.
 }
 \usage{
-googleMap(latitude, longitude, position = cbind(lat = latitude, lon = longitude), zoom = 12, maptype = c("roadmap", "satellite", "terrain", "hybrid"), mark = FALSE, radius = 0, browse = TRUE, ...)
+googleMap(latitude, longitude, position = NULL, zoom = 12, 
+maptype = c("roadmap", "satellite", "terrain", "hybrid"), 
+mark = FALSE, radius = 0, browse = TRUE, ...)
 }
 \arguments{
   \item{latitude}{ a numeric value between -90 and 90 giving the latitude of the center of the map.
