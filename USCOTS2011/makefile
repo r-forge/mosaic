@@ -5,6 +5,7 @@ export BIBINPUTS := ./inputs//:${BIBINPUTS}
 TEXFILES = \
 	  Master-TeachingStatsWithR.tex \
 	  Chap-GettingStarted.tex \
+	  Chap-Manipulate.tex \
 	  Chap-SimulationBased.tex \
 	  Chap-Multivariate.tex \
 	  Chap-Core.tex \
