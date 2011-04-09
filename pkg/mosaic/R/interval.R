@@ -2,19 +2,22 @@
 
 interval <- function(x, ...){UseMethod("interval", x)}
 
-interval.htest <- function (x, ...){
+interval.htest <- function (x, verbose=TRUE, ...){
   int <- x$conf.int
   lev <- attr(int, "conf.level")
-  cat( "\n" )
-  cat('Method: ')
-  cat(x$method)
-  cat( "\n" )
-  cat( "\n" )
-  print(x$estimate) 
-  cat( "\n" )
-  cat( paste(lev * 100, "% confidence interval: \n", sep = "") )
-  cat( as.vector(int) )
-  cat( "\n" )
-  cat( "\n" )
-  invisible(int)
+  if (verbose ) {
+	  cat( "\n" )
+	  cat('Method: ')
+	  cat(x$method)
+	  cat( "\n" )
+	  cat( "\n" )
+	  print(x$estimate) 
+	  cat( "\n" )
+	  cat( paste(lev * 100, "% confidence interval: \n", sep = "") )
+	  cat( as.vector(int) )
+	  cat( "\n" )
+	  cat( "\n" )
+  	  invisible(int)
+  }
+  return(int)
 }

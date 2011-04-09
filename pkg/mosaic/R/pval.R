@@ -2,7 +2,7 @@
 
 pval <- function(x, ...){UseMethod("pval", x)}
 
-pval.htest <- function (x, digits=4,...){
+pval.htest <- function (x, digits=4, verbose=TRUE, ...){
   pval <- x$p.value
   stat <- x$statistic
   param <- x$parameter
@@ -15,36 +15,39 @@ pval.htest <- function (x, digits=4,...){
   	'greater' = ' > ',
   	'two.sided' = ' <> '
 	)
-  cat('\n')
-  cat(paste('Method: ', method,  sep=""))
-  cat('\n\n')
-  cat(paste(
-  	'Null Hypothesis: ', 
-  	names(null), 
-	" = ", 
-	null,
-  	sep="") 
-  )  
-  cat('\n')
-  cat(paste(
-  	'Alt. Hypothesis: ', 
-  	names(null), 
-	direction, 
-	null,
-  	sep="") 
-  )  
-  cat('\n\n')
-  cat(paste(names(stat), " = ", 
-  	signif(stat,digits=digits),
-  	sep="") )  
-  cat('  (')
-  cat( paste( 
-  	names(param), " = ", 
-  	signif(param,digits=digits), 
-  	sep="",
-	collapse=', ') )  
-  cat(')\n\n')
-  cat( paste("p-value = ", signif(pval,digits), sep="") ) 
-  cat('\n\n')
-  invisible(pval)
+  if (verbose) {
+	  cat('\n')
+	  cat(paste('Method: ', method,  sep=""))
+	  cat('\n\n')
+	  cat(paste(
+		'Null Hypothesis: ', 
+		names(null), 
+		" = ", 
+		null,
+		sep="") 
+	  )  
+	  cat('\n')
+	  cat(paste(
+		'Alt. Hypothesis: ', 
+		names(null), 
+		direction, 
+		null,
+		sep="") 
+	  )  
+	  cat('\n\n')
+	  cat(paste(names(stat), " = ", 
+		signif(stat,digits=digits),
+		sep="") )  
+	  cat('  (')
+	  cat( paste( 
+		names(param), " = ", 
+		signif(param,digits=digits), 
+		sep="",
+		collapse=', ') )  
+	  cat(')\n\n')
+	  cat( paste("p-value = ", signif(pval,digits), sep="") ) 
+	  cat('\n\n')
+	  invisible(pval)
+  }
+  return(pval)
 }
