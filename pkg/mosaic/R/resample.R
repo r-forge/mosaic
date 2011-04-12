@@ -80,11 +80,11 @@ sample <- function (x, size, replace=FALSE, ...) {
 		groups <- rep(groups, length.out=nrow(x))
 	}
 	groups = as.factor(groups)
-	flag = FALSE
+	flag = c()
 	levs = levels(groups);
 	for (lev in levs) { # k in 1:length(levs) ) {
 		ids = which( groups==lev )
-		if (length(ids)==1 ) { flag = TRUE }
+		if (length(ids)==1 ) { flag = c(lev) }
 		rids = sample(ids, replace=replace, orig.ids=orig.ids) 
 		if( is.null(dim(x))) {
 			x[ ids] = x[rids]}
@@ -96,8 +96,9 @@ sample <- function (x, size, replace=FALSE, ...) {
 			}
 		}
 	}
-	if (flag) {
-		warning("One or more groups had only 1 member. Can't shuffle that group.")
+	if (length(flag) > 0) {
+		message <- paste ("The following groups had only 1 member and can't be shuffled: ", flag)
+		warning(message)
 	}
 	return(x)
 }
@@ -145,6 +146,23 @@ sample.matrix <- function(x, size, replace = FALSE, prob = NULL, groups=NULL, or
 			attr(data,'orig.row') <- ids
 		}
 		if (length(ids) < 50) { return(data) } else {invisible(data)}
+}
+
+sample.factor <- function(x, size, replace = FALSE, prob = NULL, groups=NULL, orig.ids=FALSE, 
+					drop.unused.levels = FALSE, ...) {
+	if (! is.null(groups) ) {
+		return(
+			.shuffle_within(x, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids)
+		)
+	}
+	n <- length(x)
+	ids <- base::sample(n, size, replace=replace, prob=prob)
+	if (drop.unused.levels) {
+		data <-  factor( x [ ids ] )
+	} else {
+		data <-  factor( x [ ids ], levels=levels(x) )
+	}
+	return(data)
 }
 
 

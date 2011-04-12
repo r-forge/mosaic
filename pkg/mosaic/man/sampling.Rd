@@ -3,6 +3,7 @@
 \alias{resample}
 \alias{sample.matrix}
 \alias{sample.default}
+\alias{sample.factor}
 \alias{sample.data.frame}
 \alias{deal}
 \alias{shuffle}
@@ -21,8 +22,13 @@ sample(x, size, replace = FALSE, ...)
 
 \method{sample}{matrix}(x, size, replace = FALSE, prob = NULL, 
 	groups = NULL, orig.ids = FALSE, ...)
+
 \method{sample}{data.frame}(x, size, replace = FALSE, prob = NULL, 
 	groups = NULL, orig.ids = TRUE, ...)
+
+\method{sample}{factor}(x, size, replace = FALSE, prob = NULL, 
+	groups = NULL, orig.ids = FALSE, drop.unused.levels=FALSE, ...)
+
 \method{sample}{default}(x, size, replace = FALSE, prob = NULL, groups = NULL, 
     orig.ids = FALSE, ...) 
 
@@ -50,18 +56,19 @@ nflip(n=1, prob=.5, ...)
   \item{replace}{ a logical indicating whether sampling is to be done with
   replacement.
 }
-  \item{prob}{ A vector of probability weights for obtaining the elements of
+  \item{prob}{ a vector of probability weights for obtaining the elements of
   the object being sampled, or the probability of heads for \code{rflip} and 
   \code{nflip}.
 }
-  \item{groups}{ if present, shuffling is done within groups given by
+  \item{groups}{ If present, shuffling is done within groups given by
   this vector.  In this case \code{size}, if present, is ignored.
 }
-  \item{orig.ids}{ if \code{TRUE} and \code{x} is a data frame or a matrix,
+  \item{orig.ids}{ If \code{TRUE} and \code{x} is a data frame or a matrix,
   then the original locations of the data is recorded in the object returned.
 }
 	\item{quiet}{ If \code{TRUE}, suppress output.}
 	\item{verbose}{ If \code{FALSE}, suppress output.}
+	\item{drop.unused.levels}{a logical. Remove unused levels from factors?}
 	\item{\dots}{ Additional arguments.}
 }
 \value{
