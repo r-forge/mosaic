@@ -25,6 +25,7 @@ clean:
 	\rm Master-*tex
 	\rm Master-*blg
 	\rm Master-*ind
+	\rm Master-TeachingStatsWithR.pdf
 
 %.tex: %.Rnw
 	bin/sweave.sh -nc -c=cache $<
