@@ -9,7 +9,8 @@ lsline <- function( x, y, a=NULL, b=0, ... ) {
     panel=function(x,y,...) {
       resid <- y - a - b*x
       grid.rect( x, y, width=resid, height=resid, default.units="native",
-        gp=gpar(fill='red',col='red',alpha=0.1)
+        gp=gpar(fill='red',col='red',alpha=0.1),
+		just= if (resid < 0) c('right','top') else c('left','bottom')
       )
       panel.xyplot(x,y,...)
       panel.abline(a,b)
