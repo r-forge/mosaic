@@ -72,3 +72,11 @@ if(require(manipulate)) {
 }
 @
 
+\subsection{Visualizing Normal Distributions}
+<<manipulate-xpnorm>>=
+if(require(manipulate)) {
+  manipulate( xpnorm( x, 500, 100 ), x = slider(200,800) )
+}
+@
+
+
