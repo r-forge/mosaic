@@ -19,7 +19,7 @@ TEXFILES = \
 all: Master-TeachingStatsWithR.pdf
 
 clean:
-	\rm Chap-*.tex Chap-*.aux Master-*aux Master-*tex \
+	- \rm Chap-*.tex Chap-*.aux Master-*aux Master-*tex \
 		Master-*blg Master-*ind Master-TeachingStatsWithR*.pdf
 
 %.tex: %.Rnw
