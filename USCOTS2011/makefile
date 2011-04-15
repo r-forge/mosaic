@@ -19,8 +19,13 @@ TEXFILES = \
 all: Master-TeachingStatsWithR.pdf
 
 clean:
-	- \rm Chap-*.tex Chap-*.aux Master-*aux Master-*tex \
-		Master-*blg Master-*ind Master-TeachingStatsWithR*.pdf
+	- \rm Chap-*.tex 
+	- \rm Chap-*.aux 
+	- \rm Master-*aux 
+	- \rm Master-*tex 
+	- \rm Master-*blg 
+	- \rm Master-*ind 
+	- \rm Master-TeachingStatsWithR*.pdf
 
 %.tex: %.Rnw
 	bin/sweave.sh -nc -c=cache $<
