@@ -8,6 +8,7 @@ TEXFILES = \
 	  Chap-Manipulate.tex \
 	  Chap-SimulationBased.tex \
 	  Chap-Multivariate.tex \
+	  Chap-MoreExamples.tex \
 	  Chap-Core.tex \
 	  Chap-Internet.tex \
 	  Chap-Calculus.tex \

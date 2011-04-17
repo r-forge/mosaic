@@ -24,106 +24,133 @@ require(vcd)
 mosaic <- function(...) { print(vcd::mosaic(...)) }
 @ 
 
-\section{Examples from Randy's sections [to be deleted once Nick 
-understands how various things are done]}
+In this chapter, we will briefly review the commands and functions needed
+to analyze data from a more traditional introductory statistics course.
+We will use data from the HELP study: a randomized trial of a novel 
+way to link at-risk subjects with primary care.  More information on the
+dataset can 
+be found in section \ref{sec:help}.
 
-The \verb!rflip()! function can flip one coin
-
-<<flip1coin,cache=F>>=
-require(mosaic)
-rflip()
-@
-or a number of coins
-<<flip10coins,cache=F>>=
-rflip(10)
-@
-%and show us the results.
-
-Typing \verb!rflip(10)! a bunch of times is almost as tedious as 
-flipping all those coins.   But it is not too hard to 
-tell \R\ to \verb!do()! this a bunch of times.
-<<flip2,cache=F>>=
-do(3) * rflip(10)
-@
-
-Let's get \R\ to \verb!do()! it for us 10,000 times and make 
-a table of the results.
-
-<<seed123,echo=F>>=
-set.seed(123)
-@
-
-<<lady-dolots,cache=true>>=
-random.ladies <- do(10000) * rflip(10)
-@
-\vspace{-5mm}
-
-<<lady-table>>=
-table(random.ladies$heads)
-perctable(random.ladies$heads)     # display table using percentages
-@
-
-We can display this table graphically using a plot called a \term{histogram}.
-\vspace{-8mm}
-\begin{center}
-<<lady-hist,fig=T,width=3,height=1.6>>=
-histogram(~heads, random.ladies, 
-	breaks=-.5 + (0:11)
-	)
-@
-\end{center}
 
 \section{Graphical and Numerical Summaries}
 
-\subsection{Categorical Variables}
 
 \subsection{Continuous Variables}
 
-The \verb!rflip()! function can flip one coin
+R includes a number of commands to numerically summarize variables.
+These include the capability of calculating the mean, standard deviation,
+variance, median, five number summary, intra-quartile range (IQR) as well as arbitrary quantiles.  We will
+illustrate these using the CESD (Center for Epidemiologic Studies - Depression)
+measure of depressive symptoms.  To improve the legibility of output,
+we will also set the default number of digits to display to a more reasonable
+level.
 
-<<flip1coin,cache=F>>=
-require(mosaic)
-rflip()
-@
-or a number of coins
-<<flip10coins,cache=F>>=
-rflip(10)
-@
-%and show us the results.
-
-Typing \verb!rflip(10)! a bunch of times is almost as tedious as 
-flipping all those coins.   But it is not too hard to 
-tell \R\ to \verb!do()! this a bunch of times.
-<<flip2,cache=F>>=
-do(3) * rflip(10)
+<<cesd1,cache=F>>=
+options(digits=3)
+mean(HELP$cesd)
+sd(HELP$cesd)
+sd(HELP$cesd)^2
+var(HELP$cesd)
 @
 
-Let's get \R\ to \verb!do()! it for us 10,000 times and make 
-a table of the results.
+It is also straightforward to calculate quantiles of the distribution.
 
-<<seed123,echo=F>>=
-set.seed(123)
+<<cesd1,cache=F>>=
+median(HELP$cesd)
+five = fivenum(HELP$cesd)
+five     # vector of length 5
+five[4] - five[2]
+IQR(HELP$cesd)
+quantile(HELP$cesd)
+quantile(HELP$cesd, c(.25, .50))
 @
 
-<<lady-dolots,cache=true>>=
-random.ladies <- do(10000) * rflip(10)
-@
-\vspace{-5mm}
+We see that it is possible to interact with the objects created by these
+functions to calculate the IQR (or a function can generate this directly).
+By default, the 
+\verb!quantile()! function displays the quartiles, but can be given
+a vector of quantiles to display.
 
-<<lady-table>>=
-table(random.ladies$heads)
-perctable(random.ladies$heads)     # display table using percentages
-@
+The \verb!hist()! function is used to create a histogram.
 
-We can display this table graphically using a plot called a \term{histogram}.
 \vspace{-8mm}
 \begin{center}
-<<lady-hist,fig=T,width=3,height=1.6>>=
-histogram(~heads, random.ladies, 
-	breaks=-.5 + (0:11)
-	)
+<<cesd-hist,fig=TRUE,width=3,height=1.6>>=
+histogram(~ cesd, HELP)
 @
 \end{center}
+
+In the HELP dataset, approximately one quarter of the subjects
+are female.  It is straightforward to restrict our attention to
+just those subjects.
+
+The \verb!subset()! function can generate a new data frame containing
+just the women.  Once this is created, we
+used the \verb!stem()! function to create a stem and leaf plot.
+<<cesd-stem>>=
+female = subset(HELP, female==1)
+stem(female$cesd)
+@
+
+The \verb!dotPlot()! function is used to create a dotplot a la Fathom.
+
+\vspace{-8mm}
+\begin{center}
+<<cesd-dot,fig=TRUE,width=3,height=1.6>>=
+dotPlot(female$cesd)
+@
+\end{center}
+
+
+
+\subsection{Categorical Variables}
+
+<<homeless-table>>=
+table(HELP$homeless)
+perctable(HELP$homeless)     # display table using percentages
+@
+\section{Bivariate Graphical and Numerical Summaries}
+
+\subsection{Continuous Variables}
+
+Here we will compare the distributions of CESD scores by gender.
+To ensure that the display is clearly
+labeled, we first create a new variable called 
+\verb!gender!.
+<<cesd-gender>>=
+gender = rep("gender", length(HELP$female))   # what is a better way to do this?
+gender[HELP$female == 1] = "female"
+gender[HELP$female == 0] = "male"
+with(HELP, table(female))
+table(gender)
+@
+
+The \verb!tapply()! function can be used to calculate the mean CESD score
+for each of the two groups.
+<<tapply>>=
+tapply(HELP$cesd, gender, mean)
+@
+
+
+
+
+Boxplots are a particularly helpful graphical display to compare distributions.
+The \verb!bwplot()! function can be used to display the boxplots for the CESD scores separately by gender.  We see from both the numerical and graphical
+displays that women tend to have slightly higher CESD scores than men.
+
+\vspace{-8mm}
+\begin{center}
+<<cesd-box,fig=TRUE,width=3,height=1.6>>=
+bwplot(cesd ~ gender, data=HELP)
+@
+\end{center}
+
+\subsection{Categorical Variables}
+
+<<homeless-gender>>=
+table(HELP$homeless, HELP$female)
+xtabs(~ homeless + female, HELP)     
+@
 
 \section{Density Curves and Normal Distributions}
 
@@ -151,5 +178,7 @@ histogram(~heads, random.ladies,
 \section{Inference for Means}
 
 \section{Inference for Categorical Tables}
+
+\label{sec:DiscreteDistributions}
 
 \section{Linear Models: Regression and ANOVA}
