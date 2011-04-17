@@ -24,13 +24,132 @@ require(vcd)
 mosaic <- function(...) { print(vcd::mosaic(...)) }
 @ 
 
+\section{Examples from Randy's sections [to be deleted once Nick 
+understands how various things are done]}
 
-\section{Inference for Proportions}
+The \verb!rflip()! function can flip one coin
+
+<<flip1coin,cache=F>>=
+require(mosaic)
+rflip()
+@
+or a number of coins
+<<flip10coins,cache=F>>=
+rflip(10)
+@
+%and show us the results.
+
+Typing \verb!rflip(10)! a bunch of times is almost as tedious as 
+flipping all those coins.   But it is not too hard to 
+tell \R\ to \verb!do()! this a bunch of times.
+<<flip2,cache=F>>=
+do(3) * rflip(10)
+@
+
+Let's get \R\ to \verb!do()! it for us 10,000 times and make 
+a table of the results.
+
+<<seed123,echo=F>>=
+set.seed(123)
+@
+
+<<lady-dolots,cache=true>>=
+random.ladies <- do(10000) * rflip(10)
+@
+\vspace{-5mm}
+
+<<lady-table>>=
+table(random.ladies$heads)
+perctable(random.ladies$heads)     # display table using percentages
+@
+
+We can display this table graphically using a plot called a \term{histogram}.
+\vspace{-8mm}
+\begin{center}
+<<lady-hist,fig=T,width=3,height=1.6>>=
+histogram(~heads, random.ladies, 
+	breaks=-.5 + (0:11)
+	)
+@
+\end{center}
+
+\section{Graphical and Numerical Summaries}
+
+\subsection{Categorical Variables}
+
+\subsection{Continuous Variables}
+
+The \verb!rflip()! function can flip one coin
+
+<<flip1coin,cache=F>>=
+require(mosaic)
+rflip()
+@
+or a number of coins
+<<flip10coins,cache=F>>=
+rflip(10)
+@
+%and show us the results.
+
+Typing \verb!rflip(10)! a bunch of times is almost as tedious as 
+flipping all those coins.   But it is not too hard to 
+tell \R\ to \verb!do()! this a bunch of times.
+<<flip2,cache=F>>=
+do(3) * rflip(10)
+@
+
+Let's get \R\ to \verb!do()! it for us 10,000 times and make 
+a table of the results.
+
+<<seed123,echo=F>>=
+set.seed(123)
+@
+
+<<lady-dolots,cache=true>>=
+random.ladies <- do(10000) * rflip(10)
+@
+\vspace{-5mm}
+
+<<lady-table>>=
+table(random.ladies$heads)
+perctable(random.ladies$heads)     # display table using percentages
+@
+
+We can display this table graphically using a plot called a \term{histogram}.
+\vspace{-8mm}
+\begin{center}
+<<lady-hist,fig=T,width=3,height=1.6>>=
+histogram(~heads, random.ladies, 
+	breaks=-.5 + (0:11)
+	)
+@
+\end{center}
+
+\section{Density Curves and Normal Distributions}
+
+
+\section{Scatterplots and correlation}
+
+\section{Cross classification Tables}
+
+\section{Simple Linear Regression}
+
+\section{Design and Randomization}
+
+\section{Bias and Variability}
+
+\section{Probability and Random Variables}
+
+
+
+
+
+
+
+\section{Inference for Proportions and Counts}
 
 \section{Inference for Means}
 
-\section{Chi-Squared Tests}
-
-\subsection{Dealing with Categorical Data}
+\section{Inference for Categorical Tables}
 
 \section{Linear Models: Regression and ANOVA}

@@ -52,13 +52,13 @@ methods are often available first in \R.
 \begin{center}
 \url{http://beta.rstudio.org/}
 \end{center}
-You shouldbe able to log in using your Calvin ID (\texttt{myname@calvin.edu})  
-and KnightVision password.  Once you have logged in, you will see something like 
+You should be able to log in using your Gmail address.
+Once you have logged in, you will see something like 
 Figure~\ref{fig:Rstudio-bigview}.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=.75\textwidth]{images/RStudio-bigview}
+\includegraphics[width=1.0\textwidth]{images/RStudio-bigview}
 \end{center}
 \caption{Welcome to \Rstudio.}
 \label{fig:Rstudio-bigview}%
@@ -85,15 +85,20 @@ properly.
 15.3 * 23.4
 sqrt(16)
 @
-You can save values to named variables for later reuse
+You can save values to named variables for later reuse.
 
-<<variables>>=
+<<variables1>>=
 product = 15.3 * 23.4       # save result
 product                     # show the result
 product <- 15.3 * 23.4      # <- is assignment operator, same as =
 product                     
 15.3 * 23.4 -> newproduct   # -> assigns to the right
 newproduct
+@
+Once variables are defined, they can be referenced with other operators
+and functions.
+
+<<variables2>>=
 .5 * product                # half of the product
 log(product)                # (natural) log of the product
 log10(product)              # base 10 log of the product
@@ -409,7 +414,7 @@ Determine the average (mean) sepal width for each of the three species in the \v
 
 \subsection{Lattice Graphics}
 
-There are several ways to make graphs in \R.  I like to use a system called
+There are several ways to make graphs in \R.  One approach is a system called
 \verb!lattice! graphics.  The first step for using \verb!lattice! is to
 load the \verb!lattice! package using the check box in the \tab{Packages} tab or using
 the following command:
@@ -1116,16 +1121,15 @@ the default behavior or something special).
 \subsection{RStudio in the cloud}
 Our primary version of \R\ will be the online version of \Rstudio.  
 You should have an \Rstudio\ account at \url{http://beta.rstudio.org/} 
-using your Calvin student email address and password.
+using your Gmail address.
 \Rstudio\ is a brand new (and quite nice) interface to \R that runs in a web browser.
 This has the advantage that you don't have to install or configure anything.  Just login
 and you are good to go.  Futhermore, \Rstudio\ will ``remember'' what you were doing so that
 each time you login (even on a different machine) you can pick up right where you left off.
 This is ``\R\ in the cloud" and works a bit like GoogleDocs for \R.
 
-If you find bugs or have suggestions for \Rstudio, let me know.  It is in rapid development
-at the moment, and I can pass along your feedback to the developers.  You are among the 
-first to use \Rstudio, and this is your chance to improve the software!
+If you find bugs or have suggestions for \Rstudio, let us know.  It is in rapid development
+at the moment, and we can pass along your feedback to the developers.  
 
 This should be all you need for this course.  But if you prefer to have a
 stand-alone version (because you study somewhere without an internet
@@ -1133,9 +1137,9 @@ connection, for example), read on.
 
 
 \subsection{RStudio on Your Desktop/Laptop}
-There is also a stand-alone version of the \Rstudio\ that you can install on
-your desktop or laptop machine.  I'll send you email with instructions indicating where to
-find it.  (It is currently in beta and has not been released to the general public.)
+There is also a stand-alone version of the \Rstudio\ environment that you can install on
+your desktop or laptop machine.  
+This can be downloaded from \url{http://www.rstudio.org/}.  
 
 
 \subsection{Getting R from CRAN}
