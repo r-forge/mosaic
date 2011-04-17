@@ -22,13 +22,13 @@ by Kleinman and Horton.
 }
 \source{\url{http://www.math.smith.edu/sasr/datasets.php}}
 \references{
-Kleinman, K. and Horton, N.J. (2009)
-\cite{SAS and R: Data Management, Statistical Analysis, and Graphics},
+Horton, N.J. and Kleinman K (2011)
+\cite{Using R for Data Management, Statistical Analysis, and Graphics},
 Chapman & Hall.
 }
 \examples{
 data(HELP)
-xtabs(~homeless + female, HELP)
-xchisq.test(xtabs(~homeless + female, HELP))
+xtabs(~ homeless + female, HELP)
+xchisq.test(xtabs(~ homeless + female, HELP))
 }
 \keyword{datasets}
