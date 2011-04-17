@@ -32,7 +32,7 @@ dataset can
 be found in section \ref{sec:help}.
 
 
-\section{Graphical and Numerical Summaries}
+\section{Univariate Graphical and Numerical Summaries}
 
 
 \subsection{Continuous Variables}
@@ -57,8 +57,8 @@ It is also straightforward to calculate quantiles of the distribution.
 
 <<cesd1,cache=F>>=
 median(HELP$cesd)
-five = fivenum(HELP$cesd)
-five     # vector of length 5
+five <- fivenum(HELP$cesd)
+five     # display the object (vector of length 5)
 five[4] - five[2]
 IQR(HELP$cesd)
 quantile(HELP$cesd)
@@ -88,7 +88,7 @@ The \verb!subset()! function can generate a new data frame containing
 just the women.  Once this is created, we
 used the \verb!stem()! function to create a stem and leaf plot.
 <<cesd-stem>>=
-female = subset(HELP, female==1)
+female <- subset(HELP, female==1)
 stem(female$cesd)
 @
 
@@ -118,15 +118,17 @@ To ensure that the display is clearly
 labeled, we first create a new variable called 
 \verb!gender!.
 <<cesd-gender>>=
-gender = rep("gender", length(HELP$female))   # what is a better way to do this?
-gender[HELP$female == 1] = "female"
-gender[HELP$female == 0] = "male"
+gender <- rep("gender", length(HELP$female))   # what is a better way to do this?
+gender[HELP$female == 1] <- "female"
+gender[HELP$female == 0] <- "male"
 with(HELP, table(female))
 table(gender)
 @
 
 The \verb!tapply()! function can be used to calculate the mean CESD score
-for each of the two groups.
+(given as first argument)
+for each of the two groups (given as second argument).  The third argument
+specifies which function to run for each of these subgroups.
 <<tapply>>=
 tapply(HELP$cesd, gender, mean)
 @
