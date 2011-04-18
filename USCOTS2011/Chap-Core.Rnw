@@ -55,7 +55,7 @@ var(HELP$cesd)
 
 It is also straightforward to calculate quantiles of the distribution.
 
-<<cesd1,cache=F>>=
+<<cesd1>>=
 median(HELP$cesd)
 five <- fivenum(HELP$cesd)
 five     # display the object (vector of length 5)
@@ -71,7 +71,7 @@ By default, the
 \verb!quantile()! function displays the quartiles, but can be given
 a vector of quantiles to display.
 
-The \verb!hist()! function is used to create a histogram.
+The \verb!histogram()! function is used to create a histogram.
 
 \vspace{-8mm}
 \begin{center}
@@ -97,10 +97,27 @@ The \verb!dotPlot()! function is used to create a dotplot a la Fathom.
 \vspace{-8mm}
 \begin{center}
 <<cesd-dot,fig=TRUE,width=3,height=1.6>>=
-dotPlot(female$cesd)
+dotPlot(~cesd, data=female)
+@
+\end{center}
+We could also have made our subset ``on the fly'', just for the purposes of graphing:
+<<cesd-dot2,fig=TRUE,width=3,height=1.6,eval=F>>=
+dotPlot(~cesd, data=HELP, subset=female==1)
+@
+Or we could make side-by-side dotplots of men and women:
+\begin{center}
+<<cesd-dot3,fig=TRUE,width=5,height=1.9,eval=T>>=
+dotPlot(~cesd | female, data=HELP)
 @
 \end{center}
 
+Nicer if we recode:
+\begin{center}
+<<cesd-dot4,fig=TRUE,width=5,height=1.9,eval=T>>=
+HELP$sex <- factor( HELP$female, labels=c('male','female') )
+dotPlot( ~ cesd | sex, data=HELP)
+@
+\end{center}
 
 
 \subsection{Categorical Variables}
