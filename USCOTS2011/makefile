@@ -1,6 +1,8 @@
 export TEXINPUTS := ./inputs//:${TEXINPUTS}
 export BIBINPUTS := ./inputs//:${BIBINPUTS}
 
+SWEAVEOPTS = ""
+SWEAVEOPTS = -c=cache 
 
 TEXFILES = \
 	  Master-TeachingStatsWithR.tex \
@@ -29,7 +31,7 @@ clean:
 	- \rm Master-TeachingStatsWithR*.pdf
 
 %.tex: %.Rnw
-	bin/sweave.sh -nc -c=cache $<
+	bin/sweave.sh -nc $(SWEAVEOPTS) $< 
 
 Master-TeachingStatsWithR.pdf: $(TEXFILES)
 	./bin/latexmk -f -pdf  Master-TeachingStatsWithR.tex

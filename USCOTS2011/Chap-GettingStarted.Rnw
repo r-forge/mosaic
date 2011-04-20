@@ -475,9 +475,24 @@ that the lady correctly identified all 10 cups!
 \cite{salsburg}
 
 
+\subsubsection{A different design}
+
+Suppose instead that we prepare five cups each way (and that the woman tasting
+knows this).  We give her five cards labeled ``milk first'', and she must place 
+them next to the cups that had the milked poured first.  How does this 
+design change things?
+
+<<lady-five>>=
+results <- do(10000) * table( sample( c('M','M','M','M','M','T','T','T','T','T'), 5 ) )
+table(results$M) / 10000
+@
+
+
 
 
 \section{Graphical and Numerical Summaries}
+
+See appendix A.
 
 \section{Going Multivariate Early: Galton's Data}
 
