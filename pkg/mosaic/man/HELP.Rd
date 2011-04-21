@@ -1,34 +1,51 @@
 \name{HELP}
 \alias{HELP}
 \docType{data}
-\title{HELP -- Health Evaluation and Linkage to Primary Care}
-\description{ Data recorded for inpatient subjects at a detoxification unit.
+\title{
+%%   ~~ data name/kind ... ~~
 }
-\usage{
-data(HELP)
+\description{
+The HELP study was a clinical trial for adult inpatients recruited from a detoxification unit.
+Patients with no primary care physician were randomized to receive a multidisciplinary assessment and a brief motivational intervention or usual care,
+with the goal of linking them to primary medical care.
 }
-
+\usage{data(HELP)}
+\format{
+  A data frame with 453 observations on the following 24 variables.
+  \describe{
+    \item{\code{id}}{subject identifier}
+    \item{\code{age}}{subject age (in years)}
+    \item{\code{substance}}{a factor with levels \code{alcohol} \code{cocaine} \code{heroin}}
+    \item{\code{racegrp}}{a factor with levels \code{black} \code{hispanic} \code{other} \code{white}}
+  }
+}
 \details{
-The HELP (Health Evaluation and Linkage to Primary Care) study was a clinical
-trial for adult inpatients recruited from a detoxification unit. Patients with
-no primary care physician were randomized to receive a multidisciplinary
-assessment and a brief motivational intervention or usual care, with the goal
-of linking them to primary medical care. The Institutional Review Board of
-Boston University Medical Center approved all aspects of the study, including
-the creation of the de-identified dataset available in this data frame. Variables
-included in the HELP dataset are described in Table C.2 (p. 279) of
-\cite{SAS and R: Data Management, Statistical Analysis, and Graphics}
-by Kleinman and Horton.
+Eligible subjects were
+adults, who spoke Spanish or English, reported alcohol, heroin or
+cocaine as their first or second drug of choice, resided in proximity
+to the primary care clinic to which they would be referred or were
+homeless.  Patients with established primary care relationships
+they planned to continue, significant dementia, specific plans to
+leave the Boston area that would prevent research participation,
+failure to provide contact information for tracking purposes, or
+pregnancy were excluded.
+
+Subjects were interviewed at baseline during their detoxification
+stay and follow-up interviews were undertaken every 6 months for 2
+years.  A variety of continuous, count, discrete, and survival time
+predictors and outcomes were collected at each of these five
+occasions.
 }
-\source{\url{http://www.math.smith.edu/sasr/datasets.php}}
+\source{
+\url{http://www.math.smith.edu/help}
+}
 \references{
-Horton, N.J. and Kleinman K (2011)
-\cite{Using R for Data Management, Statistical Analysis, and Graphics},
-Chapman & Hall.
+Samet JH, Larson MJ, Horton NJ, Doyle K, Winter M, and Saitz R.  Linking alcohol and 
+drug-dependent adults to primary medical care: 
+A randomized controlled trial of a multi-disciplinary health intervention in a detoxification unit.  {\it Addiction}, 2003; 98(4):509-516.
 }
 \examples{
 data(HELP)
-xtabs(~ homeless + female, HELP)
-xchisq.test(xtabs(~ homeless + female, HELP))
+## maybe str(HELP) ; plot(HELP) ...
 }
 \keyword{datasets}
