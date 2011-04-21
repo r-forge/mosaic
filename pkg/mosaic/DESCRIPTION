@@ -1,8 +1,8 @@
 Package: mosaic
 Type: Package
 Title: Data sets and utilities from Project MOSAIC (mosaic-web.org)
-Version: 0.1-19
-Date: 2011-04-11
+Version: 0.1-20
+Date: 2011-04-21
 Depends: lattice, grid
 Suggests: MASS 
 Author: Randall Pruim <rpruim@calvin.edu>, Daniel Kaplan <kaplan@macalester.edu>, Nicholas Horton <nhorton@smith.edu>
