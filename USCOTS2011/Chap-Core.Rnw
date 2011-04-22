@@ -8,11 +8,14 @@
 \SweaveOpts{pdf=T}          % use pdf for graphics
 \SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+%% \SweaveOpts{eval=false}     % temporary
 
 <<setup,echo=F>>=
 #setCacheDir("cache")
 require(grDevices); require(datasets); require(stats); require(lattice)
-require(grid); require(mosaic); require(fastR)
+require(grid) 
+require(fastR)
+require(mosaic) 
 trellis.par.set(theme=col.mosaic(bw=FALSE))
 trellis.par.set(fontsize=list(text=9))
 options(keep.blank.line=FALSE); options(width=100)
@@ -91,8 +94,8 @@ just those subjects.
 The \verb!subset()! function can generate a new data frame containing
 just the women.  Once this is created, we
 used the \verb!stem()! function to create a stem and leaf plot.
-<<cesd-stem, eval=true>>=
-female <- subset(HELP, female==1)
+<<cesd-stem>>=
+female <- subset(HELP, sex=='female')
 stem(female$cesd)
 @
 
@@ -100,31 +103,33 @@ The \verb!dotPlot()! function is used to create a dotplot a la Fathom.
 
 \vspace{-8mm}
 \begin{center}
-<<cesd-dot,fig=TRUE,width=3,height=1.6, eval=true>>=
+<<cesd-dot,fig=TRUE,width=3,height=1.6>>=
 dotPlot(~cesd, data=female)
 @
 \end{center}
 We could also have made our subset ``on the fly'', just for the purposes of graphing:
 \begin{center}
-<<cesd-dot2,fig=TRUE,width=3,height=1.6,eval=true>>=
-dotPlot(~cesd, data=HELP, subset=female==1)
+<<cesd-dot2,fig=TRUE,width=3,height=1.6>>=
+dotPlot(~cesd, data=HELP, subset=sex=='female')
 @
 \end{center}
 
 Or we could make side-by-side dotplots of men and women:
 \begin{center}
-<<cesd-dot3,fig=TRUE,width=5,height=1.9,eval=true>>=
-dotPlot(~cesd | female, data=HELP)
+<<cesd-dot3,fig=TRUE,width=5,height=1.9>>=
+dotPlot(~cesd | sex, data=HELP)
 @
 \end{center}
 
+\iffalse
 Nicer if we recode:
 \begin{center}
-<<cesd-dot4,fig=TRUE,width=5,height=1.9,eval=true>>=
+<<cesd-dot4,fig=TRUE,width=5,height=1.9>>=
 HELP$sex <- factor( HELP$female, labels=c('male','female') )
 dotPlot( ~ cesd | sex, data=HELP)
 @
 \end{center}
+\fi
 
 \subsection{Density Curves and Normal Distributions}
 
@@ -165,7 +170,7 @@ perctable(HELP$homeless)     # display table using percentages
 \subsection{Cross classification Tables}
 
 \subsubsection{From Raw Data}
-<<homeless-gender, eval=true>>=
+<<homeless-sex>>=
 table(HELP$homeless, HELP$female)
 xtabs(~ homeless + female, HELP)     
 @
@@ -181,53 +186,54 @@ xtabs(~ homeless + female, HELP)
 \section{Quantiative Response to a Categorical Predictor}
 
 \subsection{A Bivariate Predictor: Two-sample t}
-Here we will compare the distributions of CESD scores by gender.
+Here we will compare the distributions of CESD scores by sex.
+The \verb!HELP! data set has a numeric variable \verb!female!
+that codes sex us 0 for male and 1 for female.
 To ensure that the display is clearly
-labeled, we first create a new variable called 
+labeled, we first create a new factor (i.e., categorical) variable called 
 \verb!gender!.
-<<cesd-gender,eval=true>>=
-gender <- rep("gender", length(HELP$female))   # what is a better way to do this?
-gender[HELP$female == 1] <- "female"
-gender[HELP$female == 0] <- "male"
-with(HELP, table(female))
-table(gender)
-@
 
-<<cesd-gender-better, eval=true>>=
-# another approach to the recoding above
+<<cesd-gender-better>>=
 HELP$gender <- factor(HELP$female, labels=c('male', 'female'))
 # sanity check:
 xtabs( ~ female + gender, HELP)
+@
+As it turns out, the \verb!HELP! data set already had a recoded 
+version of female called \verb!sex!.  But many data sets require this sort
+of conversion from numeric codes to factors.
+<<>>=
+# HELP already has a factor called sex, so this was redundant effort
+xtabs( ~ sex + gender, HELP)
 @
 
 The \verb!tapply()! function can be used to calculate the mean CESD score
 (given as first argument)
 for each of the two groups (given as second argument).  The third argument
 specifies which function to run for each of these subgroups.
-<<tapply, eval=true>>=
-tapply(HELP$cesd, gender, mean)
+<<tapply>>=
+tapply(HELP$cesd, HELP$sex, mean)
 @
 
 \authNote{Which method(s) do we want to show?}
 Alternatives to the code above:
 <<tapply-alternatives>>=
-aggregate(cesd ~ gender, HELP, FUN=mean)
-aggregate(cesd ~ gender, HELP, FUN=favstats)
-summary(cesd ~ gender, HELP, fun=mean)
-summary(cesd ~ gender, HELP, fun=favstats)
+aggregate(cesd ~ sex, HELP, FUN=mean)
+aggregate(cesd ~ sex, HELP, FUN=favstats)
+summary(cesd ~ sex, HELP, fun=mean)
+summary(cesd ~ sex, HELP, fun=favstats)
 @
 
 
 Boxplots are a particularly helpful graphical display to compare distributions.
-The \verb!bwplot()! function can be used to display the boxplots for the CESD scores separately by gender.  We see from both the numerical and graphical
+The \verb!bwplot()! function can be used to display the boxplots for the CESD scores separately by sex.  We see from both the numerical and graphical
 displays that women tend to have slightly higher CESD scores than men.
 \authNote{Should mention use of \verb!xyplot()! when the sample sizes are small.
 No reason to compute 5-number summaries of 10 or fewer numbers really.}
 
 \vspace{-8mm}
 \begin{center}
-<<cesd-box,fig=TRUE,width=3,height=1.6,eval=true>>=
-bwplot(cesd ~ gender, data=HELP)
+<<cesd-box,fig=TRUE,width=3,height=1.6>>=
+bwplot(cesd ~ sex, data=HELP)
 @
 \end{center}
 

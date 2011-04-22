@@ -7,11 +7,15 @@
 \SweaveOpts{pdf=T}          % use pdf for graphics
 \SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+\SweaveOpts{width=3}
+\SweaveOpts{height=2}
 
 <<setup,echo=F>>=
 #setCacheDir("cache")
 require(grDevices); require(datasets); require(stats); require(lattice)
-require(grid); require(mosaic); require(fastR)
+require(fastR)
+require(grid); 
+require(mosaic); 
 trellis.par.set(theme=col.mosaic(bw=FALSE))
 trellis.par.set(fontsize=list(text=9))
 options(keep.blank.line=FALSE); options(width=100)
@@ -23,7 +27,29 @@ require(vcd)
 mosaic <- function(...) { print(vcd::mosaic(...)) }
 @ 
 
-\section{\texttt{mosaic} randomization widgets}
+\section{\texttt{mosaic} Randomization Widgets}
+
+\subsection{Sampling and Resampling}
+
+<<>>=
+rnorm(20, mean=500, sd=100) 
+rexp(20, rate=1/5)
+@
+<<>>=
+rflip(20)
+rdata(20, 1:4)
+@
+
+
+\subsection{\texttt{do()}}
+The heart of a simulation is doing something over and over.  
+The \verb!do()! function simplifies the syntax for this and improves 
+the output format (usually returning a data frame).
+
+<<>>=
+do(5) * "hello"
+@
+
 
 \section{Examples}
 \subsection{Lady Tasting Tea}
@@ -32,7 +58,44 @@ an introduction to testing a proportion.
 
 \subsection{Golfballs in the Yard}
 
+<<>>=
+require(fastR)
+golfballs 
+table( rdata(486, 1:4) )
+@
+<<>>=
+rgolfballs <- do(10000) * table( rdata(486, 1:4) )
+@
 
+
+<<>>=
+args(statTally)
+@
+
+\begin{center}
+<<golfballs-max,fig=true>>=
+print( statTally( golfballs, rgolfballs, max ) )
+@
+\end{center}
+
+\begin{center}
+<<golfballs-range,fig=true,height=1.7>>=
+print( statTally( golfballs, rgolfballs, function(x) { diff(range(x)) } ) )
+@
+\end{center}
+
+\begin{center}
+<<golfballs-var,fig=true,height=1.7>>=
+print( statTally( golfballs, rgolfballs, var ) )
+@
+\end{center}
+
+\section{Comparing Two Means}
+
+<<>>=
+do(5) * lm( age ~ sex, HELP )
+do(5) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)
+@
 
 \section{Bootstrap?}
 
