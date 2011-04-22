@@ -3,7 +3,7 @@
 \chapter{The Core of a Traditional Course}
 
 \SweaveOpts{prefix.string=figures/fig}  % location of 
-\SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
+\SweaveOpts{highlight=F}    % not sure this does anything unless we use pgfSweave
 \SweaveOpts{tidy=F}         % keep.source probably disables this
 \SweaveOpts{pdf=T}          % use pdf for graphics
 \SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
@@ -28,14 +28,18 @@ In this chapter, we will briefly review the commands and functions needed
 to analyze data from a more traditional introductory statistics course.
 We will use data from the HELP study: a randomized trial of a novel 
 way to link at-risk subjects with primary care.  More information on the
-dataset can 
-be found in section \ref{sec:help}.
+dataset can be found in section \ref{sec:help}.
 
+Since the selection and order of topics can vary greatly from 
+textbook to textbook and instructor to instructor, we have chosen to 
+organize this material by the kind of data being analyzed.  This should make
+it straightforward to find what you are looking for even if you present 
+things in a different order.  This is also a good organizational template
+to give your students to help them keep straight ``what to do when".
 
-\section{Univariate Graphical and Numerical Summaries}
+\section{One Quantitative Variable}
 
-
-\subsection{Continuous Variables}
+\subsection{Graphical and Numerical Summaries}
 
 R includes a number of commands to numerically summarize variables.
 These include the capability of calculating the mean, standard deviation,
@@ -87,7 +91,7 @@ just those subjects.
 The \verb!subset()! function can generate a new data frame containing
 just the women.  Once this is created, we
 used the \verb!stem()! function to create a stem and leaf plot.
-<<cesd-stem, eval=FALSE>>=
+<<cesd-stem, eval=true>>=
 female <- subset(HELP, female==1)
 stem(female$cesd)
 @
@@ -96,45 +100,92 @@ The \verb!dotPlot()! function is used to create a dotplot a la Fathom.
 
 \vspace{-8mm}
 \begin{center}
-<<cesd-dot,fig=TRUE,width=3,height=1.6, eval=FALSE>>=
+<<cesd-dot,fig=TRUE,width=3,height=1.6, eval=true>>=
 dotPlot(~cesd, data=female)
 @
 \end{center}
 We could also have made our subset ``on the fly'', just for the purposes of graphing:
-<<cesd-dot2,fig=TRUE,width=3,height=1.6,eval=FALSE>>=
+\begin{center}
+<<cesd-dot2,fig=TRUE,width=3,height=1.6,eval=true>>=
 dotPlot(~cesd, data=HELP, subset=female==1)
 @
+\end{center}
+
 Or we could make side-by-side dotplots of men and women:
 \begin{center}
-<<cesd-dot3,fig=TRUE,width=5,height=1.9,eval=FALSE>>=
+<<cesd-dot3,fig=TRUE,width=5,height=1.9,eval=true>>=
 dotPlot(~cesd | female, data=HELP)
 @
 \end{center}
 
 Nicer if we recode:
 \begin{center}
-<<cesd-dot4,fig=TRUE,width=5,height=1.9,eval=FALSE>>=
+<<cesd-dot4,fig=TRUE,width=5,height=1.9,eval=true>>=
 HELP$sex <- factor( HELP$female, labels=c('male','female') )
 dotPlot( ~ cesd | sex, data=HELP)
 @
 \end{center}
 
+\subsection{Density Curves and Normal Distributions}
 
-\subsection{Categorical Variables}
+\subsection{Power Calculations}
+
+
+
+\section{One Categorical Variable}
+
+\subsection{Graphical and Numerical Summaries}
 
 <<homeless-table>>=
 table(HELP$homeless)
 perctable(HELP$homeless)     # display table using percentages
 @
-\section{Bivariate Graphical and Numerical Summaries}
 
-\subsection{Continuous Variables}
+\subsection{The Binomial Test}
 
+\subsection{The Proportion Test}
+
+\subsection{Goodness of Fit Tests}
+
+\subsection{Power Calculations}
+
+
+\section{Two Quantitative Variables}
+
+\subsection{Paired t}
+
+\subsection{Scatterplots}
+
+\subsection{Correlation}
+
+\subsection{Simple Linear Regression}
+
+\section{Two Categorical Variables}
+
+\subsection{Cross classification Tables}
+
+\subsubsection{From Raw Data}
+<<homeless-gender, eval=true>>=
+table(HELP$homeless, HELP$female)
+xtabs(~ homeless + female, HELP)     
+@
+
+\subsubsection{Building Cross Tables from Already Summarized Data}
+
+\subsection{Chi-squared tests}
+
+\subsubsection{Displaying additional information: \texttt{xchisq.test()}}
+
+\subsection{Fisher's Exact Test}
+
+\section{Quantiative Response to a Categorical Predictor}
+
+\subsection{A Bivariate Predictor: Two-sample t}
 Here we will compare the distributions of CESD scores by gender.
 To ensure that the display is clearly
 labeled, we first create a new variable called 
 \verb!gender!.
-<<cesd-gender, eval=FALSE>>=
+<<cesd-gender,eval=true>>=
 gender <- rep("gender", length(HELP$female))   # what is a better way to do this?
 gender[HELP$female == 1] <- "female"
 gender[HELP$female == 0] <- "male"
@@ -142,43 +193,52 @@ with(HELP, table(female))
 table(gender)
 @
 
+<<cesd-gender-better, eval=true>>=
+# another approach to the recoding above
+HELP$gender <- factor(HELP$female, labels=c('male', 'female'))
+# sanity check:
+xtabs( ~ female + gender, HELP)
+@
+
 The \verb!tapply()! function can be used to calculate the mean CESD score
 (given as first argument)
 for each of the two groups (given as second argument).  The third argument
 specifies which function to run for each of these subgroups.
-<<tapply, eval=FALSE>>=
+<<tapply, eval=true>>=
 tapply(HELP$cesd, gender, mean)
 @
 
-
+\authNote{Which method(s) do we want to show?}
+Alternatives to the code above:
+<<tapply-alternatives>>=
+aggregate(cesd ~ gender, HELP, FUN=mean)
+aggregate(cesd ~ gender, HELP, FUN=favstats)
+summary(cesd ~ gender, HELP, fun=mean)
+summary(cesd ~ gender, HELP, fun=favstats)
+@
 
 
 Boxplots are a particularly helpful graphical display to compare distributions.
 The \verb!bwplot()! function can be used to display the boxplots for the CESD scores separately by gender.  We see from both the numerical and graphical
 displays that women tend to have slightly higher CESD scores than men.
+\authNote{Should mention use of \verb!xyplot()! when the sample sizes are small.
+No reason to compute 5-number summaries of 10 or fewer numbers really.}
 
 \vspace{-8mm}
 \begin{center}
-<<cesd-box,fig=TRUE,width=3,height=1.6,eval=FALSE>>=
+<<cesd-box,fig=TRUE,width=3,height=1.6,eval=true>>=
 bwplot(cesd ~ gender, data=HELP)
 @
 \end{center}
 
-\subsection{Categorical Variables}
 
-<<homeless-gender, eval=FALSE>>=
-table(HELP$homeless, HELP$female)
-xtabs(~ homeless + female, HELP)     
-@
+\subsection{1-way ANOVA}
 
-\section{Density Curves and Normal Distributions}
+\subsection{Tukey's Honest Significant Differences}
 
+\section{Categorical Response to a Quantitative Predictor}
 
-\section{Scatterplots and correlation}
-
-\section{Cross classification Tables}
-
-\section{Simple Linear Regression}
+\subsection{Logistic Regression}
 
 \section{Design and Randomization}
 
@@ -186,18 +246,12 @@ xtabs(~ homeless + female, HELP)
 
 \section{Probability and Random Variables}
 
-
-
-
-
-
-
-\section{Inference for Proportions and Counts}
-
-\section{Inference for Means}
-
-\section{Inference for Categorical Tables}
-
 \label{sec:DiscreteDistributions}
 
-\section{Linear Models: Regression and ANOVA}
+\section{More than Two Variables}
+
+\subsection{Two-way ANOVA}
+
+\subsection{Multiple Regression}
+
+
