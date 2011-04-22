@@ -9,6 +9,7 @@
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
 \SweaveOpts{width=3}
 \SweaveOpts{height=2}
+\SweaveOpts{cache=T}
 
 <<setup,echo=F>>=
 #setCacheDir("cache")
@@ -37,9 +38,32 @@ rexp(20, rate=1/5)
 @
 <<>>=
 rflip(20)
-rdata(20, 1:4)
+as.numeric(rflip(20))       # just count how many heads
+rdata(20, 1:4)              # samples with replacement
 @
 
+<<>>=
+# These are equivalent
+sample(cards, 5)
+deal(cards, 5)
+@
+<<>>=
+# These are equivalent
+sample(cards) 
+shuffle(cards) 
+@
+
+<<>>=
+# These are equivalent.  Note the order of the arguments.
+sample(HELP, 2)
+rdata(2, HELP)
+@
+
+<<>>=
+# These are equivalent; sampling with replacement now
+resample(HELP, 2)
+rdata(2, HELP, replace=TRUE)
+@
 
 \subsection{\texttt{do()}}
 The heart of a simulation is doing something over and over.  
@@ -68,12 +92,9 @@ rgolfballs <- do(10000) * table( rdata(486, 1:4) )
 @
 
 
-<<>>=
-args(statTally)
-@
-
 \begin{center}
 <<golfballs-max,fig=true>>=
+require(fastR)
 print( statTally( golfballs, rgolfballs, max ) )
 @
 \end{center}
@@ -90,21 +111,42 @@ print( statTally( golfballs, rgolfballs, var ) )
 @
 \end{center}
 
-\section{Comparing Two Means}
+
+\subsection{Comparing Two Means}
 
 <<>>=
-do(5) * lm( age ~ sex, HELP )
-do(5) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)
+lm( age ~ sex, HELP )                        # actual data
+do(1) * lm( age ~ sex, HELP )                # actual data
+do(2) * lm( age ~ shuffle(sex), HELP )       # shuffled data
+diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
+do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)            # actual
+do(2) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)   # shuffled
 @
 
-\section{Bootstrap?}
+\begin{center}
+<<two-sample-hist,fig=true,width=4>>=
+test.stat <- do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)  
+rtest.stats <- do(1000) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
+xhistogram(~diff, rtest.stats, v=test.stat)
+@
+\end{center}
 
-Do any of us do bootstrap in intro courses?  Other courses?  Do we want to include this?
-Robin Lock is big on bootstrap.  Do we need any bootstrap tools in the \verb!mosaic! 
-package?
+\begin{center}
+<<two-sample-dot,fig=true,width=6,height=2.2>>=
+test.stat <- do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)  
+rtest.stats <- do(200) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
+dotPlot(~diff, rtest.stats, n=40 )
+ladd( panel.abline(v=test.stat) )                 # add a verticle line
+@
+\end{center}
 
-Danny responds: We already have good-enough bootstrap tools in the
+
+
+\section{Bootstrap}
+
+Danny: We already have good-enough bootstrap tools in the
 package: \texttt{do} and \texttt{resample}.  I don't do bootstrapping
 early in the course, but I do talk about sampling variability from day
 1.  Later on, I introduce bootstrapping as a way to simulate sampling
 variability without having to collect more data.
+

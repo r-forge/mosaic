@@ -1,8 +1,8 @@
 export TEXINPUTS := ./inputs//:${TEXINPUTS}
 export BIBINPUTS := ./inputs//:${BIBINPUTS}
 
-SWEAVEOPTS = -c=cache 
 SWEAVEOPTS = ""
+SWEAVEOPTS = -c=cache 
 
 TEXFILES = \
 	  Master-TeachingStatsWithR.tex \

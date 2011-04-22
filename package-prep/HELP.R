@@ -17,6 +17,7 @@ cols2keep <- c("age",
 "dayslink"     ,
 "drugrisk"     ,
 "e2b"          ,
+"female"       ,
 "sex"          ,
 "g1b"          ,
 "homeless"     ,
@@ -42,3 +43,4 @@ HELP = ds[,cols2keep]
 names(HELP)
 summary(HELP)
 save(HELP, file="HELP.Rda")
+prompt(HELP, 'HELP.Rd')
