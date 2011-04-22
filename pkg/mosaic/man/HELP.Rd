@@ -10,17 +10,18 @@ or usual care, with the goal of linking them to primary medical care.
 }
 \usage{data(HELP)}
 \format{
-  A data frame with 453 observations on the following 26 variables.
+  A data frame with 453 observations on the following 27 variables.
   \describe{
     \item{\code{age}}{subject age (in years)}
     \item{\code{anysubstatus}}{a numeric vector}
     \item{\code{anysub}}{a factor with levels \code{no} \code{yes}}
-    \item{\code{cesd}}{a numeric vector}
+    \item{\code{cesd}}{Center for Epidemiologic Studies Depression measurements}
     \item{\code{d1}}{a numeric vector}
     \item{\code{daysanysub}}{a numeric vector}
     \item{\code{dayslink}}{a numeric vector}
     \item{\code{drugrisk}}{a numeric vector}
     \item{\code{e2b}}{a numeric vector}
+    \item{\code{female}}{0 for male, 1 for female}
     \item{\code{sex}}{a factor with levels \code{male} \code{female}}
     \item{\code{g1b}}{a factor with levels \code{no} \code{yes}}
     \item{\code{homeless}}{a factor with levels \code{housed} \code{homeless}}
