@@ -10,14 +10,37 @@ or usual care, with the goal of linking them to primary medical care.
 }
 \usage{data(HELP)}
 \format{
-  A data frame with 453 observations on the following 24 variables.
+  A data frame with 453 observations on the following 26 variables.
   \describe{
-    \item{\code{id}}{subject identifier}
     \item{\code{age}}{subject age (in years)}
-    \item{\code{substance}}{a factor with levels \code{alcohol} \code{cocaine} \code{heroin}}
+    \item{\code{anysubstatus}}{a numeric vector}
+    \item{\code{anysub}}{a factor with levels \code{no} \code{yes}}
+    \item{\code{cesd}}{a numeric vector}
+    \item{\code{d1}}{a numeric vector}
+    \item{\code{daysanysub}}{a numeric vector}
+    \item{\code{dayslink}}{a numeric vector}
+    \item{\code{drugrisk}}{a numeric vector}
+    \item{\code{e2b}}{a numeric vector}
+    \item{\code{sex}}{a factor with levels \code{male} \code{female}}
+    \item{\code{g1b}}{a factor with levels \code{no} \code{yes}}
+    \item{\code{homeless}}{a factor with levels \code{housed} \code{homeless}}
+    \item{\code{i1}}{a numeric vector}
+    \item{\code{i2}}{a numeric vector}
+    \item{\code{id}}{subject identifier}
+    \item{\code{indtot}}{a numeric vector}
+    \item{\code{linkstatus}}{a numeric vector}
+    \item{\code{link}}{a factor with levels \code{no} \code{yes}}
+    \item{\code{mcs}}{a numeric vector}
+    \item{\code{pcs}}{a numeric vector}
+    \item{\code{pss_fr}}{a numeric vector}
     \item{\code{racegrp}}{a factor with levels \code{black} \code{hispanic} \code{other} \code{white}}
+    \item{\code{satreat}}{a factor with levels \code{no} \code{yes}}
+    \item{\code{sexrisk}}{a numeric vector}
+    \item{\code{substance}}{a factor with levels \code{alcohol} \code{cocaine} \code{heroin}}
+    \item{\code{treat}}{a factor with levels \code{no} \code{yes}}
   }
 }
+
 \details{
 Eligible subjects were adults, who spoke Spanish or English, reported alcohol,
 heroin or cocaine as their first or second drug of choice, resided in proximity
@@ -43,6 +66,5 @@ A randomized controlled trial of a multi-disciplinary health intervention in a d
 }
 \examples{
 data(HELP)
-## maybe str(HELP) ; plot(HELP) ...
 }
 \keyword{datasets}
