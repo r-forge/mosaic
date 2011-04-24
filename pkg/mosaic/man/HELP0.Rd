@@ -1,5 +1,5 @@
-\name{HELP}
-\alias{HELP}
+\name{HELP0}
+\alias{HELP0}
 \docType{data}
 \title{Health Evaluation and Linkage to Primary Care}
 \description{
@@ -9,15 +9,14 @@ to receive a multidisciplinary assessment and a brief motivational intervention
 or usual care, with the goal of linking them to primary medical care.
 }
 \usage{
-data(HELP)
+data(HELP0)
 }
 \format{
   Data frame with 453 observations on the following variables.
   
   \describe{
     \item{\code{age}}{subject age (in years)}
-    \item{\code{anysub}}{a factor with levels \code{no} \code{yes}} 
-	(\code{HELP})
+    \item{\code{anysubstatus}}{a numeric vector}
     \item{\code{cesd}}{Center for Epidemiologic Studies Depression measurements}
     \item{\code{d1}}{a numeric vector}
     \item{\code{daysanysub}}{a numeric vector}
@@ -25,7 +24,6 @@ data(HELP)
     \item{\code{drugrisk}}{a numeric vector}
     \item{\code{e2b}}{a numeric vector}
     \item{\code{female}}{0 for male, 1 for female} 
-    \item{\code{sex}}{a factor with levels \code{male} \code{female}} 
     \item{\code{g1b}}{a factor with levels \code{no} \code{yes}}
     \item{\code{homeless}}{a factor with levels \code{housed} \code{homeless}}
     \item{\code{i1}}{a numeric vector}
@@ -33,7 +31,6 @@ data(HELP)
     \item{\code{id}}{subject identifier}
     \item{\code{indtot}}{a numeric vector}
     \item{\code{linkstatus}}{a numeric vector} 
-    \item{\code{link}}{a factor with levels \code{no} \code{yes}} 
     \item{\code{mcs}}{a numeric vector}
     \item{\code{pcs}}{a numeric vector}
     \item{\code{pss_fr}}{a numeric vector}
@@ -69,6 +66,6 @@ drug-dependent adults to primary medical care:
 A randomized controlled trial of a multi-disciplinary health intervention in a detoxification unit.  {Addiction}, 2003; 98(4):509-516.
 }
 \examples{
-data(HELP)
+data(HELP0)
 }
 \keyword{datasets}
