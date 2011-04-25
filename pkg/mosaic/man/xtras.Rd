@@ -34,11 +34,25 @@ panel.xhistogram(x,
 	stripes=c('vertical','horizontal','none'), alpha=1, ...) 
 }
 \arguments{
-  \item{\dots}{ arguments passed to other functions. }
-
   \item{data}{a data frame.}
 
   \item{density }{boolean -- should a density curve be overlaid on histogram? }
+
+  \item{dmath}{density function, defaults to \code{dnorm}}
+
+  \item{dn}{an integer indicating the resolution to use for plotting the density curve}
+
+  \item{args}{a list of arguments passed to \code{dmath}}
+
+  \item{v, h}{numerical vector of positions for vertical and horizontal lines to add to plot}
+
+  \item{breaks}{break points for histogram bins}
+
+  \item{stripes}{type of stripes to use for grouping in histograms}
+
+  \item{alpha}{opacity value for histogram rectangles}
+
+  \item{panel}{a panel function}
 
   \item{x}{ A numeric vector or formula. }
 
@@ -70,45 +84,36 @@ panel.xhistogram(x,
 	for normal-quantile plots but may not be what you want for fitting
 	other distributions. }
 \item{col.line}{like \code{col} but applied only to lines}
-\item{xlim, ylim}{display limits}
-\item{
-q,
-p,
-groups,
-type,
-labels,
-which,
-main,
-pch,
-lwd,
-lty}{as in \code{\link{lattice}} graphics functions}
-\item{
-caption,
-fit,
-start,
-panel.default,
-sub.caption,
-print.plots,
-ask,
-addline.col,
-line.col,
-symbol.col,
-id.n,
-labels.id,
-cex.id,
-cook.levels,
-add.smooth,
-label.pos,
-cex.caption,
-mean,
-sd,
-plot,
-verbose,
-digits,
-lower.tail,
-log.p,
-panel
-}{ to be documented}
+
+\item{lwd,lty}{line width and line type}
+
+\item{dcol, dlwd}{like \code{col} and \code{lwd} but applied to density curves}
+
+\item{gcol, glwd}{like \code{col} and \code{lwd} but applied to grid lines}
+
+\item{fcol}{fill color for histogram rectangles}
+
+\item{fit}{passed to \code{fitdistr} from \code{MASS} for maximum-likelihood fitting}
+
+\item{verbose}{a logical indicating whether verbose output should be displayed}
+
+\item{groups}{grouping variable as in other \code{lattice} plots}
+
+\item{pch}{plot character as in other \code{lattice} plots}
+
+\item{type}{type of histogram}
+
+\item{labels}{a logical indicating whether labels be added to histogram}
+
+\item{start}{starting point for use by \code{fitdistr}}
+
+\item{\dots}{other arguments including
+\code{q},
+\code{p},
+\code{which},
+\code{main}
+which behave as in other \code{\link{lattice}} graphics functions
+}
 }
 
 \author{

@@ -8,7 +8,6 @@
 \alias{gestation}
 \alias{kidsfeet}
 \alias{marriage}
-\alias{utilities}
 \alias{whickham}
 \alias{latlon2xyz}
 \alias{xyz2latlon}
