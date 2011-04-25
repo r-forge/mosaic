@@ -12,18 +12,23 @@ function (x, breaks, equal.widths = TRUE, groups = NULL, nint = round(log2(lengt
     col.line = trellis.par.get("dot.line")$col, alpha = trellis.par.get("dot.symbol")$alpha, cex=1, 
     type = "count", ...) 
 {
+    dot.line <- trellis.par.get("dot.line")
+    dot.symbol <- trellis.par.get("dot.symbol")
+    sup.symbol <- trellis.par.get("superpose.symbol")
+    x <- as.numeric(x)
 	if ( !is.null(groups) ) {
 		groups <- factor(groups)
 		col <- rep(col, length.out=length(levels(groups)))
 		pch <- rep(pch, length.out=length(levels(groups)))
 		col <- col[as.numeric(groups)]
 		pch <- pch[as.numeric(groups)]
+		col <- col[order(x)]
+		pch <- pch[order(x)]
+	} else {
+		pch <- rep(pch[1], length.out <- length(x))
+		col <- rep(col[1], length.out <- length(x))
 	}
 
-    dot.line <- trellis.par.get("dot.line")
-    dot.symbol <- trellis.par.get("dot.symbol")
-    sup.symbol <- trellis.par.get("superpose.symbol")
-    x <- as.numeric(x)
     if (length(x) > 0) {
         if (is.null(breaks)) {
             breaks <- if (equal.widths) 
@@ -40,14 +45,16 @@ function (x, breaks, equal.widths = TRUE, groups = NULL, nint = round(log2(lengt
                 if (y[bin] <= 0) {
                   next
                 }
-                xvals <- rep((breaks[bin] + breaks[bin + 1])/2, 
-                  y[bin])
+                xvals <- rep( (breaks[bin] + breaks[bin + 1])/2, y[bin] )
                 yvals <- 1:y[bin]
                 grid.points( size= cex * unit(1,"char"), 
-				  pch = if (length(pch) > 0) pch[1] else pch, 
-				  gp = gpar(fill = col, alpha = alpha, 
-                  col = col, lty = lty, lwd = lwd), x = xvals, 
-                  y = yvals, default.units = "native")
+				  pch = pch,
+				  gp = gpar(fill = col, alpha = alpha, col = col, lty = lty, lwd = lwd), 
+				  		x = xvals, 
+                  		y = yvals, 
+						default.units = "native")
+				pch <- pch[ -(1:y[bin]) ]
+				col <- col[ -(1:y[bin]) ]
             }
         }
     }

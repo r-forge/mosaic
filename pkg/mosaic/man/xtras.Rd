@@ -135,4 +135,6 @@ rownames(phs) <- c("aspirin","placebo")
 colnames(phs) <- c("heart attack","no heart attack") 
 phs 
 xchisq.test(phs) 
+x <- rnorm(200)
+xhistogram(~ x, groups = x > 2, n=20, density=TRUE )
 }
