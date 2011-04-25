@@ -5,13 +5,21 @@ function (x, ..., panel = panel.dotPlot)
 }
 
 panel.dotPlot <-
-function (x, breaks, equal.widths = TRUE, groups = NULL, nint = round(log2(length(x)) + 
-    1), pch = if (is.null(groups)) trellis.par.get("dot.symbol")$pch else trellis.par.get("superpose.symbol")$pch, 
+function (x, breaks, equal.widths = TRUE, groups = NULL, nint = round(log2(length(x)) + 1), 
+	pch = if (is.null(groups)) trellis.par.get("dot.symbol")$pch else trellis.par.get("superpose.symbol")$pch, 
     col = if (is.null(groups)) trellis.par.get("dot.symbol")$col else trellis.par.get("superpose.symbol")$col, 
     lty = trellis.par.get("dot.line")$lty, lwd = trellis.par.get("dot.line")$lwd, 
     col.line = trellis.par.get("dot.line")$col, alpha = trellis.par.get("dot.symbol")$alpha, cex=1, 
     type = "count", ...) 
 {
+	if ( !is.null(groups) ) {
+		groups <- factor(groups)
+		col <- rep(col, length.out=length(levels(groups)))
+		pch <- rep(pch, length.out=length(levels(groups)))
+		col <- col[as.numeric(groups)]
+		pch <- pch[as.numeric(groups)]
+	}
+
     dot.line <- trellis.par.get("dot.line")
     dot.symbol <- trellis.par.get("dot.symbol")
     sup.symbol <- trellis.par.get("superpose.symbol")
