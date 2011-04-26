@@ -27,7 +27,7 @@ function (x,
 {
 	stripes <- match.arg(stripes)
 	if (!is.null(groups)) {
-    	hist.master <- hist(x, plot = FALSE, breaks=breaks, ...)
+    	hist.master <- hist(x, plot = FALSE, breaks=breaks, warn.unused=FALSE, ...)
 		nbreaks <- length(hist.master$breaks)
 		groups <- factor(groups)
 		ngroups <- length(levels(groups))
@@ -40,6 +40,7 @@ function (x,
 				x[groups==levels(groups)[level] ], 
 				plot=FALSE,
 				breaks=hist.master$breaks,
+				warn.unused=FALSE,
 				...
 			)
 			hist.level$density <- hist.level$density * props[level]
@@ -95,7 +96,7 @@ function (x,
     	panel.histogram(x, type = type, breaks=breaks, ...)
 	}
     if (labels) {
-        h <- hist(x, plot = FALSE, ...)
+        h <- hist(x, plot = FALSE, warn.unused=FALSE, ...)
         if (type == "count") {
             aa <- max(h$counts) * 0.01
             grid.text(label = as.character(round(h$counts, 3)), 
