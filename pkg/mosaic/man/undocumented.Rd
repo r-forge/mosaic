@@ -13,6 +13,7 @@
 \alias{xyz2latlon}
 \alias{rad2deg}
 \alias{deg2rad}
+\alias{statTally}
 
 \title{Undocumented Objects}
 
