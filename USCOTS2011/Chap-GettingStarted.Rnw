@@ -23,6 +23,26 @@ require(vcd)
 mosaic <- function(...) { print(vcd::mosaic(...)) }
 @ 
 
+\section{Getting Familiar with R}
+
+We organized this workshop to help instructors integrate R (as well as some 
+related technologies) into their statistics courses at all levels.
+We are presenting an approach to teaching introductory and intermediate statistics courses that is tightly coupled with computing (specifically using R, an open source general purpose statistics package).  This flows from the philosophy outlined by
+Nolan and Temple Lang \cite{nola:temp:2010}.
+
+The activities and examples in the workshop are intended to highlight a modern approach to statistical education that focuses on modeling, resampling based inference, and multivariate graphical techniques.  A secondary goal is to facilitate computing with data through use of small simulation studies, data scraping from the internet and appropriate statistical analysis workflow.
+
+During this workshop, we are planning to
+introduce multiple activities, some appropriate for an introductory course, others suitable for higher levels, that demonstrate key concepts in statistics and modeling.  
+We've crafted these notes partly to accompany our presentations, but primarily as a reference to support your teaching using R.  We've included far more than we could possibly
+cover in 2 days, but hope to be able to provide some exposure and motivation for
+material and approaches that may differ from what you are doing at present (while 
+supporting the core material of a traditional course).
+
+We're planning to extend and elaborate on these notes, and would welcome any and all
+suggestions for other topics or material to add.
+
+
 \section{Getting Students Familiar with R}
 
 \subsection{Strategies}
@@ -30,7 +50,7 @@ mosaic <- function(...) { print(vcd::mosaic(...)) }
 \item
 Start right away.
 
-Do something with \R\ on day 1.  Have students do something by the end of week 1.
+Do something with \R\ on day 1.  Do something else on day 2.  Have students do something by the end of week 1 at the latest.
 
 
 \item Illustrate frequently.
@@ -83,7 +103,9 @@ to learn R.  It also changes what you can ask for and about on tests.
 
 Randy began doing this when his students asked him if there was a way to use computers
 during the test ``\emph{since that's how we do all the homework}."  He has students 
-bring laptops to class.  
+bring laptops to class.  Nick has both in-class (without computer) and out-of-class
+(take home) components to his assessment.  
+
 
 \item
 Rethink your course.
@@ -96,7 +118,11 @@ course:
 Reading statistical tables.  
 
 Does anyone still consult a table for values of $\sin$,
-or $\log$?  Why use tables for statistical distributions?
+or $\log$?  
+All of us have sworn off the use of tabulations of critical values of
+ distributions (since none of us use them in our professional work, why would we
+teach this to students?)
+
 \item
 ``Computational formulas".
 
@@ -114,7 +140,7 @@ Large data sets
 \item
 Beautiful plots
 \item
-Simulation/randomization based methods
+Simulation/randomization/resampling based methods
 \item
 Quick computations
 \item
@@ -492,7 +518,8 @@ table(results$M) / 10000
 
 \section{Graphical and Numerical Summaries}
 
-See appendix A.
+See appendix A. \authNote{What's intended here?  An example of how easy it is to 
+get quick and dirty plots that convey useful info?}
 
 \section{Going Multivariate Early: Galton's Data}
 
