@@ -40,6 +40,19 @@ it straightforward to find what you are looking for even if you present
 things in a different order.  This is also a good organizational template
 to give your students to help them keep straight ``what to do when".
 
+It's worth noting how we teach the ``Traditional Course'', which, contrary
+to rumor, some of us do on occasion.  Nick has used the 5th edition of
+Moore and McCabe \cite{moor:mcca:2006}, where he introduces least squares 
+regression at the end of the first week of a semester, and multiple regression
+(purely descriptively) at the end of the second week.  Design is the next
+main topic, then a brutally pruned intro to probability and sampling distributions.
+Interval estimation and testing are introduced in one or two settings, then 
+the class returns to inference for multiple regression.  While students are working
+on projects involving a multiple linear regression model with 2 predictors,
+some categorical data analysis is covered.
+
+\authNote{Others interested in chiming in?}
+
 \section{One Quantitative Variable}
 
 \subsection{Graphical and Numerical Summaries}
