@@ -19,6 +19,7 @@ require(mosaic)
 trellis.par.set(theme=col.mosaic(bw=FALSE))
 trellis.par.set(fontsize=list(text=9))
 options(keep.blank.line=FALSE); options(width=100)
+densityplot <- function(...) { print(lattice::densityplot(...)) }
 xyplot <- function(...) { print(lattice::xyplot(...)) }
 bwplot <- function(...) { print(lattice::bwplot(...)) }
 histogram <- function(...) { print(lattice::histogram(...)) }
@@ -151,10 +152,89 @@ xpnorm(1.96, 0, 1)
 @
 
 <<dens1,fig=TRUE,width=5,height=1.9>>=
-densityplot(~ cesd, female)
+densityplot(~ cesd, data=female)
 @
 
 \subsection{Power Calculations}
+
+\authNote{This is a placeholder: I'm not sure if we want this at all, or here}
+
+\noindent
+Let $X_1, ..., X_{25}$ be i.i.d. $N(.3, 1)$.  Consider testing the null hypothesis $H_0: \mu=0$ versus $H_A: \mu>0$ at significance level $\alpha=.05$.  Compare the power of the sign test and the power of the test based on normal theory (one sample one sided t-test) assuming that $\sigma$ is known.
+
+\noindent
+We calculate the power of the sign test as follows. The probability that $x > 0$, given that $H_A$ is true:
+<<>>=
+1-pnorm(0,.3,1)
+@
+\noindent
+Using $pbinom$, we can find the rejection region and the critical value. We reject when $t < 0.05$:
+<<>>=
+sim=round(1-pbinom(0:25, 25, .5), 3)
+lsim=length(sim[sim>0.05]);lsim
+# include plot of dbinom() under null + alternative
+@
+\noindent
+Looking at the distribution of this, we see that the rejection region is $X_i > 17$. Given that $p = .6179$, we can now find the probability that $\delta > 0$ given $H_A$:
+<<>>=
+powersign=1-pbinom(17, 25, .6179); powersign
+@
+\noindent
+Thus, the power of the sign test is approximately \Sexpr{round(powersign, 4)}.
+
+\medskip
+\noindent
+We then calculated the power of the test based on normal theory as follows:
+First we found the rejection region.
+
+<<>>=
+# Under the null P(X>=17) = 1 - P(X<16) =
+1-pbinom(16, 25, .5) # = 0.0539, our alpha level.
+alpha=.0539 # alpha not wholly = 0.05 since there are only a discrete set of values.
+n=25; sigma=1 # given
+sediff=sqrt(2*sigma^2/n)
+tstar=qnorm(1-alpha, 0, sediff) # 1-alpha = .9461
+# So we're actually getting a 94.61% CI
+@
+Therefore, we reject for observed values greater than \Sexpr{round(tstar,3)}.  Then, to calculate the power of this one-sided test we find the area under the alternative hypothesis to the right of our t*.
+<<>>=
+powert=1-pnorm(tstar, .3, 1)
+@
+Thus, the power of the test based on normal theory is \Sexpr{round(powert,3)}.
+To check this we can use the {\tt power.t.test()} in R.
+<<>>=
+alpha=1-pbinom(16, 25, .5)
+power.t.test(n=25, delta=.3, sd=1, sig.level=alpha, alternative="one.sided",
+type="one.sample")$power
+@
+
+Comparing the two methods we see that the normal theory power calculation is greater than the sign test power calculation.
+
+We can simulate the power of the sign test for 1000 samples to verify and check our answer:
+<<>>=
+numsim=1000
+ressign=numeric(numsim)
+for (i in 1:numsim){
+x=rnorm(25, 0, 1)
+ressign[i]=sum(x>0)
+}
+powersign=sum(ressign>17)/numsim
+@
+
+The power of the sign test using a simulation is approximately \Sexpr{round(powersign,3)}. The difference between the analytic and empirical solutions is not unusual because we expect some variability with a simulation.
+
+Similarly, we can simulate the power of the test based on normal theory for 1000 samples:
+<<>>=
+numsim=1000
+resnorm=numeric(numsim)
+for (i in 1:numsim){
+x=rnorm(25, 0, 1)
+resnorm[i]=t.test(x, type="one.sided")$p.value
+}
+powernorm=sum(resnorm<.05)/numsim
+@
+
+We find the power to be approximately \Sexpr{round(powernorm,3)}.
 
 
 
