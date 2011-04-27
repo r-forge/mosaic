@@ -6,13 +6,9 @@
 	}
 }
 
-xhistogram <- function (x, data=NULL, ...) {
-  dots <- list(...)
-  .drop_from_list(dots, c('type', 'panel'))
-  histogram(x, data=data, panel=panel.xhistogram, type='density', ...)
+xhistogram <- function (x, data=NULL, panel=panel.xhistogram, type='density', ...) {
+  histogram(x, data=data, panel=panel, type=type, ...)
 }
-
-
 
 panel.xhistogram <-
 function (x, 
@@ -28,6 +24,11 @@ function (x,
 	stripes <- match.arg(stripes)
 	if (!is.null(groups)) {
     	hist.master <- hist(x, plot = FALSE, breaks=breaks, warn.unused=FALSE, ...)
+		hist.master$height <- switch(type,
+			'density' = hist.master$density,
+			'count' = hist.master$count,
+			'percent' = 100 * hist.master$count / length(x)
+			)
 		nbreaks <- length(hist.master$breaks)
 		groups <- factor(groups)
 		ngroups <- length(levels(groups))
@@ -51,7 +52,7 @@ function (x,
 					x=hist.level$breaks[-nbreaks] + cumrdensity*diff(breaks),
 					y=0,
 					width=diff(hist.level$breaks) * hist.level$rdensity,
-					height=hist.master$density,
+					height=hist.master$height,
 					just=c('left','bottom'),
 					default.units='native',
 					gp=gpar(col=fcol[level], fill=fcol[level],alpha=alpha),
@@ -61,7 +62,7 @@ function (x,
 					x=hist.level$breaks[-nbreaks],
 					y=0 + cumrdensity* hist.master$density,
 					width=diff(hist.level$breaks),
-					height=hist.master$density * hist.level$rdensity,
+					height=hist.master$height * hist.level$rdensity,
 					just=c('left','bottom'),
 					default.units='native',
 					gp=gpar(col=fcol[level], fill=fcol[level],alpha=alpha),
@@ -71,7 +72,7 @@ function (x,
 					x=hist.level$breaks[-nbreaks],
 					y=0,
 					width=diff(hist.level$breaks),
-					height=hist.level$density,
+					height=hist.level$height,
 					just=c('left','bottom'),
 					default.units='native',
 					gp=gpar(col='black', fill=fcol[level],alpha=alpha),
@@ -84,7 +85,7 @@ function (x,
 				x=hist.master$breaks[-nbreaks],
 				y=0,
 				width=diff(hist.master$breaks),
-				height=hist.master$density,
+				height=hist.master$height,
 				just=c('left','bottom'),
 				default.units='native',
 				gp=gpar(col='black', fill='transparent'),
@@ -165,6 +166,9 @@ function (x,
         args = list(mean = mean(x, na.rm = T), sd = sd(x, na.rm = T))
     }
     if (density) {
+		if (type != 'density') {
+			warning("Use type='density' when adding density overlays.")
+		}
 		if (verbose) {
         	cat("args for density function:\n")
         	print(args)

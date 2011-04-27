@@ -35,7 +35,7 @@ function (x, breaks, equal.widths = TRUE, groups = NULL, nint = round(log2(lengt
                 do.breaks(range(x, finite = TRUE), nint)
             else quantile(x, 0:nint/nint, na.rm = TRUE)
         }
-        h <- hist(x, breaks = breaks, plot = FALSE, ...)
+        h <- hist(x, breaks = breaks, plot = FALSE, warn.unused=FALSE, ...)
         y <- h$counts
         nb <- length(breaks)
         if (length(y) != nb - 1) 

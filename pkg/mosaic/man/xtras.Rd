@@ -14,7 +14,7 @@ removed from their names.
 \usage{
 xchisq.test(...)
 
-xhistogram(x, data, ...)
+xhistogram(x, data=NULL, panel=panel.xhistogram, type="density", ...)
 
 xqqmath(x, data=NULL, panel="panel.xqqmath", ...)
 
