@@ -81,7 +81,7 @@ five <- fivenum(HELP$cesd)
 five     # display the object (vector of length 5)
 five[4] - five[2]
 IQR(HELP$cesd)
-quantile(HELP$cesd)
+quantile(HELP$cesd)   # may differ from fivenum()
 quantile(HELP$cesd, c(.25, .50))
 @
 
@@ -117,13 +117,13 @@ The \verb!dotPlot()! function is used to create a dotplot a la Fathom.
 \vspace{-8mm}
 \begin{center}
 <<cesd-dot,fig=TRUE,width=3,height=1.6>>=
-dotPlot(~cesd, data=female)
+dotPlot(~ cesd, data=female)
 @
 \end{center}
 We could also have made our subset ``on the fly'', just for the purposes of graphing:
 \begin{center}
 <<cesd-dot2,fig=TRUE,width=3,height=1.6>>=
-dotPlot(~cesd, data=HELP, subset=sex=='female')
+dotPlot(~ cesd, data=HELP, subset=(sex=='female'))
 @
 \end{center}
 
@@ -145,6 +145,14 @@ dotPlot( ~ cesd | sex, data=HELP)
 \fi
 
 \subsection{Density Curves and Normal Distributions}
+
+<<norm1,fig=TRUE,width=5,height=1.9>>=
+xpnorm(1.96, 0, 1)
+@
+
+<<dens1,fig=TRUE,width=5,height=1.9>>=
+densityplot(~ cesd, female)
+@
 
 \subsection{Power Calculations}
 
@@ -196,7 +204,7 @@ xtabs(~ homeless + female, HELP)
 
 \subsection{Fisher's Exact Test}
 
-\section{Quantiative Response to a Categorical Predictor}
+\section{Quantitative Response to a Categorical Predictor}
 
 \subsection{A Bivariate Predictor: Two-sample t}
 Here we will compare the distributions of CESD scores by sex.
