@@ -47,26 +47,18 @@ pregnancy were excluded.
 Subjects were interviewed at baseline during
 their detoxification stay and follow-up interviews were undertaken
 every 6 months for 2 years.  A variety of continuous, count, discrete, and survival time predictors and outcomes were collected at each of these five occasions.
-
 The details of the
 randomized trial along with the results from a series of additional analyses have been published \cite{same:lars:hort:2003,rees:sait:hort:2001,hort:sait:lair:2002,lieb:save:2002,kert:hort:frie:2003,sait:lars:2004,sait:hort:2005,shan:linc:2005,lars:sait:2006,wine:sait:2007}.
-
-A copy of the study instruments can be found at: \url{http://www.math.smith.edu/help}
-
 The Institutional Review Board of
 Boston University Medical Center approved all aspects of the study, including the creation of the de-identified dataset.  Additional
 privacy protection was secured by the issuance of a Certificate of
 Confidentiality by the Department of Health and Human Services.
+A copy of the study instruments can be found at: \url{http://www.math.smith.edu/help}
 
-The \verb!mosaic! package contains three forms of the de-identified HELP dataset:
-\begin{description}
-\item[HELP] a minimal dataset containing XX variables for the XX subjects
-with minimal missing data, primarily at baseline
-\item[HELPbig] a larger dataset including followup information and more variables
-\item[HELPhuge] an even larger dataset with all variables for all subjects
-at all timepoints.
-\end{description}
-
+The \verb!mosaic! package contains several forms of the de-identified HELP dataset.
+We will focus on \verb!HELP!, which contains
+27 variables for the 453 subjects
+with minimal missing data, primarily at baseline.
 Variables included in the HELP dataset are described in Table \ref{tab:helpvars}.  More information can be found in \cite{Horton:2011:R}.
 \begin{longtable}{|p{2.1cm}|p{6.8cm}|p{4.5cm}|}
 \caption{Annotated description of variables in the HELP dataset}
@@ -74,7 +66,7 @@ Variables included in the HELP dataset are described in Table \ref{tab:helpvars}
 \hline
 VARIABLE & DESCRIPTION (VALUES) & NOTE \\ \hline
 {\tt age} & age at baseline (in years) (range 19--60) & \\ \hline
-{\tt anysubstatus} & use of any substance post-detox (0=no, 1=yes)  & see also {\tt daysanysub}
+{\tt anysub} & use of any substance post-detox & see also {\tt daysanysub}
 \\ \hline
 {\tt cesd} & Center for Epidemiologic Studies Depression scale (range 0--60)  & \\ \hline
 {\tt d1} & how many times hospitalized for medical problems (lifetime)  (range 0--100)  & \\ \hline
@@ -108,11 +100,12 @@ VARIABLE & DESCRIPTION (VALUES) & NOTE \\ \hline
 {\tt pss\_fr} & perceived social supports (friends, range 0--14) & 
 \\ \hline
 {\tt satreat} & any BSAS substance abuse treatment at baseline (0=no, 1=yes)  &  \\ \hline
-{\tt sexrisk} & Risk-Assessment Battery (RAB) drug risk score  (range 0--21)  & see also {\tt drugrisk}
+{\tt sex} & sex of respondent  (male or female)  & \\ \hline
+{\tt sexrisk} & Risk-Assessment Battery (RAB) sex risk score  (range 0--21)  & see also {\tt drugrisk}
 \\ \hline
 {\tt substance} & primary substance of abuse (alcohol, cocaine or heroin) &
 \\ \hline
-{\tt treat} & randomization group (0=usual care, 1=HELP clinic)  &
+{\tt treat} & randomization group (randomize to HELP clinic, no or yes) & 
 \\ \hline
 \end{longtable}
 \noindent
