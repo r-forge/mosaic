@@ -153,12 +153,12 @@
 \author{
 Randall Pruim
 \and
-Nicholas Horton 
+Nicholas J. Horton 
 \and 
 Daniel Kaplan 
 }
 
-\date{May, 2011}
+\date{USCOTS workshop (May 17-19, 2011)}
 
 
 \begin{document}
