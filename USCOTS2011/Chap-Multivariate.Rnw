@@ -26,3 +26,20 @@ mosaic <- function(...) { print(vcd::mosaic(...)) }
 \section{Danny's Favorite Example}
 
 \section{Danny's Second Favorite Example}
+
+\section{Bias in Sampling?  Choosing library books off a shelf?}
+
+\section{Taking Your Class for a Random Walk}
+
+\section{Biostatistics example: gene sequencing?}
+
+\section{The perils of multiple comparisons}
+
+\section{The sampling distribution of R2 and F under the null hypothesis}
+
+\section{A demonstration of shuffling and how it implements the null hypothesis}
+
+\section{Working through an ANOVA calculation by hand}
+
+\section{Sampling bias in survival studies (with a simulation)}
+
