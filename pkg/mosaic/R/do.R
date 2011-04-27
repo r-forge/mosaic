@@ -86,10 +86,9 @@ do = function(n=1, cull=NULL, mode=NULL) {
 	if (class(f) != 'function') {
 		f = function(){eval.parent(fthing, n=2) }
 	}
-	res1 = cull(f());  # was (...)
-	if (n < 2) { return (res1) }
+	res1 = cull(f())  # was (...)
 
-	nm = names(res1);
+	nm = names(res1)
 
 	if (!is.null(a$mode)) { 
 		out.mode <- a$mode 
@@ -105,27 +104,32 @@ do = function(n=1, cull=NULL, mode=NULL) {
 		}
 	}
 
+
 	if ( out.mode == 'list' ) {
 		result <- list()
 		result[[1]] <- res1
+		if (n < 2) return (res1) 
 		for (k in 2:n) {
-			result[[k]] <- cull(f()); # was (...)
+			result[[k]] <- cull(f()) # was (...)
 		}
 		return(result)
 	}
 
-	result <- matrix(nrow=n,ncol=length(res1));
+	result <- matrix(nrow=n,ncol=length(res1))
 	if ( out.mode == 'data.frame' ){
-		result = data.frame(result);
-		names(result) = names(res1);
+		result = data.frame(result)
+		names(result) = names(res1)
 	}
-	result[1,] = res1;
+	result[1,] = res1
 
-	for (k in 2:n) {
-		result[k,] <- cull(f()); # was (...)
+	if (n > 1) {
+		for (k in 2:n) {
+			result[k,] <- cull(f()) # was (...)
+		}
 	}
 
-	if (dim(result)[2] == 1 & is.null(nm) ) return(data.frame(result=result[,1])) else return(result);
+
+	if (dim(result)[2] == 1 & is.null(nm) ) return(data.frame(result=result[,1])) else return(result)
 }
 
 "*.repeater" = .do_repeats
