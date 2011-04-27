@@ -34,7 +34,7 @@ function (bw = FALSE, lty = 1:7)
         return(list(background = list(col = "transparent"), 
 			plot.polygon = list(col = paleBlue), 
 			superpose.polygon = list(
-				col = c(darkBlue, 
+				col = c(aBlue, 
                 "lightskyblue3", "darkgreen", "tan", "orange", 
                 "purple", "lightgreen")), 
             box.rectangle = list(col = darkBlue), box.umbrella = list(col = darkBlue), 

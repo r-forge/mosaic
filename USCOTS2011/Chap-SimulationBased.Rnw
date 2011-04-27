@@ -11,12 +11,13 @@
 \SweaveOpts{height=2}
 \SweaveOpts{cache=T}
 
+
 <<setup,echo=F>>=
 #setCacheDir("cache")
 require(grDevices); require(datasets); require(stats); require(lattice)
 require(fastR)
-require(grid); 
-require(mosaic); 
+require(grid) 
+require(mosaic)
 trellis.par.set(theme=col.mosaic(bw=FALSE))
 trellis.par.set(fontsize=list(text=9))
 options(keep.blank.line=FALSE); options(width=100)
@@ -75,7 +76,7 @@ do(5) * "hello"
 @
 
 
-\section{Examples}
+\section{Empirical p-values}
 \subsection{Lady Tasting Tea}
 If you don't use the Lady Tasting Tea as a course starter, you can use it as 
 an introduction to testing a proportion.
@@ -83,8 +84,7 @@ an introduction to testing a proportion.
 \subsection{Golfballs in the Yard}
 
 <<>>=
-require(fastR)
-golfballs 
+golfballs <- c(137, 138, 107, 104) 
 table( rdata(486, 1:4) )
 @
 <<>>=
@@ -94,7 +94,6 @@ rgolfballs <- do(10000) * table( rdata(486, 1:4) )
 
 \begin{center}
 <<golfballs-max,fig=true>>=
-require(fastR)
 print( statTally( golfballs, rgolfballs, max ) )
 @
 \end{center}
@@ -114,20 +113,49 @@ print( statTally( golfballs, rgolfballs, var ) )
 
 \subsection{Comparing Two Means}
 
+In this section we show two ways to see if the mean ages of men and women in the HELP study 
+are significantly different.
+
+\subsubsection{Using \texttt{aggregate()}}
+
+The \verb!aggregate()! function can compute a function on subsets of variable:
 <<>>=
-lm( age ~ sex, HELP )                        # actual data
-do(1) * lm( age ~ sex, HELP )                # actual data
-do(2) * lm( age ~ shuffle(sex), HELP )       # shuffled data
+aggregate( age ~ sex, HELP, mean )
+@
+A natural test statistic for comparing two means is the difference in sample means,
+which we can calculate using
+<<>>=
 diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
-do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)            # actual
-do(2) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)   # shuffled
 @
 
-\begin{center}
-<<two-sample-hist,fig=true,width=4>>=
+Using \verb!do()! and \verb!shuffle()! we can now compare
+\Sexpr{round(diff(aggregate( age ~ sex, HELP, mean )$age),2)} with
+the values we obtain if we randomly shuffle the \verb!sex! variable.
+
+<<>>=
+do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)                      # actual
+do(2) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)             # shuffled
+do(2) * c( diff=diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )   # shuffled and renamed
+@
+
+
+If we increase the number of random shufflings, we get an approximate sampling distribution
+that we can use to compute an empirical p-value.
+
+<<two-sample,width=4>>=
+set.seed(123)
 test.stat <- do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)  
 rtest.stats <- do(1000) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
-xhistogram(~diff, rtest.stats, v=test.stat)
+table(rtest.stats >= test.stat)
+mean(rtest.stats >= test.stat)                      # compute proportion of extreme statistics
+@
+With a empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, there 
+is no reason to reject the null hypothesis that the mean age is the same for men and women.
+
+We can use histograms or dotplots to display the sampling distributions graphically.
+\begin{center}
+<<two-sample-hist,fig=true,width=5>>=
+xhistogram(~diff, rtest.stats, v=test.stat, groups=diff >= test.stat)      
 @
 \end{center}
 
@@ -135,11 +163,38 @@ xhistogram(~diff, rtest.stats, v=test.stat)
 <<two-sample-dot,fig=true,width=6,height=2.2>>=
 test.stat <- do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)  
 rtest.stats <- do(200) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
-dotPlot(~diff, rtest.stats, n=40 )
+dotPlot(~diff, rtest.stats, n=40, groups=diff >= test.stat, pch=16 )
 ladd( panel.abline(v=test.stat) )                 # add a verticle line
 @
 \end{center}
 
+\subsubsection{Using \texttt{lm()}}
+An alternative approach to comparing two means is based on the use of linear models.  In the example below,
+\R\ will automatically convert the \verb!sex! factor into 0's and 1's, so the slope parameter in the model
+is the difference in the means.  
+<<>>=
+lm( age ~ sex, HELP )                        # actual data
+@
+The \verb!do()! function conveniently stores the values of the 
+estimated parameters that result from fitting with \verb!lm()!, so it is relatively easy to obtain
+the sampling distribution for any of these estimated parameters.
+<<>>=
+do(1) * lm( age ~ sex, HELP )                # actual data
+do(2) * lm( age ~ shuffle(sex), HELP )       # shuffled data
+@
+
+Since this is just another way of computing the difference in the sample means, the two approaches
+are equivalent.  If we reset the random seed, we get exactly the same simulation results.
+<<>>=
+set.seed(123)
+simulated <- do(1000) * lm( age ~ shuffle(sex), HELP ) 
+test.stat <- (do(1) * lm(age ~ sex, HELP) )['sexfemale'] -> test.stat
+rtest.stats <- simulated$shufflesexfemale
+table(rtest.stats >= test.stat)
+mean(rtest.stats >= test.stat)
+@
+\authNote{Perhaps we should adjust do() so that it returns a data frame even when there is one repetition.
+---rjp}
 
 
 \section{Bootstrap}
