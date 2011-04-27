@@ -33,10 +33,11 @@ Intro Stats students Spring 2011.}
 
 \section{Welcome to \R\ and \Rstudio}
 
-\R\ is a system for statistical computation and graphics.  We will use \R\ in this course 
+\R\ is a system for statistical computation and graphics.  We will use \R\ 
 for several reasons:
 \begin{enumerate}
-\item \R\ is open-source and freely available for Mac, PC, and Linux machines.
+\item \R\ is open-source and freely available for Mac, PC, and Linux machines.  This means that there is no restriction on having to license a particular software program, or have
+students work in a specific lab that has been outfitted with the technology of choice.
 \item \R\ is user-extensible and user extensions can easily be made available to others.
 \item \R\ is commercial quality.  It is the package of choice for many statisticians and those
 who use statistics frequently.  
@@ -48,11 +49,14 @@ include links to the \R\ code used for the analysis and graphics presented.
 methods are often available first in \R.
 \end{enumerate}
 
-\Rstudio\ provides access to \R\ in a web browser.  The URL is
+\Rstudio\ provides access to \R\ in a web browser.  This has some additional
+advantages, in that it simplifies installation of R, allows work to begin on one machine, and be picked up seamlessly later on somewhere else.
+
+The URL is
 \begin{center}
 \url{http://beta.rstudio.org/}
 \end{center}
-You should be able to log in using your Gmail address.
+You should be able to log in using the Gmail address that you provided earlier.
 Once you have logged in, you will see something like 
 Figure~\ref{fig:Rstudio-bigview}.
 
@@ -166,43 +170,45 @@ which of these are loaded.
 
 %(A similar thing is true for the stand-alone versions of \R.)
 
-Here are some packages we will use frequently in this course:
+Here are some packages we will use frequently:
 \begin{itemize}
 \item \verb!lattice!  (for graphics; this will always be installed in \R)
-\item \verb!Hmisc!    (a package with some nice utilities; available on CRAN)
-\item \verb!vcd!      (a package for visualizing categorical data; available on CRAN)
-\item \verb!fastR!    (a package with some nice utilities; available on CRAN)
-\item \verb!abd!      (a package with data and utilities for our textbook; available on CRAN)
+\item \verb!mosaic!  (for teaching statistics; this will need to be installed in \R
+from CRAN, see section \ref{sec:CRAN})
+%\item \verb!Hmisc!    (a package with some nice utilities; available on CRAN)
+%\item \verb!vcd!      (a package for visualizing categorical data; available on CRAN)
+%\item \verb!fastR!    (a package with some nice utilities; available on CRAN)
+%\item \verb!abd!      (a package with data and utilities for our textbook; available on CRAN)
 \end{itemize}
 There may be others that we use from time to time as well.  You should install
-\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
-(in that order) the first time you use \R\ 
-so that they are always available to you.
+%\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
+\authNote{Do we still need these other packages?}
+\verb!Hmisc! and \verb!mosaic! 
+the first time you use \R\ 
+so that they are always available to you on that machine.
 You can install these packages 
 by clicking on the ``Install Package" button and following the directions
 or by using the following commands:
 
 <<install,eval=F>>=
 install.packages('Hmisc')           # note the quotation marks 
-install.packages('vcd')
-install.packages('fastR')
-install.packages('abd')
 install.packages('mosaic')
 @
 
 Once these are installed, you can load them by checking the box in the 
 \tab{Packages} tab or by using the commands
 
+\authNote{Need to move findData into mosaic}
+
 <<require>>=
 require(lattice)
 require(Hmisc)
-require(vcd)
-require(fastR)
-require(abd)
+require(abd)   
 require(mosaic)
 @
 
 \begin{problem}
+\authNote{Can we tweak this in some manner?}
 Install and load the following packages:
 \verb!Hmisc!,
 \verb!vcd!,
@@ -1143,6 +1149,7 @@ This can be downloaded from \url{http://www.rstudio.org/}.
 
 
 \subsection{Getting R from CRAN}
+\label{sec:CRAN}
 
 CRAN is the Comprehensive \R\ Archive Network (\url{http://cran.r-project.org/}).  
 You can download free versions of \R\ for PC, Mac, and Linux from CRAN.  (If you use
