@@ -32,32 +32,37 @@ mosaic <- function(...) { print(vcd::mosaic(...)) }
 \section{Simulation and Randomization with the  \texttt{mosaic} Package}
 
 Software environments almost always provide an important feature:
-\begin{itemize}
-  \item[(1)] They allow potentially complicated operations to be
+\authNote{Why use itemize when you want to enumerate?  If we don't like the 
+display of enumerate, we should reset the defaults.  I'm switching to enumerate.
+---rjp}
+\begin{enumerate}
+  \item They allow potentially complicated operations to be
     packaged with a simple interface, making them easy to use.
-\end{itemize}
+	\saveenumi
+\end{enumerate}
 An environment that is integrated with a programming language provides
 an additional capability:
-\begin{itemize}
-  \item[(2)] New operations can be constructed from existing ones.
-\end{itemize}
+\begin{enumerate}
+\reuseenumi
+  \item New operations can be constructed from existing ones.
+\end{enumerate}
 
 Any proper statistics environment should offer the ease of use of
-(1).  R, like many packages, offers a large set of pre-packaged
-operations.  But, as a modern programming language, R offers the
+(1).  \R, like many packages, offers a large set of pre-packaged
+operations.  But, as a modern programming language, \R\ offers the
 advantage of making (2) available as well as (1).  In addition to
-enabling R to provide ready access to new forms of state-of-the-art
-computing, the programming-language features of R also enable the
+enabling \R\ to provide ready access to new forms of state-of-the-art
+computing, the programming-language features of \R\ also enable the
 operations in (1) to be de-constructed and presented to students in a
 transparent and intelligible way that reveals the underlying logic.
 
-One of the important goals of the MOSAIC package is to provide
+One of the important goals of the \verb!mosaic! package is to provide
 elementary commands that can be easily strung together by novices
 without having to master the esoteric aspects of programming.  This
 chapter will describe a few such key operations and how they connect
 to one another: random sampling and resampling, replication of random
 trials, summarizing the results of multiple trials.  As you will see,
-the MOSAIC operations allow students to implement each of the
+the \verb!mosaic! operations allow students to implement each of the
 operations in what George Cobb calls the ``3 Rs'' of statistical
 inference: Randomization, Replication, and Rejection. \cite{USCOTS-cobb-2005}
 By putting the 3 Rs together in various ways, students learn to
@@ -73,56 +78,72 @@ actual practice of sampling in favor of theoretical descriptions.
 What's more, the algebraic notation in which much of conventional
 textbook statistics is written does not offer an obvious notation for sampling.
 
-With the computer, however, this notational and efficiency obstacle
-can be overcome.  Sampling can be place in its rightfully central
+With the computer, however, thes3 efficiency and notation obstacles
+can be overcome.  Sampling can be placed in its rightfully central
 place among the statistical concepts in our courses.
 
 In doing so, why not start right off with a sample from a population?
 One example is the population of US states:
 
-\authNote{DTK: I'm reading it in this awkward way until I can add the dataset to
-  the MOSAIC package.  In the MOSAIC package, the current ``SAT'' data
+\authNoted{DTK: I'm reading it in this awkward way until I can add the dataset to
+  the \verb!mosaic! package.  In the \verb!mosaic! package, the current ``SAT'' data
 set has just one variable.  My view is that all such data sets should
 be data frames.  But I understand the virtue of having a few that
-students can use without the \$ notation.}
-<<>>=
-sat = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/sat.csv")
+students can use without the \$ notation.}%
+\authNote{RJP: I added the data and cleaned it up a bit.
+All you need do is add documentation.}%
+<<eval=false,echo=false>>=
+SAT = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/sat.csv")
 @ 
 
 Students in the US will know that there are 50 states:
 <<>>=
-nrow(sat)
+nrow(SAT)
 @ 
 
 
-\authNote{DTK: Danny should fix the SAT data set so that states like
-  ``New York'' don't have a comma inserted in place of the space.}
+\authNoted{DTK: Danny should fix the SAT data set so that states like
+  ``New York'' don't have a comma inserted in place of the space.
+
+  RJP:  done.}
 
 One of the variables to be measured from the population is the
 student/teacher ratio 
 <<>>=
-mean( sat$ratio )
+mean( SAT$ratio )
 @ 
 
 \authNote{DTK: There's another style that we could push.  I'm
-  interested in your reaction to it. This has the advantage of segregating the randomization part from the
-calculation part.  I'll try using this style in the following, and we
+  interested in your reaction to it. This has the advantage of segregating the
+  randomization part from the calculation part.  
+  I'll try using this style in the following, and we
 can easily change back to a more conventional style if it gets irritating.}
 
 <<>>=
-with( sat, mean(ratio) )
+with( SAT, mean(ratio) )
 @ 
 
 Every student who does this calculation will get the same result.
-Take a random sample of, say, 4 states:
+But if each student takes a random sample of, say, 4 states:
+\authNote{RJP: If we want a sample, let's call it a sample, not a shuffle.  I've changed
+the \R\ code throughout this section.}%
 <<>>=
-shuffle(sat, 4)
+sample(SAT, 4)
 @ 
+
+Then each student gets a potentially different result.
 
 Doing this with a classroom of students will immediately elicit a
 realization that the random sample is exactly that.  Ask the class:
 Who got California?  (There should be one or two in a class of 20.)
 Who got Alabama?  Did anyone get the same state twice?
+\authNote{RJP:
+No one will get the same state twice with \verb!smaple()! or 
+with \verb!shuffle()! under the default settings.  \verb!resample()! 
+on the other hand, samples with replacement by default.
+We could use \verb!deal()! here, but why mix metaphors when you are talking
+about sampling?
+}
 
 \begin{problem}
 QUESTION FOR INSTRUCTORS: How would you demonstrate that there are 50
@@ -131,25 +152,36 @@ duplicates?  (This isn't a question for beginning students, just one
 for developing instructor capabilities.)  Try each of the following
 and see if you can understand what's going on in each of them:
 <<echo=false>>=
-with( sat, table(State) )
-length(with( sat, table(State) ))
-table(with( sat, table(State) ))
+with( SAT, table(state) )
+length(with( SAT, table(state) ))
+table(with( SAT, table(state) ))
+table(table(SAT$state))
 @ 
 END OF QUESTION FOR INSTRUCTORS 
 \end{problem}
 
 The value of some measure for the population is, of course, called the ``population
-parameter.''  But for a sample, it's a ``sample statistic.''  It's
+parameter.''  
+\authNote{RJP: Why use scare quotes here?  Use \verb!\term{}! to highlight terms.  We 
+can define that to be boldface font or some such.}%
+But for a sample, it's a ``sample statistic.''  It's
 worthwhile to make the distinction concrete:
 <<>>=
-with( sat, mean(ratio) )
-with( shuffle(sat,4), mean(ratio) )
+with( SAT, mean(ratio) )
+with( sample(SAT,4), mean(ratio) )
 @ 
 
 Good questions to ask in class at this point: Who got a sample
 statistic that's bigger than the population parameter?  (About half
 the class will say yes.)  Who got a sample statistic that's exactly
 equal to the population parameter?  (It's unlikely that there will be a match.)
+\authNote{Is it worth the effort to write a few macros that place marginal
+notes alerting the reader to things like ``questions for students'', 
+``just for instructors'', ``R pitfalls'', etc.  
+Perhaps we could use the data set identifier from Danny's book
+as a model?  I'm thinking it would be nice to make it easier for users to locate
+various types of material.}
+
 
 At this point, it's helpful to point out that the reason we take
 samples is because it can be difficult or impossible to measure every
@@ -158,12 +190,18 @@ population is the 50 US States, but what if your population were the
 whole set individual people living in the US: that's over 300,000,000
 people!  
 
+
 \subsection{Taking Randomness Seriously}
 
 It's tempting to think that ``random'' means that anything goes.  This
 is, after all, the everyday meaning of the word.  In statistics,
 though, the point of randomness is to get a representative sample, or
-to assign experimental treatments in some fairly even way.   Using
+to assign experimental treatments in some fairly even way.   
+\authNote{RJP: 'fairly even' is pretty vague and potentially misleading.
+Randomness is really about having some knowledge about the variability.
+Other methods may have less variability, but if we don't know how to quantify it
+and if it is miscentered (biased), it doesn't do us any good. }%
+Using
 randomness properly means taking care and being formal about where the
 randomness comes from.  When you finally submit the research paper you
 have written after your long years of labor, you don't want it to be
@@ -174,15 +212,18 @@ First, to demonstrate that the sort of computer-generated random
 sampling produces reasonable results.  Perhaps it's a little too early
 in the course to talk about sampling distributions, but you certainly
 can have your class generate random samples of a reasonable size and
-show that they are reasonably close to the population parameter.  For
+show that sample statistics are reasonably close to the population parameter.  
+\authNote{RJP: samples are not close to parameters, statistics are.  I changed
+'they' to 'sample statistics'}%
+For
 instance, have each student in your class do this:
 <<>>=
-with( sat, mean(ratio) )
-with( shuffle(sat,25), mean(ratio) )
+with( SAT, mean(ratio) )
+with( sample(SAT,25), mean(ratio) )
 @ 
 Or, each student can repeat the trial several times:
 <<>>=
-do(10)*with( shuffle(sat,25), mean(ratio) )
+do(10)*with( sample(SAT,25), mean(ratio) )
 @ 
 This raises the question, naturally enough, of what ``reasonably
 close'' means, and what it means to measure ``how close.''
@@ -195,17 +236,26 @@ wrong with the answers they get from their random samples.  Some are too high co
 population parameter, some are too low, but as a group they are pretty
 well centered.
 
-It's helpful at this point to have some examples where an informal approach to
-randomness leads to misleading results.
+\subsection{Illuminating Sampling Mistakes}
+\authNote{RJP: The word 'illuminating' has two meanings intentionally -- but feel free to 
+change if that's too cute.}%
+It's helpful at this point to have some examples where an informal or careless
+approach to randomness leads to misleading results.
 
-Here are two that can be visually compelling:
+Here are some that can be visually compelling:
 \begin{enumerate}
-\item Select books off a library shelf and count how many pages they
-  are.  (Introduce the R app that let's students do this with the
-  mouse.)  When students pick books haphazardly, they get a systematic
-  over-estimate of the page length.  (A random sample of 25 is
+\item Select books off a library shelf and count how many pages 
+are in each book.
+  When students pick books haphazardly, they get a systematic
+  over-estimate of the page length.  
+  
+  A random sample of 25 is
   sufficient to see this for the large majority of students in the
-  class.  Going up to 50, though tedious, makes the result even more compelling.)
+  class.  Going up to 50, though tedious, makes the result even more compelling.
+  \authNote{RJP:  I moved Danny's comment (Introduce the R app that let's
+  students do this with the mouse.)  to this note.  
+  It's too late in the game to put hard to spot cruft into the document
+  that we need to remember to remove later.}%
   
 \item A simulation of a real-world study of Alzheimer's disease.  The
   sampling process was to go to nursing homes on a given day and
@@ -220,39 +270,82 @@ Here are two that can be visually compelling:
   tends to select those who are at the nursing home for a long time,
   rather than equally picking all patients.  Students can then compare
   the mean for the population to the mean for their haphazard sample.}
-  
+
+  \item Sample people and find out how many siblings are in their family
+  (including themselves).
+  Use this data to estimate family size.  Since larger families have more
+  children, we will over-sample larger families and over-estimate 
+  family size.  (Section~\ref{sec:fake-families} demonstrates how
+  to fake a data set for this activity.)
+
+  (Note:  In a higher level course, you could ask students
+  to determine a method to correct for this bias.)
+
+  \authNote{RJP:  build appropriate data frames for this and Alzheimer's examples.
+  Do we want to show how to build these?  I say yes.  It would be good for instructors
+  to see how these are built.  Those who are not interested can simply
+  copy.  We can but this stuff into a \verb!demo()! for easy access.
+  }
+
+  \item
+  Using \verb!googleMap()! (see Section~\ref{sec:googleMap}) 
+  we can compare uniform sampling of longitude 
+  and latitude with correct sampling that takes into account that the earth
+  is a sphere, not a cylinder.
 \end{enumerate}
-In both of these cases, follow up the haphazard sample with a formally
-generated sample (which is faster to do, in any event) and show that
+
+In each of these cases, follow up the haphazard or systematically biaseed 
+sample with a formally generated sample (which is faster to do, in any event) and show that
 the formally generated sample gives results that are more
 representative of the population than the haphazardly sampled data.
 
-Danny put this in to see how the commit works.
-Danny put this in to see how the commit works.
-Danny put this in to see how the commit works.
-Danny put this in to see how the commit works.
 
+\subsection{Sampling From Day 1 with \texttt{rflip()}}
 
+Since tossing a coin is one of the most familiar examples of randomness, we've added to
+\verb!mosaic! a function that facilitates simulating coin tosses. 
+<<>>=
+rflip(20)
+as.numeric( rflip(20) )       # just count how many heads
+@
 
+In addition to the Lady Tasting Tea activity (Section~\ref{sec:lady-tasting-tea}),
+other activities can be devised to help students develop a sense for randomness 
+and variability.
 
+\begin{enumerate}
+\item If you flip a coin 100 times, how often will you get exactly 50 heads?
+Between 45 and 55 heads?  Between 40 and 60 heads?
+\item
+If you flip a coin 20 times, how long is the longest run of either heads or tails typically?
 
-Basic sampling with shuffle
+This can be part of demonstration where you have students write down strings of H and T
+that ``look random'' and another set based on actual coin tosses.  Then see if you can 
+tell them which are which.
 
-Random number generation
+\end{enumerate}
+\authNote{Add some more of these.  Should we include examples where the coin is 
+biased -- free throw shooting comes to mind, for example.  Also the tipping 
+and spinning pennies activities.}%
 
-But better to sample from less abstract quantities and use these to
-generate some of the distributions that are used later.
+\subsection{Basic Sampling With \texttt{sample()}, \texttt{resample()}, and Cousins}
 
-Library project to show bias in sampling.
+<<>>=
+rdata(20, 1:4)              # samples with replacement
+@
+
+\authNote{\texttt{rdata()} could go in this section or in the next.  It serves as a 
+transition from sampling from data to sampling from an abstract distribution.}%
+
+\subsection{Sampling from Distributions}
+
+%But better to sample from less abstract quantities and use these to
+%generate some of the distributions that are used later.
+
 
 <<>>=
 rnorm(20, mean=500, sd=100) 
 rexp(20, rate=1/5)
-@
-<<>>=
-rflip(20)
-as.numeric(rflip(20))       # just count how many heads
-rdata(20, 1:4)              # samples with replacement
 @
 
 <<>>=
@@ -266,12 +359,18 @@ sample(cards)
 shuffle(cards) 
 @
 
+<<echo-false>>=
+set.seed(123)
+@
 <<>>=
 # These are equivalent.  Note the order of the arguments.
 sample(HELP, 2)
 rdata(2, HELP)
 @
 
+<<echo-false>>=
+set.seed(123)
+@
 <<>>=
 # These are equivalent; sampling with replacement now
 resample(HELP, 2)
@@ -286,6 +385,39 @@ the output format (usually returning a data frame).
 <<>>=
 do(5) * "hello"
 @
+
+\subsection{Generating Fake Data For Sampling Activities}
+\label{sec:fake-families}%
+If you don't have actual data at your disposal, you can simulate data
+to illustrate your point.  For example, let's take  the family size example above.
+We'll simulate 5000 families using a Poisson distribution with a mean of 3
+to generate family size.  (You can make up whatever elaborate story you like
+for the population you are considering.)
+
+<<>>=
+families <- data.frame( familyid = 1:5000, children = rpois(5000,3) )
+@
+
+Now we generate the people in these families
+<<>>=
+people <- data.frame( 
+		familyid = with( families, rep( familyid, children) ) ,
+		sibs = with( families, rep( children, children) ) 
+		)
+@
+
+<<>>=
+with( families, mean(children) )
+with( people, mean(sibs) )
+@
+If the result is mysterious, the following tables might shed some light.
+<<>>=
+with(families, table(children))
+with(people, table(sibs))
+@
+
+Once built, you can provide these data frames to your students for a sampling exercise.
+(See \ref{sec:distributingData}.)
 
 
 \section{Empirical p-values}
@@ -419,5 +551,8 @@ mean(rtest.stats >= test.stat)
 
 
 
+\section{Exercises, Problems, and Activities}
+
+\shipoutProblems
 
 \section{Power}
