@@ -88,7 +88,7 @@ golfballs <- c(137, 138, 107, 104)
 table( rdata(486, 1:4) )
 @
 <<>>=
-rgolfballs <- do(10000) * table( rdata(486, 1:4) )
+rgolfballs <- do(2000) * table( rdata(486, 1:4) )
 @
 
 
@@ -144,26 +144,30 @@ that we can use to compute an empirical p-value.
 
 <<two-sample,width=4>>=
 set.seed(123)
-test.stat <- do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)  
+test.stat <- diff(aggregate( age ~ sex, HELP, mean )$age )
 rtest.stats <- do(1000) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
+rtest.stats <- rtest.stats$diff
+@
+<<two-sample-pval>>=
 table(rtest.stats >= test.stat)
 mean(rtest.stats >= test.stat)                      # compute proportion of extreme statistics
 @
-With a empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, there 
+With an empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, there 
 is no reason to reject the null hypothesis that the mean age is the same for men and women.
 
 We can use histograms or dotplots to display the sampling distributions graphically.
+\authNote{Need to improve this in mosaic package ---rjp}%
 \begin{center}
 <<two-sample-hist,fig=true,width=5>>=
-xhistogram(~diff, rtest.stats, v=test.stat, groups=diff >= test.stat)      
+xhistogram(~rtest.stats, v=test.stat, groups=rtest.stats >= test.stat)      
 @
 \end{center}
 
 \begin{center}
 <<two-sample-dot,fig=true,width=6,height=2.2>>=
-test.stat <- do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)  
+test.stat <-  diff(aggregate( age ~ sex, HELP, mean )$age )
 rtest.stats <- do(200) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
-dotPlot(~diff, rtest.stats, n=40, groups=diff >= test.stat, pch=16 )
+dotPlot(~diff, rtest.stats, n=40, groups=rtest.stats$diff >= test.stat, pch=16 )
 ladd( panel.abline(v=test.stat) )                 # add a verticle line
 @
 \end{center}
@@ -188,20 +192,20 @@ are equivalent.  If we reset the random seed, we get exactly the same simulation
 <<>>=
 set.seed(123)
 simulated <- do(1000) * lm( age ~ shuffle(sex), HELP ) 
-test.stat <- (do(1) * lm(age ~ sex, HELP) )['sexfemale'] -> test.stat
+test.stat <- (do(1) * lm(age ~ sex, HELP) )$sexfemale -> test.stat
 rtest.stats <- simulated$shufflesexfemale
 table(rtest.stats >= test.stat)
 mean(rtest.stats >= test.stat)
 @
 \authNote{Perhaps we should adjust do() so that it returns a data frame even when there is one repetition.
 ---rjp}
+\authNote{Done. --rjp}
 
 
-\section{Bootstrap}
+\section{Bootstrap Confidence Intervals}
+\authNote{Should we interleave the confidence intervals and p-values or separate them like this? --rjp}%
 
-Danny: We already have good-enough bootstrap tools in the
-package: \texttt{do} and \texttt{resample}.  I don't do bootstrapping
-early in the course, but I do talk about sampling variability from day
-1.  Later on, I introduce bootstrapping as a way to simulate sampling
-variability without having to collect more data.
 
+
+
+\section{Power}
