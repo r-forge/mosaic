@@ -152,11 +152,11 @@ rtest.stats <- rtest.stats$diff
 table(rtest.stats >= test.stat)
 mean(rtest.stats >= test.stat)                      # compute proportion of extreme statistics
 @
-With an empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, there 
-is no reason to reject the null hypothesis that the mean age is the same for men and women.
+With an empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, 
+there is no reason to reject the null hypothesis that the mean
+age is the same for men and women.
 
 We can use histograms or dotplots to display the sampling distributions graphically.
-\authNote{Need to improve this in mosaic package ---rjp}%
 \begin{center}
 <<two-sample-hist,fig=true,width=5>>=
 xhistogram(~rtest.stats, v=test.stat, groups=rtest.stats >= test.stat)      
