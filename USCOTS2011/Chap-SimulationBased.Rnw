@@ -29,9 +29,221 @@ require(vcd)
 mosaic <- function(...) { print(vcd::mosaic(...)) }
 @ 
 
-\section{\texttt{mosaic} Randomization Widgets}
+\section{Simulation and Randomization with the  \texttt{mosaic} Package}
+
+Software environments almost always provide an important feature:
+\begin{itemize}
+  \item[(1)] They allow potentially complicated operations to be
+    packaged with a simple interface, making them easy to use.
+\end{itemize}
+An environment that is integrated with a programming language provides
+an additional capability:
+\begin{itemize}
+  \item[(2)] New operations can be constructed from existing ones.
+\end{itemize}
+
+Any proper statistics environment should offer the ease of use of
+(1).  R, like many packages, offers a large set of pre-packaged
+operations.  But, as a modern programming language, R offers the
+advantage of making (2) available as well as (1).  In addition to
+enabling R to provide ready access to new forms of state-of-the-art
+computing, the programming-language features of R also enable the
+operations in (1) to be de-constructed and presented to students in a
+transparent and intelligible way that reveals the underlying logic.
+
+One of the important goals of the MOSAIC package is to provide
+elementary commands that can be easily strung together by novices
+without having to master the esoteric aspects of programming.  This
+chapter will describe a few such key operations and how they connect
+to one another: random sampling and resampling, replication of random
+trials, summarizing the results of multiple trials.  As you will see,
+the MOSAIC operations allow students to implement each of the
+operations in what George Cobb calls the ``3 Rs'' of statistical
+inference: Randomization, Replication, and Rejection. \cite{USCOTS-cobb-2005}
+By putting the 3 Rs together in various ways, students learn to
+generalize and internalize the logic of inference, rather than just
+following formulaic methods.
 
 \subsection{Sampling and Resampling}
+
+Arguably, the most important operation in statistics is sampling:
+ideally, selecting a random subset from a population.  Regrettably,
+sampling takes work and time, so instructors tend to de-emphasize the
+actual practice of sampling in favor of theoretical descriptions.
+What's more, the algebraic notation in which much of conventional
+textbook statistics is written does not offer an obvious notation for sampling.
+
+With the computer, however, this notational and efficiency obstacle
+can be overcome.  Sampling can be place in its rightfully central
+place among the statistical concepts in our courses.
+
+In doing so, why not start right off with a sample from a population?
+One example is the population of US states:
+
+\authNote{DTK: I'm reading it in this awkward way until I can add the dataset to
+  the MOSAIC package.  In the MOSAIC package, the current ``SAT'' data
+set has just one variable.  My view is that all such data sets should
+be data frames.  But I understand the virtue of having a few that
+students can use without the \$ notation.}
+<<>>=
+sat = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/sat.csv")
+@ 
+
+Students in the US will know that there are 50 states:
+<<>>=
+nrow(sat)
+@ 
+
+
+\authNote{DTK: Danny should fix the SAT data set so that states like
+  ``New York'' don't have a comma inserted in place of the space.}
+
+One of the variables to be measured from the population is the
+student/teacher ratio 
+<<>>=
+mean( sat$ratio )
+@ 
+
+\authNote{DTK: There's another style that we could push.  I'm
+  interested in your reaction to it. This has the advantage of segregating the randomization part from the
+calculation part.  I'll try using this style in the following, and we
+can easily change back to a more conventional style if it gets irritating.}
+
+<<>>=
+with( sat, mean(ratio) )
+@ 
+
+Every student who does this calculation will get the same result.
+Take a random sample of, say, 4 states:
+<<>>=
+shuffle(sat, 4)
+@ 
+
+Doing this with a classroom of students will immediately elicit a
+realization that the random sample is exactly that.  Ask the class:
+Who got California?  (There should be one or two in a class of 20.)
+Who got Alabama?  Did anyone get the same state twice?
+
+\begin{problem}
+QUESTION FOR INSTRUCTORS: How would you demonstrate that there are 50
+different states, rather than just 50 cases that might include
+duplicates?  (This isn't a question for beginning students, just one
+for developing instructor capabilities.)  Try each of the following
+and see if you can understand what's going on in each of them:
+<<echo=false>>=
+with( sat, table(State) )
+length(with( sat, table(State) ))
+table(with( sat, table(State) ))
+@ 
+END OF QUESTION FOR INSTRUCTORS 
+\end{problem}
+
+The value of some measure for the population is, of course, called the ``population
+parameter.''  But for a sample, it's a ``sample statistic.''  It's
+worthwhile to make the distinction concrete:
+<<>>=
+with( sat, mean(ratio) )
+with( shuffle(sat,4), mean(ratio) )
+@ 
+
+Good questions to ask in class at this point: Who got a sample
+statistic that's bigger than the population parameter?  (About half
+the class will say yes.)  Who got a sample statistic that's exactly
+equal to the population parameter?  (It's unlikely that there will be a match.)
+
+At this point, it's helpful to point out that the reason we take
+samples is because it can be difficult or impossible to measure every
+member of the population.  Of course, it's not so difficult if your
+population is the 50 US States, but what if your population were the
+whole set individual people living in the US: that's over 300,000,000
+people!  
+
+\subsection{Taking Randomness Seriously}
+
+It's tempting to think that ``random'' means that anything goes.  This
+is, after all, the everyday meaning of the word.  In statistics,
+though, the point of randomness is to get a representative sample, or
+to assign experimental treatments in some fairly even way.   Using
+randomness properly means taking care and being formal about where the
+randomness comes from.  When you finally submit the research paper you
+have written after your long years of labor, you don't want it to be
+rejected because the reviewer isn't convinced that what you called
+``random'' was really so.
+
+First, to demonstrate that the sort of computer-generated random
+sampling produces reasonable results.  Perhaps it's a little too early
+in the course to talk about sampling distributions, but you certainly
+can have your class generate random samples of a reasonable size and
+show that they are reasonably close to the population parameter.  For
+instance, have each student in your class do this:
+<<>>=
+with( sat, mean(ratio) )
+with( shuffle(sat,25), mean(ratio) )
+@ 
+Or, each student can repeat the trial several times:
+<<>>=
+do(10)*with( shuffle(sat,25), mean(ratio) )
+@ 
+This raises the question, naturally enough, of what ``reasonably
+close'' means, and what it means to measure ``how close.''
+Eventually, that might lead you into consideration of differences,
+mean differences, mean square differences, and root mean square
+differences: the standard deviation and variance.  But even before
+encountering this formality the
+students should be able to see that there is nothing systematically
+wrong with the answers they get from their random samples.  Some are too high compared to the
+population parameter, some are too low, but as a group they are pretty
+well centered.
+
+It's helpful at this point to have some examples where an informal approach to
+randomness leads to misleading results.
+
+Here are two that can be visually compelling:
+\begin{enumerate}
+\item Select books off a library shelf and count how many pages they
+  are.  (Introduce the R app that let's students do this with the
+  mouse.)  When students pick books haphazardly, they get a systematic
+  over-estimate of the page length.  (A random sample of 25 is
+  sufficient to see this for the large majority of students in the
+  class.  Going up to 50, though tedious, makes the result even more compelling.)
+  
+\item A simulation of a real-world study of Alzheimer's disease.  The
+  sampling process was to go to nursing homes on a given day and
+  randomly pick out patients who were diagnosed with Alzheimers.
+  Their files were flagged and, after a few years, the data were
+  examined to find the mean survival time, from when they entered the
+  nursing home to when they died.  
+  
+\authNote{We can easily write an app that generates admission and
+  death dates as Julian dates, and let's the student pick a random day
+  of the year for the sampling.  A graphic shows how the random day
+  tends to select those who are at the nursing home for a long time,
+  rather than equally picking all patients.  Students can then compare
+  the mean for the population to the mean for their haphazard sample.}
+  
+\end{enumerate}
+In both of these cases, follow up the haphazard sample with a formally
+generated sample (which is faster to do, in any event) and show that
+the formally generated sample gives results that are more
+representative of the population than the haphazardly sampled data.
+
+Danny put this in to see how the commit works.
+Danny put this in to see how the commit works.
+Danny put this in to see how the commit works.
+Danny put this in to see how the commit works.
+
+
+
+
+
+Basic sampling with shuffle
+
+Random number generation
+
+But better to sample from less abstract quantities and use these to
+generate some of the distributions that are used later.
+
+Library project to show bias in sampling.
 
 <<>>=
 rnorm(20, mean=500, sd=100) 
