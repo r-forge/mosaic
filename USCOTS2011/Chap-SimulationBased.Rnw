@@ -309,6 +309,7 @@ rflip(20)
 as.numeric( rflip(20) )       # just count how many heads
 @
 
+
 In addition to the Lady Tasting Tea activity (Section~\ref{sec:lady-tasting-tea}),
 other activities can be devised to help students develop a sense for randomness 
 and variability.
@@ -323,7 +324,14 @@ This can be part of demonstration where you have students write down strings of 
 that ``look random'' and another set based on actual coin tosses.  Then see if you can 
 tell them which are which.
 
+\item
+\verb!rflip()! allows you to flip biased coins as well.  Let's simulate a 90\%
+free throw shooter shooting 10 free throws.
 \end{enumerate}
+<<>>=
+rflip(10, prob=.9)
+@
+
 \authNote{Add some more of these.  Should we include examples where the coin is 
 biased -- free throw shooting comes to mind, for example.  Also the tipping 
 and spinning pennies activities.}%
@@ -537,7 +545,7 @@ are equivalent.  If we reset the random seed, we get exactly the same simulation
 set.seed(123)
 simulated <- do(1000) * lm( age ~ shuffle(sex), HELP ) 
 test.stat <- (do(1) * lm(age ~ sex, HELP) )$sexfemale -> test.stat
-rtest.stats <- simulated$shufflesexfemale
+rtest.stats <- simulated$shuffle.sexfemale
 table(rtest.stats >= test.stat)
 mean(rtest.stats >= test.stat)
 @
