@@ -25,14 +25,14 @@ do = function(n=1, cull=NULL, mode=NULL) {
 .cull_for_do = function(object) {
 	if (any(class(object)=='lme')){ # for mixed effects models
 		result <- object
-		names(result) <- gsub('\\(','', names(result))
+		names(result) <- gsub('\\(','.', names(result))
 		names(result) <- gsub('\\)','', names(result))
 		return( object$coef$fixed )
 	}
 	if (any(class(object)=='lm') ) {
 		sobject <- summary(object)
 		result <-  c( coef(object), sigma=sobject$sigma, "r-squared" = sobject$r.squared ) 
-		names(result) <- gsub('\\(','', names(result))
+		names(result) <- gsub('\\(','.', names(result))
 		names(result) <- gsub('\\)','', names(result))
 		return(result)
 	}
