@@ -47,7 +47,7 @@ an appendix.}
 \section{Making Data Available Online}
 
 
-\section{A Brie Tour of Sweave and Friends}
+\section{A Brief Tour of Sweave and Friends}
 
 \section{\texttt{exams}}
 
