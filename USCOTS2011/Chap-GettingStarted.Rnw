@@ -170,7 +170,7 @@ Introduce Graphics Early.
 
 Do graphics very early, so that students see that they can get
 impressive output from simple commands.  Try to break away from their
-prior expectation that there is a "steep learning curve."
+prior expectation that there is a ``steep learning curve."
 
 Accept the defaults -- don't worry about the niceties (good labels,
 nice breaks on histograms, colors) too early.  Let them become
