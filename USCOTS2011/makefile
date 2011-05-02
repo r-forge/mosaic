@@ -21,6 +21,8 @@ TEXFILES = \
 
 all: Master-TeachingStatsWithR.pdf
 
+tex: $(TEXFILES)
+
 clean:
 	- \rm Chap-*.tex 
 	- \rm Chap-*.aux 
@@ -30,7 +32,7 @@ clean:
 	- \rm Master-*ind 
 	- \rm Master-TeachingStatsWithR*.pdf
 
-%.tex: %.Rnw
+%.tex: %.Rnw setup.R
 	bin/sweave.sh -nc $(SWEAVEOPTS) $< 
 
 Master-TeachingStatsWithR.pdf: $(TEXFILES)

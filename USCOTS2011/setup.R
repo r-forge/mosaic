@@ -15,5 +15,8 @@ options(width=90)
 xyplot <- function(...) { print(lattice::xyplot(...)) }
 bwplot <- function(...) { print(lattice::bwplot(...)) }
 histogram <- function(...) { print(lattice::histogram(...)) }
+xhistogram <- function(...) { print(mosaic::xhistogram(...)) }
+dotPlot <- function(...) { print(mosaic::dotPlot(...)) }
 barchart <- function(...) { print(lattice::barchart(...)) }
 mosaic <- function(...) { print(vcd::mosaic(...)) }
+densityplot <- function(...) { print(lattice::densityplot(...)) }

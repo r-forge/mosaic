@@ -13,20 +13,7 @@
 
 
 <<setup,echo=F>>=
-#setCacheDir("cache")
-require(grDevices); require(datasets); require(stats); require(lattice)
-require(fastR)
-require(grid) 
-require(mosaic)
-trellis.par.set(theme=col.mosaic(bw=FALSE))
-trellis.par.set(fontsize=list(text=9))
-options(keep.blank.line=FALSE); options(width=100)
-xyplot <- function(...) { print(lattice::xyplot(...)) }
-bwplot <- function(...) { print(lattice::bwplot(...)) }
-histogram <- function(...) { print(lattice::histogram(...)) }
-barchart <- function(...) { print(lattice::barchart(...)) }
-require(vcd)
-mosaic <- function(...) { print(vcd::mosaic(...)) }
+source('setup.R')
 @ 
 
 \section{Simulation and Randomization with the  \texttt{mosaic} Package}
@@ -348,7 +335,7 @@ with( families, mean(nkids) )
   \authNote{RJP:  build appropriate data frames for this and Alzheimer's examples.
   Do we want to show how to build these?  I say yes.  It would be good for instructors
   to see how these are built.  Those who are not interested can simply
-  copy.  We can but this stuff into a \verb!demo()! for easy access.
+  copy.  We can put this stuff into a \verb!demo()! for easy access.
   DTK: I agree.
   }
 
@@ -359,7 +346,7 @@ with( families, mean(nkids) )
   is a sphere, not a cylinder.
 \end{enumerate}
 
-In each of these cases, follow up the haphazard or systematically biaseed 
+In each of these cases, follow up the haphazard or systematically biased 
 sample with a formally generated sample (which is faster to do, in any event) and show that
 the formally generated sample gives results that are more
 representative of the population than the haphazardly sampled data.
@@ -460,6 +447,9 @@ do(5) * "hello"
 @
 
 \subsection{Generating Fake Data For Sampling Activities}
+\InstructorNote{This isn't something you will typically have students do, but it
+can help you make interesting fake data sets for examples, simulations, test questions, 
+etc.}
 \label{sec:fake-families}%
 If you don't have actual data at your disposal, you can simulate data
 to illustrate your point.  For example, let's take  the family size example above.
