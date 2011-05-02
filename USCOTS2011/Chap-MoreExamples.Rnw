@@ -75,7 +75,7 @@ VARIABLE & DESCRIPTION (VALUES) & NOTE \\ \hline
 \\ \hline
 {\tt drugrisk} & Risk-Assessment Battery (RAB) drug risk score  (range 0--21)  & see also {\tt sexrisk}
 \\ \hline
-{\tt e2b}$^*$ & number of times in past 6 months entered a detox program  (range 1--21)  & \\ \hline
+{\tt e2b} & number of times in past 6 months entered a detox program  (range 1--21)  & \\ \hline
 {\tt female} & gender of respondent  (0=male, 1=female)  &
 \\ \hline
 {\tt g1b} & experienced serious thoughts of suicide (last 30 days, values 0=no, 1=yes)  &
@@ -94,7 +94,7 @@ VARIABLE & DESCRIPTION (VALUES) & NOTE \\ \hline
 \\ \hline
 {\tt mcs} & SF-36 Mental Component Score  (range 7-62)  & see also {\tt pcs}
 \\ \hline
-{\tt pcrec}$^*$ & number of primary care visits in past 6 months   (range 0--2)  & see also {\tt linkstatus}, not observed at baseline \\ \hline
+{\tt pcrec} & number of primary care visits in past 6 months   (range 0--2)  & see also {\tt linkstatus}, not observed at baseline \\ \hline
 {\tt pcs} & SF-36 Physical Component Score  (range 14-75)  & see also {\tt mcs}
 \\ \hline
 {\tt pss\_fr} & perceived social supports (friends, range 0--14) & 
