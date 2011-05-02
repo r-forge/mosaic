@@ -65,10 +65,11 @@ to one another: random sampling and resampling, replication of random
 trials, summarizing the results of multiple trials.  As you will see,
 the \verb!mosaic! operations allow students to implement each of the
 operations in what George Cobb calls the ``3 Rs'' of statistical
-inference: Randomization, Replication, and Rejection. \cite{USCOTS-cobb-2005}
+inference: Randomization, Replication, and Rejection \cite{USCOTS-cobb-2005}.
 By putting the 3 Rs together in various ways, students learn to
 generalize and internalize the logic of inference, rather than just
-following formulaic methods.
+following formulaic methods.  More examples of the use of R as this sort
+of \emph{sandbox} for experimentation can be found in \cite{hort:brow:2004}.
 
 \subsection{Sampling and Resampling}
 
