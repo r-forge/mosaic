@@ -265,6 +265,7 @@ data.  (More about data types in \R\ as we go along.)
 The &na.strings& argument can be used to specify
 codes for missing values.  
 The following can be useful for SAS output, for example:
+\authNote{is something missing here?}
 
 
 For convenience \verb!mosaic! provides &read.file()& which uses the file name to
