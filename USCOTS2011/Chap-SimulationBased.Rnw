@@ -68,8 +68,18 @@ operations in what George Cobb calls the ``3 Rs'' of statistical
 inference: Randomization, Replication, and Rejection \cite{USCOTS-cobb-2005}.
 By putting the 3 Rs together in various ways, students learn to
 generalize and internalize the logic of inference, rather than just
-following formulaic methods.  More examples of the use of R as this sort
+following formulaic methods.  
+More examples of the use of R as this sort
 of \emph{sandbox} for experimentation can be found in \cite{hort:brow:2004}.
+
+There's an interesting discussion of the role of simulation in \cite{spee:2011}, where
+he notes that simulation was:
+\begin{quote}
+something that people did when they can't do the math. $\ldots$ It now seems that we
+are heading into an era when all statistical analysis can be done by simulation.
+\end{quote}
+
+
 
 \subsection{Sampling and Resampling}
 

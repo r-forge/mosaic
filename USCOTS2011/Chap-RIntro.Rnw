@@ -178,7 +178,7 @@ from CRAN, see section \ref{sec:CRAN})
 %\item \verb!Hmisc!    (a package with some nice utilities; available on CRAN)
 %\item \verb!vcd!      (a package for visualizing categorical data; available on CRAN)
 %\item \verb!fastR!    (a package with some nice utilities; available on CRAN)
-%\item \verb!abd!      (a package with data and utilities for our textbook; available on CRAN)
+\item \verb!abd!      (a package with some nice datasets; available on CRAN)
 \end{itemize}
 There may be others that we use from time to time as well.  You should install
 %\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
