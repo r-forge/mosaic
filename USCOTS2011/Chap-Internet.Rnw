@@ -31,6 +31,7 @@ mosaic <- function(...) { print(vcd::mosaic(...)) }
 
 \section{Data Mining Activities}
 \subsection{What percentage of Earth is Covered with Water?}
+\label{sec:googleMap}
 We can estimate the proportion of the world covered with water by randomly 
 sampling points on the globe and inspecting them using GoogleMaps.
 
