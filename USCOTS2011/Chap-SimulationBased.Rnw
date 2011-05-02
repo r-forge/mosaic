@@ -72,8 +72,8 @@ following formulaic methods.
 More examples of the use of R as this sort
 of \emph{sandbox} for experimentation can be found in \cite{hort:brow:2004}.
 
-There's an interesting discussion of the role of simulation in \cite{spee:2011}, where
-he notes that simulation was:
+There's an interesting discussion of the role of simulation in \cite{speed:2011}, where
+he notes the changing role of simulation.  It used to be:
 \begin{quote}
 something that people did when they can't do the math. $\ldots$ It now seems that we
 are heading into an era when all statistical analysis can be done by simulation.
