@@ -92,8 +92,9 @@ be data frames.  But I understand the virtue of having a few that
 students can use without the \$ notation.}%
 \authNote{RJP: I added the data and cleaned it up a bit.
 All you need do is add documentation.}%
-<<eval=false,echo=false>>=
-SAT = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/sat.csv")
+<<readsat,eval=true,echo=false>>=
+#SAT = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/sat.csv")
+data(SAT)
 @ 
 
 Students in the US will know that there are 50 states:
