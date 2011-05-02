@@ -317,7 +317,7 @@ for a large data set.  We would prefer to compute numerical or graphical summari
 We'll do that shortly.
 
 \subsection{Using Your Own Data}
-\Rstudio\ will help you import you own data.  To do so use the ``Import Dataset" 
+\Rstudio\ will help you import your own data.  To do so use the ``Import Dataset" 
 button in the \tab{Workspace} tab.  You can load data from text files, from the web, or from
 google spreadsheets.   
 
