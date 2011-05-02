@@ -8,14 +8,34 @@
 \Rwidth=\textwidth
 
 
-\usepackage[margin=.9in]{geometry}
+\usepackage[margin=.9in,left=1.3in,right=1.3in]{geometry}
 \usepackage{probstat}
 \usepackage{hyperref}
 \usepackage[shownotes]{authNote}
 \usepackage[answerdelayed,exercisedelayed,lastexercise]{problems}
 \usepackage{longtable}
 
-%\usepackage{tikz}
+\usepackage{tikz}
+\usetikzlibrary{shadows}
+\usetikzlibrary{decorations}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{shapes.symbols}
+
+\newcommand{\InstructorNote}[1]{%
+\marginpar{%
+\parbox{.9in}{\begin{tikzpicture}
+\node at (0,0) [double copy shadow={opacity=.5},tape,fill=blue!10,draw=blue,thick]
+{\parbox{.75in}{\footnotesize {\sc Instructor Note}\\\texttt{#1}}};
+\end{tikzpicture}}}
+}
+
+\newcommand{\FoodForThought}[1]{%
+\marginpar{%
+\parbox{.9in}{\begin{tikzpicture}
+\node at (0,0) [double copy shadow={opacity=.5},tape,fill=blue!10,draw=blue,thick]
+{\parbox{.75in}{\footnotesize {\sc Specialized}\\\texttt{#1}}};
+\end{tikzpicture}}}
+}
 
 \usepackage[nogin]{Sweave}
 
@@ -200,24 +220,7 @@ Daniel Kaplan
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
 
 <<setup,echo=F>>=
-#setCacheDir("cache")
-require(grDevices)
-require(datasets)
-require(stats)
-require(lattice)
-require(grid)
-require(mosaic)
-require(fastR)
-require(vcd)
-trellis.par.set(theme=col.fastR(bw=FALSE))
-trellis.par.set(fontsize=list(text=9))
-options(keep.blank.line=FALSE)
-options(width=100)
-xyplot <- function(...) { print(lattice::xyplot(...)) }
-bwplot <- function(...) { print(lattice::bwplot(...)) }
-histogram <- function(...) { print(lattice::histogram(...)) }
-barchart <- function(...) { print(lattice::barchart(...)) }
-mosaic <- function(...) { print(vcd::mosaic(...)) }
+source('setup.R')
 @ 
 
 
