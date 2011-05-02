@@ -20,6 +20,8 @@
 \usetikzlibrary{decorations}
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{shapes.symbols}
+\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes.geometric}
 
 \newcommand{\tikzNote}[3]{%
 \marginpar[%
@@ -39,12 +41,16 @@
 \tikzNote{#1}{#2}{double copy shadow={opacity=.5},tape,fill=blue!10,draw=blue,thick}
 }
 
+\renewcommand{\InstructorNote}[2][For Instructors\\]{%
+\tikzNote{#1}{#2}{tape,fill=blue!10,draw=blue,thick}
+}
+
 \newcommand{\FoodForThought}[2][\relax]{%
-\tikzNote{#1}{#2}{double copy shadow={opacity=.5},tape,fill=green!10,draw=green,thick}
+\tikzNote{#1}{#2}{rectangle,fill=green!10,draw=green,thick}
 }
 
 \newcommand{\Caution}[2][Caution!]{%
-\tikzNote{#1}{#2}{double copy shadow={opacity=.5},tape,fill=red!10,draw=red,thick}
+\tikzNote{#1}{#2}{chamfered rectangle,fill=red!10,draw=red,thick}
 }
 
 
