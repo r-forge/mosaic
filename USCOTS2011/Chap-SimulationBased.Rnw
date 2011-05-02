@@ -485,7 +485,8 @@ Once built, you can provide these data frames to your students for a sampling ex
 
 \section{Empirical p-values}
 \subsection{Lady Tasting Tea}
-If you don't use the Lady Tasting Tea as a course starter, you can use it as 
+If you don't use the Lady Tasting Tea as a course starter 
+(Section~\ref{sec:lady-tasting-tea}), you can use it as 
 an introduction to testing a proportion.
 
 \subsection{Golfballs in the Yard}
