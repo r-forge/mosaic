@@ -34,7 +34,8 @@ mosaic <- function(...) { print(vcd::mosaic(...)) }
 Software environments almost always provide an important feature:
 \authNote{Why use itemize when you want to enumerate?  If we don't like the 
 display of enumerate, we should reset the defaults.  I'm switching to enumerate.
----rjp}
+---rjp.  DTK says, ``Thanks.''  I didn't know about the saveenumi and
+reuseenumi.  Very helpful.  One of many things I'm learning.  }
 \begin{enumerate}
   \item They allow potentially complicated operations to be
     packaged with a simple interface, making them easy to use.
@@ -78,7 +79,7 @@ actual practice of sampling in favor of theoretical descriptions.
 What's more, the algebraic notation in which much of conventional
 textbook statistics is written does not offer an obvious notation for sampling.
 
-With the computer, however, thes3 efficiency and notation obstacles
+With the computer, however, these efficiency and notation obstacles
 can be overcome.  Sampling can be placed in its rightfully central
 place among the statistical concepts in our courses.
 
@@ -276,16 +277,68 @@ are in each book.
   (including themselves).
   Use this data to estimate family size.  Since larger families have more
   children, we will over-sample larger families and over-estimate 
-  family size.  (Section~\ref{sec:fake-families} demonstrates how
-  to fake a data set for this activity.)
+  family size.  Section~\ref{sec:fake-families} demonstrates how
+  to fake a data set for this activity.  But for the present, we can
+  use the \texttt{galton} dataset and pretend to take a sample of,
+  say, size 300 kids from the whole group of children that Galton had assembled.  
+ 
+<<>>=
+data(galton)
+with( sample(galton,300), mean(nkids))
+with( sample(galton,300), mean(nkids))
+do(10)*with( sample(galton,300), mean(nkids))
+@ 
+The samples all give about the same answer: about 6 kids in a family.
+But this is misleading!  The case in the \texttt{galton} data is a
+child, and families with more children have their family size
+represented proportionally more.  
 
-  (Note:  In a higher level course, you could ask students
+\newcommand{\VN}[1]{{\sf #1}}
+
+\authNote{DTK: To be added to the style guidelines????  I like to have a macro that typesets variable names in
+  a consistent way, e.g., a sans-serif font.  It doesn't matter so
+  much what the typestyle is, so long as we can be consistent.  I
+  suggest \verb+\VN{}+ as the markup.  We need a similar markup for
+  data sets and for operators (so that we can make an index of operators.}
+There are several ways to convert the \texttt{galton} to a new data
+set where the case is a family.  The key information is contained in
+the \VN{family} variable, which has a unique value for each family.
+The \texttt{duplicated} function identifies levels that are repeats of
+earlier ones and so the following will do the job (although is not
+necessarily something that you want to push onto students):
+<<>>=
+families = subset(galton, !duplicated(family) )
+@ 
+Of course, you will want to show that this has done the right job.  Compare
+<<>>=
+nrow(families) 
+@ 
+to 
+<<>>=
+length( with(galton, unique(family)) )
+@ 
+
+Now check out the average family size when the average is across
+families, not across kids in families:
+<<>>=
+with( families, mean(nkids) )
+@ 
+
+
+  (Note:  In a higher-level course, you could ask students
   to determine a method to correct for this bias.)
+\authNote{Consider whether my little example is too advanced and
+  should be moved to a higher-level course.  A good general policy for
+  this workshop would be to ask the users to mark up places where the
+  commands seem too difficult, or to highlight ``student use'' versus
+  ``instructor demonstration.''  There are always students who are
+  keen to see more, even if they aren't expected to master it.}
 
   \authNote{RJP:  build appropriate data frames for this and Alzheimer's examples.
   Do we want to show how to build these?  I say yes.  It would be good for instructors
   to see how these are built.  Those who are not interested can simply
   copy.  We can but this stuff into a \verb!demo()! for easy access.
+  DTK: I agree.
   }
 
   \item
