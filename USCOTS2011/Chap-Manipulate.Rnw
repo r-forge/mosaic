@@ -33,6 +33,13 @@ mosaic <- function(...) { print(vcd::mosaic(...)) }
 
 \chapter{Getting Interactive with \texttt{manipulate}}
 
+One very attractive feature of RStudio is the \verb!manipulate()! function, which
+can allow the creation of a set of controls (such as \verb!slider()!, \verb!picker()!
+or \verb!checkbox()!) that can be used to dynamically change values within the 
+expression.  When a value is changed using these controls, the expression is automatically
+re-executed and redrawn.  This can be used to quickly prototype a number of activities and
+demos as part of a statistics lecture.
+
 \section{Simple Things}
 
 \subsection{Sliders}
