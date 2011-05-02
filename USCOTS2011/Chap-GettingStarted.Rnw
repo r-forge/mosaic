@@ -203,6 +203,7 @@ in the course.
 
 
 \subsection{Coins and Cups: The Lady Tasting Tea}
+\label{sec:lady-tasting-tea}
 
 \begin{quote}
 \emph{This section is a slightly modified version of a handout R. Pruim
