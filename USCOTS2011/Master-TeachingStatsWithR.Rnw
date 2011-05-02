@@ -8,7 +8,7 @@
 \Rwidth=\textwidth
 
 
-\usepackage[margin=.9in,left=1.3in,right=1.3in]{geometry}
+\usepackage[margin=.5in,outer=1.5in,inner=.9in,includehead,includefoot]{geometry}
 \usepackage{probstat}
 \usepackage{hyperref}
 \usepackage[shownotes]{authNote}
@@ -21,21 +21,32 @@
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{shapes.symbols}
 
-\newcommand{\InstructorNote}[1]{%
-\marginpar{%
-\parbox{.9in}{\begin{tikzpicture}
-\node at (0,0) [double copy shadow={opacity=.5},tape,fill=blue!10,draw=blue,thick]
-{\parbox{.75in}{\footnotesize {\sc Instructor Note}\\\texttt{#1}}};
+\newcommand{\tikzNote}[3]{%
+\marginpar[%
+\hspace*{0.5in}
+\parbox{1.2in}{\begin{tikzpicture}
+\node at (0,0) [#3]
+{\parbox{1.05in}{\footnotesize {\sc #1 }\texttt{#2}}};
+\end{tikzpicture}}
+]{%
+\parbox{1.2in}{\begin{tikzpicture}
+\node at (0,0) [#3]
+{\parbox{1.05in}{\footnotesize {\sc #1 }\texttt{#2}}};
 \end{tikzpicture}}}
 }
 
-\newcommand{\FoodForThought}[1]{%
-\marginpar{%
-\parbox{.9in}{\begin{tikzpicture}
-\node at (0,0) [double copy shadow={opacity=.5},tape,fill=blue!10,draw=blue,thick]
-{\parbox{.75in}{\footnotesize {\sc Specialized}\\\texttt{#1}}};
-\end{tikzpicture}}}
+\newcommand{\InstructorNote}[2][For Instructors\\]{%
+\tikzNote{#1}{#2}{double copy shadow={opacity=.5},tape,fill=blue!10,draw=blue,thick}
 }
+
+\newcommand{\FoodForThought}[2][\relax]{%
+\tikzNote{#1}{#2}{double copy shadow={opacity=.5},tape,fill=green!10,draw=green,thick}
+}
+
+\newcommand{\Caution}[2][Caution!]{%
+\tikzNote{#1}{#2}{double copy shadow={opacity=.5},tape,fill=red!10,draw=red,thick}
+}
+
 
 \usepackage[nogin]{Sweave}
 
@@ -266,6 +277,7 @@ R Code
 \end{enumerate}
 \item
 Exercises
+\InstructorNote{Some exercises are for instructors, not for students.}%
 \begin{enumerate}
 \item Use \verb!\begin{problem} ... \end{problem}! to define problems.
 \item Use \verb!\begin{solution} ... \end{solution}! to define solutions.
@@ -282,8 +294,23 @@ last \verb!shipoutProblems!.
 
 \item Examples
 
-Do we want an example environment?  I've been using 
-sectioning to indicate examples. --rjp
+Put within 
+\verb!\begin{example}! and \verb!end{example}!.  We can tweak the formatting later.
+
+\item 
+Marginal Notes
+
+We can place some marginal notes with:
+\begin{itemize}
+\item \verb!\InstructorNote{}!
+\InstructorNote{This is an instructor note.}
+\item \verb!\FoodForThought{}!
+\FoodForThought{We can tweak the layout, color, size, etc. later.  For now. I'm just
+using color to distinguish.}
+\item \verb!\Caution{}!
+\Caution{This is a caution}
+\end{itemize}
+
 
 \end{enumerate}
 
