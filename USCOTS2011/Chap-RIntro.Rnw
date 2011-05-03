@@ -114,11 +114,13 @@ If you mis-capitalize something in \R\ it won't do what you want.
 
 \item 
 Functions in \R\ use the following syntax:
-
 <<function-syntax,eval=F>>=
 functionname( argument1, argument2, ... )
 @
 \vspace{-5mm}
+\FoodForThought{To help students get the hang of function arguments,
+ask them \emph{What information does the computer need to compute this?}
+}%
 \begin{itemize}
 \item The arguments are \underline{always} \emph{surrounded by (round) parentheses} and 
 \emph{separated by commas}.
