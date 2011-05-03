@@ -144,13 +144,16 @@ We could use \verb!deal()! here, but why mix metaphors when you are talking
 about sampling?
 }
 
-\begin{problem}
+\begin{problem}[stars=1]
+(This isn't a question for beginning students, just one
+for developing instructor capabilities.)  
 How would you demonstrate that there are 50
 different states, rather than just 50 cases that might include
-duplicates?  (This isn't a question for beginning students, just one
-for developing instructor capabilities.)  Try each of the following
+duplicates?  
+Try each of the following
 and see if you can understand what's going on in each of them:
-<<eval=true>>=
+\authNote{We had \verb!echo=false! here, but I think we mean \verb!eval=false! ---rjp}%
+<<eval=false>>=
 with( SAT, table(state) )
 length(with( SAT, table(state) ))
 with( SAT, table(table(state)) )
@@ -444,6 +447,7 @@ the output format (usually returning a data frame).
 do(5) * "hello"
 @
 
+
 \subsection{Generating Fake Data For Sampling Activities}
 \InstructorNote{This isn't something you will typically have students do, but it
 can help you make interesting fake data sets for examples, simulations, test questions, 
@@ -605,8 +609,8 @@ are equivalent.  If we reset the random seed, we get exactly the same simulation
 <<>>=
 set.seed(123)
 simulated <- do(1000) * lm( age ~ shuffle(sex), HELP ) 
-test.stat <- (do(1) * lm(age ~ sex, HELP) )$sexfemale -> test.stat
-rtest.stats <- simulated$shuffle.sexfemale
+test.stat <- (do(1) * lm(age ~ sex, HELP) )$sexmale -> test.stat
+rtest.stats <- simulated$sexmale
 table(rtest.stats >= test.stat)
 mean(rtest.stats >= test.stat)
 @

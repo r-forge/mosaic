@@ -199,6 +199,8 @@
 {\global\@ExeTitletrue\gdef\ExerciseTitle{\string#1}}
 \define@key{PPExercise}{difficulty}%
 {\global\@ExeDifficultytrue\global\ExerciseDifficulty=\number#1}
+\define@key{PPExercise}{stars}%
+{\global\@ExeDifficultytrue\global\ExerciseDifficulty=\number#1}
 \define@key{PPExercise}{name}%
 {\global\@ExeReNametrue\gdef\@ExerciseName{\string#1}}
 \define@key{PPExercise}{origin}%
@@ -617,7 +619,7 @@
 \fi
 
 %
-\newenvironment{problem}{%
+\newenvironment{problem}[1][\relax]{%
 \pagebreak[3]
 \begingroup%
 \renewcommand{\labelenumi}{\textbf{\alph{enumi})}}%
@@ -626,7 +628,7 @@
 \renewcommand{\theenumi}{{\alph{enumi}}}%
 \renewcommand{\theenumii}{\roman{enumii}}%
 \renewcommand{\theenumiii}{\Alph{enumiii}}%
-\begin{Exercise}%
+\begin{Exercise}[#1]%
 }%
 {%
 \vspace*{\probskip}
