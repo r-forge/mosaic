@@ -1,6 +1,5 @@
 \chapter{Simulation Based Inference}
 
-
 \SweaveOpts{prefix.string=figures/fig}  % location of 
 \SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
 \SweaveOpts{tidy=F}         % keep.source probably disables this
@@ -277,17 +276,17 @@ are in each book.
   children, we will over-sample larger families and over-estimate 
   family size.  Section~\ref{sec:fake-families} demonstrates how
   to fake a data set for this activity.  But for the present, we can
-  use the \texttt{galton} dataset and pretend to take a sample of,
+  use the \texttt{Galton} dataset and pretend to take a sample of,
   say, size 300 kids from the whole group of children that Galton had assembled.  
  
 <<>>=
-data(galton)
-with( sample(galton,300), mean(nkids))
-with( sample(galton,300), mean(nkids))
-do(10)*with( sample(galton,300), mean(nkids))
+data(Galton)
+with( sample(Galton,300), mean(nkids))
+with( sample(Galton,300), mean(nkids))
+do(10)*with( sample(Galton,300), mean(nkids))
 @ 
 The samples all give about the same answer: about 6 kids in a family.
-But this is misleading!  The case in the \texttt{galton} data is a
+But this is misleading!  The case in the \texttt{Galton} data is a
 child, and families with more children have their family size
 represented proportionally more.  
 
@@ -298,14 +297,14 @@ represented proportionally more.
   much what the typestyle is, so long as we can be consistent.  I
   suggest \verb+\VN{}+ as the markup.  We need a similar markup for
   data sets and for operators (so that we can make an index of operators.}
-There are several ways to convert the \texttt{galton} to a new data
+There are several ways to convert the \texttt{Galton} to a new data
 set where the case is a family.  The key information is contained in
 the \VN{family} variable, which has a unique value for each family.
 The \texttt{duplicated} function identifies levels that are repeats of
 earlier ones and so the following will do the job (although is not
 necessarily something that you want to push onto students):
 <<>>=
-families = subset(galton, !duplicated(family) )
+families = subset(Galton, !duplicated(family) )
 @ 
 Of course, you will want to show that this has done the right job.  Compare
 <<>>=
@@ -313,7 +312,7 @@ nrow(families)
 @ 
 to 
 <<>>=
-length( with(galton, unique(family)) )
+length( with(Galton, unique(family)) )
 @ 
 
 Now check out the average family size when the average is across

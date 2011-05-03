@@ -522,10 +522,10 @@ RJP added some plots here just to see what the data looked like.
 Keep/delete/modify at your discretion.
 
 \begin{center}
-<<galton,fig=T,height=3>>=
-xyplot(height ~ father+mother| sex, galton, type=c('p','r'), auto.key=T, alpha=.6)
+<<Galton,fig=T,height=3>>=
+xyplot(height ~ father+mother| sex, Galton, type=c('p','r'), auto.key=T, alpha=.6)
 @
-<<galton-parents,fig=T,width=3,height=2.5>>=
-xyplot(father~mother, galton, type=c('p','r'), auto.key=T, alpha=.3)
+<<Galton-parents,fig=T,width=3,height=2.5>>=
+xyplot(father~mother, Galton, type=c('p','r'), auto.key=T, alpha=.3)
 @
 \end{center}

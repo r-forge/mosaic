@@ -139,6 +139,8 @@ the list of arguments it expects.  The up and down arrows can be used to retriev
 \item
 If you see a \verb!+! prompt, it means \R\ is waiting for more input.
 
+\Caution{Your students will get into a syntactic hole from which they cannot
+dig out.  Teach them about the ESC key early.}%
 Often this means that you have forgotten a closing parenthesis or made some other
 syntax error.  If you have messed up and just want to get back to the normal plot,
 hit the escape key and start the command fresh.
@@ -874,7 +876,7 @@ than less infected fish.
 \fi
 
 \begin{problem}
-The \verb!utilities2! data set in the \verb!fastR! package contains a number of variables
+The \verb!Utilities2! data set in the \verb!fastR! package contains a number of variables
 about the utilities bills at a residence in Minnesota over a number of years.
 Since the number of days in a billing cycle varies from month to month, variables 
 like \verb!gasbillpday! (\verb!elecbillpday!, etc.) contain the gasbill (electric bill, etc.) 
@@ -885,7 +887,7 @@ Make a scatter plot of \verb!gasbillpday! vs. \verb!monthsSinceY2K! using the co
 \end{enumerate}
 
 <<gasbill,fig=F>>=
-xyplot(gasbillpday ~ monthsSinceY2K, data=utilities2, type='l')   # the letter l
+xyplot(gasbillpday ~ monthsSinceY2K, data=Utilities2, type='l')   # the letter l
 @
 \vspace{-6mm}
 \begin{enumerate}
