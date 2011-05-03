@@ -145,18 +145,17 @@ about sampling?
 }
 
 \begin{problem}
-QUESTION FOR INSTRUCTORS: How would you demonstrate that there are 50
+How would you demonstrate that there are 50
 different states, rather than just 50 cases that might include
 duplicates?  (This isn't a question for beginning students, just one
 for developing instructor capabilities.)  Try each of the following
 and see if you can understand what's going on in each of them:
-<<echo=false>>=
+<<eval=true>>=
 with( SAT, table(state) )
 length(with( SAT, table(state) ))
-table(with( SAT, table(state) ))
+with( SAT, table(table(state)) )
 table(table(SAT$state))
 @ 
-END OF QUESTION FOR INSTRUCTORS 
 \end{problem}
 
 The value of some measure for the population is, of course, called the ``population
@@ -525,14 +524,21 @@ are significantly different.
 
 \subsubsection{Using \texttt{aggregate()}}
 
-The \verb!aggregate()! function can compute a function on subsets of variable:
+While \verb!summary()! from \verb!Hmisc! makes a nice visual display
+of summary statistics by groups,
 <<>>=
-aggregate( age ~ sex, HELP, mean )
+summary( age ~ sex, data=HELP, fun=mean )
+@
+the \verb!aggregate()! function stores its results in a data frame that lends itself
+to further computation.
+<<>>=
+aggregate( age ~ sex, HELP, FUN=mean )
 @
 A natural test statistic for comparing two means is the difference in sample means,
 which we can calculate using
 <<>>=
 diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
+with( aggregate( age ~ sex, HELP, mean ), diff(age) )           # actual
 @
 
 Using \verb!do()! and \verb!shuffle()! we can now compare
@@ -540,9 +546,9 @@ Using \verb!do()! and \verb!shuffle()! we can now compare
 the values we obtain if we randomly shuffle the \verb!sex! variable.
 
 <<>>=
-do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)                      # actual
-do(2) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)             # shuffled
-do(2) * c( diff=diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )   # shuffled and renamed
+do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
+do(2) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)           # shuffled
+do(2) * c( diff=diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) ) # shuffled & renamed
 @
 
 
@@ -557,7 +563,7 @@ rtest.stats <- rtest.stats$diff
 @
 <<two-sample-pval>>=
 table(rtest.stats >= test.stat)
-mean(rtest.stats >= test.stat)                      # compute proportion of extreme statistics
+mean(rtest.stats >= test.stat)            # compute proportion of extreme statistics
 @
 With an empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, 
 there is no reason to reject the null hypothesis that the mean
@@ -612,10 +618,9 @@ mean(rtest.stats >= test.stat)
 \section{Bootstrap Confidence Intervals}
 \authNote{Should we interleave the confidence intervals and p-values or separate them like this? --rjp}%
 
-
+\section{Power}
 
 \section{Exercises, Problems, and Activities}
 
 \shipoutProblems
 
-\section{Power}
