@@ -51,3 +51,9 @@ pval.htest <- function (x, digits=4, verbose=TRUE, ...){
   }
   return(pval)
 }
+
+stat <- function(x,...) { UseMethod("stat", x)}
+
+stat.htest <- function(x,...) {
+	x $ statistic
+}
