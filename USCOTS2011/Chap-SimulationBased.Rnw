@@ -91,7 +91,8 @@ students can use without the \$ notation.}%
 \authNote{RJP: I added the data and cleaned it up a bit.
 All you need do is add documentation.}%
 
-\begin{example}
+\begin{example}[ (Sampling from 50 States)]
+
 Students in the US will know that there are 50 states:
 <<>>=
 nrow(SAT)
@@ -142,7 +143,7 @@ about sampling?
 }
 \end{example}
 
-\begin{problem}[stars=1]
+\begin{problem}[stars=2]
 (This isn't a question for beginning students, just one
 for developing instructor capabilities.)  
 How would you demonstrate that there are 50
@@ -446,16 +447,17 @@ do(5) * "hello"
 @
 
 
+
 \subsection{Generating Fake Data For Sampling Activities}
-\InstructorNote{This isn't something you will typically have students do, but it
-can help you make interesting fake data sets for examples, simulations, test questions, 
-etc.}
 \label{sec:fake-families}%
-If you don't have actual data at your disposal, you can simulate data
-to illustrate your point.  For example, let's take  the family size example above.
+If you don't have actual data at your disposal, you can sometimes simulate data
+to illustrate your point.  
+
+\begin{example}[ (Fake Families)]
 We'll simulate 5000 families using a Poisson distribution with a mean of 3
 to generate family size.  (You can make up whatever elaborate story you like
 for the population you are considering.)
+\InstructorNote{This example is intended for instructors, not for students.}
 
 <<>>=
 families <- data.frame( familyid = 1:5000, children = rpois(5000,3) )
@@ -478,6 +480,7 @@ If the result is mysterious, the following tables might shed some light.
 with(families, table(children))
 with(people, table(sibs))
 @
+\end{example}
 
 Once built, you can provide these data frames to your students for a sampling exercise.
 (See \ref{sec:distributingData}.)
