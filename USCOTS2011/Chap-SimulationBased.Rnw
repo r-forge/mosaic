@@ -90,11 +90,8 @@ be data frames.  But I understand the virtue of having a few that
 students can use without the \$ notation.}%
 \authNote{RJP: I added the data and cleaned it up a bit.
 All you need do is add documentation.}%
-<<readsat,eval=true,echo=false>>=
-#SAT = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/sat.csv")
-data(SAT)
-@ 
 
+\begin{example}
 Students in the US will know that there are 50 states:
 <<>>=
 nrow(SAT)
@@ -143,6 +140,7 @@ on the other hand, samples with replacement by default.
 We could use \verb!deal()! here, but why mix metaphors when you are talking
 about sampling?
 }
+\end{example}
 
 \begin{problem}[stars=1]
 (This isn't a question for beginning students, just one
@@ -590,7 +588,10 @@ ladd( panel.abline(v=test.stat) )                 # add a verticle line
 \end{center}
 
 \subsubsection{Using \texttt{lm()}}
-An alternative approach to comparing two means is based on the use of linear models.  In the example below,
+An alternative approach to comparing two means is based on the use of linear models. 
+
+\begin{example}
+In this example,
 \R\ will automatically convert the \verb!sex! factor into 0's and 1's, so the slope parameter in the model
 is the difference in the means.  
 <<>>=
@@ -614,10 +615,7 @@ rtest.stats <- simulated$sexmale
 table(rtest.stats >= test.stat)
 mean(rtest.stats >= test.stat)
 @
-\authNote{Perhaps we should adjust do() so that it returns a data frame even when there is one repetition.
----rjp}
-\authNote{Done. --rjp}
-
+\end{example}
 
 \section{Bootstrap Confidence Intervals}
 \authNote{Should we interleave the confidence intervals and p-values or separate them like this? --rjp}%

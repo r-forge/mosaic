@@ -53,6 +53,14 @@
 \tikzNote{#1}{#2}{chamfered rectangle,fill=red!10,draw=red,thick}
 }
 
+\newcounter{examplenum}[chapter]
+\newenvironment{example}{
+\refstepcounter{examplenum}
+\textbf{\large Example \thechapter.\arabic{examplenum}.}
+}{%
+\hfill {\Large $\diamond$}
+%\centerline{\rule{5in}{.5pt}}
+}
 
 \usepackage[nogin]{Sweave}
 
