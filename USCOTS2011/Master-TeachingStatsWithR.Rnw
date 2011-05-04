@@ -4,6 +4,7 @@
 \usepackage{mparhack}
 
 \usepackage{etoolbox}
+\usepackage{multicol}
 
 \newdimen\Rwidth
 \Rwidth=\textwidth
@@ -388,6 +389,12 @@ available sometime in August 2011.
 We appreciate any feedback you are willing to share.  Drop us an email at
 \url{pis@mosaic.org}.
 
+\subsection*{What's Ours is Yours -- To a Point}
+
+This material is copyrighted by the authors under a ???? license. 
+
+\textbf{Insert copyright details here.}
+
 \subsection*{Two Audiences}
 
 The primary audience for these materials is instructors of statistics at the college or
@@ -400,7 +407,41 @@ these audiences more clearly at the forefront.  This means that
 expertise in \R\ and their own teaching materials.
 \end{enumerate}
 
-\subsection{Notation}
+Although the distinction can get blurry, and what works ``as is" in one setting may 
+not work ``as is" in another.  Nevertheless, we'll try to indicate which parts of this 
+book fit into each category as we go along.
+
+\subsection*{R and R Packages}
+
+\R\ can be obtained from \url{http://cran.r-project.org/}.  Download and installation are 
+pretty straightforward for Mac, PC, or linux machines.
+
+In addition to \R, we will make use of several packages that need to be installed
+and loaded separately. These packages include
+\begin{multicols}{4}
+\begin{itemize}
+\item
+\verb!mosaic!
+\item
+\verb!fastR!
+\item
+\verb!abd!
+\end{itemize}
+\end{multicols}
+
+We also make use of \verb!lattice! and \verb!grid! which are installed with 
+\R\ but must be loaded before use.
+
+There are also a few things (mainly those using \verb!manipulate()!) that require
+the \RStudio\ interface to \R.  \RStudio\ is available from 
+\url{http://www.rstudio.org/}.
+
+\RStudio\ can be installed as a desktop (laptop) application or as a server application
+that is accessible to others via the Internet.
+We wish to thank the \RStudio\ team for providing all workshop participants with
+accounts on their servers.
+
+\subsection*{Notation}
 
 \subsubsection*{Exercises}
 Exercises marked with 1 star are intended for students in courses beyond the
