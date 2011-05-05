@@ -32,7 +32,8 @@ clean:
 	- \rm Master-*ind 
 	- \rm Master-TeachingStatsWithR*.pdf
 
-%.tex: %.Rnw setup.R inputs/problems.sty inputs/authNote.sty inputs/sfsect.sty inputs/USCOTS.bib
+%.tex: %.Rnw setup.R inputs/problems.sty inputs/authNote.sty \
+	inputs/sfsect.sty inputs/USCOTS.bib
 	bin/sweave.sh -nc $(SWEAVEOPTS) $< 
 
 Master-TeachingStatsWithR.pdf: $(TEXFILES) 

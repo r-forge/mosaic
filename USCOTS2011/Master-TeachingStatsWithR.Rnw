@@ -386,10 +386,16 @@ on Teaching Statistics.  Consider them a work in progress.  We hope to continue
 improving them over the summer of 2011 with the goal of making a stable version
 available sometime in August 2011.
 
-We appreciate any feedback you are willing to share.  Drop us an email at
-\url{pis@mosaic.org}.
 
-\subsection*{What's Ours is Yours -- To a Point}
+
+\subsection*{A Work in Progress}
+
+We appreciate any feedback you are willing to share as we continue
+to work on these materials and the accompanying \verb!mosaic! package.  
+Drop us an email at \url{pis@mosaic.org} with any comments, suggestions,
+corrections, etc.
+
+\subsection*{What's Ours Is Yours -- To a Point}
 
 This material is copyrighted by the authors under a ???? license. 
 
@@ -451,6 +457,75 @@ instructors (but may also be appropriate for students in higher level courses).
 \subsubsection*{Marginal Notes}
 
 
+\chapter*{Project MOSAIC}
+
+Project MOSAIC is a community of educators working to develop  new ways to
+introduce mathematics, statistics, computation, and modeling to students in
+colleges and universities.
+
+\bigskip
+
+The purpose of the MOSAIC community is to help us share ideas and resources to
+improve teaching, and to develop a curricular and assessment
+infrastructure to support the dissemination and evaluation of these ideas.
+Our goal is to provide a broader approach to quantitative studies that provides
+better support for work in science and technology. 
+The focus of the project is to tie together
+better diverse aspects of quantitative work that students in science,
+technology, and engineering will need in their professional lives, but which
+are today usually taught in isolation, if at all.  In particular, we focus on
+
+\begin{description}
+	\item[Modeling] The ability to create, manipulate and investigate useful
+	and informative mathematical representations of a real-world situations.
+
+	\item[Statistics] The analysis of variability that draws on our ability to
+	quantify uncertainty and to draw logical inferences from observations and
+	experiment.
+
+    \item[Computation] 
+	The capacity to think algorithmically, to manage data on large scales, to
+	visualize and interact with models, and to automate tasks for efficiency,
+	accuracy, and reproducibility.
+
+    \item[Calculus] 
+	The traditional mathematical entry point for college and university
+	students and a subject that still has the potential to provide important
+	insights to today's students.
+	\end{description}
+
+Drawing on support from the US National Science Foundation (NSF DUE-0920350),
+Project MOSAIC supports a number of initiatives to help achieve these goals,
+including
+\begin{description}
+\item
+[Faculty development and training opportunities,] 
+such as the USCOTS 2011 workshop.
+
+\item
+[M-casts,] 
+a series of regularly scheduled seminars, delivered via the Internet, 
+that provide a forum for instructors to share their insights and innovations 
+and to develop collaborations to refine and develop them.
+A schedule of future M-casts and recordings of past M-casts are available
+at the Project MOSAIC web site, \url{http://mosaic-web.org}.
+
+\item[The development of a "concept inventory" to support teaching modeling.] 
+It is somewhat rare in today's curriculum for modeling to be taught. 
+College and university catalogs are filled with descriptions of courses 
+in statistics, computation, and calculus. There are many textbooks in 
+these areas and the most new faculty teaching statistics, computation, 
+and calculus have a solid idea of what should be included. 
+But modeling is different. It's generally recognized
+as important, but few if instructors have a clear view of the essential
+concepts.
+
+\item[The construction of syllabi and materials] 
+for courses that teach the MOSAIC topics in a better integrated way. Such
+courses and materials might be wholly new constructions, or they might be 
+incremental modifications of existing resources that draw on the 
+connections between the MOSAIC topics.
+\end{description}
 
 \include{Chap-GettingStarted}
 
