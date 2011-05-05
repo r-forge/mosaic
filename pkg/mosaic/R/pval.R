@@ -2,7 +2,7 @@
 
 pval <- function(x, ...){UseMethod("pval", x)}
 
-pval.htest <- function (x, digits=4, verbose=TRUE, ...){
+pval.htest <- function (x, digits=4, verbose=FALSE, ...){
   pval <- x$p.value
   stat <- x$statistic
   param <- x$parameter
@@ -49,7 +49,8 @@ pval.htest <- function (x, digits=4, verbose=TRUE, ...){
 	  cat('\n\n')
 	  invisible(pval)
   }
-  return(pval)
+
+  return( c(p.value=pval) )
 }
 
 stat <- function(x,...) { UseMethod("stat", x)}
