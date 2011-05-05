@@ -468,7 +468,7 @@ histogram(~heads, random.ladies,
 
 You might be surprised to see that the number of correct guesses
 is exactly 5 (half of the 10 tries) only 
-\Sexpr{round(as.numeric(table(random.ladies)[6]/100,1))}\%
+\Sexpr{round(as.numeric(perctable(random.ladies)[6],1))}\%
 of the time.  But most of the results are quite close to 5 correct.
 \Sexpr{round(sum(table(random.ladies$heads)[5:7]/100,1))}\% of the results are 
 4, 5, or 6, for example.

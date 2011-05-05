@@ -534,8 +534,8 @@ of summary statistics by groups,
 <<>>=
 summary( age ~ sex, data=HELP, fun=mean )
 @
-the \verb!aggregate()! function stores its results in a data frame that lends itself
-to further computation.
+the \verb!aggregate()! function stores its results in a data frame that lends 
+itself better to further computation.
 <<>>=
 aggregate( age ~ sex, HELP, FUN=mean )
 @
@@ -568,7 +568,7 @@ rtest.stats <- rtest.stats$diff
 @
 <<two-sample-pval>>=
 table(rtest.stats >= test.stat)
-mean(rtest.stats >= test.stat)            # compute proportion of extreme statistics
+mean(rtest.stats <= test.stat)            # compute proportion of extreme statistics
 @
 With an empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, 
 there is no reason to reject the null hypothesis that the mean
@@ -582,13 +582,31 @@ xhistogram(~rtest.stats, v=test.stat, groups=rtest.stats >= test.stat)
 \end{center}
 
 \begin{center}
-<<two-sample-dot,fig=true,width=6,height=2.2>>=
+<<two-sample-dot,fig=true,width=5,height=2.2>>=
 test.stat <-  diff(aggregate( age ~ sex, HELP, mean )$age )
 rtest.stats <- do(200) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
 dotPlot(~diff, rtest.stats, n=40, groups=rtest.stats$diff >= test.stat, pch=16 )
 ladd( panel.abline(v=test.stat) )                 # add a verticle line
 @
 \end{center}
+
+\subsubsection{Using \texttt{t.test()}}
+
+If you prefer to teach randomization methods as an alternative to traditional 
+methods when the assumptions of those procedures are violated, you can use 
+simulation to approximate the sampling distribution of the usual test statistic.
+<<>>=
+data.t <- stat( t.test( age ~ sex, HELP ) ); data.t
+simulated <- do(1000) * stat(t.test( age ~ shuffle(sex), HELP) )
+table(simulated$t >= data.t)
+@
+\begin{center}
+<<t-test-simulatoin-histogram,fig=true,width=5>>=
+xhistogram( ~ t, simulated, groups=t >= data.t, v=data.t )
+@
+\end{center}
+
+
 
 \subsubsection{Using \texttt{lm()}}
 An alternative approach to comparing two means is based on the use of linear models. 
