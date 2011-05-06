@@ -795,6 +795,16 @@ table(a+b > 50)
 %\subsection{Cross Tabulation with \texttt{xtabs()}}
 %\subsection{\texttt{aggregate()} and \texttt{Hmisc::summary()}}
 \subsection{Adding new variables to a data frame}
+\subsection{Dropping variables}
+\subsection{Renaming variables}
+\subsection{Creating variables}
+\subsubsection{character variables}
+\subsubsection{coercing variables}
+\subsubsection{recoding variables}
+\subsection{Accounting for missing data}
+\subsection{Creating subsets}
+\subsection{Merging datasets}
+
 
 We can add additional variables to an existing data frame by simple assignment.
 It is an error to add a vector of the wrong length.
