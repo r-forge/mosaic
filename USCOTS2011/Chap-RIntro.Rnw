@@ -1124,7 +1124,7 @@ the default behavior or something special).
 Our primary version of \R\ will be the online version of \Rstudio.  
 You should have an \Rstudio\ account at \url{http://beta.rstudio.org/} 
 using your Gmail address.
-\Rstudio\ is a brand new (and quite nice) interface to \R that runs in a web browser.
+\Rstudio\ is a brand new (and quite nice) interface to \R\ that runs in a web browser.
 This has the advantage that you don't have to install or configure anything.  Just login
 and you are good to go.  Futhermore, \Rstudio\ will ``remember'' what you were doing so that
 each time you login (even on a different machine) you can pick up right where you left off.
