@@ -397,9 +397,15 @@ corrections, etc.
 
 \subsection*{What's Ours Is Yours -- To a Point}
 
-This material is copyrighted by the authors under a ???? license. 
-
-\textbf{Insert copyright details here.}
+This material is copyrighted by the authors under a Creative Commons Attribution 3.0 
+Unported License.
+You are free to \emph{Share} (to copy, distribute and transmit the work) and to \emph{Remix} 
+(to adapt the work) 
+if you
+attribute our work.
+More detailed information about the licensing is available at this web page:
+\authNote{Need to add the file license.html to the website}
+\url{http://www.mosaic-web.org/teachingRlicense.html}.
 
 \subsection*{Two Audiences}
 
@@ -473,8 +479,9 @@ better support for work in science and technology.
 The focus of the project is to tie together
 better diverse aspects of quantitative work that students in science,
 technology, and engineering will need in their professional lives, but which
-are today usually taught in isolation, if at all.  In particular, we focus on
+are today usually taught in isolation, if at all.  
 
+In particular, we focus on:
 \begin{description}
 	\item[Modeling] The ability to create, manipulate and investigate useful
 	and informative mathematical representations of a real-world situations.
@@ -496,7 +503,7 @@ are today usually taught in isolation, if at all.  In particular, we focus on
 
 Drawing on support from the US National Science Foundation (NSF DUE-0920350),
 Project MOSAIC supports a number of initiatives to help achieve these goals,
-including
+including:
 \begin{description}
 \item
 [Faculty development and training opportunities,] 
@@ -526,6 +533,8 @@ courses and materials might be wholly new constructions, or they might be
 incremental modifications of existing resources that draw on the 
 connections between the MOSAIC topics.
 \end{description}
+
+We welcome and encourage your participation in all of these initiatives.
 
 \include{Chap-GettingStarted}
 
