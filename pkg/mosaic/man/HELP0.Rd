@@ -12,7 +12,7 @@ or usual care, with the goal of linking them to primary medical care.
 data(HELP0)
 }
 \format{
-  Data frame with 453 observations on the following variables.
+  Data frame with 470 observations on the following variables.
   
   \describe{
     \item{\code{age}}{subject age (in years)}
@@ -56,6 +56,9 @@ stay and follow-up interviews were undertaken every 6 months for 2
 years.  A variety of continuous, count, discrete, and survival time
 predictors and outcomes were collected at each of these five
 occasions.
+
+This version dataset includes a number of subjects with missing data that were excluded
+from HELP.
 }
 \source{
 \url{http://www.math.smith.edu/help}

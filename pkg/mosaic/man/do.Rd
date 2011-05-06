@@ -7,7 +7,7 @@ Do Things Repeatedly
 }
 \description{
 \code{do()} provides a natural syntax for repetition tuned to assist 
-with replication methods.
+with replication and resampling methods.
 }
 \usage{
 do(n = 1, cull=NULL, mode=NULL) 
