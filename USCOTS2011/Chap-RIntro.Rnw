@@ -309,7 +309,8 @@ for a large data set.  We would prefer to compute numerical or graphical summari
 We'll do that shortly.
 
 The \verb!attach()! function in R can be used to make objects within dataframes accessible in R with fewer keystrokes, but we strongly discourage its use, as it often leads to name conflicts.
-The Google R Style Guide (\url{http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html}) echoes this advice, stating that \emph{The possibilities for creating errors when using attach are numerous. Avoid it.}
+The Google R Style Guide (\url{http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html}) echoes this advice, stating that \emph{The possibilities for creating errors when using attach are numerous. Avoid it.} It is far better to directly access variables using the \verb!\$! syntax
+or to use the \verb!with()! function.
 
 \subsection{Using Your Own Data}
 \Rstudio\ will help you import your own data.  To do so use the ``Import Dataset" 
@@ -327,7 +328,7 @@ your spreadsheet, choose a name, and you're done.
 you need to follow a 3-step process:
 \begin{enumerate}
 \item
-Save your Excel worksheet as a csv file.
+Save your Excel worksheet as a csv (comma separated value) file.
 \item
 Upload (in the \tab{Files} tab) your csv file to the server, where you can create folders and store
 files in your personal account.  
