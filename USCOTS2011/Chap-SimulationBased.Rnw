@@ -105,7 +105,7 @@ nrow(SAT)
   RJP:  done.}
 
 One of the variables to be measured from the population is the
-student/teacher ratio 
+student/teacher ratio.  There are two equivalent ways to calculate this quantity:
 <<>>=
 mean( SAT$ratio )
 @ 
@@ -121,7 +121,7 @@ with( SAT, mean(ratio) )
 @ 
 
 Every student who does this calculation will get the same result.
-But if each student takes a random sample of, say, 4 states:
+But if each student takes a random sample (without replacement) of, say, 4 states:
 \authNote{RJP: If we want a sample, let's call it a sample, not a shuffle.  I've changed
 the \R\ code throughout this section.}%
 <<>>=
