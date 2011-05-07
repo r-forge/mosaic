@@ -1,3 +1,5 @@
+
+
 \chapter{Simulation Based Inference}
 
 \SweaveOpts{prefix.string=figures/fig}  % location of 
@@ -144,7 +146,7 @@ about sampling?
 \end{example}
 
 \begin{problem}[stars=2]
-(This isn't a question for beginning students, just one
+ (This isn't a question for beginning students, just one
 for developing instructor capabilities.)  
 How would you demonstrate that there are 50
 different states, rather than just 50 cases that might include
@@ -192,6 +194,8 @@ people!
 
 
 \subsection{Taking Randomness Seriously}
+
+\label{sec:taking-randomness-seriously}
 
 It's tempting to think that ``random'' means that anything goes.  This
 is, after all, the everyday meaning of the word.  In statistics,
@@ -291,7 +295,6 @@ But this is misleading!  The case in the \texttt{Galton} data is a
 child, and families with more children have their family size
 represented proportionally more.  
 
-\newcommand{\VN}[1]{{\sf #1}}
 
 \authNote{DTK: To be added to the style guidelines????  I like to have a macro that typesets variable names in
   a consistent way, e.g., a sans-serif font.  It doesn't matter so
@@ -531,26 +534,35 @@ are significantly different.
 
 While \verb!summary()! from \verb!Hmisc! makes a nice visual display
 of summary statistics by groups,
-<<>>=
+<<help101>>=
 summary( age ~ sex, data=HELP, fun=mean )
 @
 the \verb!aggregate()! function stores its results in a data frame that lends 
 itself better to further computation.
-<<>>=
+\authNote{DTK: The statements below using HELP refer to a variable
+  named ``sex.''  There doesn't seem to be one at present.  I
+  generated one from ``female'' so that I could compile the document.}
+  
+<<making-female-to-sex>>=
+# Generate the variable "sex" from "female"
+# FIX THIS!
+HELP$sex = as.factor( c("M","F")[1+HELP$female] ) 
+@ 
+<<help102>>=
 aggregate( age ~ sex, HELP, FUN=mean )
 @
 A natural test statistic for comparing two means is the difference in sample means,
 which we can calculate using
-<<>>=
+<<help103>>=
 diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
 with( aggregate( age ~ sex, HELP, mean ), diff(age) )           # actual
 @
 
 Using \verb!do()! and \verb!shuffle()! we can now compare
 \Sexpr{round(diff(aggregate( age ~ sex, HELP, mean )$age),2)} with
-the values we obtain if we randomly shuffle the \verb!sex! variable.
+the values we obtain if we randomly shuffle the \verb!female! variable.
 
-<<>>=
+<<help104>>=
 do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
 do(2) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)           # shuffled
 do(2) * c( diff=diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) ) # shuffled & renamed
@@ -601,7 +613,7 @@ simulated <- do(1000) * stat(t.test( age ~ shuffle(sex), HELP) )
 table(simulated$t >= data.t)
 @
 \begin{center}
-<<t-test-simulatoin-histogram,fig=true,width=5>>=
+<<t-test-simulation-histogram,fig=true,width=5>>=
 xhistogram( ~ t, simulated, groups=t >= data.t, v=data.t )
 @
 \end{center}
@@ -757,18 +769,274 @@ sample itself.
 
 \section{The Sampling Distribution}
 
-NOTES: This takes place on Planet Earth.  It requires the actual
-population.  Example using the running data.
+Section \ref{sec:taking-randomness-seriously} shows some examples of
+drawing random samples repeatedly from a set of data.  To discuss the
+sampling distribution, it's helpful to make clear that the sampling
+distribution refers to results from the {\bf population}.  In the planet
+metaphor, this means that the samples are drawn from Planet Earth:
+
+\centerline{\includegraphics[width=1.2in]{images/planet_earth.png}}
+
+It can be a challenge to find a compelling example where you have the
+population, rather than a sample, in hand.  Sports statistics provide
+one plausible setting, where
+you have, for example, the names and attributes of every professional
+player.  The ability to sample from Earth mapping software
+\authNote{Reference needed here to the Google maps example.} provides
+another compelling setting.  
+
+As one example, we will take the complete list of results from a
+running race held in Washington, D.C. in April 2005 --- the Cherry
+Blossom Ten-Mile run.  The data set gives the \VN{sex}, \VN{age}, and \VN{net} running time
+(start line to finish line) for each of the 8636 runners who
+participated: the population of runners in that race.
+
+\authNote{Change the following to a ``data'' statement if we add
+  ten-mile-race.csv to the mosaic package.}
+<<>>=
+our.population = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/ten-mile-race.csv")
+nrow(our.population)
+@ 
+
+If you have the whole data set on the computer, there's little point
+in taking a random sample.  But the point here is to illustrate the
+consequences of taking a sample.  So, imagine that in fact it was
+difficult or expensive or dangerous or destructive to collect the data on a runner,
+so you want to examine just a small subset of the population.
+
+Here's a sample of 100 runners:
+<<run-sample>>=
+mysamp = sample(our.population, 100)
+@ 
+
+With that sample, you can calculate whatever statistics are of
+interest to you, for instance:
+<<>>=
+with( mysamp, mean(age) )
+with( mysamp, sd(age) )
+with( mysamp, mean(sex=="F") )
+lm( net ~ age + sex, data=mysamp )
+@ 
+
+These various numbers are informative in their own way about the
+sample, but it's important to know how they might relate to the
+population.  For example, how precise are these numbers?  That is, if
+someone had collected a different random sample, how different would
+there results be likely to be.
+
+Given that we have the population in hand, that we're on Planet Earth,
+we can go back and collect such samples more times and study how much
+they vary one to the other.  We'll do this by replacing
+\texttt{mysamp} with a command to sample anew from the population.
+
+<<>>=
+with( sample(our.population,100), mean(age) )
+with( sample(our.population,100), sd(age) )
+with( sample(our.population,100), mean(sex=="F") )
+lm( net ~ age + sex, data=sample(our.population,100) )
+@ 
+
+Slightly different results!  To quantify this, repeat the sampling
+process many times and look at the distribution: the {\bf sampling distribution}.
+
+<<run-samp-dist>>=
+s1 = do(500)*with( sample(our.population,100), mean(age) )
+s2 = do(500)*with( sample(our.population,100), sd(age) )
+s3 = do(500)*with( sample(our.population,100), mean(sex=="F") )
+s4 = do(500)*lm( net ~ age + sex, data=sample(our.population,100) )
+@ 
+
+You can display the sampling distribution in several ways: histograms,
+box-and-whisker plots, density plots.  This is worth doing with the
+class.  Make sure to point out that the distribution depends on the
+statistic being calculated: in the above examples, the mean age, the standard deviation of
+ages, the fraction of runners who are female, the relationship between
+running time and \VN{sex} and \VN{age}.  (We'll get to the dependence
+on sample size in a little bit.)
+
+Insofar as we want to be able to characterize the repeatability of the
+results of the sampling process, it's worth describing it in terms of the spread of
+the distribution: for instance, the standard deviation.  Of course, when talking
+about a sampling distribution, we give another name to the standard
+deviation: the {\em standard error}.   Actually calculating the
+standard error may perhaps solidify in the students mind that it is a
+standard deviation.
+
+<<>>=
+sd( s1 )  # mean age
+sd( s2 )  # sd of age
+sd( s3 )  # fraction female
+sd( s4 )  # relation of running time to age and sex
+@ 
+
+\begin{example}
+This is an activity to carry out in class, with each student or pair
+of students at a computer.
+
+\begin{enumerate}
+  \item Make sure you can replicate the calculations for the standard
+    error of one of the statistics in the ten-mile-race example with a
+    sample of size $n=100$.  Your reproduction won't be exact, but it
+    should be reasonably close.
+  \item Now repeat the calculations, but use sample sizes that are
+    larger.  From $n=100$, increase to $n=400$, then $n=1600$, then $n=6400$.
+    How does the standard error depend on $n$?  Does larger $n$
+    lead to a bigger or smaller standard error?  Which of these
+    formulas most closely matches the pattern you see:
+    \begin{enumerate}
+      \item The standard error increases with $n$.
+      \item The standard error increases with $\sqrt{n}$.
+      \item The standard error gets smaller with increasing $n$ with
+       the pattern $1/\sqrt{n}$.
+      \item The standard error gets smaller with increasing $n$ with
+       the pattern $1/n$.
+   \end{enumerate}
+    \item Use the pattern you observed to predict what will be the
+      standard error for a sample of size $n=1000$.  Then carry out
+      the actual simulation of repeated sampling using that sample size and compare your
+      prediction to the result you actually got.
+      
+    \item In the above, you used \texttt{do(500)} replications of
+      random sampling.  Suppose you use \texttt{do(100)} or
+      \texttt{do(2000)} replications instead?  Do your results depend
+      systematically on the number of replications?
+ 
+ \end{enumerate}
+\end{example}
+
 
 \section{The Re-Sampling Distribution}
 
-NOTES: It's impractical to take repeated samples from Earth.  So we
-take one sample and use it to populate Planet Sample.  Then we can use
-the computer to  drawing many samples from Planet Sample.  This gives
-us some information about how one sample is likely to differ from
-another, but all the samples we draw on Planet Sample are necessarily
-going to resemble sample with which we originally populated the
-planet. 
+The sampling distribution is a lovely theoretical thing.  But if
+really were so easy to replicate taking a sample over and over again,
+wouldn't you just take a larger sample in the first place?  The
+practical problem you face is that the sample you took was collected
+with difficulty and expense.  There's no way you are going to go back
+and repeat the process that was do difficult in the first place.
+
+This is where our hypothetical Planet Sample comes in.
+
+\centerline{\includegraphics[width=1.2in]{images/planet-sample.png}}
+
+You create Planet Sample yourself.  You do this by taking your sample
+using it to populate Planet Sample; it consists of many, many copies
+of your sample.
+
+To illustrate, here's a sample from the running population:
+<<>>=
+mysamp = sample( our.population, 100 ) # a sample from the population
+@ 
+In reality, of course, you wouldn't run a command.  You would go out
+and do the hard work of randomly selecting cases from your population,
+measuring their relevant attributes, and recording that data.  
+
+But here, in order to make a point, we're going to pretend to be
+sampling from the runners' population rather than doing the actual
+calculations.  Why?  In order to show you how the results on Planet
+Sample relate to the results on Planet Earth.  The idea is, of course,
+to show you that the work you will do on Planet Sample corresponds to
+what's happening on Planet Earth.
+
+To drive home the point that Planet Sample just consists of many
+copies of the data in the sample itself, here's a way to construct it explicitly:
+<<making-planet-sample>>=
+planet.sample = rbind(mysamp, mysamp, mysamp, mysamp, 
+                      mysamp, mysamp, mysamp, mysamp,
+                      mysamp, mysamp, mysamp, mysamp)
+nrow(mysamp)
+nrow(planet.sample)
+@ 
+
+Now you can go through the exact calculations you did to construct the
+sampling distribution (on Planet Earth), but instead use the data from
+Planet Sample:
+<<>>=
+with( sample(planet.sample,100), mean(age) )
+with( sample(planet.sample,100), sd(age) )
+with( sample(planet.sample,100), mean(sex=="F") )
+lm( net ~ age + sex, data=sample(planet.sample,100) )
+@ 
+
+
+This is just one sample from Planet Sample.  Just as easy to collect
+many replications and example the resulting distribution.
+
+<<run-planet-samp-dist>>=
+ps1 = do(500)*with( sample(planet.sample,100), mean(age) )
+ps2 = do(500)*with( sample(planet.sample,100), sd(age) )
+ps3 = do(500)*with( sample(planet.sample,100), mean(sex=="F") )
+ps4 = do(500)*lm( net ~ age + sex, data=sample(planet.sample,100) )
+@ 
+
+And, then, summarize the resulting distribution:
+<<>>=
+sd( ps1 )  # mean age
+sd( ps2 )  # sd of age
+sd( ps3 )  # fraction female
+sd( ps4 )  # relation of running time to age and sex
+@ 
+
+It's an affectation, and unnecessary, actually to populate Planet
+Sample by repeated copying of the data in your sample.  Instead, you
+can arrange things so that the copying is done during the sampling
+process.  Do this by using the \texttt{resample} operator rather
+than \texttt{sample}.  As the name suggests, \texttt{resample} takes a
+sample from a sample --- re-sampling --- and does so with replacement
+so that it's possible that some cases will be duplicated and some will
+be left out entirely.
+
+You can illustrate this easily by comparing the process of sampling
+and resampling on a short series of numbers:
+<<>>=
+our.set = c(1,2,3,4,5,6)
+our.set
+sample(our.set)  # no replacement
+sample(our.set)
+sample(our.set)
+resample(our.set) # with replacement
+resample(our.set)
+resample(our.set)
+@ 
+
+Going back to the previous example, it will suffice to show what the
+statements look like for just one of the statistics.
+<<>>=
+ps1 = do(500)*with( resample(mysamp), mean(age) )
+sd(ps1)
+@ 
+
+This operation, on Planet Sample, isn't quite constructing the
+sampling distribution.  This is for the simple reason that it is being
+done on Planet Sample rather than Planet Earth.  To emphasize the
+distinction, it's helpful to refer to the {\em resampling
+  distribution} in contrast to the sampling distribution.
+
+\begin{example}
+Have your students compare the results they get from resampling of a
+fixed sample of size $n$, to repeated draws from the population with
+the same sample size $n$.
+
+Emphasize that the resampling process is good for estimating the width
+of the sampling distribution, but not so good for estimating the
+center.  That is, the results on Planet Sample will generally compare
+quite well to Planet Earth for the standard error, but the means of
+the sampling distributions and the resampling distributions can be
+quite different.
+
+In a more advanced class, you might ask how big a sample is needed to
+get a reasonable estimate of the standard error.
+
+\end{example}
+
+The question naturally arises, is the standard error estimated from
+the resampling distribution good enough to use in place of the
+standard deviation of the actual sampling distribution.  Answering
+this question requires some solid sense of {\em what you are using the
+  standard error for}.    In general, we use standard errors to get an
+idea of whether the point estimate is precise enough for the purpose
+at hand.  Such questions can be productively addressed on Planet Alt,
+where we will journey after a short detour to that most boring of all
+places, Planet Null.
 
 \section{The Sampling Distribution Under the Null Hypothesis}
 
