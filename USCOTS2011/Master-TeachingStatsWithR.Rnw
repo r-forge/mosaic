@@ -409,7 +409,8 @@ You are free to \emph{Share} (to copy, distribute and transmit the work) and to 
 if you
 attribute our work.
 More detailed information about the licensing is available at this web page:
-\authNote{Need to add the file license.html to the website}
+\authNote{Randy to add the file license.html from the USCOTS directory to the website 
+at this location}
 \url{http://www.mosaic-web.org/teachingRlicense.html}.
 
 \subsection*{Two Audiences}
