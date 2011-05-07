@@ -170,7 +170,65 @@ interesting to discuss what sort of model should be used for distances from rand
 \end{enumerate}
 
 \subsection{Zillow}
+
+Zillow.com is an online real estate database that can be used to estimate
+property values using tax records, sales data, and comparable homes.  
+
+\centerline{\includegraphics[width=3.8in]{images/zillow1.png}}
+
+They have made an application programming interface (aka API) that specify 
+how software programs can interface with their system.  Duncan Temple Lang has
+crafted a package in R which talks to Zillow. 
+This can be used to dynamically generate datasets for use in courses, after
+you (and/or your students) generate a \verb!zillowId! for use with the system.
+(Danny Kaplan has used {\tt cars.com} to similar ends).
+
+In this section, we describe how to use Zillow to generate and analyse a
+dataset comprised of comparable sites to an arbitrary house of interest.
+
 \centerline{\includegraphics[width=3.8in]{images/zillow_api.pdf}}
+
 \centerline{\includegraphics[width=3.8in]{images/zillow_profile.pdf}}
+
+The first step is to install the Zillow package, which unlike others described
+to date, is available on a different repository than CRAN:
+<<zillowinst,echo=TRUE, eval=FALSE>>=
+install.packages("Zillow", repos="http://www.omegahat.org/R", type="source")
+@
+
+<<zillowid, eval=TRUE, echo=FALSE>>=
+zillowId = "X1-ZWz1bvi5ru1gqz_4srxq"  # this is Nick's, please don't share!
+@
+Before you proceed, you need to set your \verb!zillowID! to the value that you 
+got when you registered with {\tt Zillow.com}.
+<<zillow1>>=
+est = "Zillow package not installed"
+comps = est
+if(require(Zillow)) {
+  est = zestimate("1538 SE 33rd Avenue", "97214", zillowId)
+  comps = getComps(rownames(est), zillowId)
+}
+est
+rownames(est)
+names(comps)
+@
+<<zillow2>>=
+if(require(Zillow)) {
+  table(comps$bathrooms)
+  fivenum(comps$finishedSqFt)
+}
+@
+<<zillowprices,fig=TRUE>>=
+if(require(Zillow)) {
+  boxplot(comps$low, comps$taxAssessment, comps$high, names=c("Low", "Assessed", "High"))
+}
+@
+<<zillowcomps,fig=TRUE>>=
+if(require(Zillow)) {
+  plot(comps)
+}
+@
+
+
 
 
