@@ -527,6 +527,8 @@ print(statTally( golfballs, rgolfballs, var))
 
 \subsection{Comparing Two Means}
 
+\label{sec:comparing-two-means}
+
 In this section we show two ways to see if the mean ages of men and women in the HELP study 
 are significantly different.
 
@@ -1040,7 +1042,46 @@ places, Planet Null.
 
 \section{The Sampling Distribution Under the Null Hypothesis}
 
-NOTES: introduce the pun ---  take the space shuffle to planet null.
+The Null Hypothesis is often introduced in terms of the values of
+population parameters, e.g., ``The population mean is 98.6,'' or ``The
+difference between the two group means is zero,'' or ``The population
+proportion is 50\%.''  
+
+Perhaps this is fine if all you want to talk about is means or proportions or
+differences between means, as is so often the focus of an introductory
+statistics course.  But instructors would like to think that their
+students are going to go further, and that the introductory course is
+meant to set them up for doing so. 
+
+In the multi-planet metaphor, the Null Hypothesis is about a place
+where variables are unrelated to one another.  Any measured
+relationship, as indicated by a difference in sample means, a sample
+correlation coefficient different from zero, non-zero model
+coefficients, etc., is, on Planet Null, just the result of random
+sampling fluctuations.  This formulation if very general and is not
+hard for students to understand.  (Ironically, it doesn't work so
+well for the very simplest null hypotheses that are about single-group
+means or proportions, so it turns out to be easier to introduce the
+supposedly more complicated cases, e.g., differences in means or
+proportions, regression coefficients, etc.)
+
+\centerline{\includegraphics[width=1.2in]{images/venus.png}}
+
+Like Planet Sample, Planet Null is a place that you construct.  You
+construct it in a way that makes the Null Hypothesis true: destroying
+relationships between variables.  You've already seen the process in 
+Section \ref{sec:comparing-two-means}: randomization with \texttt{shuffle}.
+
+Examples: IN NOTE FORM FOR NOW.
+\begin{itemize}
+\item differences between two means
+\item differences between two proportions
+\item model coefficients.
+\end{itemize}
+
+Show single examples, then use ``do'' to construct the sampling distribution.
+
+
 
 \section{The Sampling Distribution Under the Alternative Hypothesis}
 
