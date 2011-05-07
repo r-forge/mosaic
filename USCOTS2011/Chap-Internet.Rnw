@@ -170,5 +170,7 @@ interesting to discuss what sort of model should be used for distances from rand
 \end{enumerate}
 
 \subsection{Zillow}
-Nick 
+\centerline{\includegraphics[width=3.8in]{images/zillow_api.pdf}}
+\centerline{\includegraphics[width=3.8in]{images/zillow_profile.pdf}}
+
 
