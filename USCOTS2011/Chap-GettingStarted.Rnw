@@ -506,26 +506,3 @@ table(results$M) / 10000
 
 
 
-\section{Graphical and Numerical Summaries}
-
-See appendix A. \authNote{What's intended here?  An example of how easy it is to 
-get quick and dirty plots that convey useful info?}
-
-\section{Going Multivariate Early: Galton's Data}
-
-Using Francis Galton's data, investigate how an adult child's height depends on the height of the parents.  Is
-it mainly the father's height, mainly the mother's?  What's the role
-of the child's gender, e.g., do boys inherit height from the father
-and girls from the mother?  Make this a research question for the students.  
-
-RJP added some plots here just to see what the data looked like.  
-Keep/delete/modify at your discretion.
-
-\begin{center}
-<<Galton,fig=T,height=3>>=
-xyplot(height ~ father+mother| sex, Galton, type=c('p','r'), auto.key=T, alpha=.6)
-@
-<<Galton-parents,fig=T,width=3,height=2.5>>=
-xyplot(father~mother, Galton, type=c('p','r'), auto.key=T, alpha=.3)
-@
-\end{center}

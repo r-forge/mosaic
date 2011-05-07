@@ -477,7 +477,7 @@ colleges and universities.
 
 \bigskip
 
-The purpose of the MOSAIC community is to help us share ideas and resources to
+The purpose of the MOSAIC project is to help us share ideas and resources to
 improve teaching, and to develop a curricular and assessment
 infrastructure to support the dissemination and evaluation of these ideas.
 Our goal is to provide a broader approach to quantitative studies that provides
@@ -513,7 +513,8 @@ including:
 \begin{description}
 \item
 [Faculty development and training opportunities,] 
-such as the USCOTS 2011 workshop.
+such as the USCOTS 2011 workshop and our 2010 gathering at the Institute for Mathematics
+and its Applications.
 
 \item
 [M-casts,] 
