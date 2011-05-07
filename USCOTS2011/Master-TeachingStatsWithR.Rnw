@@ -1,6 +1,5 @@
 
 \documentclass[twoside]{report}
-\usepackage[utf8]{inputenc}
 \usepackage{mparhack}
 
 \usepackage{etoolbox}
@@ -67,6 +66,7 @@
 %\centerline{\rule{5in}{.5pt}}
 }
 
+\usepackage[utf8]{inputenc}
 \usepackage[nogin]{Sweave}
 
 \usepackage[Bjornstrup]{fncychap}
