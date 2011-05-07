@@ -218,14 +218,19 @@ if(require(Zillow)) {
   fivenum(comps$finishedSqFt)
 }
 @
+\authNote{Should I use some variant of bwplot instead?}
 <<zillowprices,fig=TRUE>>=
 if(require(Zillow)) {
   boxplot(comps$low, comps$taxAssessment, comps$high, names=c("Low", "Assessed", "High"))
+} else {
+  plot(1:10)
 }
 @
 <<zillowcomps,fig=TRUE>>=
 if(require(Zillow)) {
   plot(comps)
+} else {
+  plot(1:10)
 }
 @
 
