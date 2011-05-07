@@ -109,7 +109,7 @@ nrow(SAT)
 One of the variables to be measured from the population is the
 student/teacher ratio.  There are two equivalent ways to calculate this quantity:
 <<>>=
-mean( SAT$ratio )
+mean(SAT$ratio)
 @ 
 
 \authNote{DTK: There's another style that we could push.  I'm
@@ -119,7 +119,7 @@ mean( SAT$ratio )
 can easily change back to a more conventional style if it gets irritating.}
 
 <<>>=
-with( SAT, mean(ratio) )
+with(SAT, mean(ratio))
 @ 
 
 Every student who does this calculation will get the same result.
@@ -155,9 +155,9 @@ Try each of the following
 and see if you can understand what's going on in each of them:
 \authNote{We had \verb!echo=false! here, but I think we mean \verb!eval=false! ---rjp}%
 <<eval=false>>=
-with( SAT, table(state) )
-length(with( SAT, table(state) ))
-with( SAT, table(table(state)) )
+with(SAT, table(state))
+length(with(SAT, table(state)))
+with( SAT, table(table(state)))
 table(table(SAT$state))
 @ 
 \end{problem}
@@ -169,8 +169,8 @@ can define that to be boldface font or some such.}%
 But for a sample, it's a ``sample statistic.''  It's
 worthwhile to make the distinction concrete:
 <<>>=
-with( SAT, mean(ratio) )
-with( sample(SAT,4), mean(ratio) )
+with(SAT, mean(ratio))
+with(sample(SAT,4), mean(ratio))
 @ 
 
 Good questions to ask in class at this point: Who got a sample
@@ -222,12 +222,12 @@ show that sample statistics are reasonably close to the population parameter.
 For
 instance, have each student in your class do this:
 <<>>=
-with( SAT, mean(ratio) )
-with( sample(SAT,25), mean(ratio) )
+with(SAT, mean(ratio))
+with(sample(SAT,25), mean(ratio))
 @ 
 Or, each student can repeat the trial several times:
 <<>>=
-do(10)*with( sample(SAT,25), mean(ratio) )
+do(10)*with(sample(SAT,25), mean(ratio))
 @ 
 This raises the question, naturally enough, of what ``reasonably
 close'' means, and what it means to measure ``how close.''
@@ -286,9 +286,9 @@ are in each book.
  
 <<>>=
 data(Galton)
-with( sample(Galton,300), mean(nkids))
-with( sample(Galton,300), mean(nkids))
-do(10)*with( sample(Galton,300), mean(nkids))
+with(sample(Galton,300), mean(nkids))
+with(sample(Galton,300), mean(nkids))
+do(10)*with(sample(Galton,300), mean(nkids))
 @ 
 The samples all give about the same answer: about 6 kids in a family.
 But this is misleading!  The case in the \texttt{Galton} data is a
@@ -308,7 +308,7 @@ The \texttt{duplicated} function identifies levels that are repeats of
 earlier ones and so the following will do the job (although is not
 necessarily something that you want to push onto students):
 <<>>=
-families = subset(Galton, !duplicated(family) )
+families = subset(Galton, !duplicated(family))
 @ 
 Of course, you will want to show that this has done the right job.  Compare
 <<>>=
@@ -316,7 +316,7 @@ nrow(families)
 @ 
 to 
 <<>>=
-length( with(Galton, unique(family)) )
+length(with(Galton, unique(family)))
 @ 
 
 Now check out the average family size when the average is across
@@ -361,7 +361,7 @@ Since tossing a coin is one of the most familiar examples of randomness, we've a
 \verb!mosaic! a function that facilitates simulating coin tosses. 
 <<>>=
 rflip(20)
-as.numeric( rflip(20) )       # just count how many heads
+as.numeric(rflip(20))       # just count how many heads
 @
 
 
@@ -446,7 +446,7 @@ The \verb!do()! function simplifies the syntax for this and improves
 the output format (usually returning a data frame).
 
 <<>>=
-do(5) * "hello"
+do(5)*"hello"
 @
 
 
@@ -463,20 +463,20 @@ for the population you are considering.)
 \InstructorNote{This example is intended for instructors, not for students.}
 
 <<>>=
-families <- data.frame( familyid = 1:5000, children = rpois(5000,3) )
+families <- data.frame(familyid = 1:5000, children = rpois(5000,3))
 @
 
 Now we generate the people in these families
 <<>>=
 people <- data.frame( 
-		familyid = with( families, rep( familyid, children) ) ,
-		sibs = with( families, rep( children, children) ) 
+		familyid = with(families, rep( familyid, children)),
+		sibs = with(families, rep( children, children)) 
 		)
 @
 
 <<>>=
-with( families, mean(children) )
-with( people, mean(sibs) )
+with(families, mean(children))
+with(people, mean(sibs))
 @
 If the result is mysterious, the following tables might shed some light.
 <<>>=
@@ -499,28 +499,28 @@ an introduction to testing a proportion.
 
 <<>>=
 golfballs <- c(137, 138, 107, 104) 
-table( rdata(486, 1:4) )
+table(rdata(486, 1:4))
 @
 <<>>=
-rgolfballs <- do(2000) * table( rdata(486, 1:4) )
+rgolfballs <- do(2000) * table(rdata(486, 1:4))
 @
 
 
 \begin{center}
 <<golfballs-max,fig=true>>=
-print( statTally( golfballs, rgolfballs, max ) )
+print(statTally( golfballs, rgolfballs, max))
 @
 \end{center}
 
 \begin{center}
 <<golfballs-range,fig=true,height=1.7>>=
-print( statTally( golfballs, rgolfballs, function(x) { diff(range(x)) } ) )
+print(statTally(golfballs, rgolfballs, function(x) { diff(range(x)) }))
 @
 \end{center}
 
 \begin{center}
 <<golfballs-var,fig=true,height=1.7>>=
-print( statTally( golfballs, rgolfballs, var ) )
+print(statTally( golfballs, rgolfballs, var))
 @
 \end{center}
 
@@ -535,7 +535,7 @@ are significantly different.
 While \verb!summary()! from \verb!Hmisc! makes a nice visual display
 of summary statistics by groups,
 <<help101>>=
-summary( age ~ sex, data=HELP, fun=mean )
+summary(age ~ sex, data=HELP, fun=mean)
 @
 the \verb!aggregate()! function stores its results in a data frame that lends 
 itself better to further computation.
@@ -549,23 +549,23 @@ itself better to further computation.
 HELP$sex = as.factor( c("M","F")[1+HELP$female] ) 
 @ 
 <<help102>>=
-aggregate( age ~ sex, HELP, FUN=mean )
+aggregate(age ~ sex, HELP, FUN=mean)
 @
 A natural test statistic for comparing two means is the difference in sample means,
 which we can calculate using
 <<help103>>=
 diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
-with( aggregate( age ~ sex, HELP, mean ), diff(age) )           # actual
+with(aggregate( age ~ sex, HELP, mean ), diff(age))           # actual
 @
 
 Using \verb!do()! and \verb!shuffle()! we can now compare
-\Sexpr{round(diff(aggregate( age ~ sex, HELP, mean )$age),2)} with
+\Sexpr{round(diff(aggregate(age ~ sex, HELP, mean )$age),2)} with
 the values we obtain if we randomly shuffle the \verb!female! variable.
 
 <<help104>>=
-do(1) * diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
-do(2) * diff(aggregate( age ~ shuffle(sex), HELP, mean )$age)           # shuffled
-do(2) * c( diff=diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) ) # shuffled & renamed
+do(1) * diff(aggregate(age ~ sex, HELP, mean )$age)                    # actual
+do(2) * diff(aggregate(age ~ shuffle(sex), HELP, mean )$age)           # shuffled
+do(2) * c(diff=diff(aggregate(age ~ shuffle(sex), HELP, mean )$age)) # shuffled & renamed
 @
 
 
@@ -574,8 +574,8 @@ that we can use to compute an empirical p-value.
 
 <<two-sample,width=4>>=
 set.seed(123)
-test.stat <- diff(aggregate( age ~ sex, HELP, mean )$age )
-rtest.stats <- do(1000) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
+test.stat <- diff(aggregate(age ~ sex, HELP, mean )$age)
+rtest.stats <- do(1000) * c(diff= diff(aggregate(age ~ shuffle(sex), HELP, mean )$age))
 rtest.stats <- rtest.stats$diff
 @
 <<two-sample-pval>>=
@@ -589,16 +589,16 @@ age is the same for men and women.
 We can use histograms or dotplots to display the sampling distributions graphically.
 \begin{center}
 <<two-sample-hist,fig=true,width=5>>=
-xhistogram(~rtest.stats, v=test.stat, groups=rtest.stats >= test.stat)      
+xhistogram(~ rtest.stats, v=test.stat, groups=rtest.stats >= test.stat)      
 @
 \end{center}
 
 \begin{center}
 <<two-sample-dot,fig=true,width=5,height=2.2>>=
-test.stat <-  diff(aggregate( age ~ sex, HELP, mean )$age )
-rtest.stats <- do(200) * c(diff= diff(aggregate( age ~ shuffle(sex), HELP, mean )$age) )
-dotPlot(~diff, rtest.stats, n=40, groups=rtest.stats$diff >= test.stat, pch=16 )
-ladd( panel.abline(v=test.stat) )                 # add a verticle line
+test.stat <-  diff(aggregate(age ~ sex, HELP, mean )$age)
+rtest.stats <- do(200) * c(diff= diff(aggregate(age ~ shuffle(sex), HELP, mean)$age))
+dotPlot(~ diff, rtest.stats, n=40, groups=rtest.stats$diff >= test.stat, pch=16 )
+ladd(panel.abline(v=test.stat))                 # add a vertical line
 @
 \end{center}
 
@@ -608,13 +608,13 @@ If you prefer to teach randomization methods as an alternative to traditional
 methods when the assumptions of those procedures are violated, you can use 
 simulation to approximate the sampling distribution of the usual test statistic.
 <<>>=
-data.t <- stat( t.test( age ~ sex, HELP ) ); data.t
-simulated <- do(1000) * stat(t.test( age ~ shuffle(sex), HELP) )
+data.t <- stat(t.test( age ~ sex, HELP)); data.t
+simulated <- do(1000) * stat(t.test(age ~ shuffle(sex), HELP))
 table(simulated$t >= data.t)
 @
 \begin{center}
 <<t-test-simulation-histogram,fig=true,width=5>>=
-xhistogram( ~ t, simulated, groups=t >= data.t, v=data.t )
+xhistogram(~ t, simulated, groups=t >= data.t, v=data.t)
 @
 \end{center}
 
@@ -628,21 +628,21 @@ In this example,
 \R\ will automatically convert the \verb!sex! factor into 0's and 1's, so the slope parameter in the model
 is the difference in the means.  
 <<>>=
-lm( age ~ sex, HELP )                        # actual data
+lm(age ~ sex, HELP)                        # actual data
 @
 The \verb!do()! function conveniently stores the values of the 
 estimated parameters that result from fitting with \verb!lm()!, so it is relatively easy to obtain
 the sampling distribution for any of these estimated parameters.
 <<>>=
-do(1) * lm( age ~ sex, HELP )                # actual data
-do(2) * lm( age ~ shuffle(sex), HELP )       # shuffled data
+do(1) * lm(age ~ sex, HELP)                # actual data
+do(2) * lm(age ~ shuffle(sex), HELP)       # shuffled data
 @
 
 Since this is just another way of computing the difference in the sample means, the two approaches
 are equivalent.  If we reset the random seed, we get exactly the same simulation results.
 <<>>=
 set.seed(123)
-simulated <- do(1000) * lm( age ~ shuffle(sex), HELP ) 
+simulated <- do(1000) * lm(age ~ shuffle(sex), HELP) 
 test.stat <- (do(1) * lm(age ~ sex, HELP) )$sexmale -> test.stat
 rtest.stats <- simulated$sexmale
 table(rtest.stats >= test.stat)
@@ -664,7 +664,7 @@ calculating the quantities used in inference: standard errors,
 t-statistics, p-values, etc.  
 
 Perhaps because students don't understand the logic, they have strong
-mis-conceptions about confidence intervals and, especially, about
+misconceptions about confidence intervals and, especially, about
 p-values.  For example, even among professional scientists, the
 mainstream (mis)-understanding of p-values is that they reflect the
 probability that the null hypothesis is correct.
@@ -812,10 +812,10 @@ mysamp = sample(our.population, 100)
 With that sample, you can calculate whatever statistics are of
 interest to you, for instance:
 <<>>=
-with( mysamp, mean(age) )
-with( mysamp, sd(age) )
-with( mysamp, mean(sex=="F") )
-lm( net ~ age + sex, data=mysamp )
+with(mysamp, mean(age))
+with(mysamp, sd(age))
+with(mysamp, mean(sex=="F"))
+lm(net ~ age + sex, data=mysamp)
 @ 
 
 These various numbers are informative in their own way about the
@@ -830,20 +830,20 @@ they vary one to the other.  We'll do this by replacing
 \texttt{mysamp} with a command to sample anew from the population.
 
 <<>>=
-with( sample(our.population,100), mean(age) )
-with( sample(our.population,100), sd(age) )
-with( sample(our.population,100), mean(sex=="F") )
-lm( net ~ age + sex, data=sample(our.population,100) )
+with(sample(our.population,100), mean(age))
+with(sample(our.population,100), sd(age))
+with(sample(our.population,100), mean(sex=="F"))
+lm(net ~ age + sex, data=sample(our.population,100))
 @ 
 
 Slightly different results!  To quantify this, repeat the sampling
 process many times and look at the distribution: the {\bf sampling distribution}.
 
 <<run-samp-dist>>=
-s1 = do(500)*with( sample(our.population,100), mean(age) )
-s2 = do(500)*with( sample(our.population,100), sd(age) )
-s3 = do(500)*with( sample(our.population,100), mean(sex=="F") )
-s4 = do(500)*lm( net ~ age + sex, data=sample(our.population,100) )
+s1 = do(500)*with(sample(our.population,100), mean(age))
+s2 = do(500)*with(sample(our.population,100), sd(age))
+s3 = do(500)*with(sample(our.population,100), mean(sex=="F"))
+s4 = do(500)*lm(net ~ age + sex, data=sample(our.population,100))
 @ 
 
 You can display the sampling distribution in several ways: histograms,
@@ -863,10 +863,10 @@ standard error may perhaps solidify in the students mind that it is a
 standard deviation.
 
 <<>>=
-sd( s1 )  # mean age
-sd( s2 )  # sd of age
-sd( s3 )  # fraction female
-sd( s4 )  # relation of running time to age and sex
+sd(s1)  # mean age
+sd(s2)  # sd of age
+sd(s3)  # fraction female
+sd(s4)  # relation of running time to age and sex
 @ 
 
 \begin{example}
@@ -924,7 +924,7 @@ of your sample.
 
 To illustrate, here's a sample from the running population:
 <<>>=
-mysamp = sample( our.population, 100 ) # a sample from the population
+mysamp = sample(our.population, 100) # a sample from the population
 @ 
 In reality, of course, you wouldn't run a command.  You would go out
 and do the hard work of randomly selecting cases from your population,
@@ -951,10 +951,10 @@ Now you can go through the exact calculations you did to construct the
 sampling distribution (on Planet Earth), but instead use the data from
 Planet Sample:
 <<>>=
-with( sample(planet.sample,100), mean(age) )
-with( sample(planet.sample,100), sd(age) )
-with( sample(planet.sample,100), mean(sex=="F") )
-lm( net ~ age + sex, data=sample(planet.sample,100) )
+with(sample(planet.sample,100), mean(age))
+with(sample(planet.sample,100), sd(age))
+with(sample(planet.sample,100), mean(sex=="F"))
+lm(net ~ age + sex, data=sample(planet.sample,100))
 @ 
 
 
@@ -962,18 +962,18 @@ This is just one sample from Planet Sample.  Just as easy to collect
 many replications and example the resulting distribution.
 
 <<run-planet-samp-dist>>=
-ps1 = do(500)*with( sample(planet.sample,100), mean(age) )
-ps2 = do(500)*with( sample(planet.sample,100), sd(age) )
-ps3 = do(500)*with( sample(planet.sample,100), mean(sex=="F") )
-ps4 = do(500)*lm( net ~ age + sex, data=sample(planet.sample,100) )
+ps1 = do(500)*with(sample(planet.sample,100), mean(age))
+ps2 = do(500)*with(sample(planet.sample,100), sd(age))
+ps3 = do(500)*with(sample(planet.sample,100), mean(sex=="F"))
+ps4 = do(500)*lm(net ~ age + sex, data=sample(planet.sample,100))
 @ 
 
 And, then, summarize the resulting distribution:
 <<>>=
-sd( ps1 )  # mean age
-sd( ps2 )  # sd of age
-sd( ps3 )  # fraction female
-sd( ps4 )  # relation of running time to age and sex
+sd(ps1)  # mean age
+sd(ps2)  # sd of age
+sd(ps3)  # fraction female
+sd(ps4)  # relation of running time to age and sex
 @ 
 
 It's an affectation, and unnecessary, actually to populate Planet
@@ -1001,7 +1001,7 @@ resample(our.set)
 Going back to the previous example, it will suffice to show what the
 statements look like for just one of the statistics.
 <<>>=
-ps1 = do(500)*with( resample(mysamp), mean(age) )
+ps1 = do(500)*with(resample(mysamp), mean(age))
 sd(ps1)
 @ 
 
