@@ -203,6 +203,11 @@
 \newcommand{\rterm}[1]{\textbf{#1}}
 
 
+% Looking for a consistent typography for variable names.
+\newcommand{\VN}[1]{{\sf #1}}
+
+
+
 \title{Teaching Statistics with R}
 
 \author{
