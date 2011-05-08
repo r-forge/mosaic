@@ -1,5 +1,6 @@
 \chapter{Multivariate Statistics -- Early?}
 
+\label{chap:multivariate-early}
 
 \SweaveOpts{prefix.string=figures/fig}  % location of 
 \SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
@@ -11,6 +12,47 @@
 <<setup,echo=F>>=
 source('setup.R')
 @ 
+
+If you are of a certain age, you may remember the 1960s television show {\em
+  Lost in Space}.  One of the characters, the Robot, was often
+assigned guard duty.  Robot would march back and forth, just like a
+soldier on guard duty.
+
+But why?  Soldiers are ordered to march back and forth so that they
+won't fall asleep; walking forces them to maintain a certain attention
+to their duty.  Robot has no such need; his sensors and circuits can reliably
+detect intruders without the marching.  Of course, the television
+viewers wouldn't know this about robots.  Using the robot in the
+manner of a soldier was a way to introduce new technology to people
+with old mind-sets.
+
+Now fast forward from the television of the 1960s to the classroom of
+the 21st century.  Students have computers.  They use statistical
+software packages to do calculations.  But what calculations are they
+doing?  Sample means, sample proportions, differences between means.
+
+This Robot walking back and forth.  A way to use new technology with
+old mind-sets.  But it's the professors, not the students, with the
+old mind-sets.  The students are open to new things.  They don't need
+to know that, once upon a time, it was a feat to get a machine to add
+up a column of numbers.
+
+We professors were educated at a time when the tools for inverting a
+matrix were paper and pencil, when doing least squares problem involved
+a strange thing called a ``pseudo-inverse'' that you might learn in
+your fourth or fifth semester of university-level mathematics.  But, now, least squares
+problems are no more difficult or time consuming to the human than
+square roots or addition.  We just have to learn to use the tools in
+the right way.  
+
+Or, rather, we have to show our students what are the
+basic operations that are important for statistical reasoning in an
+age of modern computation.  Not marching back and forth, like robot
+soldiers, computing
+sums of columns of numbers, but thinking about how to model the
+potentially rich interplay among multiple variables.
+
+
 
 \section{Danny's Favorite Example}
 
