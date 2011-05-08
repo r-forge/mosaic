@@ -1062,6 +1062,7 @@ sampling fluctuations.  This formulation if very general and is not
 hard for students to understand.  (Ironically, it doesn't work so
 well for the very simplest null hypotheses that are about single-group
 means or proportions, so it turns out to be easier to introduce the
+null hypothesis with the
 supposedly more complicated cases, e.g., differences in means or
 proportions, regression coefficients, etc.)
 
@@ -1071,16 +1072,108 @@ Like Planet Sample, Planet Null is a place that you construct.  You
 construct it in a way that makes the Null Hypothesis true: destroying
 relationships between variables.  You've already seen the process in 
 Section \ref{sec:comparing-two-means}: randomization with \texttt{shuffle}.
+The basic idea is to treat relationships as a mapping from the values
+of explanatory variables in each case to a response variable.  By
+randomizing the explanatory variables relative to the response, you
+generate the world in which the Null Hypothesis holds true: Planet Null. 
 
-Examples: IN NOTE FORM FOR NOW.
+Some examples:
 \begin{itemize}
-\item differences between two means
-\item differences between two proportions
-\item model coefficients.
+\item Do the foot widths differ between boys and girls, judging from
+  the \texttt{KidsFeet } data?
+<<kidsfeet-null>>=
+data(KidsFeet)
+lm( width ~ sex, data=KidsFeet ) # our sample
+@ 
+\authNote{DTK: What do you say we re-define display.lm in the mosaic
+  package to get rid of the report about the Call.  It just takes up
+  useless space.}
+Looks like girls' feet are a little bit narrower.  But is this the
+sort of thing we might equally well see on Planet Null, where there is
+no systematic difference between boys' and girls' feet?
+<<echo=false>>=
+set.seed(133)
+@ 
+<<>>=
+lm( width ~ shuffle(sex), data=KidsFeet ) # planet null
+@ 
+For this particular sample from Planet Null, the girls' feet are a
+little wider than the boys'.  By generating a sampling distribution on
+Planet Null, we can see the size of the relationship to be expected
+just due to sampling fluctuations in a world where there is no relationship.
+<<>>=
+sn1 = do(500)*lm( width ~ shuffle(sex), data=KidsFeet ) # distribution on planet null
+mean( abs(sn1[,2]) > abs(-0.4058) )  # a p-value
+@ 
+The value of $-0.4058$ observed in our sample is not very likely on
+Planet Null.  This suggests that our sample was not collected from
+Planet Null: we can reject the Null Hypothesis.
+
+\InstructorNote{The \texttt{[,2]} means to take the 2nd column of \texttt{sn1}. }
+\authNote{If we can suppress the shuffle in the output of do(), then
+  we can just use the \$ notation for pulling out a column.}
+
+\item Is the survival rate for smokers different from that for non-smokers?
+<<smokers-null>>=
+data(Whickham)
+lm( outcome=="Alive" ~ smoker, data=Whickham ) # our sample
+lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) # planet null
+sn2 = do(500)*lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) # distribution on planet null
+mean( abs(sn2[,2]) > abs(0.07538) )  # a p-value
+@ 
+If you're shocked to see that smoking is associated with greater
+likelihood of being alive (7.5 percentage points greater!) and that
+the data indicate that this is statistically significant, you should
+be.  But the problem isn't with the calculation, which is the same one
+you will get from the textbook formulas.  The problem is with the
+failure to take into account covariates.  What's shocking is that we
+teach students about p-values without teaching them about covariates
+and how to adjust for them.
+
+
+The big covariate here is \VN{age}.  It happens that in the Whickham
+ data, younger people are more likely to smoke.  To see this you :
+<<>>=
+lm( smoker=="Yes" ~ age, data=Whickham ) # our sample
+lm( smoker=="Yes" ~ shuffle(age), data=Whickham ) # our sample
+sn3 = do(500)*lm(smoker=="Yes" ~ shuffle(age), data=Whickham ) # distribution on planet null
+mean( abs(sn3[,2]) > abs(-0.00326) ) # a p-value
+@ 
+So, greater \VN{age} is associated with lower \VN{smoker} status.
+And, of course, older people  are more likely to die.  Taking both factors together, it turns out
+ that smokers are less likely to die, but that's because they are
+ young.  
+\item Let's make up for the deficiency in the above smoking example.
+  One way to do this is to adjust for \VN{age} when considering the
+  effect of \VN{smoker} status.  We'll consider this more in Chapter
+  \ref{chap:Multivariate-early}, but for now, we'll just build the model.
+  
+<<>>=
+glm( outcome=="Alive" ~ smoker + age, data=Whickham, family="binomial" ) # our sample
+glm( outcome=="Alive" ~ shuffle(smoker) + age, data=Whickham, family="binomial" ) # planet null
+# distribution on planet null
+sn4 = do(500)*glm( outcome=="Alive" ~ shuffle(smoker) + age, data=Whickham, family="binomial" ) 
+mean( abs(sn4) > abs(-0.2047) ) # a p-value
+@ 
+You can see that the coefficient on \texttt{smokerYes} is negative,
+and that the p-value indicates significance.  So, smoking in these
+data are associated with a lower probability of survival, but only
+when adjusting for \VN{age}.
+
+You might have noticed that the model built here was a logistic
+model.  There's good reason to do that, since we are modeling
+probabilities the value of which must always be between 0 and 1.  But
+notice also that the logic of hypothesis testing remains the same:
+construct a Planet Null by randomizing an explanatory variable with
+respect to a response variable.
 \end{itemize}
 
-Show single examples, then use ``do'' to construct the sampling distribution.
-
+As this is being written, the US Space Shuttle is carrying out it's
+last couple of missions before being retired.  For a few years, at
+least, your students will know what you mean by ``Space Shuttle.''
+You can help them remember the way to create Planet Null if, at the
+cost of some self-dignity, you tell them, ``Take the Space Shuffle to
+Planet Null.''
 
 
 \section{The Sampling Distribution Under the Alternative Hypothesis}
