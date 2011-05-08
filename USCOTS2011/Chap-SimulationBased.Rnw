@@ -1340,15 +1340,14 @@ What's the distribution of p-values under the Null Hypothesis?
 Many students seem to think that if the Null is true, the p-value will
 be large.  It can help to show what's really going on.
 
+
+Similar problem on deriving the shape of the F distribution.
+
+\end{problem}
 \authNote{Move this to the section on Multiple variables, where you
   will have the regression and ANOVA reports from which you can pull
   out the p-values.
 }
-
-Similar problem on deriving the shape of the F distribution.
-
-@ 
-\end{problem}
 
 \shipoutProblems
 
