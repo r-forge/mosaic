@@ -541,22 +541,14 @@ summary(age ~ sex, data=HELP, fun=mean)
 @
 the \verb!aggregate()! function stores its results in a data frame that lends 
 itself better to further computation.
-\authNote{DTK: The statements below using HELP refer to a variable
-  named ``sex.''  There doesn't seem to be one at present.  I
-  generated one from ``female'' so that I could compile the document.}
-  
-<<making-female-to-sex>>=
-# Generate the variable "sex" from "female"
-# FIX THIS!
-HELP$sex = as.factor( c("M","F")[1+HELP$female] ) 
-@ 
+ 
 <<help102>>=
 aggregate(age ~ sex, HELP, FUN=mean)
 @
 A natural test statistic for comparing two means is the difference in sample means,
 which we can calculate using
 <<help103>>=
-diff(aggregate( age ~ sex, HELP, mean )$age)                    # actual
+diff(aggregate( age ~ sex, HELP, mean )$age)                  # actual
 with(aggregate( age ~ sex, HELP, mean ), diff(age))           # actual
 @
 
@@ -565,9 +557,9 @@ Using \verb!do()! and \verb!shuffle()! we can now compare
 the values we obtain if we randomly shuffle the \verb!female! variable.
 
 <<help104>>=
-do(1) * diff(aggregate(age ~ sex, HELP, mean )$age)                    # actual
-do(2) * diff(aggregate(age ~ shuffle(sex), HELP, mean )$age)           # shuffled
-do(2) * c(diff=diff(aggregate(age ~ shuffle(sex), HELP, mean )$age)) # shuffled & renamed
+do(1) * diff(aggregate(age ~ sex, HELP, mean)$age)                    # actual
+do(2) * diff(aggregate(age ~ shuffle(sex), HELP, mean)$age)           # shuffled
+do(2) * c(diff=diff(aggregate(age ~ shuffle(sex), HELP, mean)$age))   # shuffled & renamed
 @
 
 
