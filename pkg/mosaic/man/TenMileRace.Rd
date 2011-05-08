@@ -12,7 +12,7 @@ are published.  This data frame  contains the results from the 2005 race.
 }
 \usage{data(TenMileRace)}
 \format{
-  A data frame with 8636 observations on the following 5 variables.
+  A data frame with 8636 observations on the following variables.
   \describe{
     \item{\code{state}}{State of residence of runner.}
     \item{\code{time}}{Official time from starting gun to finish line.}
@@ -27,7 +27,7 @@ gone off.}
 }
 \examples{
 data(TenMileRace)
-xyplot( net ~ age, data=TenMileRace, groups=sex)
-lm( net ~ age + sex, data=TenMileRace)
+xyplot(net ~ age, data=TenMileRace, groups=sex)
+lm(net ~ age + sex, data=TenMileRace)
 }
 \keyword{datasets}
