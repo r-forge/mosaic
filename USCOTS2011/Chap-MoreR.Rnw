@@ -798,6 +798,9 @@ table(a+b > 50)
 \subsection{Dropping variables}
 \subsection{Renaming variables}
 \subsection{Creating variables}
+
+% HELP$newsex <- factor(HELP$female, labels=c('M','F'))
+
 \subsubsection{character variables}
 \subsubsection{coercing variables}
 \subsubsection{recoding variables}

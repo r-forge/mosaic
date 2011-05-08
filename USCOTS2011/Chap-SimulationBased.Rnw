@@ -688,12 +688,11 @@ it might be helpful to draw from the theory of kinesthetic learning
 carrying out a physical activity.
 Many practitioners of the reform style of teaching statistics engage
 in the kinesthetic style; they have students draw M\&Ms from a bag
-and count the brown ones, they have students walk randomly to see how
-far they get after $n$ steps, they toss a globe around the classroom
-to see how often a students' index finger lands in the ocean. \cite{needCitation}
+and count the brown ones XX CITATION XX, they have students walk randomly to see how
+far they get after $n$ steps XX CITATION XX, they toss a globe around the classroom
+to see how often a students' index finger lands in the ocean \cite{gelm:nola:2002}.
 \authNote{Get the citations to these.  The first, I think, is from
-  Workshop statistics.  The second can refer to DTK's CAUSEWEB talk.
-  The third is, I think, in Deb Nolan's ``Tricks'' book.}
+  Workshop statistics.  The second can refer to DTK's CAUSEWEB talk.}
 
 To teach hypothesis testing in a kinesthetic way, you need a physical
 representation of the various hypotheses found in statistical

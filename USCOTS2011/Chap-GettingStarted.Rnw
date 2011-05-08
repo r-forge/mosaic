@@ -457,14 +457,19 @@ perctable(random.ladies$heads)     # display table using percentages
 @
 
 We can display this table graphically using a plot called a \term{histogram}.
-\vspace{-8mm}
+%\vspace{-8mm}
 \begin{center}
 <<lady-hist,fig=T,width=3,height=1.6>>=
-histogram(~heads, random.ladies, 
+histogram(~ heads, random.ladies, 
 	breaks=-.5 + (0:11)
 	)
 @
 \end{center}
+We have control of the histogram display by 
+specifying the breaks from -.5 to 10.5:
+<<breaks>>=
+-.5 + (0:11)
+@
 
 You might be surprised to see that the number of correct guesses
 is exactly 5 (half of the 10 tries) only 
@@ -499,7 +504,7 @@ them next to the cups that had the milked poured first.  How does this
 design change things?
 
 <<lady-five>>=
-results <- do(10000) * table( sample( c('M','M','M','M','M','T','T','T','T','T'), 5 ) )
+results <- do(10000) * table(sample( c('M','M','M','M','M','T','T','T','T','T'), 5))
 table(results$M) / 10000
 @
 
