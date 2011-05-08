@@ -12,11 +12,23 @@
 source('setup.R')
 @ 
 
+Provocative papers by Gould \cite{goul:2010} and Nolan and Temple Lang \cite{nola:temp:2010}
+have highlighted the importance of broadening the type of data students encounter
+in their first courses as well as the role of computing in modern statistics, respectively.
+In this chapter, we highlight some approaches which facilitate use of data scraping
+from the internet as well as interfaces to web based tools to achieve both these goals.
+
 \section{Google Docs and \RStudio}
+
+\authNote{Move to appendix B?}
 
 \section{Sharing in \RStudio}
 
+\authNote{Move to appendix B?}
+
 \section{Other Ways to Make Data Available Online}
+
+\authNote{Move to appendix B?}
 
 \section{Data Mining Activities}
 \subsection{What percentage of Earth is Covered with Water?}
@@ -186,35 +198,73 @@ you (and/or your students) generate a \verb!zillowId! for use with the system.
 In this section, we describe how to use Zillow to generate and analyse a
 dataset comprised of comparable sites to an arbitrary house of interest.
 
-\centerline{\includegraphics[width=3.8in]{images/zillow_api.pdf}}
+The first step is to create a Zillow account (click on \verb!Register! on the
+top right of the page at \verb!zillow.com!).  You can set up an account or register
+using Facebook.
 
-\centerline{\includegraphics[width=3.8in]{images/zillow_profile.pdf}}
+Once you have the account, log in, then click on \verb!My Zillow! at the top right.
+This should display your profile (in this case, for a user named \verb!SC_z!).
 
-The first step is to install the Zillow package, which unlike others described
-to date, is available on a different repository than CRAN:
+\centerline{\includegraphics{images/zillow_profile.pdf}}
+
+Next, 
+open the page: \url{http://www.zillow.com/webservice/Registration.htm}.  This
+is the application programming interface (API) request, which requires more information
+if you are a real estate professional.  Note that there are limits on the use 
+of these data, which at first glance appear to not contravene use for statistics
+activities and data collection. An overview of the API and terms of use can be found
+at \url{http://www.zillow.com/howto/api/APIOverview.htm}.
+
+\centerline{\includegraphics[width=4.6in]{images/zillow_api.pdf}}
+
+You should receive information about your Zillow ID (a character string
+of letters and numbers).  
+
+Once you've set up your Zillow account, and gotten your Zillow Id,
+the next step is to install the Zillow package. Unlike others described
+to date, this is available on the Omegahat server (a different repository than CRAN):
 <<zillowinst,echo=TRUE, eval=FALSE>>=
 install.packages("Zillow", repos="http://www.omegahat.org/R", type="source")
 @
 
+Next, you should
+initialize your \verb!zillowID! to the value that you 
+received when you registered with {\tt Zillow.com}.
+<<fakezillow>>=
+zillowId = "set_to_your_zillowId"
+@
 <<zillowid, eval=TRUE, echo=FALSE>>=
 zillowId = "X1-ZWz1bvi5ru1gqz_4srxq"  # this is Nick's, please don't share!
 @
-Before you proceed, you need to set your \verb!zillowID! to the value that you 
-got when you registered with {\tt Zillow.com}.
+
+This allows you to make calls to functions such as \verb!zestimate()! (which
+allows you to search for information about a particular property) and
+\verb!getComps()! (which facilitates finding a set of comparable properties.  
+Here we find information about an arbitrary house in California, as well as
+comparable properties.
 <<zillow1>>=
-est = "Zillow package not installed"
-comps = est
 if(require(Zillow)) {
-  est = zestimate("1538 SE 33rd Avenue", "97214", zillowId)
+  est = zestimate("1280 Monterey Avenue", "94707", zillowId)
   comps = getComps(rownames(est), zillowId)
 }
-est
-rownames(est)
-names(comps)
+if(require(Zillow)) {
+  est
+}
+if(require(Zillow)) {
+  rownames(est)
+}
+if(require(Zillow)) {
+  names(comps)
+}
 @
 <<zillow2>>=
 if(require(Zillow)) {
   table(comps$bathrooms)
+}
+if(require(Zillow)) {
+  table(comps$bedrooms)
+}
+if(require(Zillow)) {
   fivenum(comps$finishedSqFt)
 }
 @
@@ -226,6 +276,13 @@ if(require(Zillow)) {
   plot(1:10)
 }
 @
+
+It's interesting that for this property, assessed values tend to lag far behind the lower and
+upper Zillow estimates.  We could explore whether this is true in California more generally.
+
+It's possible to plot the results of our comparable properties, which yields a scatterplot
+of price by square feet (with the number of bedrooms as well as the low and high range) as
+well as a scatterplot of amount/finished square feet vs log size in square feet.
 <<zillowcomps,fig=TRUE>>=
 if(require(Zillow)) {
   plot(comps)
@@ -233,6 +290,40 @@ if(require(Zillow)) {
   plot(1:10)
 }
 @
+
+Several aspects of this activity are worth noting: 
+\begin{enumerate}
+\item There is some startup cost for instructors and students (since each user will need
+their own ZillowID\footnote{By default, the number of calls per day to the API is limited to 1000,
+which could easily be exceeded in a lab setting if, contrary to the terms of use, the Zillow ID
+were to be shared.}).  
+\item Once set up, the calls to the Zillow package are very straightforward, and provide
+immediate access to a wealth of interesting data.
+\item This could be used as an activity to provide descriptive analysis of comparable 
+properties, or in a more elaborate manner to compare properties in different cities or
+areas.
+\item Since the latitude and longitude of the comparable properties is returned, users
+can generate maps using the mechanisms described in \ref{sec:googleMap}.
+\end{enumerate}
+
+\subsection{Other variants}
+
+We've outlined several approaches which efficiently scrape data from the web.
+But there are lots of other examples (many due to Duncan Temple Lang) which may be worth exploring.  These include:
+\begin{description}
+\item[NY Times:] interface to several of the \emph{New York Times} web services
+for searching articles, meta-data, user-generated content and best seller lists 
+(\url{http://www.omegahat.org/RNYTimes})
+\item[Flickr:] interface to the Flickr photo sharing service 
+(\url{http://www.omegahat.org/Rflickr})
+\item[Google Docs:] interface to allow listing documents on Google Docs along with details,
+downloading contents, and uploading files (\url{http://www.omegahat.org/RGoogleDocs})
+
+\item[Twitter:] interface to access Twitter feeds in various ways 
+(\url{http://cran.r-project.org/web/packages/twitteR})
+\item[last.fm:] interface to the \verb!last.fm! music recommendation site (\url{http://cran.r-project.org/web/packages/RLastFM})
+\end{description}
+
 
 
 
