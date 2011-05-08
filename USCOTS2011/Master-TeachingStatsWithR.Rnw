@@ -335,6 +335,10 @@ using color to distinguish.}
 \Caution{This is a caution}
 \end{itemize}
 
+\item Variable names.  Often it's nice to distinguish between an
+  actual variable name and a word that might have a similar name, for
+  instance between sex and \VN{sex}.  Use the \verb+\VN{sex}+ command
+  to accomplish this.
 
 \end{enumerate}
 
