@@ -227,7 +227,7 @@ with(sample(SAT,25), mean(ratio))
 @ 
 Or, each student can repeat the trial several times:
 <<>>=
-do(10)*with(sample(SAT,25), mean(ratio))
+do(10) * with(sample(SAT,25), mean(ratio))
 @ 
 This raises the question, naturally enough, of what ``reasonably
 close'' means, and what it means to measure ``how close.''
@@ -288,7 +288,7 @@ are in each book.
 data(Galton)
 with(sample(Galton,300), mean(nkids))
 with(sample(Galton,300), mean(nkids))
-do(10)*with(sample(Galton,300), mean(nkids))
+do(10) * with(sample(Galton,300), mean(nkids))
 @ 
 The samples all give about the same answer: about 6 kids in a family.
 But this is misleading!  The case in the \texttt{Galton} data is a
@@ -446,7 +446,7 @@ The \verb!do()! function simplifies the syntax for this and improves
 the output format (usually returning a data frame).
 
 <<>>=
-do(5)*"hello"
+do(5) * "hello"
 @
 
 
@@ -463,7 +463,7 @@ for the population you are considering.)
 \InstructorNote{This example is intended for instructors, not for students.}
 
 <<>>=
-families <- data.frame(familyid = 1:5000, children = rpois(5000,3))
+families <- data.frame(familyid=1:5000, children=rpois(5000,3))
 @
 
 Now we generate the people in these families
@@ -646,12 +646,13 @@ mean(rtest.stats >= test.stat)
 
 \section{The Multi-World Metaphor for Statistical Inference}
 
-Statistical inference is hard to teach.\footnote{Here we are considering only the
+Statistical inference is hard to teach.
+\footnote{Here we are considering only the
   frequentist version of inference.  The Bayesian approach is
   different and has different features that make it hard to teach and
   understand.  In these notes, we will be agnostic about frequentist
   vs Bayesian, except to acknowledge that, for good or bad, the
-  frequentist approach is vastly dominant in introductory statistics courses.}  
+  frequentist approach is vastly dominant in introductory statistics courses.}%
 Often, instead of teaching
 the logic of inference, we teach methods and techniques for
 calculating the quantities used in inference: standard errors,
@@ -671,8 +672,13 @@ things work, an idea to be proven through lab or field research or the
 collection of data.  But statistics hews not to the scientist's but to
 the philosopher's or logician's rather abstract notion 
 of a hypothesis: a ``proposition made as a basis for reasoning, without any
-assumption of its truth.''  (Oxford American Dictionaries)  What kind
-of scientist would frame a hypothesis without some disposition to
+assumption of its truth.''  (Oxford American Dictionaries)  Or more simply:
+
+\begin{center}
+A hypothesis is a statement that may be true or false.
+\end{center}
+
+What kind of scientist would frame a hypothesis without some disposition to
 think it might be true?  Only a philosopher or a logician.
 
 To help connect the philosophy and logic of statistical hypotheses
@@ -684,7 +690,7 @@ Many practitioners of the reform style of teaching statistics engage
 in the kinesthetic style; they have students draw M\&Ms from a bag
 and count the brown ones, they have students walk randomly to see how
 far they get after $n$ steps, they toss a globe around the classroom
-to see how often a students' index finger lands in the ocean.
+to see how often a students' index finger lands in the ocean. \cite{needCitation}
 \authNote{Get the citations to these.  The first, I think, is from
   Workshop statistics.  The second can refer to DTK's CAUSEWEB talk.
   The third is, I think, in Deb Nolan's ``Tricks'' book.}
@@ -693,24 +699,31 @@ To teach hypothesis testing in a kinesthetic way, you need a physical
 representation of the various hypotheses found in statistical
 inference.  One way to do this involves not the actual physical
 activity of truly kinesthetic learning, but concrete stories of making
-different sorts of trips to different sorts of worlds.  To that end,
-we humbly offer physical analogs of the various hypotheses: the planets.
+different sorts of trips to different sorts of worlds.  
+A hypothesis may be true on some worlds and false on others.
+On some planets we will know whether a hypothesis is true or false,
+on others, the truth of a hypothesis is an open question.
+%To that end, we humbly offer physical analogs of the various hypotheses: the planets.
 
 Of course, the planet that we care about, the place about which we
-want to be able to draw conclusions, is not at all hypothetical.  It's
-Planet Earth:
+want to be able to draw conclusions.  It's Planet Earth:
 
 \centerline{\includegraphics[width=1.2in]{images/planet_earth.png}}
 
-This is not a hypothesis; it's reality.  But it's a big place and
-complicated and it's hard to know exactly what's going on.  So, to
+We want to know which hypotheses are true on Earth and which are false.
+%This is not a hypothesis; it's reality.  
+But Earth is a big place and complicated,
+and it's hard to know exactly what's going on.  So, to
 deal with the limits of our abilities to collect data and to
 understand complexity, statistical inference involves a different set
 of planets: ones that are entirely hypothetical constructions.  They resemble Planet
-Earth in some ways and not in others.  But they are simple enough that we know
-exactly what's happening on them: they are ``proposition[s] made as a
-basis for reasoning, without any assumption of [their] truth.''  These
-hypothetical planets are:
+Earth in some ways and not in others.  
+But they are simple enough that we know exactly what's happening on them, 
+so we know which hypotheses are true and which are false on these planets.
+%they are ``proposition[s] made as a
+%basis for reasoning, without any assumption of [their] truth.''  \cite{needCitation}
+
+These hypothetical planets are:
 
 \begin{center}
 \begin{tabular}{ccc}
@@ -726,8 +739,8 @@ on Planet Earth.  As such, it somewhat resembles Earth, but many of
 the details are missing, perhaps even whole countries or continents or seas.
 
 Planet Null is a boring planet.  Nothing is happening there. Express
-it how you will: The different groups all have the same mean values;
-The model coefficients are zero; Different variables are unrelated to
+it how you will: All groups all have the same mean values.
+The model coefficients are zero. Different variables are unrelated to
 one another.  Dullsville.  But even if it's dull, it's not a polished
 billiard ball that looks the same from every perspective.  It's the
 clay from which Adam was created, the ashes and dust to which man
@@ -745,28 +758,31 @@ In teaching statistical inference in a pseudo-kinesthetic way, we use
 the computer to let students construct each of the hypothetical
 planets.  Then, working on that hypothetical planet, the student can
 carry out simulations of familiar statistical operations.   Those
-simulations tell the student what they are likely to see {\em if they
-  were on that planet}.   
+simulations tell the student what they are likely to see \emph{if they were on that planet}.   
+Our goal is to figure out whether Earth looks more like Planet Null or more like 
+Planet Alt.
+\authNote{R': Are we OK with this last sentence?  Perhaps it will get us into trouble, but I'll
+leave it for now and see how it goes.}
 
 For the professional statisticians, the planet metaphor is
-unnecessarily.  The professional has learned to keep straight the
+unnecessary.  The professional has learned to keep straight the
 various roles of the null and alternative hypothesis, and why one uses
 a sample standard error to estimate the standard deviation of the
 sampling distribution from the population.  But most students find the
 array of concepts confusing and make basic categorical errors.  The
 concrete nature of the planets simplifies the task of keeping the
-concepts in order.  For instance, Type I errors are only about being
+concepts in order.  For instance, Type I errors only occur 
 on Planet Null.  You have to be on Planet Alt to make a Type II
 error.  And, of course, no matter how many (re)samples we make on
 Planet Sample, it's never going to look more like Earth than the
 sample itself.
 
-\section{The Sampling Distribution}
+\subsection{The Sampling Distribution}
 
 Section \ref{sec:taking-randomness-seriously} shows some examples of
 drawing random samples repeatedly from a set of data.  To discuss the
 sampling distribution, it's helpful to make clear that the sampling
-distribution refers to results from the {\bf population}.  In the planet
+distribution refers to results from the \textbf{population}.  In the planet
 metaphor, this means that the samples are drawn from Planet Earth:
 
 \centerline{\includegraphics[width=1.2in]{images/planet_earth.png}}
@@ -776,12 +792,12 @@ population, rather than a sample, in hand.  Sports statistics provide
 one plausible setting, where
 you have, for example, the names and attributes of every professional
 player.  The ability to sample from Earth mapping software
-\authNote{Reference needed here to the Google maps example.} provides
-another compelling setting.  
+provides another compelling setting.  (See Section~\ref{sec:googleMap}.)
 
 As one example, we will take the complete list of results from a
 running race held in Washington, D.C. in April 2005 --- the Cherry
-Blossom Ten-Mile run.  The data set gives the \VN{sex}, \VN{age}, and \VN{net} running time
+Blossom Ten-Mile Run.  
+The data set gives the \VN{sex}, \VN{age}, and \VN{net} running time
 (start line to finish line) for each of the 8636 runners who
 participated: the population of runners in that race.
 
@@ -792,7 +808,7 @@ population <- TenMileRace
 nrow(population)
 @ 
 
-If you have the whole data set on the computer, there's little point
+If you have the population on the computer, there's little point
 in taking a random sample.  But the point here is to illustrate the
 consequences of taking a sample.  So, imagine that in fact it was
 difficult or expensive or dangerous or destructive to collect the data on a runner,
@@ -800,7 +816,7 @@ so you want to examine just a small subset of the population.
 
 Here's a sample of 100 runners:
 <<run-sample>>=
-mysamp = sample(population, 100)
+mysamp <- sample(population, 100)
 @ 
 
 With that sample, you can calculate whatever statistics are of
@@ -816,10 +832,10 @@ These various numbers are informative in their own way about the
 sample, but it's important to know how they might relate to the
 population.  For example, how precise are these numbers?  That is, if
 someone had collected a different random sample, how different would
-there results be likely to be.
+their results likely be?
 
 Given that we have the population in hand, that we're on Planet Earth,
-we can go back and collect such samples more times and study how much
+we can go back and collect such samples many more times and study how much
 they vary one to the other.  We'll do this by replacing
 \texttt{mysamp} with a command to sample anew from the population.
 
@@ -834,10 +850,10 @@ Slightly different results!  To quantify this, repeat the sampling
 process many times and look at the distribution: the {\bf sampling distribution}.
 
 <<run-samp-dist>>=
-s1 = do(500)*with(sample(population,100), mean(age))
-s2 = do(500)*with(sample(population,100), sd(age))
-s3 = do(500)*with(sample(population,100), mean(sex=="F"))
-s4 = do(500)*lm(net ~ age + sex, data=sample(population,100))
+s1 <- do(500) * with(sample(population,100), mean(age))
+s2 <- do(500) * with(sample(population,100), sd(age))
+s3 <- do(500) * with(sample(population,100), mean(sex=="F"))
+s4 <- do(500) * lm(net ~ age + sex, data=sample(population,100))
 @ 
 
 You can display the sampling distribution in several ways: histograms,
@@ -899,14 +915,14 @@ of students at a computer.
 \end{example}
 
 
-\section{The Re-Sampling Distribution}
+\subsection{The Re-Sampling Distribution}
 
-The sampling distribution is a lovely theoretical thing.  But if
-really were so easy to replicate taking a sample over and over again,
+The sampling distribution is a lovely theoretical thing.  But if it
+were easy to replicate taking a sample over and over again,
 wouldn't you just take a larger sample in the first place?  The
 practical problem you face is that the sample you took was collected
 with difficulty and expense.  There's no way you are going to go back
-and repeat the process that was do difficult in the first place.
+and repeat the process that was so difficult in the first place.
 
 This is where our hypothetical Planet Sample comes in.
 
@@ -954,12 +970,14 @@ lm(net ~ age + sex, data=sample(planet.sample,100))
 
 This is just one sample from Planet Sample.  Just as easy to collect
 many replications and example the resulting distribution.
+\authNote{RJP: Huh?  I can't figure out what this sentence was supposed to
+say.}%
 
 <<run-planet-samp-dist>>=
-ps1 = do(500)*with(sample(planet.sample,100), mean(age))
-ps2 = do(500)*with(sample(planet.sample,100), sd(age))
-ps3 = do(500)*with(sample(planet.sample,100), mean(sex=="F"))
-ps4 = do(500)*lm(net ~ age + sex, data=sample(planet.sample,100))
+ps1 = do(500) * with(sample(planet.sample,100), mean(age))
+ps2 = do(500) * with(sample(planet.sample,100), sd(age))
+ps3 = do(500) * with(sample(planet.sample,100), mean(sex=="F"))
+ps4 = do(500) * lm(net ~ age + sex, data=sample(planet.sample,100))
 @ 
 
 And, then, summarize the resulting distribution:
@@ -995,7 +1013,7 @@ resample(our.set)
 Going back to the previous example, it will suffice to show what the
 statements look like for just one of the statistics.
 <<>>=
-ps1 = do(500)*with(resample(mysamp), mean(age))
+ps1 = do(500) * with(resample(mysamp), mean(age))
 sd(ps1)
 @ 
 
@@ -1032,7 +1050,7 @@ at hand.  Such questions can be productively addressed on Planet Alt,
 where we will journey after a short detour to that most boring of all
 places, Planet Null.
 
-\section{The Sampling Distribution Under the Null Hypothesis}
+\subsection{The Sampling Distribution Under the Null Hypothesis}
 
 The Null Hypothesis is often introduced in terms of the values of
 population parameters, e.g., ``The population mean is 98.6,'' or ``The
@@ -1042,7 +1060,7 @@ proportion is 50\%.''
 Perhaps this is fine if all you want to talk about is means or proportions or
 differences between means, as is so often the focus of an introductory
 statistics course.  But instructors would like to think that their
-students are going to go further, and that the introductory course is
+students are going to go farther, and that the introductory course is
 meant to set them up for doing so. 
 
 In the multi-planet metaphor, the Null Hypothesis is about a place
@@ -1061,8 +1079,11 @@ proportions, regression coefficients, etc.)
 \centerline{\includegraphics[width=1.2in]{images/venus.png}}
 
 Like Planet Sample, Planet Null is a place that you construct.  You
-construct it in a way that makes the Null Hypothesis true: destroying
-relationships between variables.  You've already seen the process in 
+construct it in a way that makes the Null Hypothesis true, destroying
+relationships between variables.  
+\authNote{R': The logical connection of the clauses in this sentence is 
+unclear to me.}%
+You've already seen the process in 
 Section \ref{sec:comparing-two-means}: randomization with \texttt{shuffle}.
 The basic idea is to treat relationships as a mapping from the values
 of explanatory variables in each case to a response variable.  By
@@ -1072,7 +1093,7 @@ generate the world in which the Null Hypothesis holds true: Planet Null.
 Some examples:
 \begin{itemize}
 \item Do the foot widths differ between boys and girls, judging from
-  the \texttt{KidsFeet } data?
+  the \texttt{KidsFeet} data?
 <<kidsfeet-null>>=
 data(KidsFeet)
 lm( width ~ sex, data=KidsFeet ) # our sample
@@ -1094,7 +1115,8 @@ little wider than the boys'.  By generating a sampling distribution on
 Planet Null, we can see the size of the relationship to be expected
 just due to sampling fluctuations in a world where there is no relationship.
 <<>>=
-sn1 = do(500)*lm( width ~ shuffle(sex), data=KidsFeet ) # distribution on planet null
+# distribution on planet null
+sn1 <- do(500) * lm( width ~ shuffle(sex), data=KidsFeet ) 
 mean( abs(sn1[,2]) > abs(-0.4058) )  # a p-value
 @ 
 The value of $-0.4058$ observed in our sample is not very likely on
@@ -1110,7 +1132,7 @@ Planet Null: we can reject the Null Hypothesis.
 data(Whickham)
 lm( outcome=="Alive" ~ smoker, data=Whickham ) # our sample
 lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) # planet null
-sn2 = do(500)*lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) # distribution on planet null
+sn2 = do(500) * lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) # distribution on planet null
 mean( abs(sn2[,2]) > abs(0.07538) )  # a p-value
 @ 
 If you're shocked to see that smoking is associated with greater
@@ -1128,7 +1150,7 @@ The big covariate here is \VN{age}.  It happens that in the Whickham
 <<>>=
 lm( smoker=="Yes" ~ age, data=Whickham ) # our sample
 lm( smoker=="Yes" ~ shuffle(age), data=Whickham ) # our sample
-sn3 = do(500)*lm(smoker=="Yes" ~ shuffle(age), data=Whickham ) # distribution on planet null
+sn3 = do(500) * lm(smoker=="Yes" ~ shuffle(age), data=Whickham ) # distribution on planet null
 mean( abs(sn3[,2]) > abs(-0.00326) ) # a p-value
 @ 
 So, greater \VN{age} is associated with lower \VN{smoker} status.
@@ -1144,7 +1166,7 @@ And, of course, older people  are more likely to die.  Taking both factors toget
 glm( outcome=="Alive" ~ smoker + age, data=Whickham, family="binomial" ) # our sample
 glm( outcome=="Alive" ~ shuffle(smoker) + age, data=Whickham, family="binomial" ) # planet null
 # distribution on planet null
-sn4 = do(500)*glm( outcome=="Alive" ~ shuffle(smoker) + age, data=Whickham, family="binomial" ) 
+sn4 = do(500) * glm( outcome=="Alive" ~ shuffle(smoker) + age, data=Whickham, family="binomial" ) 
 mean( abs(sn4) > abs(-0.2047) ) # a p-value
 @ 
 You can see that the coefficient on \texttt{smokerYes} is negative,
@@ -1168,7 +1190,7 @@ cost of some self-dignity, you tell them, ``Take the Space Shuffle to
 Planet Null.''
 
 
-\section{The Sampling Distribution Under the Alternative Hypothesis}
+\subsection{The Sampling Distribution Under the Alternative Hypothesis}
 
 NOTES: the first step is to construct planet Alt.
 

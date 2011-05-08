@@ -4,6 +4,7 @@
 
 \usepackage{etoolbox}
 \usepackage{multicol}
+\usepackage{xcolor}
 
 \newdimen\Rwidth
 \Rwidth=\textwidth
@@ -112,8 +113,8 @@
 
 \def\myRuleColor{\color{black!50!white}}
 
-\DefineVerbatimEnvironment{Sinput}{Verbatim} {fontsize=\small} 
-\DefineVerbatimEnvironment{Soutput}{Verbatim} {fontsize=\small} 
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{fontsize=\small,formatcom=\color{blue!80!black}}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{fontsize=\small,formatcom=\color{green!50!black}} 
 %\DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=5em} 
 %\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em} 
 \fvset{listparameters={\setlength{\topsep}{0pt}}} 
@@ -127,13 +128,19 @@
    \begin{lrbox}{\@tempboxa}\begin{minipage}{\Rwidth}}{\end{minipage}\end{lrbox}%
    \colorbox{GrayBoxGray}{\usebox{\@tempboxa}}
 }\makeatother
+\makeatletter\newenvironment{whitebox}{%
+   \begin{lrbox}{\@tempboxa}\begin{minipage}{\Rwidth}}{\end{minipage}\end{lrbox}%
+   {\usebox{\@tempboxa}}
+}\makeatother
 
 \renewenvironment{Schunk}{
 
 \noindent
-\begin{graybox}}{\end{graybox}
+\begin{whitebox}
+}{\end{whitebox}
 
 }
+
 
 
 \newlength{\tempfmlength}
