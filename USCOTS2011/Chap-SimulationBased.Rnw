@@ -793,11 +793,11 @@ Blossom Ten-Mile run.  The data set gives the \VN{sex}, \VN{age}, and \VN{net} r
 (start line to finish line) for each of the 8636 runners who
 participated: the population of runners in that race.
 
-\authNote{Change the following to a ``data'' statement if we add
-  ten-mile-race.csv to the mosaic package.}
+\authNote{I changed \verb!our.population! to \verb!population!.  If you really like the old
+name, you can change it back.  --rjp}
 <<>>=
-our.population = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/ten-mile-race.csv")
-nrow(our.population)
+population <- TenMileRace
+nrow(population)
 @ 
 
 If you have the whole data set on the computer, there's little point
@@ -808,7 +808,7 @@ so you want to examine just a small subset of the population.
 
 Here's a sample of 100 runners:
 <<run-sample>>=
-mysamp = sample(our.population, 100)
+mysamp = sample(population, 100)
 @ 
 
 With that sample, you can calculate whatever statistics are of
@@ -832,20 +832,20 @@ they vary one to the other.  We'll do this by replacing
 \texttt{mysamp} with a command to sample anew from the population.
 
 <<>>=
-with(sample(our.population,100), mean(age))
-with(sample(our.population,100), sd(age))
-with(sample(our.population,100), mean(sex=="F"))
-lm(net ~ age + sex, data=sample(our.population,100))
+with(sample(population,100), mean(age))
+with(sample(population,100), sd(age))
+with(sample(population,100), mean(sex=="F"))
+lm(net ~ age + sex, data=sample(population,100))
 @ 
 
 Slightly different results!  To quantify this, repeat the sampling
 process many times and look at the distribution: the {\bf sampling distribution}.
 
 <<run-samp-dist>>=
-s1 = do(500)*with(sample(our.population,100), mean(age))
-s2 = do(500)*with(sample(our.population,100), sd(age))
-s3 = do(500)*with(sample(our.population,100), mean(sex=="F"))
-s4 = do(500)*lm(net ~ age + sex, data=sample(our.population,100))
+s1 = do(500)*with(sample(population,100), mean(age))
+s2 = do(500)*with(sample(population,100), sd(age))
+s3 = do(500)*with(sample(population,100), mean(sex=="F"))
+s4 = do(500)*lm(net ~ age + sex, data=sample(population,100))
 @ 
 
 You can display the sampling distribution in several ways: histograms,
@@ -926,7 +926,7 @@ of your sample.
 
 To illustrate, here's a sample from the running population:
 <<>>=
-mysamp = sample(our.population, 100) # a sample from the population
+mysamp = sample(population, 100) # a sample from the population
 @ 
 In reality, of course, you wouldn't run a command.  You would go out
 and do the hard work of randomly selecting cases from your population,
