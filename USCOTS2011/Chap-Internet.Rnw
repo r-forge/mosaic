@@ -12,7 +12,7 @@
 source('setup.R')
 @ 
 
-Provocative papers by Gould \cite{goul:2010} and Nolan and Temple Lang \cite{nola:temp:2010}
+Provocative papers by Gould \cite{Goul:2010} and Nolan and Temple Lang \cite{nola:temp:2010}
 have highlighted the importance of broadening the type of data students encounter
 in their first courses as well as the role of computing in modern statistics, respectively.
 In this chapter, we highlight some approaches which facilitate use of data scraping
