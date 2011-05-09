@@ -14,11 +14,13 @@ source('setup.R')
 
 \chapter{Mathematics in R}
 
-\subsection{Calculus}
+\authNote{Leave out this chapter for now?}
 
-\subsection{Discrete}
+\section{Calculus}
 
-\subsection{Linear Algebra}
+\section{Discrete}
 
-\subsection{Differential Equations}
+\section{Linear Algebra}
+
+\section{Differential Equations}
 

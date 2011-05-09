@@ -38,11 +38,11 @@ the class returns to inference for multiple regression.  While students are work
 on projects involving a multiple linear regression model with 2 predictors,
 some categorical data analysis is covered.
 
-\authNote{Others interested in chiming in?}
+\authNote{Danny and/or Randy: interested in chiming in?}
 
 \section{One Quantitative Variable}
 
-\subsection{Graphical and Numerical Summaries}
+\subsection{Numerical Summaries}
 
 R includes a number of commands to numerically summarize variables.
 These include the capability of calculating the mean, standard deviation,
@@ -78,6 +78,7 @@ By default, the
 \verb!quantile()! function displays the quartiles, but can be given
 a vector of quantiles to display.
 
+\subsection{Graphical Summaries}
 The \verb!histogram()! function is used to create a histogram.
 
 \vspace{-8mm}
@@ -143,8 +144,8 @@ densityplot(~ cesd, data=female)
 
 \subsection{Power Calculations}
 
-\authNote{NH: This is a placeholder: I'm not sure if we want this at all, or here, as the simulation
-approach really belongs in Simulation}
+\authNote{NH: my plan is to move this later in the section, with reference to Simulation.
+I also plan to recast using do() if possible}
 
 \noindent
 Let $X_1, ..., X_{25}$ be i.i.d. $N(.3, 1)$.  Consider testing the null hypothesis $H_0: \mu=0$ versus $H_A: \mu>0$ at significance level $\alpha=.05$.  Compare the power of the sign test and the power of the test based on normal theory (one sample one sided t-test) assuming that $\sigma$ is known.
@@ -227,7 +228,7 @@ We find the power to be approximately \Sexpr{round(powernorm,3)}.
 
 \section{One Categorical Variable}
 
-\subsection{Graphical and Numerical Summaries}
+\subsection{Numerical Summaries}
 
 <<homeless-table>>=
 table(HELP$homeless)
@@ -264,6 +265,8 @@ xtabs(~ homeless + female, HELP)
 @
 
 \subsubsection{Building Cross Tables from Already Summarized Data}
+
+\subsubsection{Graphical Summaries}
 
 \subsection{Chi-squared tests}
 
@@ -325,8 +328,13 @@ bwplot(cesd ~ sex, data=HELP)
 @
 \end{center}
 
+\subsection{Nonparametric 2 group tests}
 
 \subsection{1-way ANOVA}
+
+<<help-aov>>=
+summary(aov(cesd ~ substance, data=HELP))
+@
 
 \subsection{Tukey's Honest Significant Differences}
 
@@ -334,9 +342,19 @@ bwplot(cesd ~ sex, data=HELP)
 
 \subsection{Logistic Regression}
 
-\section{Design and Randomization}
+<<help-logit>>=
+summary(glm(homeless ~ age + female, binomial, data=HELP))
+@
+
+\section{Survival Time Outcomes}
+
+\section{Design and Randomization}  
+
+\authNote{Drop this?}
 
 \section{Bias and Variability}
+
+\authNote{Drop this?}
 
 \section{Probability and Random Variables}
 
@@ -346,6 +364,23 @@ bwplot(cesd ~ sex, data=HELP)
 
 \subsection{Two-way ANOVA}
 
+<<help-aov2>>=
+summary(aov(cesd ~ homeless + sex, data=HELP))
+@
+
+
 \subsection{Multiple Regression}
+
+<<help-multreg>>=
+lm1 <- lm(cesd ~ mcs + age + sex, data=HELP)
+summary(lm1)
+@
+<<help-multreg2>>=
+lm2 <- lm(cesd ~ mcs + age + sex + mcs*sex, data=HELP)
+summary(lm2)
+@
+<<help-multreg3>>=
+anova(lm1, lm2)
+@
 
 
