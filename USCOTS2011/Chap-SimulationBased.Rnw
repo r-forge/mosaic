@@ -850,10 +850,10 @@ Slightly different results!  To quantify this, repeat the sampling
 process many times and look at the distribution: the {\bf sampling distribution}.
 
 <<run-samp-dist>>=
-s1 <- do(500) * with(sample(population,100), mean(age))
-s2 <- do(500) * with(sample(population,100), sd(age))
-s3 <- do(500) * with(sample(population,100), mean(sex=="F"))
-s4 <- do(500) * lm(net ~ age + sex, data=sample(population,100))
+sample.means <- do(500) * with(sample(population,100), mean(age))
+sample.sds   <- do(500) * with(sample(population,100), sd(age))
+sample.props <- do(500) * with(sample(population,100), mean(sex=="F"))
+sample.regressions  <- do(500) * lm(net ~ age + sex, data=sample(population,100))
 @ 
 
 You can display the sampling distribution in several ways: histograms,
@@ -873,11 +873,12 @@ standard error may perhaps solidify in the students mind that it is a
 standard deviation.
 
 <<>>=
-sd(s1)  # mean age
-sd(s2)  # sd of age
-sd(s3)  # fraction female
-sd(s4)  # relation of running time to age and sex
+sd(sample.means)  # standard error for mean age
+sd(sample.sds)    # standard error for sd of age
+sd(sample.props)  # standard error for fraction female
+sd(sample.regressions)  # standard errors for regression statistics
 @ 
+
 
 \begin{example}
 This is an activity to carry out in class, with each student or pair
@@ -885,7 +886,7 @@ of students at a computer.
 
 \begin{enumerate}
   \item Make sure you can replicate the calculations for the standard
-    error of one of the statistics in the ten-mile-race example with a
+    error of one of the statistics in the \verb!TenMileRace! example with a
     sample of size $n=100$.  Your reproduction won't be exact, but it
     should be reasonably close.
   \item Now repeat the calculations, but use sample sizes that are
@@ -1335,11 +1336,11 @@ mean( s < 0.05 )
 
 \section{Exercises, Problems, and Activities}
 
+
 \begin{problem}
 What's the distribution of p-values under the Null Hypothesis?
 Many students seem to think that if the Null is true, the p-value will
 be large.  It can help to show what's really going on.
-
 
 Similar problem on deriving the shape of the F distribution.
 
