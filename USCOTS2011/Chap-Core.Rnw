@@ -109,7 +109,6 @@ stem(female$cesd)
 
 The \verb!dotPlot()! function is used to create a dotplot (a la Fathom).
 
-%\vspace{-8mm}
 \begin{center}
 <<cesd-dot,fig=TRUE,width=5,height=1.9>>=
 dotPlot(~ cesd, data=female)
@@ -129,31 +128,26 @@ dotPlot(~cesd | sex, data=HELP)
 @
 \end{center}
 
-\iffalse
-Nicer if we recode:
-\begin{center}
-<<cesd-dot4,fig=TRUE,width=5,height=1.9>>=
-HELP$sex <- factor( HELP$female, labels=c('male','female') )
-dotPlot( ~ cesd | sex, data=HELP)
-@
-\end{center}
-\fi
 
 \subsection{Density Curves }
 
 
+\begin{center}
 <<dens1,fig=TRUE,width=5,height=1.9>>=
 densityplot(~ cesd, data=female)
 ladd(grid.text(x=0.1, y=0.8, 'only females'))
 @
+\end{center}
 
 \authNote{I would like to add superimposed density plots.  Is this feasible given
 that we need to protect "densityplot" with a print to deal with Weave?}
 
 \subsection{Normal Distributions}
+\begin{center}
 <<norm1,fig=TRUE,width=5,height=1.9>>=
 xpnorm(1.96, 0, 1)
 @
+\end{center}
 
 \authNote{I would like to add superimposed normal on top of a density plots.  Help!}
 
@@ -200,10 +194,12 @@ chisq.test(substab, p=c(1/3, 1/3, 1/3))
 
 \subsection{Scatterplots}
 
+\begin{center}
 <<xyplot,fig=TRUE,width=5,height=3.9>>=
 xyplot(cesd ~ mcs, data=HELP)
 ladd(panel.loess(HELP$mcs, HELP$cesd))
 @
+\end{center}
 
 \subsection{Correlation}
 <<corr>>=
@@ -217,13 +213,17 @@ model <- lm(cesd ~ mcs, data=HELP)
 summary(model)
 @
 
+\begin{center}
 <<lmhist,fig=TRUE,width=5,height=1.9>>=
 histogram(~ residuals(model))
 @
+\end{center}
 
+\begin{center}
 <<lmplot,fig=TRUE,width=5,height=3.9>>=
 plot(model)
 @
+\end{center}
 
 \section{Two Categorical Variables}
 
@@ -271,13 +271,23 @@ sex      homeless housed
 
 \subsubsection{Graphical Summaries}
 
+\begin{center}
 <<mosaicplot,fig=TRUE,width=5,height=3.9>>=
 with(HELP, mosaicplot(table(homeless, sex)))
 @
+\end{center}
 
 \subsection{Chi-squared tests}
 
-\subsubsection{Displaying additional information: \texttt{xchisq.test()}}
+<<chisq1>>=
+with(HELP, chisq.test(homeless, sex, correct=FALSE))
+@
+
+\subsubsection{Displaying additional information}
+
+<<chisq2>>=
+with(HELP, xchisq.test(homeless, sex, correct=FALSE))
+@
 
 \subsection{Fisher's Exact Test}
 
