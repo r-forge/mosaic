@@ -726,7 +726,7 @@ These hypothetical planets are:
 
 \begin{center}
 \begin{tabular}{ccc}
-\includegraphics[width=1.2in]{images/planet-sample.png} &
+\includegraphics[width=0.6in]{images/planet-sample.png} &
 \includegraphics[width=1.2in]{images/venus.png} &
 \includegraphics[width=1.4in]{images/planet-alt.png} \\
 Planet Sample & Planet Null & Planet Alt\\
@@ -924,23 +924,31 @@ wouldn't you just take a larger sample in the first place?  The
 practical problem you face is that the sample you took was collected
 with difficulty and expense.  There's no way you are going to go back
 and repeat the process that was so difficult in the first place.
+Remember, real samples from the real population (on planet Earth) 
+can't be obtained by simply asking a computer to sample for us.
 
 This is where our hypothetical Planet Sample comes in.
+\smallskip
 
-\centerline{\includegraphics[width=1.2in]{images/planet-sample.png}}
+\centerline{\includegraphics[width=0.6in]{images/planet-sample.png}}
 
+All the data for Planet Sample is in our computer, so \emph{although sampling
+from Planet Earth is difficult, sampling from Planet Sample is easy}.
+\authNote{R' deleted: 
 You create Planet Sample yourself.  You do this by taking your sample
-using it to populate Planet Sample; it consists of many, many copies
-of your sample.
+using it to populate Planet Sample.  It consists of many, many copies of your sample.}
 
 To illustrate, here's a sample from the running population:
 <<>>=
-mysamp = sample(population, 100) # a sample from the population
+planet.sample = sample(population, 100) # one sample from the population
 @ 
-In reality, of course, you wouldn't run a command.  You would go out
-and do the hard work of randomly selecting cases from your population,
+In reality, of course, you wouldn't run a command to create the sample.  
+You would go out and do the hard work of randomly selecting cases from your population,
 measuring their relevant attributes, and recording that data.  
+So let's pretend that's what we did.  Pretend that 
+\verb!planet.sample! is the result of laborious data collection.
 
+\authNote{R' deleted (at least temporarily):
 But here, in order to make a point, we're going to pretend to be
 sampling from the runners' population rather than doing the actual
 calculations.  Why?  In order to show you how the results on Planet
@@ -950,45 +958,73 @@ what's happening on Planet Earth.
 
 To drive home the point that Planet Sample just consists of many
 copies of the data in the sample itself, here's a way to construct it explicitly:
-<<making-planet-sample>>=
+ <<making-planet-sample>>=
 planet.sample = rbind(mysamp, mysamp, mysamp, mysamp, 
                       mysamp, mysamp, mysamp, mysamp,
                       mysamp, mysamp, mysamp, mysamp)
 nrow(mysamp)
 nrow(planet.sample)
-@ 
+}
 
 Now you can go through the exact calculations you did to construct the
-sampling distribution (on Planet Earth), but instead use the data from
+sampling distribution (on Planet Earth), but instead sample from 
 Planet Sample:
 <<>>=
 with(sample(planet.sample,100), mean(age))
+with(sample(planet.sample,100), mean(age))
+with(sample(planet.sample,100), mean(age))
+@
+<<eval=false,echo=false>>=
 with(sample(planet.sample,100), sd(age))
 with(sample(planet.sample,100), mean(sex=="F"))
 lm(net ~ age + sex, data=sample(planet.sample,100))
 @ 
 
+Wait, something went wrong.  We are getting the same mean every time.  The reason is that
+Planet Sample is small.  It only has 100 inhabitants and we are sampling all 100 each time.
+We could take smaller samples, but we want to learn about samples of the same size as 
+our actual sample, so that's not a good option. 
 
+
+Our solution to this problem is to sample \emph{with replacement}.  That is, we will select
+an inhabitant of Planet Sample, record the appropriate data, and then put them back on the planet
+-- possibly selecting that same inhabitant again later in our sample.  We'll call sampling with
+replacement from Planet Sample \term{resampling} for short.  The \verb!resample()! function
+in the \verb!\mosaic! package can do this as easily as sampling without replacement.
+
+<<>>=
+with(resample(planet.sample,100), mean(age))
+with(resample(planet.sample,100), mean(age))
+with(resample(planet.sample,100), mean(age))
+@
+
+Ah, that looks better.  Now let's resample a bunch of times.%
+\footnote{By default, \texttt{resample()} will draw a sample as 
+large as the population of Planet Sample, so we can drop the sample size if we like.}
+
+\iffalse
 This is just one sample from Planet Sample.  Just as easy to collect
 many replications and example the resulting distribution.
 \authNote{RJP: Huh?  I can't figure out what this sentence was supposed to
 say.}%
+\fi
 
 <<run-planet-samp-dist>>=
-ps1 = do(500) * with(sample(planet.sample,100), mean(age))
-ps2 = do(500) * with(sample(planet.sample,100), sd(age))
-ps3 = do(500) * with(sample(planet.sample,100), mean(sex=="F"))
-ps4 = do(500) * lm(net ~ age + sex, data=sample(planet.sample,100))
+resample.means <- do(500) * with(resample(planet.sample,100), mean(age))
+resample.sds   <- do(500) * with(resample(planet.sample,100), sd(age))
+resample.props <- do(500) * with(resample(planet.sample,100), mean(sex=="F"))
+resample.regressions <- do(500) * lm(net ~ age + sex, data=sample(planet.sample,100))
 @ 
 
-And, then, summarize the resulting distribution:
+And, then, summarize the resulting distributions:
 <<>>=
-sd(ps1)  # mean age
-sd(ps2)  # sd of age
-sd(ps3)  # fraction female
-sd(ps4)  # relation of running time to age and sex
+sd(resample.means)        # standard deviation of mean ages
+sd(resample.sds)          # standard deviation of sd of age
+sd(resample.props)        # standard deviation of fraction female
+sd(resample.regressions)  # standard deviation of resampled regression statistics 
 @ 
 
+\iffalse
 It's an affectation, and unnecessary, actually to populate Planet
 Sample by repeated copying of the data in your sample.  Instead, you
 can arrange things so that the copying is done during the sampling
@@ -1017,12 +1053,18 @@ statements look like for just one of the statistics.
 ps1 = do(500) * with(resample(mysamp), mean(age))
 sd(ps1)
 @ 
+\fi
 
-This operation, on Planet Sample, isn't quite constructing the
-sampling distribution.  This is for the simple reason that it is being
+\begin{center}
+<<resample-mean-run,fig=true>>=
+histogram( ~ result, resample.means )
+@
+\end{center}
+Sampling like this on Planet Sample, isn't quite the same as constructing 
+the sampling distribution.  This is for the simple reason that it is being
 done on Planet Sample rather than Planet Earth.  To emphasize the
-distinction, it's helpful to refer to the {\em resampling
-  distribution} in contrast to the sampling distribution.
+distinction, it's helpful to refer to the resulting distribution as the 
+{\em resampling distribution} in contrast to the sampling distribution.
 
 \begin{example}
 Have your students compare the results they get from resampling of a
@@ -1038,18 +1080,16 @@ quite different.
 
 In a more advanced class, you might ask how big a sample is needed to
 get a reasonable estimate of the standard error.
-
 \end{example}
 
-The question naturally arises, is the standard error estimated from
-the resampling distribution good enough to use in place of the
-standard deviation of the actual sampling distribution.  Answering
-this question requires some solid sense of {\em what you are using the
-  standard error for}.    In general, we use standard errors to get an
-idea of whether the point estimate is precise enough for the purpose
-at hand.  Such questions can be productively addressed on Planet Alt,
-where we will journey after a short detour to that most boring of all
-places, Planet Null.
+The question naturally arises, is the standard error estimated from the
+resampling distribution good enough to use in place of the standard deviation
+of the actual sampling distribution.  Answering this question requires some
+solid sense of {\em what you are using the standard error for}.    In general,
+we use standard errors to get an idea of whether the point estimate is precise
+enough for the purpose at hand.  Such questions can be productively addressed
+on Planet Alt, where we will journey after a short detour to that most boring
+of all places, Planet Null.
 
 \subsection{The Sampling Distribution Under the Null Hypothesis}
 
@@ -1069,13 +1109,15 @@ where variables are unrelated to one another.  Any measured
 relationship, as indicated by a difference in sample means, a sample
 correlation coefficient different from zero, non-zero model
 coefficients, etc., is, on Planet Null, just the result of random
-sampling fluctuations.  This formulation if very general and is not
-hard for students to understand.  (Ironically, it doesn't work so
+sampling fluctuations.  
+
+This formulation is very general and is not hard for students to understand.  
+Ironically, it doesn't work so
 well for the very simplest null hypotheses that are about single-group
 means or proportions, so it turns out to be easier to introduce the
 null hypothesis with the
 supposedly more complicated cases, e.g., differences in means or
-proportions, regression coefficients, etc.)
+proportions, regression coefficients, etc.
 
 \centerline{\includegraphics[width=1.2in]{images/venus.png}}
 
@@ -1091,9 +1133,10 @@ of explanatory variables in each case to a response variable.  By
 randomizing the explanatory variables relative to the response, you
 generate the world in which the Null Hypothesis holds true: Planet Null. 
 
-Some examples:
-\begin{itemize}
-\item Do the foot widths differ between boys and girls, judging from
+Let's look as some more examples.
+
+\begin{example}
+Do the foot widths differ between boys and girls, judging from
   the \texttt{KidsFeet} data?
 <<kidsfeet-null>>=
 data(KidsFeet)
@@ -1109,32 +1152,38 @@ no systematic difference between boys' and girls' feet?
 set.seed(133)
 @ 
 <<>>=
-lm( width ~ shuffle(sex), data=KidsFeet ) # planet null
+do(1) * lm( width ~ shuffle(sex), data=KidsFeet ) # planet null
 @ 
 For this particular sample from Planet Null, the girls' feet are a
 little wider than the boys'.  By generating a sampling distribution on
 Planet Null, we can see the size of the relationship to be expected
 just due to sampling fluctuations in a world where there is no relationship.
 <<>>=
-# distribution on planet null
-sn1 <- do(500) * lm( width ~ shuffle(sex), data=KidsFeet ) 
-mean( abs(sn1[,2]) > abs(-0.4058) )  # a p-value
+# (approximate) distribution on planet null
+planet.null <- do(500) * lm( width ~ shuffle(sex), data=KidsFeet ) 
+head(planet.null,2)
+@
+<<>>=
+with( planet.null, mean(abs(sexG) > abs(-0.4058)) )  # a p-value
 @ 
 The value of $-0.4058$ observed in our sample is not very likely on
 Planet Null.  This suggests that our sample was not collected from
 Planet Null: we can reject the Null Hypothesis.
 
-\InstructorNote{The \texttt{[,2]} means to take the 2nd column of \texttt{sn1}. }
-\authNote{If we can suppress the shuffle in the output of do(), then
-  we can just use the \$ notation for pulling out a column.}
+%\InstructorNote{The \texttt{[,2]} means to take the 2nd column of \texttt{sn1}. }
+%\authNote{If we can suppress the shuffle in the output of do(), then
+%  we can just use the \$ notation for pulling out a column.}
 
-\item Is the survival rate for smokers different from that for non-smokers?
+\end{example}
+
+\begin{example}
+Is the survival rate for smokers different from that for non-smokers?
 <<smokers-null>>=
-data(Whickham)
-lm( outcome=="Alive" ~ smoker, data=Whickham ) # our sample
-lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) # planet null
-sn2 = do(500) * lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) # distribution on planet null
-mean( abs(sn2[,2]) > abs(0.07538) )  # a p-value
+do(1) * lm( outcome=="Alive" ~ smoker, data=Whickham ) # from our sample
+do(1) * lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) # planet null
+# distribution on planet null
+null.distribution  = do(500) * lm( outcome=="Alive" ~ shuffle(smoker), data=Whickham ) 
+with(null.distribution, mean( abs(smokerYes)  > abs(0.07538) ) ) # a p-value
 @ 
 If you're shocked to see that smoking is associated with greater
 likelihood of being alive (7.5 percentage points greater!) and that
@@ -1149,26 +1198,33 @@ and how to adjust for them.
 The big covariate here is \VN{age}.  It happens that in the Whickham
  data, younger people are more likely to smoke.  To see this you :
 <<>>=
-lm( smoker=="Yes" ~ age, data=Whickham ) # our sample
-lm( smoker=="Yes" ~ shuffle(age), data=Whickham ) # our sample
-sn3 = do(500) * lm(smoker=="Yes" ~ shuffle(age), data=Whickham ) # distribution on planet null
-mean( abs(sn3[,2]) > abs(-0.00326) ) # a p-value
+do(1) * lm( smoker=="Yes" ~ age, data=Whickham )          # our sample
+do(1) * lm( smoker=="Yes" ~ shuffle(age), data=Whickham ) # under the null
+# distribution on planet null
+null.distribution <- do(500) * lm(smoker=="Yes" ~ shuffle(age), data=Whickham ) 
+with(null.distribution, mean(abs(age) > abs(-0.00326)) ) # approx. p-value
 @ 
 So, greater \VN{age} is associated with lower \VN{smoker} status.
-And, of course, older people  are more likely to die.  Taking both factors together, it turns out
- that smokers are less likely to die, but that's because they are
- young.  
-\item Let's make up for the deficiency in the above smoking example.
-  One way to do this is to adjust for \VN{age} when considering the
-  effect of \VN{smoker} status.  We'll consider this more in Chapter
-  \ref{chap:Multivariate-early}, but for now, we'll just build the model.
+And, of course, older people  are more likely to die.  Taking both factors
+together, it turns out that smokers are less likely to die, but that's because
+they are young.  
+\end{example}
+
+\begin{example}
+Let's make up for the deficiency in the above smoking example.
+One way to do this is to adjust for \VN{age} when considering the
+effect of \VN{smoker} status.  We'll consider this more in Chapter
+\ref{chap:Multivariate-early}, but for now, we'll just build the model.
   
 <<>>=
-glm( outcome=="Alive" ~ smoker + age, data=Whickham, family="binomial" ) # our sample
-glm( outcome=="Alive" ~ shuffle(smoker) + age, data=Whickham, family="binomial" ) # planet null
+# our sample on planet Earth
+do(1) * glm( outcome=="Alive" ~ smoker + age, data=Whickham, family="binomial" ) 
+# o sample on planet null
+do(1) * glm( outcome=="Alive" ~ shuffle(smoker) + age, data=Whickham, family="binomial" ) 
 # distribution on planet null
-sn4 = do(500) * glm( outcome=="Alive" ~ shuffle(smoker) + age, data=Whickham, family="binomial" ) 
-mean( abs(sn4) > abs(-0.2047) ) # a p-value
+null.distribution <- do(500) * glm( outcome=="Alive" ~ shuffle(smoker) + age, 
+                                   data=Whickham, family="binomial" ) 
+with(null.distribution, mean(abs(smokerYes) > abs(-0.205)) ) # approx. p-value
 @ 
 You can see that the coefficient on \texttt{smokerYes} is negative,
 and that the p-value indicates significance.  So, smoking in these
@@ -1181,7 +1237,7 @@ probabilities the value of which must always be between 0 and 1.  But
 notice also that the logic of hypothesis testing remains the same:
 construct a Planet Null by randomizing an explanatory variable with
 respect to a response variable.
-\end{itemize}
+\end{example}
 
 As this is being written, the US Space Shuttle is carrying out it's
 last couple of missions before being retired.  For a few years, at
@@ -1207,6 +1263,7 @@ Instead head off to Planet Alt.
 How do you get there?  You build a simulation of the world as you
 think it might be.  
 
+\begin{example}
 To illustrate, imagine that you are interested in
 researching the potential relationship between vitamin D deficiency
 and high blood pressure.  Your eventual plan is to do a study, perhaps
@@ -1230,8 +1287,10 @@ been missed by past research.  You decide a substantial but typical
 deficiency in vitamin D will, on average lead to a 5mmHg increase in
 systolic blood pressure.
 
-Now, to construct Planet Alt: \InstructorNote{The instructor would
+\InstructorNote{The instructor would
   provide this function to the students.}
+
+Now, to construct Planet Alt: 
 <<define-D-BP-alt>>=
 planet.alt = function(n=10,effect.size=1) {
   race = resample( c("B","B","W","W","W"), n)
@@ -1266,9 +1325,26 @@ simple.  Here's a quick study of size $n=5$:
 <<>>=
 planet.alt(5)
 @ 
+\end{example}
 
-We'll discuss how to use such simulations in Section \ref{sec:power},
-about power.
+\begin{example}
+In this example we construct Planet Alt for a comparison of two means.
+<<>>=
+alt.2.groups <- function(n=10, effect.size=1, sd=1, baseline=0){
+	n <- rep(n, length.out=2)
+	sd <- rep(sd, length.out=2)
+	data.frame( 
+		y = c( rnorm(n[1], baseline, sd[1]), rnorm(n[2], baseline+effect.size, sd[2])),
+		group = rep(c('A','B'), n)
+	)
+}
+@
+<<>>=
+alt.2.groups(3)
+@
+\end{example}
+
+We'll discuss how to use such simulations to compute power in Section \ref{sec:power}.
 
 \begin{problem}
 \begin{enumerate}
