@@ -274,6 +274,10 @@ xtabs(~ homeless + female, HELP)
 
 \subsection{Fisher's Exact Test}
 
+<<help-fisher>>=
+with(HELP, fisher.test(homeless, female))
+@
+
 \section{Quantitative Response to a Categorical Predictor}
 
 \subsection{A Bivariate Predictor: Two-sample t}
@@ -330,13 +334,29 @@ bwplot(cesd ~ sex, data=HELP)
 
 \subsection{Nonparametric 2 group tests}
 
+<<help-nonpar>>=
+wilcox.test(cesd ~ sex, data=HELP)
+@
+
 \subsection{1-way ANOVA}
 
 <<help-aov>>=
-summary(aov(cesd ~ substance, data=HELP))
+mod <- aov(cesd ~ substance, data=HELP)
+summary(mod)
+@
+<<help-aovlm>>=
+mod1 <- lm(cesd ~ 1, data=HELP)
+mod2 <- lm(cesd ~ substance, data=HELP)
+anova(mod1, mod2)
 @
 
+
 \subsection{Tukey's Honest Significant Differences}
+
+<<help-hsd>>=
+with(HELP, tapply(cesd, substance, mean))
+TukeyHSD(mod, "substance")
+@
 
 \section{Categorical Response to a Quantitative Predictor}
 
@@ -348,17 +368,21 @@ summary(glm(homeless ~ age + female, binomial, data=HELP))
 
 \section{Survival Time Outcomes}
 
-\section{Design and Randomization}  
+\subsection{Kaplan-Meier plot}
 
-\authNote{Drop this?}
+<<help-km, fig=TRUE>>=
+library(survival)
+fit <- survfit(Surv(dayslink, linkstatus) ~ treat, data=HELP)
+plot(fit, conf.int=FALSE, lty=1:2)
+@
 
-\section{Bias and Variability}
+\subsection{Cox proportional hazards model}
 
-\authNote{Drop this?}
+<<help-surv>>=
+library(survival)
+summary(coxph(Surv(dayslink, linkstatus) ~ age + substance, data=HELP))
+@
 
-\section{Probability and Random Variables}
-
-\label{sec:DiscreteDistributions}
 
 \section{More than Two Variables}
 
@@ -382,5 +406,17 @@ summary(lm2)
 <<help-multreg3>>=
 anova(lm1, lm2)
 @
+
+\section{Design and Randomization}  
+
+\authNote{Drop this?}
+
+\section{Bias and Variability}
+
+\authNote{Drop this?}
+
+\section{Probability and Random Variables}
+
+\label{sec:DiscreteDistributions}
 
 
