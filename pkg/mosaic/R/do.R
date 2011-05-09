@@ -91,7 +91,7 @@ do = function(n=1, cull=NULL, mode=NULL) {
 		cull <- .cull_for_do
 	}
 
-	if (class(f) != 'function') {
+	if ( ! is.function(f) ) {
 		f = function(){eval.parent(fthing, n=2) }
 	}
 	res1 = cull(f())  # was (...)
