@@ -89,7 +89,7 @@ The \verb!histogram()! function is used to create a histogram.
 
 \vspace{-4mm}
 \begin{center}
-<<cesd-hist,fig=TRUE,width=5,height=1.9>>=
+<<cesd-hist,fig=TRUE,width=6,height=1.9>>=
 histogram(~ cesd, HELP)
 @
 \end{center}
@@ -110,20 +110,20 @@ stem(female$cesd)
 The \verb!dotPlot()! function is used to create a dotplot (a la Fathom).
 
 \begin{center}
-<<cesd-dot,fig=TRUE,width=5,height=1.9>>=
+<<cesd-dot,fig=TRUE,width=6,height=1.9>>=
 dotPlot(~ cesd, data=female)
 @
 \end{center}
 We could also have made our subset ``on the fly'', just for the purposes of graphing:
 \begin{center}
-<<cesd-dot2,fig=TRUE,width=5,height=1.9>>=
+<<cesd-dot2,fig=TRUE,width=6,height=1.9>>=
 dotPlot(~ cesd, data=HELP, subset=(sex=='female'))
 @
 \end{center}
 
 Or we could make side-by-side dotplots of men and women:
 \begin{center}
-<<cesd-dot3,fig=TRUE,width=5,height=1.9>>=
+<<cesd-dot3,fig=TRUE,width=6,height=1.9>>=
 dotPlot(~cesd | sex, data=HELP)
 @
 \end{center}
@@ -133,7 +133,7 @@ dotPlot(~cesd | sex, data=HELP)
 
 
 \begin{center}
-<<dens1,fig=TRUE,width=5,height=1.9>>=
+<<dens1,fig=TRUE,width=6,height=1.9>>=
 densityplot(~ cesd, data=female)
 ladd(grid.text(x=0.1, y=0.8, 'only females'))
 @
@@ -144,7 +144,7 @@ that we need to protect "densityplot" with a print to deal with Weave?}
 
 \subsection{Normal Distributions}
 \begin{center}
-<<norm1,fig=TRUE,width=5,height=1.9>>=
+<<norm1,fig=TRUE,width=6,height=1.9>>=
 xpnorm(1.96, 0, 1)
 @
 \end{center}
@@ -171,7 +171,7 @@ binom.test(~ homeless=="housed", HELP)
 
 \subsection{The Proportion Test}
 <<proptest>>=
-prop.test(table(HELP$homeless))
+prop.test(xtabs(~ homeless, HELP))
 @
 
 \authNote{suggestions for a better approach?}
@@ -179,10 +179,21 @@ prop.test(table(HELP$homeless))
 \subsection{Goodness of Fit Tests}
 
 <<gof>>=
-substab = xtabs(~ substance, HELP)
+substab <- xtabs(~ substance, HELP)
 substab
 perctable(HELP$substance)
-chisq.test(substab, p=c(1/3, 1/3, 1/3))
+p <- c(1/3, 1/3, 1/3)
+chisq.test(substab, p=p)
+total <- sum(substab)
+@
+
+We can also calculate this manually.
+
+<<gof2>>=
+chisq = sum((substab - total*p)^2/(total*p))
+chisq
+1 - pchisq(chisq, 2)
+rm(substab, p, total, chisq)
 @
 
 
@@ -195,7 +206,7 @@ chisq.test(substab, p=c(1/3, 1/3, 1/3))
 \subsection{Scatterplots}
 
 \begin{center}
-<<xyplot,fig=TRUE,width=5,height=3.9>>=
+<<xyplot,fig=TRUE,width=6,height=3.9>>=
 xyplot(cesd ~ mcs, data=HELP)
 ladd(panel.loess(HELP$mcs, HELP$cesd))
 @
@@ -214,13 +225,13 @@ summary(model)
 @
 
 \begin{center}
-<<lmhist,fig=TRUE,width=5,height=1.9>>=
+<<lmhist,fig=TRUE,width=6,height=1.9>>=
 histogram(~ residuals(model))
 @
 \end{center}
 
 \begin{center}
-<<lmplot,fig=TRUE,width=5,height=3.9>>=
+<<lmplot,fig=TRUE,width=6,height=3.9>>=
 plot(model)
 @
 \end{center}
@@ -272,7 +283,7 @@ sex      homeless housed
 \subsubsection{Graphical Summaries}
 
 \begin{center}
-<<mosaicplot,fig=TRUE,width=5,height=3.9>>=
+<<mosaicplot,fig=TRUE,width=6,height=3.9>>=
 with(HELP, mosaicplot(table(homeless, sex)))
 @
 \end{center}
@@ -323,18 +334,9 @@ The \verb!tapply()! function can be used to calculate the mean CESD score
 for each of the two groups (given as second argument).  The third argument
 specifies which function to run for each of these subgroups.
 <<tapply>>=
-tapply(HELP$cesd, HELP$sex, mean)
-@
-
-\authNote{Which method(s) do we want to show?}
-Alternatives to the code above:
-<<tapply-alternatives>>=
 aggregate(cesd ~ sex, HELP, FUN=mean)
 aggregate(cesd ~ sex, HELP, FUN=favstats)
-summary(cesd ~ sex, HELP, fun=mean)
-summary(cesd ~ sex, HELP, fun=favstats)
 @
-
 
 Boxplots are a particularly helpful graphical display to compare distributions.
 The \verb!bwplot()! function can be used to display the boxplots for the CESD scores separately by sex.  We see from both the numerical and graphical
@@ -344,7 +346,7 @@ No reason to compute 5-number summaries of 10 or fewer numbers really.}
 
 %\vspace{-8mm}
 \begin{center}
-<<cesd-box,fig=TRUE,width=5,height=1.9>>=
+<<cesd-box,fig=TRUE,width=6,height=1.9>>=
 bwplot(cesd ~ sex, data=HELP)
 @
 \end{center}
@@ -355,8 +357,12 @@ bwplot(cesd ~ sex, data=HELP)
 wilcox.test(cesd ~ sex, data=HELP)
 @
 
-\subsection{1-way ANOVA}
-
+\subsection{Oneway ANOVA}
+\begin{center}
+<<cesd-oneway,fig=TRUE,width=6,height=1.9>>=
+bwplot(cesd ~ substance, data=HELP)
+@
+\end{center}
 <<help-aov>>=
 mod <- aov(cesd ~ substance, data=HELP)
 summary(mod)
@@ -387,11 +393,17 @@ summary(glm(homeless ~ age + female, binomial, data=HELP))
 
 \subsection{Kaplan-Meier plot}
 
-<<help-km, fig=TRUE,width=5,height=3.9>>=
+\begin{center}
+<<help-km, fig=TRUE,width=6,height=3.9>>=
 library(survival)
 fit <- survfit(Surv(dayslink, linkstatus) ~ treat, data=HELP)
-plot(fit, conf.int=FALSE, lty=1:2)
+plot(fit, conf.int=FALSE, lty=1:2, lwd=2, xlab="time (in days)",
+  ylab="P(not linked)")
+legend(20, 0.4, legend=c("Control", "Treatment"), lty=c(1,2),
+  lwd=2)
+title("Product-Limit Survival Estimates (time to linkage)")
 @
+\end{center}
 
 \subsection{Cox proportional hazards model}
 
@@ -445,8 +457,8 @@ reject when the number of positive values is large.  Under the null hypothesis, 
 distributed as a Binomial random variable with n=25 trials and p=0.5 probability of being
 a positive value.  Let's consider values between 15 and 19.
 <<pbinom>>=
-xvals = 15:19
-probs = 1 - pbinom(xvals, 25, 0.5)
+xvals <- 15:19
+probs <- 1 - pbinom(xvals, 25, 0.5)
 cbind(xvals, probs)
 @
 So we see that if we decide to reject when X = the number of positive values is
@@ -458,9 +470,12 @@ We calculate the power of the sign test as follows. The probability that $X > 0$
 1-pnorm(0, 0.3, 1)
 @
 We can view this graphically using the command:
-<<pnorm2,fig=TRUE,width=5,height=1.9>>= 
+
+\begin{center}
+<<pnorm2,fig=TRUE,width=6,height=1.9>>= 
 xpnorm(0, 0.3, 1)
 @
+\end{center}
 
 So now we need to find the power under the alternative, which is equal to the probability of getting 17 or more positive values,
 given that $p=0.6179$:
