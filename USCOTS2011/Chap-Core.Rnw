@@ -436,6 +436,50 @@ summary(lm2)
 anova(lm1, lm2)
 @
 
+\section{Probability and Random Variables}
+
+\label{sec:DiscreteDistributions}
+\label{sec:probability}
+
+R can calculate quantities related to probability distributions of all types.  
+It is straightforward to generate
+random variables from these distributions, which can be used 
+for simulation and analysis.
+
+Table \ref{core:dist} displays the basenames for probability distributions 
+available within base R.
+
+XX ADD info on usage.
+
+\begin{table}
+\begin{center}
+\caption{basename for probability distribution and random number generation}
+\label{core:dist}
+\begin{tabular}{|c|c|c|} \hline
+Distribution   & NAME                 \\ \hline
+Beta           &  {\tt beta}        \\
+binomial       &  {\tt binom}    \\
+Cauchy         &  {\tt cauchy}   \\
+chi-square     &  {\tt chisq}    \\
+exponential    &  {\tt exp}      \\
+F              &  {\tt f}        \\
+gamma          &  {\tt gamma}    \\
+geometric      &  {\tt geom}     \\
+hypergeometric &  {\tt hyper}    \\
+logistic       &  {\tt logis}    \\
+lognormal      &  {\tt lnorm}    \\
+negative binomial &  {\tt nbinom} \\
+normal         &  {\tt norm}      \\
+Poisson        &  {\tt pois}      \\
+Student's t    &  {\tt t}        \\
+Uniform        &  {\tt unif}     \\
+Weibull        &  {\tt weibull}   \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
 \section{Power Calculations}
 
 \label{sec:onesamppower}
@@ -488,7 +532,7 @@ The power is modest at best.
 \subsection{T-test}
 
 We next calculate the power of the test based on normal theory.  To keep the comparison
-fair, we will set our $\alpha$ level equal to 0.5388.
+fair, we will set our $\alpha$ level equal to 0.05388.
 First we need to find the rejection region.  
 
 <<>>=
@@ -521,16 +565,5 @@ Overall, we see that the t-test has higher power than the sign test, if the unde
 data are truly normal.  It's useful to have students calculate power empirically, 
 as demonstrated for this example in \ref{sec:power}.
 
-\section{Design and Randomization}  
-
-\authNote{Drop this?}
-
-\section{Bias and Variability}
-
-\authNote{Drop this?}
-
-\section{Probability and Random Variables}
-
-\label{sec:DiscreteDistributions}
 
 
