@@ -62,7 +62,7 @@ first in &R_LIBS&, this will probably happen automatically.  If not,
 you can specify the location manually:
 
 <<eval=F>>=
-install.packages("mosaic",lib="~/R/library")
+install.packages("mosaic", lib="~/R/library")
 @
 On a networked machine, be sure to use a different local directory for 
 each platform since packages must match the platform.
@@ -102,10 +102,11 @@ There are several ways to find packages
   designed to find information about \R.
   \item CRAN task views.
 
-  A number of folks have put together task views that list a large
-  number of packages and what they are good for.  They are 
+  A number of folks have put together task views that annotate a large
+  number of packages and summarize they are good for.  They are 
   organized according to themes.  Here are a few examples
   of available task views:
+\authNote{NJH to update}
 
   \UndefineShortVerb{\&}
   \begin{center}
@@ -128,8 +129,10 @@ There are several ways to find packages
   \end{center}
   \DefineShortVerb{\&}
 
-  \item Biocunductor (\url{http://www.bioconductor.org/}) is another
-  source of packages.
+  \item Bioconductor (\url{http://www.bioconductor.org/}) 
+  and Omegahat (\url{http://www.omegahat.org/R}) 
+are another
+  sources of packages (specify the \verb!repos=! option to use these).
 
   \item \textit{R News} %(\url{http://cran.r-project.org/doc/Rnews/bib/Rnewsbib.html})
   (available via \cran)
@@ -137,8 +140,8 @@ There are several ways to find packages
 
   \item Write your own.
 
-  You can write your own packages, and it isn't that hard to do.
-%  We won't cover this here.
+  You can write your own packages, and it isn't that hard to do (but 
+we won't cover this here).
 \end{itemize}
 
 \subsection{Some Useful Packages}
@@ -317,7 +320,7 @@ The &scan()& function puts data into a \rterm{vector}, not a \rterm{data frame}.
 build a \rterm{data frame} for our data as follows.
 
 <<dataframe>>=
-myDataFrame <- data.frame(color=myData2,number=myData1)
+myDataFrame <- data.frame(color=myData2, number=myData1)
 myDataFrame
 @
 
@@ -325,10 +328,12 @@ myDataFrame
 
 The &RMySQL& package allows direct access to data in MySQL data bases.
 This can be convenient when dealing with subsets of very large data sets.
+A great example of this is the 12 gigabytes of data from the Airline on-time
+performance dataset included in the 2009 Data Expo (\url{http://stat-computing.org/dataexpo/2009}).
 \Rindex{RMySQL}%
 \myindex{SQL}%
-%There is an \href{http://csg.sph.umich.edu/docs/R/rsql.html}{online document}
-%describing this on the CSG website.
+There is an \href{http://csg.sph.umich.edu/docs/R/rsql.html}{online document}
+describing this type of manipulation. 
 
 
 \subsection{Generating data}
@@ -344,19 +349,19 @@ The following code shows a number of ways to generate data systematically.
 <<generatingData01>>=
 x <- 5:20; x                 # all integers in a range
 # structured sequences
-seq(0,50,by=5)               
-seq(0,50,length=7)               
-rep(1:5,each=3)
-rep(1:5,times=3)
-c(1:5,10,3:5)                # c() concatenates vectors
+seq(0, 50, by=5)               
+seq(0, 50, length=7)               
+rep(1:5, each=3)
+rep(1:5, times=3)
+c(1:5, 10, 3:5)              # c() concatenates vectors
 @
 
 \R\ can also sample from several different distributions.
 
 <<generatingData02>>=
-rnorm(10,mean=10,sd=2)    # random draws from normal distribution
+rnorm(10, mean=10, sd=2)  # random draws from normal distribution
 x <- 5:20                 # all integers in a range
-sample(x,size=5)          # random sample of size 5 from x (no replacement)
+sample(x, size=5)         # random sample of size 5 from x (no replacement)
 @
 
 Functions for sampling from other distributions include
@@ -375,10 +380,10 @@ See Section~\ref{sec:DiscreteDistributions} for more information.
 delimited flat files.
 
 <<writingData>>=
-ddd <- data.frame(number=1:5,letter=letters[1:5])
+ddd <- data.frame(number=1:5, letter=letters[1:5])
 args(write.table)
-write.table(ddd,"ddd.txt")
-write.csv(ddd,"ddd.csv")
+write.table(ddd, "ddd.txt")
+write.csv(ddd, "ddd.csv")
 # this system call should work on a Mac or Linux machine
 system("head -20 ddd.txt ddd.csv")
 @
@@ -399,8 +404,8 @@ The downside is that these files are only readable in \R.
 
 <<savingData,exec=F,echo=T>>=
 abc <- "abc"
-ddd <- data.frame(number=1:5,letter=letters[1:5])
-save(ddd,abc,file="ddd.zip")     # saves both objects in a single file
+ddd <- data.frame(number=1:5, letter=letters[1:5])
+save(ddd, abc, file="ddd.zip")     # saves both objects in a single file
 load("ddd.zip")                  # loads them both
 @
 
@@ -495,7 +500,7 @@ This has some important consequences:
 xm <- matrix(1:16, nrow=4); xm
 xm[5]
 xm[,2]                   # this is 1 dimensional (a vector)
-xm[,2,drop=FALSE]        # this is 2 dimensional (still a matrix)
+xm[,2, drop=FALSE]        # this is 2 dimensional (still a matrix)
 @
 
 Many objects have a \rterm{dim attribute} that stores the dimension
@@ -520,7 +525,7 @@ obtained using \verb!nrow()! and \verb!ncol()!.
 \Rindex{attributes()}%
 
 <<attributes>>=
-ddd <- data.frame(number=1:5,letter=letters[1:5])
+ddd <- data.frame(number=1:5, letter=letters[1:5])
 attributes(ddd)
 dim(ddd)
 nrow(ddd)
@@ -560,10 +565,10 @@ as.character(xm)
 # convert matrix to vector
 as.vector(xm)
 as.logical(xm)
-alpha <- c("a","1","b","0.5")    
+alpha <- c("a", "1", "b", "0.5")    
 mode(alpha)
-as.numeric(alpha)      # can't do the coersion, so NAs are introduced
-as.integer(alpha)      # notice coersion of 0.5 to 0
+as.numeric(alpha)      # can't do the coercion, so NAs are introduced
+as.integer(alpha)      # notice coercion of 0.5 to 0
 @
 
 \section{More About Vectors}
@@ -585,7 +590,7 @@ Most traditional mathematics functions are available and work this way.
 \Rindex{log()}%
 
 <<vectors01>>=
-x <- 1:5; y <- seq(10,60,by=10); z <- rnorm(10); x; y
+x <- 1:5; y <- seq(10, 60, by=10); z <- rnorm(10); x; y
 y + 1
 x * 10
 x < 3
@@ -603,7 +608,7 @@ This can facilitate side-by-side comparisons.
 
 <<vectors01a>>=
 # compare round() and signif() by binding rowwise into matrix
-rbind(round(z,digits=2), signif(z,digits=2))   
+rbind(round(z, digits=2), signif(z, digits=2))   
 @
 
 
@@ -728,7 +733,7 @@ When vectors operate on each other, the operation is done componentwise,
 recycling the shorter vector to match the length of the longer.
 
 <<vectors03>>=
-x <- 1:5; y <- seq(10,70,by=10)
+x <- 1:5; y <- seq(10, 70, by=10)
 x + y
 @
 
@@ -747,8 +752,8 @@ First, recall that the &[ ]& operator is actually a function.
 Furthermore, it is vectorized.
 
 <<vectors04a>>=
-x <- seq(2,20,by=2)
-x[1:5]; x[c(1,4,7)]
+x <- seq(2, 20, by=2)
+x[1:5]; x[c(1, 4, 7)]
 @
 
 &[ ]& accepts &logicals& as arguments well.
@@ -756,8 +761,8 @@ The boolean values (recycled, if necessary)
 are used to select or deselect elements of the vector.
 
 <<vectors04b>>=
-x <- seq(2,20,by=2)
-x[c(TRUE,TRUE,FALSE)]        # skips every third element (recycling!)
+x <- seq(2, 20, by=2)
+x[c(TRUE, TRUE, FALSE)]      # skips every third element (recycling!)
 x[x > 10]                    # more typical use of boolean in selection
 @
 
@@ -765,7 +770,7 @@ x[x > 10]                    # more typical use of boolean in selection
 Negative indices are used to omit elements.
 
 <<vectors04b>>=
-x <- seq(2,20,by=2)
+x <- seq(2, 20, by=2)
 x[c(TRUE,TRUE,FALSE)]        # skips every third element (recycling!)
 x[x > 10]                    # more typical use of boolean in selection
 @
@@ -776,9 +781,9 @@ Here are some more examples.
 \Rindex{tolower()}%
 
 <<vectors04d>>=
-notes <- toupper(letters[1:7]); a <- 1:5; b <- seq(10,100,by=10)
+notes <- toupper(letters[1:7]); a <- 1:5; b <- seq(10, 100, by=10)
 toupper(letters[5:10])                
-paste(letters[1:5],1:3,sep='-')
+paste(letters[1:5], 1:3, sep='-')
 a+b
 (a+b)[ a+b > 50]
 length((a+b)[a+b > 50])
@@ -810,10 +815,13 @@ table(a+b > 50)
 
 
 We can add additional variables to an existing data frame by simple assignment.
-It is an error to add a vector of the wrong length.
+
+<<adding-variable2>>=
+summary(iris)
+@
 
 <<adding-variable>>=
-iris$SLength <- cut(iris$Sepal.Length,4:8)
+iris$SLength <- cut(iris$Sepal.Length, 4:8)
 @
 
 <<adding-variable2>>=
@@ -821,9 +829,11 @@ summary(iris)
 @
 \Rindex{summary()}
 
+It is an error to add a vector of the wrong length.
+
 
 \subsection{Slicing and dicing}
-\authNote{This section could probably be improved/expanded --rjp}%
+\authNote{NH to expand}
 
 
 &reshape()& provides a flexible way to change the arrangement of data.  
@@ -838,8 +848,8 @@ observation is.  For example,
 <<traffic-reshape>>=
 traffic
 
-reshape(traffic[,-2], idvar="year",ids=row.names(traffic),
-        times=names(traffic)[3:6],timevar="state",
+reshape(traffic[,-2], idvar="year", ids=row.names(traffic),
+        times=names(traffic)[3:6], timevar="state",
         varying=list(names(traffic)[3:6]),
         v.names="deathRate",
         direction="long") -> longTraffic
@@ -1016,7 +1026,7 @@ could have used a list instead.}
 
 <<defFun03>>=
 favstats <- function(x) {
-	c(mean(x),median(x), sd(x))
+	c(mean(x), median(x), sd(x))
 }
 favstats((1:20)^2)
 @
@@ -1028,12 +1038,12 @@ We'll also add an explicit &return()&.
 
 <<defFun04>>=
 favstats <- function(x) {
-    result <- c(min(x),max(x),mean(x),median(x), sd(x))
+    result <- c(min(x), max(x), mean(x), median(x), sd(x))
     names(result) <- c("min","max","mean","median","sd")
     return(result)
 }
 favstats((1:20)^2)
-summary(Sepal.Length~Species,data=iris,fun=favstats)
+summary(Sepal.Length~Species, data=iris, fun=favstats)
 @
 
 Notice how nicely this works with &summary()& from the &Hmisc& package.
