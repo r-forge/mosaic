@@ -89,7 +89,7 @@ The \verb!histogram()! function is used to create a histogram.
 
 \vspace{-4mm}
 \begin{center}
-<<cesd-hist,fig=TRUE,width=3,height=1.6>>=
+<<cesd-hist,fig=TRUE,width=5,height=1.9>>=
 histogram(~ cesd, HELP)
 @
 \end{center}
@@ -109,15 +109,15 @@ stem(female$cesd)
 
 The \verb!dotPlot()! function is used to create a dotplot (a la Fathom).
 
-\vspace{-8mm}
+%\vspace{-8mm}
 \begin{center}
-<<cesd-dot,fig=TRUE,width=3,height=1.6>>=
+<<cesd-dot,fig=TRUE,width=5,height=1.9>>=
 dotPlot(~ cesd, data=female)
 @
 \end{center}
 We could also have made our subset ``on the fly'', just for the purposes of graphing:
 \begin{center}
-<<cesd-dot2,fig=TRUE,width=3,height=1.6>>=
+<<cesd-dot2,fig=TRUE,width=5,height=1.9>>=
 dotPlot(~ cesd, data=HELP, subset=(sex=='female'))
 @
 \end{center}
@@ -157,87 +157,6 @@ xpnorm(1.96, 0, 1)
 
 \authNote{I would like to add superimposed normal on top of a density plots.  Help!}
 
-\subsection{Power Calculations}
-
-\authNote{NH: my plan is to move this later in the section, with reference to Simulation.
-I also plan to recast using do() if possible}
-
-\noindent
-Let $X_1, ..., X_{25}$ be i.i.d. $N(.3, 1)$.  Consider testing the null hypothesis $H_0: \mu=0$ versus $H_A: \mu>0$ at significance level $\alpha=.05$.  Compare the power of the sign test and the power of the test based on normal theory (one sample one sided t-test) assuming that $\sigma$ is known.
-
-\noindent
-We calculate the power of the sign test as follows. The probability that $x > 0$, given that $H_A$ is true:
-<<>>=
-1-pnorm(0,.3,1)
-@
-\noindent
-Using $pbinom$, we can find the rejection region and the critical value. We reject when $t < 0.05$:
-<<>>=
-sim=round(1-pbinom(0:25, 25, .5), 3)
-lsim=length(sim[sim>0.05]);lsim
-# include plot of dbinom() under null + alternative
-@
-\noindent
-Looking at the distribution of this, we see that the rejection region is $X_i > 17$. Given that $p = .6179$, we can now find the probability that $\delta > 0$ given $H_A$:
-<<>>=
-powersign=1-pbinom(17, 25, .6179); powersign
-@
-\noindent
-Thus, the power of the sign test is approximately \Sexpr{round(powersign, 4)}.
-
-\medskip
-\noindent
-We then calculated the power of the test based on normal theory as follows:
-First we found the rejection region.
-
-<<>>=
-# Under the null P(X>=17) = 1 - P(X<16) =
-1-pbinom(16, 25, .5) # = 0.0539, our alpha level.
-alpha=.0539 # alpha not wholly = 0.05 since there are only a discrete set of values.
-n=25; sigma=1 # given
-sediff=sqrt(2*sigma^2/n)
-tstar=qnorm(1-alpha, 0, sediff) # 1-alpha = .9461
-# So we're actually getting a 94.61% CI
-@
-Therefore, we reject for observed values greater than \Sexpr{round(tstar,3)}.  Then, to calculate the power of this one-sided test we find the area under the alternative hypothesis to the right of our t*.
-<<>>=
-powert=1-pnorm(tstar, .3, 1)
-@
-Thus, the power of the test based on normal theory is \Sexpr{round(powert,3)}.
-To check this we can use the {\tt power.t.test()} in R.
-<<>>=
-alpha=1-pbinom(16, 25, .5)
-power.t.test(n=25, delta=.3, sd=1, sig.level=alpha, alternative="one.sided",
-type="one.sample")$power
-@
-
-Comparing the two methods we see that the normal theory power calculation is greater than the sign test power calculation.
-
-We can simulate the power of the sign test for 1000 samples to verify and check our answer:
-<<>>=
-numsim=1000
-ressign=numeric(numsim)
-for (i in 1:numsim){
-x=rnorm(25, 0, 1)
-ressign[i]=sum(x>0)
-}
-powersign=sum(ressign>17)/numsim
-@
-
-The power of the sign test using a simulation is approximately \Sexpr{round(powersign,3)}. The difference between the analytic and empirical solutions is not unusual because we expect some variability with a simulation.
-
-Similarly, we can simulate the power of the test based on normal theory for 1000 samples:
-<<>>=
-numsim=1000
-resnorm=numeric(numsim)
-for (i in 1:numsim){
-x=rnorm(25, 0, 1)
-resnorm[i]=t.test(x, type="one.sided")$p.value
-}
-powernorm=sum(resnorm<.05)/numsim
-@
-
-We find the power to be approximately \Sexpr{round(powernorm,3)}.
 
 
 
@@ -246,7 +165,7 @@ We find the power to be approximately \Sexpr{round(powernorm,3)}.
 \subsection{Numerical Summaries}
 
 <<homeless-table>>=
-table(HELP$homeless)
+xtabs(~ homeless, HELP)
 perctable(HELP$homeless)     # display table using percentages
 @
 
@@ -266,9 +185,10 @@ prop.test(table(HELP$homeless))
 \subsection{Goodness of Fit Tests}
 
 <<gof>>=
-table(HELP$substance)
+substab = xtabs(~ substance, HELP)
+substab
 perctable(HELP$substance)
-chisq.test(table(HELP$substance), p=c(1/3, 1/3, 1/3))
+chisq.test(substab, p=c(1/3, 1/3, 1/3))
 @
 
 
@@ -280,8 +200,9 @@ chisq.test(table(HELP$substance), p=c(1/3, 1/3, 1/3))
 
 \subsection{Scatterplots}
 
-<<xyplot,fig=TRUE>>=
+<<xyplot,fig=TRUE,width=5,height=3.9>>=
 xyplot(cesd ~ mcs, data=HELP)
+ladd(panel.loess(HELP$mcs, HELP$cesd))
 @
 
 \subsection{Correlation}
@@ -291,19 +212,68 @@ with(HELP, cor(cesd, mcs))
 
 \subsection{Simple Linear Regression}
 
+<<lm>>=
+model <- lm(cesd ~ mcs, data=HELP)
+summary(model)
+@
+
+<<lmhist,fig=TRUE,width=5,height=1.9>>=
+histogram(~ residuals(model))
+@
+
+<<lmplot,fig=TRUE,width=5,height=3.9>>=
+plot(model)
+@
+
 \section{Two Categorical Variables}
 
 \subsection{Cross classification Tables}
 
 \subsubsection{From Raw Data}
 <<homeless-sex>>=
-table(HELP$homeless, HELP$female)
-xtabs(~ homeless + female, HELP)     
+xtabs(~ homeless + sex, HELP)     
 @
 
 \subsubsection{Building Cross Tables from Already Summarized Data}
 
+\begin{verbatim}
+> mytab <- enterxtab()
+Row variable name: 
+1: sex
+Read 1 item
+Row variable levels: 
+1: male
+2: female
+3:                 # entered a blank line here
+Read 2 items
+Column variable name: 
+1: status
+Read 1 item
+Column variable levels: 
+1: homeless
+2: housed
+3:                 # and here
+Read 2 items
+Row 1: 
+1: 169 40
+Read 2 items
+Row 2: 
+1: 177 67
+Read 2 items
+> mytab
+        status
+sex      homeless housed
+  male        169     40
+  female      177     67
+\end{verbatim}
+
+\authNote{Suggestions about how to format this?}
+
 \subsubsection{Graphical Summaries}
+
+<<mosaicplot,fig=TRUE,width=5,height=3.9>>=
+with(HELP, mosaicplot(table(homeless, sex)))
+@
 
 \subsection{Chi-squared tests}
 
@@ -312,7 +282,7 @@ xtabs(~ homeless + female, HELP)
 \subsection{Fisher's Exact Test}
 
 <<help-fisher>>=
-with(HELP, fisher.test(homeless, female))
+with(HELP, fisher.test(homeless, sex))
 @
 
 \section{Quantitative Response to a Categorical Predictor}
@@ -362,9 +332,9 @@ displays that women tend to have slightly higher CESD scores than men.
 \authNote{Should mention use of \verb!xyplot()! when the sample sizes are small.
 No reason to compute 5-number summaries of 10 or fewer numbers really.}
 
-\vspace{-8mm}
+%\vspace{-8mm}
 \begin{center}
-<<cesd-box,fig=TRUE,width=3,height=1.6>>=
+<<cesd-box,fig=TRUE,width=5,height=1.9>>=
 bwplot(cesd ~ sex, data=HELP)
 @
 \end{center}
@@ -407,7 +377,7 @@ summary(glm(homeless ~ age + female, binomial, data=HELP))
 
 \subsection{Kaplan-Meier plot}
 
-<<help-km, fig=TRUE>>=
+<<help-km, fig=TRUE,width=5,height=3.9>>=
 library(survival)
 fit <- survfit(Surv(dayslink, linkstatus) ~ treat, data=HELP)
 plot(fit, conf.int=FALSE, lty=1:2)
@@ -443,6 +413,88 @@ summary(lm2)
 <<help-multreg3>>=
 anova(lm1, lm2)
 @
+
+\section{Power Calculations}
+
+\label{sec:onesamppower}
+
+While not generally a major topic in introductory courses, power and sample size calculations
+help to reinforce key ideas in statistics.  In this section, we will explore how R
+can be used to undertake power calculations using analytic approaches (see \ref{sec:power}
+for simulation based approaches).  We consider a simple problem with two tests (t-test and
+sign test) of
+a one-sided comparison.
+
+Let $X_1, ..., X_{25}$ be i.i.d. $N(0.3, 1)$.  Consider testing the null hypothesis $H_0: \mu=0$ versus $H_A: \mu>0$ at significance level $\alpha=.05$.  Compare the power of the sign test and the power of the test based on normal theory (one sample one sided t-test) assuming that $\sigma$ 
+is known.
+
+\subsection{Sign test}
+
+We first start by calculating the Type-I error rate for the sign test.  Here we want to
+reject when the number of positive values is large.  Under the null hypothesis, this is
+distributed as a Binomial random variable with n=25 trials and p=0.5 probability of being
+a positive value.  Let's consider values between 15 and 19.
+<<pbinom>>=
+xvals = 15:19
+probs = 1 - pbinom(xvals, 25, 0.5)
+cbind(xvals, probs)
+@
+So we see that if we decide to reject when X = the number of positive values is
+17 or larger, we will have an $\alpha$ level of \Sexpr{round(1-pbinom(16, 25, 0.5), 3)},
+which is near the nominal value in the problem.
+
+We calculate the power of the sign test as follows. The probability that $X > 0$, given that $H_A$ is true is given by:
+<<pnorm1>>=
+1-pnorm(0, 0.3, 1)
+@
+We can view this graphically using the command:
+<<pnorm2,fig=TRUE,width=5,height=1.9>>= 
+xpnorm(0, 0.3, 1)
+@
+
+So now we need to find the power under the alternative, which is equal to the probability of getting 17 or more positive values,
+given that $p=0.6179$:
+<<pbinom2>>=
+1 - pbinom(16, 25, 0.6179)
+@
+
+The power is modest at best.
+
+\subsection{T-test}
+
+We next calculate the power of the test based on normal theory.  To keep the comparison
+fair, we will set our $\alpha$ level equal to 0.5388.
+First we need to find the rejection region.  
+
+<<>>=
+alpha <- 1-pbinom(16, 25, .5) # = 0.0539, our alpha level.
+n <- 25; sigma <- 1 # given
+stderr <- sqrt(sigma^2/n)
+zstar <- qnorm(1-alpha, 0, 1)
+zstar
+crit <- zstar*stderr
+crit
+@
+Therefore, we reject for observed means greater than \Sexpr{round(crit,3)}.  
+
+To calculate the power of this one-sided test we find the area 
+under the alternative hypothesis 
+that is to the right of this cutoff:
+<<>>=
+power <- 1 - pnorm(crit, 0.3, stderr)
+power
+@
+Thus, the power of the test based on normal theory is \Sexpr{round(power,3)}.
+To provide a general check (or for future calculations of this sort) we can use the {\tt power.t.test()} in R.
+<<>>=
+power.t.test(n=25, delta=.3, sd=1, sig.level=alpha, alternative="one.sided",
+type="one.sample")$power
+@
+
+This yields a similar estimate to the value that we calculated directly.  
+Overall, we see that the t-test has higher power than the sign test, if the underlying
+data are truly normal.  It's useful to have students calculate power empirically, 
+as demonstrated for this example in \ref{sec:power}.
 
 \section{Design and Randomization}  
 

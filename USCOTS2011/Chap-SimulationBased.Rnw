@@ -1373,6 +1373,7 @@ We'll discuss how to use such simulations to compute power in Section \ref{sec:p
 
 \label{sec:power}
 
+\subsection{Linear regression}
 With a specific alternative hypothesis in hand, the concept of
 statistical power is not hard to address.  Returning to the example of
 vitamin D and high blood pressure, imagine we decided to do a
@@ -1401,7 +1402,7 @@ summary( lm( systolic ~ D, data=planet.alt(n=10) ))$coef[2,4]
 
 Now you are in a position to repeat this many times:
 <<>>=
-s = do(100)*summary( lm( systolic ~ D, data=planet.alt(n=10) ))$coef[2,4]
+s = do(100) * summary( lm( systolic ~ D, data=planet.alt(n=10) ))$coef[2,4]
 @ 
 
 The power is the fraction of trials where the p-value is less than the
@@ -1409,6 +1410,11 @@ stated signficance level:
 <<>>=
 mean( s < 0.05 )
 @ 
+
+\subsection{For one sample test}
+
+\authNote{implement a simulation based approach for section \ref{sec:onesamppower}}
+
 
 \section{Exercises, Problems, and Activities}
 
