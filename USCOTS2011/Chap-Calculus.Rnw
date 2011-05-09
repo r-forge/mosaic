@@ -12,7 +12,13 @@ source('setup.R')
 @ 
 
 
-\chapter{Calculus in R}
+\chapter{Mathematics in R}
 
-authNote{Mathematics rather than just calculus?}
+\subsection{Calculus}
+
+\subsection{Discrete}
+
+\subsection{Linear Algebra}
+
+\subsection{Differential Equations}
 
