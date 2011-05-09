@@ -45,7 +45,8 @@ do = function(n=1, cull=NULL, mode=NULL) {
 		return(result)
 	}
 	if (any(class(object)=='htest') ) {
-		result <-  data.frame( statistic = object$statistic, 
+		result <-  data.frame( 
+					  statistic = object$statistic, 
 		              parameter = object$parameter,
 					  p.value = object$p.value,
 					  conf.level = attr(object$conf.int,"conf.level"),
@@ -55,6 +56,7 @@ do = function(n=1, cull=NULL, mode=NULL) {
 					  alternative = object$alternative,
 					  data = object$data.name
 					  )
+		if ( ! is.null( names(object$statistic) ) ) names(result)[1] <- names(object$statistic)
 		return(result)
 	}
 	if (any(class(object)=='table') ) {
