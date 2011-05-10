@@ -21,15 +21,16 @@ Intro Stats students Spring 2011.}
 
 \section{Welcome to \R\ and \Rstudio}
 
-\R\ is a system for statistical computation and graphics.  We will use \R\ 
-for several reasons:
+\R\ is a system for statistical computation and graphics.  We use \R\ for several reasons:
 \begin{enumerate}
-\item \R\ is open-source and freely available for Mac, PC, and Linux machines.  This means that there is no restriction on having to license a particular software program, or have
+\item \R\ is open-source and freely available for Mac, PC, and Linux machines.
+This means that there is no restriction on having to license a particular
+software program, or have
 students work in a specific lab that has been outfitted with the technology of choice.
 \item \R\ is user-extensible and user extensions can easily be made available to others.
 \item \R\ is commercial quality.  It is the package of choice for many statisticians and those
 who use statistics frequently.  
-\item \R\ is becoming very popular with biologists, especially in certain
+\item \R\ is becoming very popular with statisticians and scientists, especially in certain
 sub-disciplines, like genetics.  Articles in research journals such as \textit{Science} often
 include links to the \R\ code used for the analysis and graphics presented.
 \item
@@ -38,15 +39,20 @@ methods are often available first in \R.
 \end{enumerate}
 
 \Rstudio\ provides access to \R\ in a web browser.  This has some additional
-advantages, in that it simplifies installation of R, allows work to begin on one machine, and be picked up seamlessly later on somewhere else.
+advantages: no installation is required, the interface has some additional user-friendly components,
+and work begun on one machine can be picked up seamlessly later on somewhere else.
 
-The URL is
+The URL for the \RStudio\ beta server is
 \begin{center}
 \url{http://beta.rstudio.org/}
 \end{center}
-You should be able to log in using the Gmail address that you provided earlier.
-Once you have logged in, you will see something like 
-Figure~\ref{fig:Rstudio-bigview}.
+
+It is also possible to download \RStudio\ server and set up your own server or \RStudio\ desktop
+for stand-alone processing.
+
+
+%You should be able to log in using the Gmail address that you provided earlier.
+Once you have logged in to an \RStudio\ server, you will see something like Figure~\ref{fig:Rstudio-bigview}.
 
 \begin{figure}
 \begin{center}
@@ -68,7 +74,7 @@ Be sure to use a fixed-width font (like Courier) when you display \R\ code.  Thi
 properly.
 \end{problem}
 
-\pagebreak
+%\pagebreak
 \section{Using R as a Calculator}
 \R\ can be used as a calculator.  Try typing the following commands in the console panel.
 
@@ -78,6 +84,9 @@ properly.
 sqrt(16)
 @
 You can save values to named variables for later reuse.
+\FoodForThought[\centerline{Tip}]{It's probably best to settle on using 
+one or the other of the right-to-left assignment operators rather than to switch
+back and forth.  The authors of this document have different preferences.}%
 
 <<variables1>>=
 product = 15.3 * 23.4       # save result
@@ -165,48 +174,58 @@ which of these are loaded.
 Here are some packages we will use frequently:
 \begin{itemize}
 \item \verb!lattice!  (for graphics; this will always be installed in \R)
-\item \verb!mosaic!  (for teaching statistics; this will need to be installed in \R
+\item \verb!mosaic!  (for teaching statistics; this will need to be installed in \R\
 from CRAN, see section \ref{sec:CRAN})
 %\item \verb!Hmisc!    (a package with some nice utilities; available on CRAN)
 %\item \verb!vcd!      (a package for visualizing categorical data; available on CRAN)
 %\item \verb!fastR!    (a package with some nice utilities; available on CRAN)
-\item \verb!abd!      (a package with some nice datasets; available on CRAN)
+%\item \verb!abd!      (a package with some nice datasets; available on CRAN)
 \end{itemize}
-There may be others that we use from time to time as well.  You should install
+There may be others that we use from time to time as well.  
 %\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
 \authNote{Do we still need these other packages?}
-\verb!Hmisc! and \verb!mosaic! 
-the first time you use \R\ 
-so that they are always available to you on that machine.
+\authNote{R': I think we can reduce to \verb!lattice! and \verb!mosaic!.  Possibly \verb!Hmisc!.
+I'll remove dependencies on \verb!abd! as I go.}%
+You should install %\verb!Hmisc! and 
+\verb!mosaic! the first time you use \R.
+One a package is installed, it is available to be loaded in the current or any future session.
 You can install these packages 
 by clicking on the ``Install Package" button and following the directions
-or by using the following commands:
+or by using the following command:
 
 <<install,eval=F>>=
-install.packages('Hmisc')           # note the quotation marks 
-install.packages('mosaic')
+install.packages('mosaic')               # note the quotation marks 
 @
 
 Once these are installed, you can load them by checking the box in the 
-\tab{Packages} tab or by using the commands
+\tab{Packages} tab or by using \verb!require()! (or \verb!library()!)
 
-\authNote{Need to move findData into mosaic}
+\authNote{R': Can't move \verb!findData()! into \verb!mosaic! since it is only for finding data in 
+\verb!abd! and is designed for use with a text book to help figures out data frame names to match
+examples and problems.}%
 
 <<require>>=
-require(lattice)
-require(Hmisc)
-require(abd)   
+require(lattice)         # could also use library(lattice)
 require(mosaic)
 @
 
+\authNote{Add bibliography entries for books associated with packages.}
 \begin{problem}
-\authNote{Can we tweak this in some manner?}
-Install and load the following packages:
-\verb!Hmisc!,
-\verb!vcd!,
-\verb!fastR!, and 
-\verb!abd!.
+Install and load the \verb!mosaic! package.
 Make sure \verb!lattice! is also loaded (no need to install it, it is already installed).
+
+Here are some other packages you may like to install as well.
+following packages:
+\begin{itemize}
+\item
+\verb!Hmisc! (Frank Harell's miscellaneous utilities),
+\item
+\verb!vcd! (visualizing categorical data),
+\item
+\verb!fastR! (\textit{Foundations and Applications of Statistics}, and 
+\item
+\verb!abd! (\textit{Analysis of Biological Data}).
+\end{itemize}
 \end{problem}
 
 
@@ -219,20 +238,8 @@ using
 data()
 @
 
-The \verb!abd! package contains data sets from our text,
-\textit{The Analysis of Biological Data}.  The \verb!findData()! function
-can help you determine the correct name for the data set you are looking
-for.
-
-<<findData-human>>=
-findData('human')         # all data sets with 'human' in the name
-@
-
-<<findData-2>>=
-findData(2)               # all data sets in chapter 2
-@
-
-Typically you can use data sets by simply typing their names.  But if you have already
+Typically (provide the author of the package allowed for lazy loading of data) 
+you can use data sets by simply typing their names.  But if you have already
 used that name for something or need to refresh the data after making some changes you no longer
 want, you can explicitly load the data using the \verb!data()! function with the name of the 
 data set you want.
@@ -280,12 +287,10 @@ summary(iris)
 head(iris)
 @
 In interactive mode, you can also try
-
 <<view,eval=F,echo=T>>=
 View(iris)
 @
 to see the data or 
-
 <<view,eval=F,echo=T>>=
 ?iris
 @
@@ -298,19 +303,38 @@ the following syntax:
 <<dollar-sign,eval=F>>=
 dataframe$variable
 @
+or 
+<<eval=false>>=
+with(dataframe, variable)
+@
 
-For example,
+For example, either of 
 
-<<iris-Sepal-Length>>=
+<<iris-Sepal-Length,eval=false>>=
 iris$Sepal.Length
 @
-shows the contents of the \verb!Sepal.Length! variable.  But this isn't very useful 
-for a large data set.  We would prefer to compute numerical or graphical summaries.
-We'll do that shortly.
+or 
+<<>>=
+with(iris, Sepal.Length)
+@
+shows the contents of the \verb!Sepal.Length! variable in the following format.
+<<echo=false>>=
+with(iris, Sepal.Length)
+@
 
-The \verb!attach()! function in R can be used to make objects within dataframes accessible in R with fewer keystrokes, but we strongly discourage its use, as it often leads to name conflicts.
-The Google R Style Guide (\url{http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html}) echoes this advice, stating that \emph{The possibilities for creating errors when using attach are numerous. Avoid it.} It is far better to directly access variables using the \verb!\$! syntax
-or to use the \verb!with()! function.
+But this isn't very useful for a large data set.  
+We would prefer to compute numerical or graphical summaries.  We'll do that shortly.
+
+The \verb!attach()! function in R can be used to make objects within dataframes
+accessible in R with fewer keystrokes, but we strongly discourage its use, as
+it often leads to name conflicts.  
+\Caution{Avoid the use of \texttt{attach()}.}
+The Google R Style Guide
+(\url{http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html})
+echoes this advice, stating that \emph{The possibilities for creating errors
+when using attach are numerous. Avoid it.} 
+It is far better to directly access
+variables using the \verb!\$! syntax or to use the \verb!with()! function.
 
 \subsection{Using Your Own Data}
 \Rstudio\ will help you import your own data.  To do so use the ``Import Dataset" 
@@ -355,6 +379,21 @@ In any case, I agree that we should have a section on this somewhere.
 [RJP]
 }%
 
+If you are not using \RStudio, you can read files using
+\verb!read.csv()! or \verb!read.table()! (for white space delimited files).
+The \verb!mosaic! package includes a function called \verb!read.file()! that uses 
+slightly different default settings and infers whether it should use \verb!read.csv()!,
+\verb!read.table!, or \verb!load()! based on the file name.  
+
+Each of these functions 
+also accepts a URL in place of a file name, which provides an easy way to distribute data
+via the Internet:
+<<>>=
+births <- read.table('http://www.calvin.edu/~rpruim/data/births.txt', header=TRUE)
+head(births)        # number of live births in the US each day of 1978.
+@
+\authNote{rjp: use \texttt{read.file} after fixing bug?}
+
 \begin{problem}
 Enter the following small data set in an Excel or Google spreadsheet and import the 
 data into \Rstudio.
@@ -365,46 +404,63 @@ data into \Rstudio.
 
 You can import directly from Google.  From Excel, save the file as a csv and
 import that (as a text file) into \Rstudio.  Name the data frame \texttt{JunkData}.
-Copy and paste the results of 
-
-<<junkdata,eval=F>>=
-JunkData
-@
-into your report.  (Remember to use a fixed width font like Courier for all \R\ input and 
-output.)
 \end{problem}
 
+\subsection{Putting Data Into a Package}
+
+It is not that difficult to take a collection of csv files (a format available for many books)
+and put them all into a package.
+The \verb!abd! package contains data sets from \textit{The Analysis of Biological Data}, for example.  
+Kevin Middleton and Randall Pruim contacted the authors and obtained permission to 
+build and disseminate this package.
+
+The \verb!findData()! function makes in \verb!abd! it easy to map examples and exercises in that book to 
+data frame names in the \verb!abd! package.
+
+<<findData-human>>=
+findData('human')         # all data sets with 'human' in the name
+@
+
+<<findData-2>>=
+findData(2)               # all data sets in chapter 2
+@
+
+For information on how to create such packages, consult the \textit{Writing R Extensions} manual
+on CRAN.
 
 \section{Summarizing Data}
 
 \subsection{A Few Numerical Summaries}
 \R\ includes functions that compute a wide range of numerical and graphical summaries.  
 Most of the numerical summaries already familiar to you have obvious names.  
-Here are a few examples.  (If you don't know what some of these -- like IQR -- are, don't worry;
-we'll be discussing them soon.)
+Here are a few examples.  
+%(If you don't know what some of these -- like IQR -- are, don't worry;
+%we'll be discussing them soon.)
 
 <<numerical-summaries>>=
-mean(iris$Sepal.Length)
-median(iris$Sepal.Length)
-sd(iris$Sepal.Length)
-quantile(iris$Sepal.Length)
+with(iris, mean(Sepal.Length))                  # or mean(iris$Sepal.Length)
+with(iris, median(Sepal.Length))                # or median(iris$Sepal.Length)
+with(iris, sd(Sepal.Length))                    # or sd(iris$Sepal.Length)
+with(iris, quantile(Sepal.Length))              # or quantile(iris$Sepal.Length)
+with(iris, IQR(Sepal.Length))                   # or IQR(iris$Sepal.Length)
+IQR(iris$Sepal.Length)
 @
 
-The \verb!favstats()! function in the \verb!abd! package computes several numerical 
+The \verb!favstats()! function in the \verb!mosaic! package computes several numerical 
 summaries all at once.
 
 <<favstats>>=
-require(abd)             # if you haven't already loaded the abd package
+require(mosaic)               # if you haven't already loaded the mosaic package
 favstats(iris$Sepal.Length)
 @
 
 Here's something a little fancier.
 
 <<summary>>=
+require(Hmisc)
 summary(Sepal.Length ~ Species, data=iris, fun=favstats)
 @
-(Note: This requires installation of two add-on packages: \verb!Hmsic! 
-and \verb!abd!.)
+(Note: This requires installation of the \verb!Hmsic! package.)
 
 \begin{problem}
 What is the average (mean) \emph{width} of the sepals in the \verb!iris! data set?
@@ -431,12 +487,15 @@ plotname( y ~ x | z, data=dataname, groups=grouping_variable, ...)
 @
 \begin{itemize}
 \item
-Our most common plots have the following names:
+Here are the names of several \verb!lattice! plots:
 \begin{itemize}
 \item \verb!dotPlot! (notice the capital P; \verb!dotplot()! does something different)
-\item \verb!histogram!
-\item \verb!bwplot!
-\item \verb!xyplot!
+\footnote{\texttt{dotPlot()} is in the \texttt{mosaic} package and was created because \texttt{dotplot()} in
+the \texttt{lattice} package makes something different from what we call a dot plot.}
+\item \verb!histogram!  (for histograms)
+\item \verb!bwplot!  (for boxplots)
+\item \verb!xyplot!  (for scatter plots)
+\item \verb!qqmath!  (for quantile-quantile plots)
 \end{itemize}
 \item
 \verb!x! is the name of the variable that is plotted along the horizontal 
@@ -527,13 +586,12 @@ bwplot(~Sepal.Length|Species, data=iris)
 \vspace{-8mm}
 
 But there are betters ways to do this.
-This is better, but the species names run into each other.
 \begin{center}
 <<iris-bwplot-2d,cache=T,fig=T,width=2,height=1.5,print=T>>=
 bwplot(Sepal.Length~Species, data=iris)
 @
 \end{center}
-
+This is better, but the species names run into each other.
 We could fix that run-together text by using abbreviated names or rotating the
 labels 45 or 90 degrees.  Instead of those solutions, we can also just reverse the roles
 of the horizontal and vertical axes.
