@@ -215,8 +215,8 @@
 % unless someone wants to recode all that.
 \newcommand{\VN}[1]{\texttt{#1}}
 \newcommand{\vn}[1]{\texttt{#1}}
-\newcommand{\DFN[1]{\texttt{#1}}
-\newcommand{\dfn[1]{\texttt{#1}}
+\newcommand{\DFN}[1]{\texttt{#1}}
+\newcommand{\dfn}[1]{\texttt{#1}}
 % and for models
 \newcommand{\model}[2]{{$\,$\hbox{#1}\ \ensuremath{\sim}\ \hbox{#2}}}
 
