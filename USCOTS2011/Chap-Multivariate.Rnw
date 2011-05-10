@@ -59,11 +59,8 @@ find proportions and medians/quantiles.  These operations are
 Here we'll examine the consequences of adding in a new basic operation
 that is not in the traditional high-school curriculum, but which is
 actually quite consistent with the ``Common Core'' curriculum being
-introduced by many U.S. states.
+introduced by many U.S. states.\cite{common-core-2010}
 
-\authNote{DTK: Need citation to the common core.  Common Core State
-  Standards Initiative, ``Common Core State Standards for
-  Mathematics'', \texttt{http://www.corestandards.org/}}
 
 The operation is fitting multivariate linear models.  Modern software
 makes it no more arduous than finding a mean or standard deviation.
@@ -127,7 +124,20 @@ $$\mbox{height} = h( \mbox{age}, \mbox{sex} ) = -2\ \mbox{age} +
 \section{The Language of Models}
 
 There is a language for defining models that is different from
-writing down an algebraic formula.  The language has just a few components:
+writing down an algebraic formula.  
+
+You have already seen some aspects of this notation in graphics
+commands, e.g. verb+height ~ sex+.  You can read this in any of several
+ways:
+\begin{itemize}
+  \item Break down \VN{height} by \VN{sex} (as in a boxplot)
+  \item \VN{height} versus \VN{sex}
+  \item Model \VN{height} as a function of \VN{sex}.  
+\end{itemize}
+In this section, you'll see more complicated models, involving
+multiple variables.  This makes it worthwhile to assign more precise
+labels to the different components of the modeling language, which
+has just a few components:
 \begin{itemize}
   \item The response variable.  This is the output of the model function,
     \VN{height} in the above examples.
@@ -137,6 +147,8 @@ writing down an algebraic formula.  The language has just a few components:
     variables themselves and a special term called the ``intercept.''
     There are a few others, but we'll deal with them as we come to them.
 \end{itemize}
+(A more comprehensive introduction is given in Chapters 4 and 5 of \cite{kaplan-2009-book}.)
+
 
 As an example, consider this simple formula:
 $$ z = 7 + 3 x + 4.5 y.$$
@@ -161,10 +173,10 @@ times in the 100-meter free-style race.
 
 <<read-swim,echo=false>>=
 swim = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/swim100m.csv")
-swim.plot = function(col='black',show.legend=TRUE){
+swim.plot = function(col='black',show.legend=TRUE,...){
 plot( time ~ year, pch=21-2*as.numeric(sex), cex=1.4,xlim=c(1899,2010),
      cex.lab=1.3, cex.axis=1.3,data=swim,xlab='Year',
-     ylab='Record Time (secs)',col=col)
+     ylab='Time (secs)',col=col,...)
   if( show.legend) legend(1980,92, legend=c("Women","Men"),pch=c(19,17),cex=1.3)
 }
 @ 
@@ -180,11 +192,190 @@ You can see the steady improvement in records over the decades from
 
 Now to build some models.
 
+\subsection{\model{\VN{Time}}{1 + \VN{Year}}}
+
+The model \model{\VN{time}}{1 + \VN{year}} gives the familiar
+straight-line form: the intercept term (written simply as 1) and a term corresponding to the
+linear dependence on \VN{year}.
+
+<<swim-data-1,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+swim.mod.plot = function(form,dots=FALSE, lwd=4) {
+  t = as.character(form)
+  t = paste(t[c(2,1,3)],collapse=" ")
+  foo = lm( form, dat=swim)
+  swim.plot(col='gray', show.legend=FALSE,
+            main=t)
+  if (dots)
+      points( foo$fitted ~ swim$year, pch=20, cex=1.7,col='black')
+  else 
+      abline(foo$coef, lwd=lwd)
+}
+swim.mod.plot(time ~ year)
+@ 
+
+This model captures some of the pattern evident in the data: that
+swimming times are improving (getting shorter) over the years.  And it
+ignores other obvious features, for example the difference between men's
+and women's times, or the curvature reflecting that records are not
+improving as fast as they did in the early days.
+
+
+\subsection{\model{\VN{Time}}{\VN{Sex}}}
+
+The model \model{\VN{time}}{\VN{sex}} breaks down the swimming times
+according to \VN{sex}:
+
+<<swim-data-2,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+swim.mod.plot(time ~ sex, dots=TRUE)
+@ 
+
+This model reflects the typical difference between men's and women's
+times.  It's oblivious to the trend that records improve over the
+years.  Why?  Because the variable \VN{year} was not included in the model.
+
+\subsection{\model{\VN{Time}}{\VN{Sex}+\VN{Year}}}
+
+The record time evidently depends both on \VN{sex} and \VN{year}, so
+it's sensible to include both variables in the model
+
+<<swim-data-3,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+swim.mod.plot(time ~ sex + year, dots=TRUE)
+@ 
+
+\authNote{DTK: Should these graphics be re-written to display as
+  continuous forms rather than dots?}
+
+This is a straight-line model with separate lines for the different
+sexes. The intercept is different for the different sexes, but the
+slope is the same.  
+This model is able to reflect both the typical reflects the typical difference between men's and women's
+times.  
+
+Students sometimes observe that the function generated by fitting this
+model doesn't respect the ``vertical line test'' taught in high-school
+algebra.  This is a good time to remind students that this is a
+function of \emph{two} variables.  It is indeed a function, and for
+any specific value of the inputs \VN{sex} and \VN{year} gives a single value.
+
+\subsection{\model{\VN{Time}}{\VN{Sex}+\VN{Year} + \VN{Sex}:\VN{Year}}}
+ 
+There are two ways that the previous model, \model{\VN{time}}{\VN{sex}+\VN{year}},  misses obvious features in the
+data: there is no curvature over the years and the slopes are exactly
+the same for men and women.  To construct a model with different
+slopes for men and women requires that we add a term that combines
+both \VN{sex} and \VN{year}.  Such a term is constructed with the syntax
+\VN{sex}:\VN{year} (or, what would amount to the same thing,
+\VN{year}:\VN{sex}).  
+
+<<swim-data-4,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+swim.mod.plot(time ~ sex * year, dots=TRUE)
+@ 
+
+In statistics, such a term is called an \emph{interaction term}.  (In
+mathematics, it's often called a \emph{bi-linear term}.)  It's the
+term that lets you have different slopes for the different sexes.  
+
+The new phrase ``interaction term'' creates a need for a retronym, a way
+to refer to those simple, non-interaction terms that we started with,
+like \VN{sex} and \VN{year}.  (Common retronyms in everyday life are acoustic guitar, snail-mail, 
+World War I, cloth diaper, and whole milk, compound terms that weren't needed
+until electric guitars, e-mail, disposable diapers, and skim milk were
+introduced, and World War II showed that the ``War to End All Wars''
+was mis-named.)
+
+The standard terminology for terms like \VN{sex} and \VN{year} is unfortunate: ``main effect.'' 
+It suggests that interaction terms play a lesser role in modeling.  This is a bad
+attitude, since sometimes the interaction is exactly what you're
+interested in, but the terminology seems enshrined by statistical tradition.
+
+Very often when you are including an interaction term, you want to
+include the main effects as well.  There is a convenient shorthand for
+this: \model{\VN{time}}{\VN{sex}*\VN{year}}
+
+\subsection{The Intercept Only: \model{\VN{Time}}{1}}
+
+It's also possible to have models that have no explanatory variables
+whatsoever.  Just the intercept term appears to the right of the
+modeling $\sim$.
+
+<<swim-data-5,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+swim.mod.plot(time ~ 1, dots=TRUE)
+@ 
+
+As you might expect, by leaving out both \VN{sex} and \VN{year} from
+the model, it doesn't reflect the role of either variable in any way.
+But the model \model{\VN{time}}{1} does get one thing very well: the
+typical record time.  
+
+Think of \model{\VN{time}}{1} as saying ``all the cases are the
+same.''  In some ways, it's analogous to the model
+\model{\VN{time}}{\VN{sex}}.  That model says that ``all men are the
+same, and all women are the same.''  To the difference between 
+\model{\VN{time}}{1} and \model{\VN{time}}{\VN{sex}} is just like the
+difference between a ``grand mean'' and a ``group mean.''
+
+\subsection{Transformation Terms}
+
+You can construct more complicated models by adding in more
+explanatory variables. (Improved swimming gear?  Better training?
+Refinements in technique?).  You can also add in additional terms with
+more structure.  There is a rich variety of ways to do this.
+
+Since many students are familiar (or at least remember vaguely) the
+idea of quadratics and polynomials, they might be interested to see
+that the modeling language can handle this.  Here are three different
+models involving a polynomial dependence on \VN{year}:
+
+<<swim-data-6,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+swim.mod.plot(time ~ poly(year,2), dots=TRUE)
+@ 
+
+<<swim-data-7,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+swim.mod.plot(time ~ sex + poly(year,2), dots=TRUE)
+@ 
+
+<<swim-data-8,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+swim.mod.plot(time ~ sex * poly(year,2), dots=TRUE)
+@ 
+
+Although these models reflect more ``detail'' in the data, namely the
+curvature, they do it in a way that ultimately does not make sense in
+terms of the ``physics'' of world records.
+Notice how the upward facing parabolas eventually produce a pattern
+where the record times increase over the years.  
+
+There are other sorts of nonlinear terms that might be more
+appropriate for modeling this sort of data.  Exponentials, square
+roots, etc., even piecewise linear or bent-line forms are all
+possible within the modeling framework.  
+
+
+\begin{problem}
+{\bf DRAFT Outline} for a swim-data modeling problem: construct a post-war
+variable and add it in.  Several ways to do this: explore which one's give
+models that are most satisfactory to you:
+\begin{itemize}
+  \item postwar = year $>$ 1945
+  \item interaction with postwar and year.
+  \item pmax(year - 1945, 0)
+\end{itemize}
+\end{problem}
+
+
+
 
 
 \section{Finding Formulas from Data}
 
-\section{Genetics before Genes}
+How to fit.
+
+Fitted model values.
+
+Residuals
+
+Predict
+
+\section{Example: Genetics before Genes}
 
 About Galton's data.
 
@@ -204,3 +395,4 @@ About Galton's data.
 
 \section{Sampling bias in survival studies (with a simulation)}
 
+\shipoutProblems
