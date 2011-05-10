@@ -212,6 +212,9 @@
 
 % Looking for a consistent typography for variable names.
 \newcommand{\VN}[1]{{\sf #1}}
+% and for models
+\newcommand{\model}[2]{{$\,$\hbox{#1}\ \ensuremath{\sim}\ \hbox{#2}}}
+
 
 
 
@@ -346,6 +349,12 @@ using color to distinguish.}
   actual variable name and a word that might have a similar name, for
   instance between sex and \VN{sex}.  Use the \verb+\VN{sex}+ command
   to accomplish this.
+  
+\item Model formulas.  Use \verb-\model{A}{B+C}- to generate
+  \model{A}{B+C}.  Often, you may want to use variable names, for instance
+\verb-\model{\VN{height}}{\VN{age}+\VN{sex}}- gives
+\model{\VN{height}}{\VN{age}+\VN{sex}}.
+ 
 
 \end{enumerate}
 
