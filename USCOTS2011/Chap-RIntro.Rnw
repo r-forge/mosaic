@@ -527,7 +527,7 @@ Here's something a little fancier.
 require(Hmisc)
 summary(Sepal.Length ~ Species, data=iris, fun=favstats)
 @
-(Note: This requires installation of the \verb!Hmsic! package.)
+(Note: This requires installation of the \verb!Hmisc! package.)
 
 \begin{problem}
 What is the average (mean) \emph{width} of the sepals in the \verb!iris! data set?

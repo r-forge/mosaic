@@ -226,7 +226,9 @@ Once you've set up your Zillow account, and gotten your Zillow Id,
 the next step is to install the \verb!Zillow! package. The \verb!Zillow! package is
 not on CRAN, but can be obtained from Omegahat (a different repository from CRAN) using
 <<zillowinst,echo=TRUE, eval=FALSE>>=
-install.packages("Zillow", repos="http://www.omegahat.org/R", type="source")
+install.packages("RCurl")
+install.packages("Zillow", repos="http://www.omegahat.org/R", type="source", 
+  dependencies="Depends")
 @
 
 Next, you should initialize your \verb!zillowID! to the value that you 
@@ -244,54 +246,40 @@ allows you to search for information about a particular property) and
 Here we find information about an arbitrary house in California, as well as
 comparable properties.
 <<zillow1>>=
-if(require(Zillow)) {
-  est = zestimate("1280 Monterey Avenue", "94707", zillowId)
-  comps = getComps(rownames(est), zillowId)
-  est
-  rownames(est)
-  names(comps)
-}
+require(Zillow)
+est = zestimate("1280 Monterey Avenue", "94707", zillowId)
+comps = getComps(rownames(est), zillowId)
+est
+rownames(est)
+names(comps)
 @
 <<zillow2>>=
-if(require(Zillow)) {
-  table(comps$bathrooms)
-  table(comps$bedrooms)
-  fivenum(comps$finishedSqFt)
-}
+table(comps$bathrooms)
+table(comps$bedrooms)
+fivenum(comps$finishedSqFt)
 @
-\authNote{NH: Should I use some variant of bwplot instead?  RP: I made one we can use if we like.}%
-<<zillowprices,fig=TRUE,height=4>>=
-if(require(Zillow)) {
-  boxplot(comps$low, comps$taxAssessment, comps$high, names=c("Low", "Assessed", "High"))
-} else {
-  plot(1:10)
-}
+We can compare numerical summaries of the size of the house for houses with different 
+number of bedrooms:
+<<zillowfav>>=
+require(Hmisc)
+summary(finishedSqFt ~ bedrooms, data=comps, fun=favstats)
 @
+We can look at the distribution of Zillow price lower bound, upper bound, as well as assessed
+(tax) value.
+\authNote{NH: that's a better plot, but not the simplest syntax I've ever seen...}
 <<zillowprices-bwplot,fig=TRUE,width=6>>=
-if(require(Zillow)) {
-  bwplot( rep(c("Low", "Assessed", "High"), each=nrow(comps)) ~ c(low, taxAssessment, high),
-  	data=comps, 
-	horizontal=TRUE,
-	xlab='value ($)'
-	)
-} else {
-  plot(1:10)
-}
+bwplot(rep(c("Low", "Assessed", "High"), each=nrow(comps)) ~ c(low, taxAssessment, high),
+  data=comps, horizontal=TRUE, xlab='value ($)')
 @
 
-
-It's interesting that for this property, assessed values tend to lag far behind the lower and
+It's interesting that for these properties, assessed values tend to lag far behind the lower and
 upper Zillow estimates.  We could explore whether this is true in California more generally.
 
 It's possible to plot the results of our comparable properties, which yields a scatterplot
 of price by square feet (with the number of bedrooms as well as the low and high range) as
 well as a scatterplot of amount/finished square feet vs log size in square feet.
 <<zillowcomps,fig=TRUE,height=3.5,width=6>>=
-if(require(Zillow)) {
-  plot(comps)
-} else {
-  plot(1:10)
-}
+plot(comps)
 @
 
 Several aspects of this activity are worth noting: 
