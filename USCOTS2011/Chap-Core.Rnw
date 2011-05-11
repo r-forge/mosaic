@@ -266,7 +266,17 @@ with(HELP, cor(cesd, mcs))
 with(HELP, cor(cbind(cesd, mcs, pcs)))
 @
 
+By default, Pearson correlations are provided, other variants can be specified using the
+\verb!method! option.
+<<corrspear>>=
+with(HELP, cor(cesd, mcs), method="spearman")
+@
+
 \subsection{Simple Linear Regression}
+
+Linear regression models were introduced previously in 
+section \ref{sec:lm}.  These use the same formula interface to specify the outcome 
+and predictors.
 
 
 <<lm>>=
@@ -277,12 +287,28 @@ coef(model)
 summary(model)
 @
 
+
+<<lmclass>>=
+class(model)
+@
+The return value from \verb!lm()! is a linear model object;
+A number of functions can operate on these objects, as
+seen previously with \verb!coef()!.  As an additional example,
+there is a function called \verb!residuals()! that will return a
+vector of
+the residuals.
+
+
 \begin{center}
 <<lmhist,fig=TRUE>>=
 histogram(~ residuals(model))
 @
 \end{center}
-
+In addition, there are 
+default methods 
+to generate plots of
+linear regression objects
+(see \verb!?plot.lm!).
 \begin{center}
 <<lmplot,fig=TRUE,height=4>>=
 plot(model)
@@ -291,7 +317,13 @@ plot(model)
 
 \section{Two Categorical Variables}
 
+
 \subsection{Cross classification Tables}
+
+Cross classification (two-way or $R$ by $C$) tables can be constructed for
+two (or more) categorical variables.  Here we consider the contingency table
+for homeless status (homeless one or more nights in the past 6 months or housed) 
+and sex.
 
 \subsubsection{From Raw Data}
 <<homeless-sex>>=
@@ -299,6 +331,10 @@ xtabs(~ homeless + sex, HELP)
 @
 
 \subsubsection{Building Cross Tables from Already Summarized Data}
+
+It can be handy to create a table from existing summaries.  Here 
+we demonstrate how to generate this for our table of homeless status
+by sex.
 
 \begin{verbatim}
 > mytab <- enterxtab()
@@ -335,8 +371,14 @@ sex      homeless housed
 
 \subsubsection{Graphical Summaries}
 
+Graphical summaries of cross classification tables may be helpful in visualizing
+associations.  Mosaic plots are one example.  Here we see that males tend to be over-represented
+amongst the homeless subjects (as represented by the horizontal line which is higher for
+the homeless rather than the housed).  
+
+
 \begin{center}
-<<mosaicplot,fig=TRUE>>=
+<<mosaicplot,fig=TRUE,height=3.5>>=
 with(HELP, mosaicplot(table(homeless, sex)))
 @
 \end{center}
@@ -347,13 +389,27 @@ with(HELP, mosaicplot(table(homeless, sex)))
 with(HELP, chisq.test(homeless, sex, correct=FALSE))
 @
 
+There is a statistically significant association found: it is unlikely that we would observe
+an association this strong if there was homeless status and sex were independent back in the 
+population.
+
 \subsubsection{Displaying additional information}
+
+When a student finds a significant association, 
+it's important for them to be able to interpret this in the context of the problem. 
+The \verb!xchisq.test()! function provides additional details to help with this process.
 
 <<chisq2>>=
 with(HELP, xchisq.test(homeless, sex, correct=FALSE))
 @
 
+We observe that there are fewer homeless women, and more homeless men that would be expected.
+
 \subsection{Fisher's Exact Test}
+
+An exact test can also be calculated.  This is fairly computationally straightforward for 2 by 2
+tables.  Options to help constrain the size of the problem for larger tables exist
+(see \verb!?fisher.test()!).
 
 <<help-fisher>>=
 with(HELP, fisher.test(homeless, sex))
@@ -363,30 +419,10 @@ with(HELP, fisher.test(homeless, sex))
 
 \subsection{A Bivariate Predictor: Two-sample t}
 Here we will compare the distributions of CESD scores by sex.
-The \verb!HELP! data set has a numeric variable \verb!female!
-that codes sex us 0 for male and 1 for female.
-To ensure that the display is clearly
-labeled, we first create a new factor (i.e., categorical) variable called 
-\verb!gender!.
 
-<<cesd-gender-better>>=
-HELP$gender <- factor(HELP$female, labels=c('male', 'female'))
-# sanity check:
-xtabs( ~ female + gender, HELP)
-@
-As it turns out, the \verb!HELP! data set already had a recoded 
-version of female called \verb!sex!.  But many data sets require this sort
-of conversion from numeric codes to factors.
-<<>>=
-# HELP already has a factor called sex, so this was redundant effort
-xtabs( ~ sex + gender, HELP)
-@
-
-The \verb!tapply()! function can be used to calculate the mean CESD score
-(given as first argument)
-for each of the two groups (given as second argument).  The third argument
-specifies which function to run for each of these subgroups.
-<<tapply>>=
+The \verb!aggregate()! function can be used to calculate the mean CESD score
+for each of the two groups 
+<<aggregate>>=
 aggregate(cesd ~ sex, HELP, FUN=mean)
 aggregate(cesd ~ sex, HELP, FUN=favstats)
 @
@@ -412,11 +448,18 @@ wilcox.test(cesd ~ sex, data=HELP)
 @
 
 \subsection{Oneway ANOVA}
+
+Earlier comparisons were between two groups: we can also consider testing differences 
+in CESD scores by primary substance of abuse (heroin, cocaine, or alcohol).
+
 \begin{center}
 <<cesd-oneway,fig=TRUE,width=6,height=1.9>>=
 bwplot(cesd ~ substance, data=HELP)
 @
 \end{center}
+
+<<aggregate2>>=
+aggregate(cesd ~ substance, HELP, FUN=mean)
 <<help-aov>>=
 mod <- aov(cesd ~ substance, data=HELP)
 summary(mod)
