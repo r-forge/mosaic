@@ -134,8 +134,9 @@ There are several ways to find packages
 are another
   sources of packages (specify the \verb!repos=! option to use these).
 
-  \item \textit{R News} %(\url{http://cran.r-project.org/doc/Rnews/bib/Rnewsbib.html})
-  (available via \cran)
+  \item 
+  \textit{R Journal}  (formerly \textit{R News})
+  is available via \cran\ and 
   often has articles about new packages and their capabilities.
 
   \item Write your own.
@@ -144,15 +145,15 @@ are another
 we won't cover this here).
 \end{itemize}
 
-\subsection{Some Useful Packages}
+%\subsection{Some Useful Packages}
 %Below are a few packages that may be of interest.
 %In this
 %section we present a few ``\R\ extras'' related to the material we have 
 %covered so far.  The material is organized by the packages involved.
 
-\subsubsection*{\texttt{mosaic}}
+%\subsubsection*{\texttt{mosaic}}
 
-\subsubsection*{\texttt{Hmisc}}
+%\subsubsection*{\texttt{Hmisc}}
 
 \section{Some Workflow Suggestions}
 
@@ -167,7 +168,7 @@ In short: \emph{Think like a programmer.}
 <<source,eval=F>>=
 source("file.R") 
 @
-\Rstudio has options for executing some or all lines in a file, too. 
+\Rstudio\ has options for executing some or all lines in a file, too. 
 See the buttons in the panel for any \R\ script.  (You can create a new \R\ script
 file in the main file menu.)
 
@@ -268,13 +269,25 @@ data.  (More about data types in \R\ as we go along.)
 The &na.strings& argument can be used to specify
 codes for missing values.  
 The following can be useful for SAS output, for example:
-\authNote{is something missing here?}
+<<eval=false>>=
+read.csv('file.csv', na.strings=c('NA','','.','na')) -> someData
+@
+because SAS uses a period (\verb!.!) to code missing data, but \R\ by default
+reads that as string data, which forces the entire variable to be of character 
+type instead of numeric.
 
-
-For convenience \verb!mosaic! provides &read.file()& which uses the file name to
-determine which of &read.table()& or &read.csv()& to use and sets the defaults
-to &header=T&, &comment.char="#"&, and 
-&na.strings=c('NA','','.','na')& for both file types.
+For convenience the \verb!mosaic! package provides &read.file()& which uses the file name to
+determine which of &read.csv()&, &read.table()&, and \verb!load()! to use and sets the defaults
+to 
+\begin{itemize}
+\item
+&header=T&, 
+\item
+&comment.char="#"&, and 
+\item
+&na.strings=c('NA','','.','na')& 
+\end{itemize}
+for &read.csv()& and &read.table()&.
 
 
 
@@ -527,9 +540,13 @@ obtained using \verb!nrow()! and \verb!ncol()!.
 <<attributes>>=
 ddd <- data.frame(number=1:5, letter=letters[1:5])
 attributes(ddd)
+@
+<<>>=
 dim(ddd)
 nrow(ddd)
 ncol(ddd)
+@
+<<>>=
 names(ddd)
 row.names(ddd)
 row.names(ddd) <- c("Abe","Betty","Claire","Don","Ethel")
@@ -562,11 +579,17 @@ can also coerce things manually using one of the many &as.???()& functions.
 apropos("^as\\.")[1:10]      # just a small sample
 # convert numbers to strings (this drops attributes)
 as.character(xm)             
+@
+<<>>=
 # convert matrix to vector
 as.vector(xm)
 as.logical(xm)
+@
+<<>>=
 alpha <- c("a", "1", "b", "0.5")    
 mode(alpha)
+@
+<<>>=
 as.numeric(alpha)      # can't do the coercion, so NAs are introduced
 as.integer(alpha)      # notice coercion of 0.5 to 0
 @

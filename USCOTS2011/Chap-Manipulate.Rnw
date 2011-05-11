@@ -27,6 +27,7 @@ demos as part of a statistics lecture.
 
 \subsection{Sliders}
 
+
 <<manipulate-histogram,echo=TRUE, eval=FALSE>>=
 if(require(manipulate)) {
   manipulate(
@@ -37,7 +38,9 @@ if(require(manipulate)) {
 @
 This generates a plot along with a slider ranging from 5 bins to 40.
 
-\centerline{\includegraphics[width=3.8in]{images/manip-hist1.png}}
+\begin{center}
+\includegraphics[width=3.8in]{images/manip-hist1.png}
+\end{center}
 
 When the slider is changed, we see a clearer view of the eruptions of Old Faithful.
 

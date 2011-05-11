@@ -8,6 +8,9 @@
 \SweaveOpts{pdf=T}          % use pdf for graphics
 \SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+\SweaveOpts{width=4.5}
+\SweaveOpts{height=3}
+
 
 <<setup,echo=F>>=
 source('setup.R')
@@ -173,18 +176,42 @@ times in the 100-meter free-style race.
 
 <<read-swim,echo=false>>=
 swim = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/swim100m.csv")
+levels(swim$sex) <- c('Women','Men')
 swim.plot = function(col='black',show.legend=TRUE,...){
 plot( time ~ year, pch=21-2*as.numeric(sex), cex=1.4,xlim=c(1899,2010),
      cex.lab=1.3, cex.axis=1.3,data=swim,xlab='Year',
      ylab='Time (secs)',col=col,...)
   if( show.legend) legend(1980,92, legend=c("Women","Men"),pch=c(19,17),cex=1.3)
 }
+swim.plot2 = function(show.legend=TRUE,...){
+print(
+xyplot( time ~ year, data=swim, groups=sex,
+#	 pch=21 - 2 * as.numeric(sex), 
+#	 cex=1.4, 
+	 xlim=c(1899,2010), 
+#	 cex.lab=1.3, 
+#	 cex.axis=1.3, 
+	 xlab='Year',
+     ylab='Time (secs)',
+	 auto.key=list(columns=2),
+	 ...)
+  )
+}
 @ 
 
 
-<<swim-data-raw,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+\begin{center}
+<<swim-data-raw,fig=true,pdf=true,include=true,echo=false>>=
 swim.plot( )
 @ 
+\end{center}
+
+\begin{center}
+<<swim-data-raw2,fig=true,pdf=true,include=true,echo=false>>=
+swim.plot2( )
+@ 
+\end{center}
+
 
 
 You can see the steady improvement in records over the decades from
@@ -198,7 +225,7 @@ The model \model{\VN{time}}{1 + \VN{year}} gives the familiar
 straight-line form: the intercept term (written simply as 1) and a term corresponding to the
 linear dependence on \VN{year}.
 
-<<swim-data-1,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+<<swim-data-1,fig=true,pdf=true,include=true,echo=false>>=
 swim.mod.plot = function(form,dots=FALSE, lwd=4) {
   t = as.character(form)
   t = paste(t[c(2,1,3)],collapse=" ")
@@ -225,7 +252,7 @@ improving as fast as they did in the early days.
 The model \model{\VN{time}}{\VN{sex}} breaks down the swimming times
 according to \VN{sex}:
 
-<<swim-data-2,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+<<swim-data-2,fig=true,pdf=true,include=true,echo=false>>=
 swim.mod.plot(time ~ sex, dots=TRUE)
 @ 
 
@@ -238,7 +265,7 @@ years.  Why?  Because the variable \VN{year} was not included in the model.
 The record time evidently depends both on \VN{sex} and \VN{year}, so
 it's sensible to include both variables in the model
 
-<<swim-data-3,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+<<swim-data-3,fig=true,pdf=true,include=true,echo=false>>=
 swim.mod.plot(time ~ sex + year, dots=TRUE)
 @ 
 
@@ -267,7 +294,7 @@ both \VN{sex} and \VN{year}.  Such a term is constructed with the syntax
 \VN{sex}:\VN{year} (or, what would amount to the same thing,
 \VN{year}:\VN{sex}).  
 
-<<swim-data-4,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+<<swim-data-4,fig=true,pdf=true,include=true,echo=false>>=
 swim.mod.plot(time ~ sex * year, dots=TRUE)
 @ 
 
@@ -298,7 +325,7 @@ It's also possible to have models that have no explanatory variables
 whatsoever.  Just the intercept term appears to the right of the
 modeling $\sim$.
 
-<<swim-data-5,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+<<swim-data-5,fig=true,pdf=true,include=true,echo=false>>=
 swim.mod.plot(time ~ 1, dots=TRUE)
 @ 
 
@@ -326,15 +353,15 @@ idea of quadratics and polynomials, they might be interested to see
 that the modeling language can handle this.  Here are three different
 models involving a polynomial dependence on \VN{year}:
 
-<<swim-data-6,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+<<swim-data-6,fig=true,pdf=true,include=true,echo=false>>=
 swim.mod.plot(time ~ poly(year,2), dots=TRUE)
 @ 
 
-<<swim-data-7,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+<<swim-data-7,fig=true,pdf=true,include=true,echo=false>>=
 swim.mod.plot(time ~ sex + poly(year,2), dots=TRUE)
 @ 
 
-<<swim-data-8,fig=true,pdf=true,include=true,width=6,height=4,echo=false>>=
+<<swim-data-8,fig=true,pdf=true,include=true,echo=false>>=
 swim.mod.plot(time ~ sex * poly(year,2), dots=TRUE)
 @ 
 

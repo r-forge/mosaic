@@ -7,6 +7,9 @@
 \SweaveOpts{pdf=T}          % use pdf for graphics
 \SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+\SweaveOpts{width=3}
+\SweaveOpts{height=2}
+
 
 <<setup,echo=F>>=
 source('setup.R')
@@ -157,7 +160,71 @@ syntax error.  If you have messed up and just want to get back to the normal plo
 hit the escape key and start the command fresh.
 \end{enumerate}
 
-\section{R packages}
+\section{Getting Help}
+
+If something doesn't go quite right, or if you can't remember something, it's good to know
+where to turn for help.  In addition to asking your friends and neighbors, you can use
+the \R\ help system.
+
+\subsection{?}
+
+To get help on a specific function or data set, simply precede its name with a \verb!?!:
+
+<<help1,eval=F>>=
+?col.whitebg()
+@
+%This will give you the documentation for the object you are interested in.
+
+\subsection{\texttt{apropos()}}
+If you don't know the exact name of a function, you can give part of the name and 
+\R\ will find all functions that match.  Quotation marks are mandatory here.
+
+<<apropos>>=
+apropos('hist')            # must include quotes.  single or double.
+@
+
+\subsection{\texttt{??} and \texttt{help.search()}}
+If that fails, you can do a broader search using \verb!??! or \verb!help.search()!, 
+which will find matches not only in the names of functions and data sets, 
+but also in the documentation for them.  Quotations marks are optional here.
+
+<<help2,eval=F>>=
+??histogram                  # any of these will work
+??"histogram"  
+??'histogram'  
+help.search('histogram')
+@
+
+
+\subsection{Examples and Demos}
+
+Many functions and data sets in \R\ include example code demonstrating typical uses.
+For example,
+<<eval=false>>=
+example(histogram)
+@
+will generate a number of example plots (and you the commands used to create them).
+
+
+The \verb!mosaic! package (and some other packages as well) also includes demos.  
+Demos are bits of \R\ code that can be executed using the \verb!demo()! command
+with the name of the demo.
+
+To see how demos work, give this a try:
+\begin{center}
+<<demo,eval=false,fig=T,width=2.2,height=1.8>>=
+demo(funplots)
+@
+\end{center}
+
+You can get a list of available demos using
+
+<<demo-list,eval=false>>=
+demo()                     # all demos
+demo(package='mosaic')     # just demos from mosaic package
+@
+
+\section{R Packages}
 
 In addition to its core features, \R\ provides many more features through a (large) number 
 of packages.  To use a package, it must be installed (one time), and loaded (each session).
@@ -183,7 +250,6 @@ from CRAN, see section \ref{sec:CRAN})
 \end{itemize}
 There may be others that we use from time to time as well.  
 %\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
-\authNote{Do we still need these other packages?}
 \authNote{R': I think we can reduce to \verb!lattice! and \verb!mosaic!.  Possibly \verb!Hmisc!.
 I'll remove dependencies on \verb!abd! as I go.}%
 You should install %\verb!Hmisc! and 
@@ -222,7 +288,7 @@ following packages:
 \item
 \verb!vcd! (visualizing categorical data),
 \item
-\verb!fastR! (\textit{Foundations and Applications of Statistics}, and 
+\verb!fastR! (\textit{Foundations and Applications of Statistics}), and 
 \item
 \verb!abd! (\textit{Analysis of Biological Data}).
 \end{itemize}
@@ -304,7 +370,7 @@ the following syntax:
 dataframe$variable
 @
 or 
-<<eval=false>>=
+<<eval=F>>=
 with(dataframe, variable)
 @
 
@@ -314,7 +380,7 @@ For example, either of
 iris$Sepal.Length
 @
 or 
-<<>>=
+<<eval=false>>=
 with(iris, Sepal.Length)
 @
 shows the contents of the \verb!Sepal.Length! variable in the following format.
@@ -706,29 +772,29 @@ symbols, line thicknesses, colors, etc.
 Rather than describe them all here, we'll mention only that groups of these settings 
 can be collected into a theme.  \verb!show.settings()! will show you what the theme looks like.
 
-<<themes-whitbg,cache=T,fig=T,height=4.0>>=
+<<themes-whitbg,cache=T,fig=T,height=4.0,width=6>>=
 trellis.par.set(theme=col.whitebg())      # a theme in the lattice package
 show.settings()
 @
 
-<<themes-abd,cache=T,fig=T,height=4.0>>=
+<<themes-abd,cache=T,fig=T,height=4.0,width=6>>=
 trellis.par.set(theme=col.abd())          # a theme in the abd package
 show.settings()
 @
 
-<<themes-mosaic,cache=T,fig=T,height=4>>=
+<<themes-mosaic,cache=T,fig=T,height=4,width=6>>=
 trellis.par.set(theme=col.mosaic())        # a theme in the mosaic package
 show.settings()
 @
 
-<<themes-mosaicbw,cache=T,fig=T,height=4>>=
+<<themes-mosaicbw,cache=T,fig=T,height=4,width=6>>=
 trellis.par.set(theme=col.mosaic(bw=TRUE)) # black and white version of previous theme
 show.settings()
 @
 
-<<themes-abd-redo>>=
-trellis.par.set(theme=col.abd())          # back to the abd theme
-trellis.par.set(fontsize=list(text=9))    # and back to a 10 point font
+<<themes-mosaic-redo>>=
+trellis.par.set(theme=col.mosaic())       # back to the mosaic theme
+trellis.par.set(fontsize=list(text=9))    # and back to a larger font 
 @
 
 \begin{problem}
@@ -770,16 +836,15 @@ species?  Refer to your \R\ output as you answer this question.
 
 %\subsection{Bar Charts and Pie Charts}
 \subsection{Tabulating Categorical Data}
-The \verb!Trematodes! data set contains data from an experiment to see if
-fish infected with a certain parasite are more likely to be eaten by birds 
-(because they swim closer to the surface of the water).  Highly infected, 
-lightly infected, and uninfected fish were placed in an outdoor tank that 
-was open to foraging birds.  For each fish, the researchers recorded its
-infection status and whether it had been eaten.
+The Current Population Survey (CPS) is used to supplement census information
+between census years. These \dfn{CPS} data frame consist of a random sample of persons from the
+CPS, with information on wages and other characteristics of the workers,
+including sex, number of years of education, years of work experience,
+occupational status, region of residence and union membership.
 
-<<trematodes-head>>=
-require(abd)
-head(Trematodes,3)
+
+<<>>=
+head(CPS,3)
 @
 
 \subsubsection{Making Frequency and Contingency Tables with \texttt{xtabs()}}
@@ -787,8 +852,8 @@ Categorical variables are  often summarized in a table.
 \R\ can make a table for a categorical variable using \verb!xtabs()!.
 
 <<table>>=
-xtabs(~infection.status, Trematodes)
-xtabs(~eaten,Trematodes)
+xtabs(~race, CPS)
+xtabs(~sector, CPS)
 @
 
 %\subsubsection{Cross-Tabulation with \texttt{xtabs()}}
@@ -798,7 +863,7 @@ summarizing this data with \verb!xtabs()!.  This is often a more useful view of
 data with two categorical variables.
 
 <<xtabs>>=
-xtabs( ~ infection.status + eaten, Trematodes)
+xtabs( ~ race + sector, CPS)
 @
 
 \subsubsection*{Entering Tables by Hand}
@@ -809,21 +874,19 @@ You can enter these tables manually as follows:
 
 
 <<make-table>>=
-myinfection <- c( high=46, light=46, uninfected=50); myinfection
+myrace <- c( NW=67, W=467 )
+myrace
 @
 
 \label{R:make-xtabs}%
 <<make-xtabs>>=
-mycrosstable <- rbind(                        # bind row-wise
-                  high = c(no=9, yes=37),     # note labels
-                  light = c(35,10),           # don't need to relabel columns
-                  uninfected = c(49,1)        # note commas throughout
-			)
-@
-
-<<mycrosstable>>=
+mycrosstable <- rbind(               # bind row-wise
+  NW = c(clerical=15, const=3, manag=6,  manuf=11, other=5,  prof=7, sales=3, service=17),
+  W  = c(82,17,49,57,63,98,35,66)    # no need to repeat the column names
+			  )
 mycrosstable
 @
+
 Replacing \verb!rbind()! with \verb!cbind()! will allow you to give the data
 column-wise instead.
 
@@ -832,88 +895,38 @@ column-wise instead.
 %\subsubsection{Bar charts and pie charts}
 %We won't use these plots often, in part because summary tables are already a good
 %way to understand the data.  
-The \verb!lattice! function \verb!barchart! can display these tables as barcharts.
+The \verb!lattice! function \verb!barchart()! can display these tables as barcharts.
 \begin{center}
-<<barchart1a,fig=T,width=3,height=1.4,echo=T>>=
-barchart(xtabs(~infection.status, Trematodes))
+<<barchart1a,fig=T,width=3,height=1.8,echo=T>>=
+barchart(xtabs(~sector, CPS))
 @
-<<barchart2a,fig=T,width=3,height=1.4,echo=T>>=
-barchart(xtabs(~infection.status, Trematodes), horizontal=FALSE)  # vertical bars
+<<barchart2a,fig=T,width=4,height=1.4,echo=T>>=
+barchart(xtabs(~sector, CPS), horizontal=FALSE)  # vertical bars
 @
 \end{center}
 
-\vspace{-6mm}
-If the data are already summarized, we can make our bar charts without using
-\verb!xtabs()! (Figure~\ref{fig:TeenDeaths-barchart}).
 
-<<TeenDeaths-1,fig=F,width=5,height=2.5,echo=T>>=
-barchart(cause~deaths,TeenDeaths,horizontal=TRUE)
-@
-\begin{figure}
-\begin{center}
-<<TeenDeaths-2,fig=T,width=5,height=2.5,echo=F>>=
-barchart(cause~deaths,TeenDeaths,horizontal=TRUE)
-@
-\end{center}
-\vspace{-8mm}
-\caption{\texttt{barchart(cause\~{}deaths,TeenDeaths,horizontal=TRUE)}}
-\label{fig:TeenDeaths-barchart}%
-\end{figure}
-
-\iffalse
-Statisticians almost never use pie charts.  They are harder to read than bar charts.
-The \verb!lattice! package doesn't even include a function to make pie charts.
-But the \verb!pie()! function from the \verb!graphics!  package can make these
-plots if you absolutely have to have one:
-
-<<pie,width=4,height=3.0,eval=F>>=
-pie(table(Trematodes$infection.status))
-pie(table(Trematodes$eaten))
-@
-\fi
-\iffalse
-\begin{center}
-<<pie1,fig=T,width=3,height=3.0,echo=F>>=
-pie(table(Trematodes$infection.status))
-@
-<<pie2,fig=T,width=3,height=3.0,echo=F>>=
-pie(table(Trematodes$eaten))
-@
-\end{center}
-These are probably the last pie charts you will see in this class.
-\fi
-
-
-%\subsubsection{Mosaic plots}
-
-Just as bar charts and pie charts are used to display the distribution
+Just as bar charts are used to display the distribution
 of one categorical variable,  mosaic plots can do the same for cross tables.
 \verb!mosaic()! (from the \verb!vcd! package) is not a \verb!lattice! plot, 
-but it does use a similar formula interface.  %(See Figure~\ref{fig:mosaic}.)
+but it does use a similar formula interface.  
 
-<<mosaic1,fig=F,width=9,height=7.0,echo=T>>=
+\begin{center}
+<<mosaic1,fig=true,width=4,height=2>>=
 require(vcd)                              # load the visualing categorical data package
-mosaic(~ infection.status + eaten, Trematodes)
+mosaic(~ sex + race, CPS)
 @
+\end{center}
 
 
 Alternatively, we can send \verb!mosaic()! the output of \verb!xtabs()!:
 \begin{center}
-<<mosaic2,fig=F,width=6,height=2.5>>=
-mosaic(xtabs(~ infection.status + eaten, Trematodes))
+<<mosaic2,fig=F>>=
+mosaic(xtabs(~ sex + race, CPS))
 @
 \end{center}
 
-%\vspace{-12mm}
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=.65\textwidth]{images/fig-mosaic1}
-\end{center}
-%\caption{\texttt{mosaic(\~{} infection.status + eaten, Trematodes)}}
-%\label{fig:mosaic}
-\end{figure}
 
-\vspace{-12mm}
 Or we can send our own hand-made table (although the output isn't quite as nice without some
 extra effort we won't discuss just now):
 \begin{center}
@@ -922,40 +935,20 @@ mosaic(mycrosstable)
 @
 \end{center}
 
-\iffalse
-\vspace{-5mm}
-Want it the other way around like the other plots?  You can build your table the other way or you can transpose 
-the one you have with \verb!t()!:
-\begin{center}
-<<mosaic4,fig=F,width=6,height=2.5>>=
-mosaic(t(mycrosstable))
-@
-\end{center}
-\fi
 
-\iffalse
-In these plots, area is proportional to the number in each (combined) category.
-This plot makes it easy to see that more infected fish were more likely to be eaten
-than less infected fish.
-\fi
 
 \begin{problem}
-The \verb!Utilities2! data set in the \verb!fastR! package contains a number of variables
+The \dfn{Utilities2} data set in the \verb!mosaic! package contains a number of variables
 about the utilities bills at a residence in Minnesota over a number of years.
 Since the number of days in a billing cycle varies from month to month, variables 
-like \verb!gasbillpday! (\verb!elecbillpday!, etc.) contain the gasbill (electric bill, etc.) 
+like \vn{gasbillpday} (\dfn{elecbillpday}, etc.) contain the gas bill (electric bill, etc.) 
 divided by the number of days in the billing cycle.
 \begin{enumerate}
 \item
-Make a scatter plot of \verb!gasbillpday! vs. \verb!monthsSinceY2K! using the command
-\end{enumerate}
-
+Make a scatter plot of \dfn{gasbillpday} vs. \dfn{monthsSinceY2K} using the command
 <<gasbill,fig=F>>=
 xyplot(gasbillpday ~ monthsSinceY2K, data=Utilities2, type='l')   # the letter l
 @
-\vspace{-6mm}
-\begin{enumerate}
-\setcounter{enumi}{1}
 \item[]
 What pattern(s) do you see?
 \item
@@ -966,19 +959,19 @@ What happens if we replace
 \verb!type='l'! with 
 \verb!type='b'!?
 \item
-Make a scatter plot of \verb!gasbillpday! by \verb!month!.   
+Make a scatter plot of \vn{gasbillpday} by \vn{month}.   
 What do you notice?
 
-\iffalse
 \item
-Make side-by-side boxplots of \verb!gasbillpday! by \verb!month!.   
+Make side-by-side boxplots of \vn{gasbillpday} by \vn{month} using the \dfn{Utilities2}
+data frame.   
 What do you notice?
 
 Your first try probably won't give you what you expect.  The reason is that month is coded
 using numbers, so \R\ treats it as numerical data.  We want to treat it as categorical data.
-To do this in \R\, use \verb!factor(month)! in place of \verb!month!.  
+To do this in \R\, use \verb!factor(month)! in place of \dfn{month}.  
 \R\ calls categorical data a \term{factor}.
-\fi
+
 \item
 Make any other plot you like using this data.  Include both a copy of your plot and a 
 discussion of what you can learn from it.
@@ -990,7 +983,6 @@ The table below is from a study of nighttime lighting in infancy and
 eyesight (later in life).  
 % latex table generated in R 2.12.1 by xtable 1.5-6 package
 % Fri Feb  4 15:46:48 2011
-\begin{table}[ht]
 \begin{center}
 \begin{tabular}{rrrr}
   \hline
@@ -1002,13 +994,10 @@ darkness & 155 & 15 & 2 \\
    \hline
 \end{tabular}
 \end{center}
-\end{table}
-
-\vspace*{-8mm}
 
 \begin{enumerate}
-\item
-Do you think this was an experiment or an observational study?  Why?
+%\item
+%Do you think this was an experiment or an observational study?  Why?
 \item
 Recreate the table in \Rstudio.  Copy and paste the results into your Word document.
 \item
@@ -1022,84 +1011,32 @@ in the \verb!vcd! package.
 \item
 Make a mosaic plot for this data.  What does this plot reveal?
 \end{enumerate}
-\vspace{-5mm}
 \end{problem}
 
-%\subsubsection*{More Bar Charts}
-\vspace{-8mm}
 Barcharts can also be used to display two-way tables.  First we convert
 the cross-table to a data frame.
 Then we can use this data frame for plotting.
 
 <<barchart3a>>=
-trem <- as.data.frame( xtabs(~ infection.status + eaten, data=Trematodes) ); trem   
+cps <- as.data.frame( xtabs(~ sector + race, data=CPS) ); cps   
 @
-
-<<barchart3b,eval=F>>=
-barchart( Freq ~ infection.status, groups=eaten, data=trem) 
+<<<barchart3aa,eval=false>>=
+barchart(Freq ~ sector, groups=race, data=cps)
 @
 
 \begin{center}
-<<barchart3,fig=T,width=3,height=1.3,echo=F>>=
-print( lattice::barchart( Freq ~ infection.status, groups=eaten, data=trem) )
+<<barchart3b,fig=T,echo=false,width=5>>=
+print(lattice::barchart(Freq ~ sector, groups=race, data=cps))
 @
 \end{center}
 
-\vspace{-10mm}
-\section{Getting Help}
 
-\subsection{?}
-
-To get help on a specific function or data set, simply precede its name with a \verb!?!:
-
-<<help1,eval=F>>=
-?col.whitebg()
-@
-%This will give you the documentation for the object you are interested in.
-
-\subsection{\texttt{apropos()}}
-If you don't know the exact name of a function, you can give part of the name and 
-\R\ will find all functions that match.  Quotation marks are mandatory here.
-
-<<apropos>>=
-apropos('hist')            # must include quotes.  single or double.
-@
-
-\subsection{??}
-If that fails, you can do a broader search using \verb!??!, which will find matches not only
-in the names of functions and data sets, but also in the documentation for them.
-Quotations marks are optional here.
-
-<<help2,eval=F>>=
-??histogram                  # any of these will work
-??"histogram"  
-??'histogram'  
-@
-
-\subsection{Demos}
-The \verb!abd! package also includes demos for some of the sections of the book.
-These demos show you how to make the plots or perform the analyses in that section,
-so we don't have to repeat them all here.  This also makes it easy to copy and paste
-the commands within \Rstudio\ if you need to do something similar.
-
-Here's how \verb!demo()! works.
-\begin{center}
-<<demo-sec2-2,fig=T,width=2.2,height=1.8>>=
-demo(sec2.2)
-@
-\end{center}
-\vspace{-8mm}
-You can get a list of all available demos using
-
-<<demo-list,eval=F>>=
-demo()
-@
 
 \vspace{-8mm}
 \section{Additional Notes on R Syntax}
 
 
-\subsection{Text and Quotations}
+\subsection{Text and Quotation Marks}
 
 For the most part, text in \R\ must be enclosed in either single or double quotations.  
 It usually doesn't matter which you use, unless you want one or the other type of 
@@ -1215,12 +1152,12 @@ follow the appropriate instructions for your platform.
 
 \subsection{RStudio in the cloud on your own server}
 
-At present, we are using a beta version of RStudio running on their servers.  
+At present, we are using a beta version of \RStudio\ running on their servers.  
 It is also possible to install this on servers at your institution.  This will
 almost certainly require a discussion with your administrators, but may be worthwhile
 to facilitate student use in this manner.
 
-\authNote{NH: Are you both comfortable with this?}
+\authNoted{NH: Are you both comfortable with this?}
 
 
 \newpage
@@ -1228,12 +1165,12 @@ to facilitate student use in this manner.
 \section{\R\ Examples}
 \vspace{-3mm}
 The commands below are illustrated with the data sets \verb!iris! and 
-\verb!Trematode!.  To apply these in other situations, you will need to 
+\verb!CPS!.  To apply these in other situations, you will need to 
 substitute the name of your data frame and the variables in it.
 
 \vspace{-3mm}
 \begin{center}
-\begin{longtable}{p{2.45in}p{4.10in}}
+\begin{longtable}{p{2.45in}p{3.30in}}
 \verb!answer <- 42! & Store the value 42 in a variable named \verb!answer!.
 \\[3mm]
 %\verb!sl <- iris$Sepal.Length! & Store the \verb!Sepal.Length! variable from the 
@@ -1246,8 +1183,8 @@ root of 123.
 \\[3mm]
 \verb!data(iris)! & (Re)load the data set \verb!iris!.
 \\[3mm]
-\verb!findData(2)! & Find \verb!abd! data in chapter 2.
-\\[3mm]
+%\verb!findData(2)! & Find \verb!abd! data in chapter 2.
+%\\[3mm]
 \verb!summary(iris$Sepal.Length)! & 
 Summarize the distribution of the \verb!Sepal.Length! variable in the \verb!iris! data
 frame.
@@ -1273,49 +1210,48 @@ Summarize each variable in the \verb!iris! data frame.
 \\[1mm]
 & 
 Compute favorite statistics of \verb!Sepal.Length! for each \verb!Species!.
-
-[requires \verb!Hmisc! and \verb!abd!]
+[requires \verb!Hmisc!]
 \\[3mm]
 %\verb!cut(x,breaks,right=TRUE)! & Divide up the range of \verb!x! into 
 %	intervals and code the values in \verb!x! according to which interval 
 %	they fall into. 
 %\\[3mm]
-\multicolumn{2}{l}{\texttt{histogram(\~{}Sepal.Length|Species,iris)}}
+\multicolumn{2}{l}{\texttt{histogram(\~{}Sepal.Length|Species, iris)}}
 \\[1mm]
 & 
 Histogram of \verb!Sepal.Length! conditioned on \verb!Species!.
 \\[3mm]
-\verb!bwplot(Sepal.Length~Species,iris)! & 
+\verb!bwplot(Sepal.Length~Species, iris)! & 
 Boxplot of \verb!Sepal.Length! conditioned on \verb!Species!.
 \\[3mm]
-\multicolumn{2}{l}{\texttt{xyplot(Sepal.Length\~{}Sepal.Width|Species,iris)}} 
+\multicolumn{2}{l}{\texttt{xyplot(Sepal.Length\~{}Sepal.Width|Species, iris)}} 
 \\[1mm]
 & 
 Scatterplot of \verb!Sepal.Length! by \verb!Sepal.Width! 
 with separate panels for each  \verb!Species!.
 \\[3mm]
-\verb!xtabs(~infection.status,Trematodes)! & Frequency table of the variable \verb!infection.status!.
+\verb!xtabs(~sector, CPS)! & Frequency table of the variable \verb!sector!.
 \\[3mm]
-\multicolumn{2}{l}{\texttt{barchart(xtabs(\~{}infection.status,Trematodes))}}
+\multicolumn{2}{l}{\texttt{barchart(xtabs(\~{}sector, CPS))}}
 \\[1mm]
 & Make a barchart from the table.
 \\[3mm]
-\multicolumn{2}{l}{\texttt{xtabs(\~{}infection.status + eaten,Trematodes)}}
+\multicolumn{2}{l}{\texttt{xtabs(\~{}sector + race, CPS)}}
 \\[1mm]
-& Cross tabulation of \verb!infection.status!  and \verb!eaten!.
+& Cross tabulation of \verb!sector!  and \verb!race!.
 \\[3mm]
 \multicolumn{2}{l}{
-\texttt{mosaic(\~{}infection.status + eaten,Trematodes)} }
+\texttt{mosaic(\~{}sector + race, CPS)} }
 \\[1mm]
 & Make a mosaic plot.
 \\[3mm]
 \multicolumn{2}{l}{
-\texttt{xtData <- as.data.frame( xtabs(\~{}eaten + infection.status,Trematodes) )}}
+\texttt{xtData <- as.data.frame( xtabs(\~{}sector + race, Trematodes) )}}
 \\[1mm]
   & Save cross table information as \verb!xtData!. 
 \\[3mm]
 \multicolumn{2}{l}{
-\texttt{barchart(Freq\~{}infection.status,data=xtData,groups=eaten)}
+\texttt{barchart(Freq\~{}sector, data=xtData, groups=race)}
 }
 \\[1mm]
 & Use \verb!xtData! to make a segmented bar chart.
