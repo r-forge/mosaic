@@ -2,13 +2,14 @@
 
 \chapter{The Core of a Traditional Course}
 
-\SweaveOpts{prefix.string=figures/fig}  % location of 
-\SweaveOpts{highlight=F}    % not sure this does anything unless we use pgfSweave
+\SweaveOpts{prefix.string=figures/fig}  % location of
+\SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
 \SweaveOpts{tidy=F}         % keep.source probably disables this
 \SweaveOpts{pdf=T}          % use pdf for graphics
-\SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
+\SweaveOpts{strip.white=T}  % remove blank lines at beginning and end
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
-%% \SweaveOpts{eval=false}     % temporary
+\SweaveOpts{width=5}
+\SweaveOpts{height=2.2}
 
 <<setup,echo=F>>=
 source('setup.R')
@@ -50,7 +51,7 @@ variance, median, five number summary, intra-quartile range (IQR) as well as arb
 illustrate these using the CESD (Center for Epidemiologic Studies - Depression)
 measure of depressive symptoms.  To improve the legibility of output,
 we will also set the default number of digits to display to a more reasonable
-level.
+level (see \verb!?options! for more configuration possibilities).
 
 <<cesd1,cache=F>>=
 options(digits=3)
@@ -60,10 +61,7 @@ mean(HELP$cesd)
 sd(HELP$cesd)
 @
 <<cesd2b,cache=F>>=
-sd(HELP$cesd)^2
-@
-<<cesd2c,cache=F>>=
-var(HELP$cesd)
+sd(HELP$cesd)^2; var(HELP$cesd)
 @
 
 It is also straightforward to calculate quantiles of the distribution.
@@ -74,22 +72,30 @@ five <- fivenum(HELP$cesd)
 five     # display the object (vector of length 5)
 five[4] - five[2]
 IQR(HELP$cesd)
-quantile(HELP$cesd)   
-quantile(HELP$cesd, c(.25, .50))
 @
 
-We see that it is possible to interact with the objects created by these
-functions to calculate the IQR (or a function can generate this directly).
+The user can interact with the objects created by these
+functions to calculate the IQR (or the built-in a function can generate this directly).
+
+<<cesd4>>=
+quantile(HELP$cesd)   
+quantile(HELP$cesd, c(.25, .50))
+favstats(HELP$cesd)
+@
+
 By default, the 
 \verb!quantile()! function displays the quartiles, but can be given
-a vector of quantiles to display.
+a vector of quantiles to display.  Finally, the \verb!favstats()! 
+function in the \verb!mosaic! package provides a concise summary of 
+many useful statistics.
+
 
 \subsection{Graphical Summaries}
 The \verb!histogram()! function is used to create a histogram.
 
 \vspace{-4mm}
 \begin{center}
-<<cesd-hist,fig=TRUE,width=6,height=1.9>>=
+<<cesd-hist,fig=TRUE>>=
 histogram(~ cesd, HELP)
 @
 \end{center}
@@ -110,46 +116,57 @@ stem(female$cesd)
 The \verb!dotPlot()! function is used to create a dotplot (a la Fathom).
 
 \begin{center}
-<<cesd-dot,fig=TRUE,width=6,height=1.9>>=
+<<cesd-dot,fig=TRUE,height=1.8>>=
 dotPlot(~ cesd, data=female)
 @
 \end{center}
+Here we use the formula interface as discussed in section \ref{sec:formula} to
+specify that we wanted a histogram of the CESD scores.
+
 We could also have made our subset ``on the fly'', just for the purposes of graphing:
 \begin{center}
-<<cesd-dot2,fig=TRUE,width=6,height=1.9>>=
+<<cesd-dot2,fig=TRUE,height=1.8>>=
 dotPlot(~ cesd, data=HELP, subset=(sex=='female'))
 @
 \end{center}
 
 Or we could make side-by-side dotplots of men and women:
 \begin{center}
-<<cesd-dot3,fig=TRUE,width=6,height=1.9>>=
-dotPlot(~cesd | sex, data=HELP)
+<<cesd-dot3,fig=TRUE>>=
+dotPlot(~ cesd | sex, data=HELP)
 @
 \end{center}
 
 
 \subsection{Density Curves }
 
+One disadvantage of histograms is that they can be sensitive to the choice of the
+number of bins.  Another display to consider is a density curve.
 
 \begin{center}
-<<dens1,fig=TRUE,width=6,height=1.9>>=
+<<dens1,fig=TRUE>>=
 densityplot(~ cesd, data=female)
-ladd(grid.text(x=0.1, y=0.8, 'only females'))
+ladd(grid.text(x=0.2, y=0.8, 'only females'))
 @
 \end{center}
 
-\authNote{I would like to add superimposed density plots.  Is this feasible given
+\authNote{NH: I would like to add superimposed density plots.  Is this feasible given
 that we need to protect "densityplot" with a print to deal with Weave?}
+
+The most famous density curve is a normal distribution.  The \verb!xpnorm()! function
+displays the probability that a random variable is less than the first argument, for a 
+normal distribution with mean given by the second argument and standard deviation by the 
+third.  More information about probability distributions can 
+be found in section \ref{sec:probability}.
 
 \subsection{Normal Distributions}
 \begin{center}
-<<norm1,fig=TRUE,width=6,height=1.9>>=
+<<norm1,fig=TRUE,height=2.4>>=
 xpnorm(1.96, 0, 1)
 @
 \end{center}
 
-\authNote{I would like to add superimposed normal on top of a density plots.  Help!}
+\authNote{NH: I would like to add superimposed normal on top of a density plots.  Help!}
 
 
 
@@ -158,36 +175,53 @@ xpnorm(1.96, 0, 1)
 
 \subsection{Numerical Summaries}
 
+The \verb!xtabs()!, \verb!perctable()! and \verb!proptable()! functions can be used to calculate
+counts, percentages and proportions, respectively for a categorical variable.
+
 <<homeless-table>>=
-xtabs(~ homeless, HELP)
+xtabs(~ homeless, HELP)      # display table using counts
 perctable(HELP$homeless)     # display table using percentages
+proptable(HELP$homeless)     # display table using proportions
 @
+\authNote{NH: how best to add row and/or column totals?}
 
 \subsection{The Binomial Test}
+
+An exact confidence interval for a proportion (as well as a test of the null 
+hypothesis is equal to a particular value [by default 0.5]) can be calculated
+using the \verb!binom.test()! function.
 
 <<binomtest>>=
 binom.test(~ homeless=="housed", HELP)
 @
 
 \subsection{The Proportion Test}
-<<proptest>>=
-prop.test(xtabs(~ homeless, HELP))
-@
 
+A similar interval and test can be calculated using \verb!prop.test()!.
+<<proptest>>=
+prop.test(xtabs(~ homeless, HELP), correct=FALSE)
+@
 \authNote{suggestions for a better approach?}
 
 \subsection{Goodness of Fit Tests}
 
+A variety of goodness of fit tests can be calculated against a reference 
+distribution.  For the HELP data, we could test the null hypothesis that the 
+proportion of subjects back in the original population in each of the 
+substance abuse groups were equal.
+
 <<gof>>=
 substab <- xtabs(~ substance, HELP)
 substab
+@
+<<gofmore>>=
 perctable(HELP$substance)
 p <- c(1/3, 1/3, 1/3)
 chisq.test(substab, p=p)
 total <- sum(substab)
 @
 
-We can also calculate this manually.
+We can also calculate this quantity manually, in terms of observed and expected values.
 
 <<gof2>>=
 chisq = sum((substab - total*p)^2/(total*p))
@@ -206,7 +240,7 @@ rm(substab, p, total, chisq)
 \subsection{Scatterplots}
 
 \begin{center}
-<<xyplot,fig=TRUE,width=6,height=3.9>>=
+<<xyplot,fig=TRUE>>=
 xyplot(cesd ~ mcs, data=HELP)
 ladd(panel.loess(HELP$mcs, HELP$cesd))
 @
@@ -225,13 +259,13 @@ summary(model)
 @
 
 \begin{center}
-<<lmhist,fig=TRUE,width=6,height=1.9>>=
+<<lmhist,fig=TRUE>>=
 histogram(~ residuals(model))
 @
 \end{center}
 
 \begin{center}
-<<lmplot,fig=TRUE,width=6,height=3.9>>=
+<<lmplot,fig=TRUE>>=
 plot(model)
 @
 \end{center}
@@ -283,7 +317,7 @@ sex      homeless housed
 \subsubsection{Graphical Summaries}
 
 \begin{center}
-<<mosaicplot,fig=TRUE,width=6,height=3.9>>=
+<<mosaicplot,fig=TRUE>>=
 with(HELP, mosaicplot(table(homeless, sex)))
 @
 \end{center}
@@ -342,11 +376,12 @@ Boxplots are a particularly helpful graphical display to compare distributions.
 The \verb!bwplot()! function can be used to display the boxplots for the CESD scores separately by sex.  We see from both the numerical and graphical
 displays that women tend to have slightly higher CESD scores than men.
 \authNote{Should mention use of \verb!xyplot()! when the sample sizes are small.
-No reason to compute 5-number summaries of 10 or fewer numbers really.}
+No reason to compute 5-number summaries of 10 or fewer numbers really.  NH resp: I'm not sure
+what you mean by this.}
 
 %\vspace{-8mm}
 \begin{center}
-<<cesd-box,fig=TRUE,width=6,height=1.9>>=
+<<cesd-box,fig=TRUE>>=
 bwplot(cesd ~ sex, data=HELP)
 @
 \end{center}
