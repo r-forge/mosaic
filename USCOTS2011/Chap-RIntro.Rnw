@@ -1,4 +1,4 @@
-\chapter{Getting Started with R}
+\chapter{An Introduction to R}
 
 
 \SweaveOpts{prefix.string=figures/fig}  % location of 
@@ -17,7 +17,8 @@ source('setup.R')
 
 \begin{quote}
 \emph{This is a lightly modified version of a handout RJP used with his 
-Intro Stats students Spring 2011.}
+Intro Stats students Spring 2011.  Aside from the occasional comment to
+instructors, this chapter could be used essentially as is with students.}
 \end{quote}
 
 \label{app:StartingR}
@@ -599,11 +600,11 @@ dotPlot(~Sepal.Length, data=iris, n=20)   # n=20 gives us approximately 20 tower
 \end{center}
 We can use a conditional variable to give us separate dot plots for each species.
 
-<<iris-dotPlot-condA,cache=T,eval=F,fig=F,width=7.0,height=2.5>>=
+<<iris-dotPlot-condA,cache=T,eval=F,fig=F,width=6.0,height=2.5>>=
 dotPlot(~Sepal.Length|Species, data=iris, n=20)
 @
 \begin{center}
-<<iris-dotPlot-condB,cache=T,fig=T,echo=F,width=7.0,height=2.0>>=
+<<iris-dotPlot-condB,cache=T,fig=T,echo=F,width=6.0,height=2.0>>=
 dotPlot(~Sepal.Length|Species, data=iris, n=20, cex=.6)
 @
 \end{center}
@@ -856,6 +857,15 @@ xtabs(~race, CPS)
 xtabs(~sector, CPS)
 @
 
+Alternatively, we can use \verb!table()!, \verb!proptable()!, and \verb!perctable()! 
+to make tables of counts, proportions, or percentages.
+
+<<table>>=
+with(CPS, table(race))
+with(CPS, proptable(sector))
+with(CPS, perctable(sector))
+@
+
 %\subsubsection{Cross-Tabulation with \texttt{xtabs()}}
 We can make a \term{cross-table} 
 (also called a \term{contingency table} or a \term{two-way table}) 
@@ -874,7 +884,7 @@ You can enter these tables manually as follows:
 
 
 <<make-table>>=
-myrace <- c( NW=67, W=467 )
+myrace <- c( NW=67, W=467 )       # c for combine or concatenate
 myrace
 @
 

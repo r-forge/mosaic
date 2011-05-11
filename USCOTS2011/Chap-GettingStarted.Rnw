@@ -12,24 +12,6 @@
 source('setup.R')
 @ 
 
-\section{Getting Familiar with R}
-
-We organized this workshop to help instructors integrate R (as well as some 
-related technologies) into their statistics courses at all levels.
-We are presenting an approach to teaching introductory and intermediate statistics courses that is tightly coupled with computing (specifically using R, an open source general purpose statistics package).  This flows from the philosophy outlined by
-Nolan and Temple Lang \cite{nola:temp:2010}.
-
-The activities and examples in the workshop are intended to highlight a modern approach to statistical education that focuses on modeling, resampling based inference, and multivariate graphical techniques.  A secondary goal is to facilitate computing with data through use of small simulation studies, data scraping from the internet and appropriate statistical analysis workflow.
-
-During this workshop, we are planning to
-introduce multiple activities, some appropriate for an introductory course, others suitable for higher levels, that demonstrate key concepts in statistics and modeling.  
-We've crafted these notes partly to accompany our presentations, but primarily as a reference to support your teaching using R.  We've included far more than we could possibly
-cover in 2 days, but hope to be able to provide some exposure and motivation for
-material and approaches that may differ from what you are doing at present (while 
-supporting the core material of a traditional course).
-
-We're planning to extend and elaborate on these notes, and would welcome any and all
-suggestions for other topics or material to add.
 
 
 \section{Getting Students Familiar with R}
@@ -48,7 +30,7 @@ Have \R\ running every class period and use it as needed throughout the course s
 can see what \R\ does.  Preview topics by showing before asking students to do things.
 
 \item
-Teach \R\ as a programming language.
+Teach \R\ as a programming language. (But don't overdo it.)
 
 There is a bit of syntax to learn -- so teach it explicitly.
 \begin{itemize}
@@ -57,9 +39,9 @@ Capitalization (and spelling) matter
 \item
 Explain carefully (and repeatedly) the syntax of functions.
 \item
-Every object in \R\ has a type (class).  \emph{What type of thing is this?}
+Every object in \R\ has a type (class).  Ask frequently: \emph{What type of thing is this?}
 \item
-Get students to think about what arguments are needed for functions:
+Get students to think about what arguments are needed for functions by asking
 \emph{What does this function need to know to do its job?}
 \end{itemize}
 Give more language details in higher level courses
@@ -78,7 +60,7 @@ Use a few methods frequently and students will learn how to use them well, flexi
 even creatively. 
 
 Focus on a small number of data types: numerical vectors, character
-strings, data frames.  
+strings, factors, and data frames.  
 
 Not everything needs to be introduced from first principles.  For
 instance, categorical variables are easily enough understood by
@@ -148,6 +130,9 @@ Focus on diagnosing what they don't know and how to help them ``get it''.
 Tell students to copy and paste \R\ code and error messages into email when they
 have trouble.  When you reply, explain how the error message helped you diagnose their
 problem and help them generalize your solution to other situations.
+\FoodForThought[Tip]{Tell your students to copy and paste error messages
+into email rather than describe them vaguely.  It's a big time saver for
+both of you.}%
 \end{enumerate}
 
 \subsection{Tactics}
