@@ -617,6 +617,7 @@ xhistogram(~ t, simulated, groups=t >= data.t, v=data.t)
 
 
 \subsubsection{Using \texttt{lm()}}
+\label{sec:lm}
 An alternative approach to comparing two means is based on the use of linear models. 
 
 \begin{example}
