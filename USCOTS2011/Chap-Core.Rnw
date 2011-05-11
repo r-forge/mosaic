@@ -417,7 +417,7 @@ with(HELP, fisher.test(homeless, sex))
 
 \section{Quantitative Response to a Categorical Predictor}
 
-\subsection{A Bivariate Predictor: Two-sample t}
+\subsection{A Bivariate Predictor: Numerical and Graphical Summaries}
 Here we will compare the distributions of CESD scores by sex.
 
 The \verb!aggregate()! function can be used to calculate the mean CESD score
@@ -441,11 +441,47 @@ bwplot(cesd ~ sex, data=HELP)
 @
 \end{center}
 
-\subsection{Nonparametric 2 group tests}
+\subsection{A Bivariate Predictor: Two-sample t}
+
+The Student's two sample t-test can be run without or with an equal variance assumption.
+
+<<help-nonpar>>=
+t.test(cesd ~ sex, data=HELP, var.equal=FALSE)
+@
+
+We see that there is a statistically significant difference between the two groups.
+
+
+\subsection{Non-parametric 2 group tests}
+
+The same conclusion is seen using a non-parametric (Wilcoxon rank sum) test.
 
 <<help-nonpar>>=
 wilcox.test(cesd ~ sex, data=HELP)
 @
+
+\subsection{Non-parametric 2 group tests}
+
+
+
+\subsection{Permutation test}
+
+Here we extend the methods introduced in section \ref{sec:comparing-two-means} to 
+undertake a two-sided test.
+
+<<permute,fig=TRUE>>=
+simulations <- 1000
+test.stat <-  abs(diff(aggregate(cesd ~ sex, HELP, mean)$cesd))
+test.stat
+rtest.stats <- do(simulations) * c(diff= diff(aggregate(cesd ~ shuffle(sex), HELP, mean)$cesd))
+rtest.stats[simulations+1,] = test.stat  # add in the observed value
+dotPlot(~ abs(diff), rtest.stats, n=40, groups=abs(rtest.stats$diff) >= test.stat, pch=16, cex=.8 )
+ladd(panel.abline(v=test.stat))                 # add a vertical line
+@
+
+\authNote{NH: comments and suggestions welcomed: this is a kludge}
+
+The same conclusion is observed with a permutation test.
 
 \subsection{Oneway ANOVA}
 
@@ -467,14 +503,24 @@ summary(mod)
 <<help-aovlm>>=
 mod1 <- lm(cesd ~ 1, data=HELP)
 mod2 <- lm(cesd ~ substance, data=HELP)
+@
+
+The \verb!anova()! command can be used to compare two (nested) models.
+
+<<help-aov2>>=
 anova(mod1, mod2)
 @
 
 
 \subsection{Tukey's Honest Significant Differences}
 
+There are a variety of multiple comparison procedures.  One of these is Tukey's Honest
+Significant Difference (HSD).  Other options are available with the \verb!multcomp! package.
+
 <<help-hsd>>=
 with(HELP, tapply(cesd, substance, mean))
+@
+<<help-hsd2>>=
 TukeyHSD(mod, "substance")
 @
 
@@ -482,11 +528,17 @@ TukeyHSD(mod, "substance")
 
 \subsection{Logistic Regression}
 
+Logistic regression is available from within the \verb!glm()! function: a variety of
+link functions and distributional forms for generalized linear models are supported.
+
 <<help-logit>>=
 summary(glm(homeless ~ age + female, binomial, data=HELP))
 @
 
 \section{Survival Time Outcomes}
+
+Extensive support for Survival (Time to Event) analysis is available within the 
+\verb!survival! package.
 
 \subsection{Kaplan-Meier plot}
 
@@ -502,12 +554,17 @@ title("Product-Limit Survival Estimates (time to linkage)")
 @
 \end{center}
 
+We see that the subjects in the treatment (HELP clinic) were significantly more likely to 
+link to primary care than the control (usual care) group.
+
 \subsection{Cox proportional hazards model}
 
 <<help-surv>>=
 library(survival)
 summary(coxph(Surv(dayslink, linkstatus) ~ age + substance, data=HELP))
 @
+
+Neither age, nor substance group was significantly associated with linkage to primary care.
 
 
 \section{More than Two Variables}
