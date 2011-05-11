@@ -8,12 +8,13 @@
 \SweaveOpts{pdf=T}          % use pdf for graphics
 \SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
-\SweaveOpts{width=4.5}
-\SweaveOpts{height=3}
+\SweaveOpts{width=4.0}
+\SweaveOpts{height=2.5}
 
 
 <<setup,echo=F>>=
 source('setup.R')
+trellis.par.set(fontsize=list(text=10))
 @ 
 
 If you are of a certain age, you may remember the 1960s television show {\em
@@ -178,36 +179,34 @@ times in the 100-meter free-style race.
 swim = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/swim100m.csv")
 levels(swim$sex) <- c('Women','Men')
 swim.plot = function(col='black',show.legend=TRUE,...){
-plot( time ~ year, pch=21-2*as.numeric(sex), cex=1.4,xlim=c(1899,2010),
-     cex.lab=1.3, cex.axis=1.3,data=swim,xlab='Year',
+plot( time ~ year, pch=19-4*as.numeric(sex), cex=1.0,xlim=c(1899,2010),
+     cex.lab=1.0, cex.axis=1.0,data=swim,xlab='Year',
      ylab='Time (secs)',col=col,...)
-  if( show.legend) legend(1980,92, legend=c("Women","Men"),pch=c(19,17),cex=1.3)
+  if( show.legend) legend(1980,92, legend=c("Women","Men"),pch=c(17,15),cex=1.0)
 }
 swim.plot2 = function(show.legend=TRUE,...){
 print(
-xyplot( time ~ year, data=swim, groups=sex,
-#	 pch=21 - 2 * as.numeric(sex), 
-#	 cex=1.4, 
+xyplot( time ~ year, data=swim, groups=sex, 
 	 xlim=c(1899,2010), 
-#	 cex.lab=1.3, 
-#	 cex.axis=1.3, 
 	 xlab='Year',
      ylab='Time (secs)',
-	 auto.key=list(columns=2),
-	 ...)
+	 auto.key= if (show.legend) list(columns=2) else FALSE,
+	 ...,
+	 par.settings = list( superpose.symbol=list(pch=c(17,15)) )
+	 )
   )
 }
 @ 
 
 
 \begin{center}
-<<swim-data-raw,fig=true,pdf=true,include=true,echo=false>>=
+<<swim-data-raw,fig=true,include=true,echo=false,eval=false>>=
 swim.plot( )
 @ 
 \end{center}
 
 \begin{center}
-<<swim-data-raw2,fig=true,pdf=true,include=true,echo=false>>=
+<<swim-data-raw2,fig=true,include=true,echo=false>>=
 swim.plot2( )
 @ 
 \end{center}
@@ -225,7 +224,7 @@ The model \model{\VN{time}}{1 + \VN{year}} gives the familiar
 straight-line form: the intercept term (written simply as 1) and a term corresponding to the
 linear dependence on \VN{year}.
 
-<<swim-data-1,fig=true,pdf=true,include=true,echo=false>>=
+<<swim-data-1,fig=false,include=true,echo=false>>=
 swim.mod.plot = function(form,dots=FALSE, lwd=4) {
   t = as.character(form)
   t = paste(t[c(2,1,3)],collapse=" ")
@@ -240,6 +239,34 @@ swim.mod.plot = function(form,dots=FALSE, lwd=4) {
 swim.mod.plot(time ~ year)
 @ 
 
+
+\begin{center}
+<<swim-data-1b,fig=true,include=true,echo=false>>=
+swim.mod.plot2 = function(form, dots=FALSE, lwd=3, show.legend=FALSE,...){
+  t = as.character(form)
+  t = paste(t[c(2,1,3)],collapse=" ")
+  model = lm( form, dat=swim )
+  print(
+  xyplot( time ~ year, data=swim, groups=sex, 
+	 xlim=c(1899,2010), 
+	 xlab='Year',
+     ylab='Time (secs)',
+	 auto.key= if (show.legend) list(columns=2) else FALSE,
+	 panel = function(x, y, ...) {
+	 	panel.xyplot(x, y, col='gray', ...)
+		if (dots) 
+		  panel.points(x, fitted(model), cex=1.0, alpha=.7)
+		else 
+		  panel.abline(reg=model, lwd=lwd)
+	 },
+	 par.settings = list( superpose.symbol=list(pch=c(17,15)) ),
+	 ...)
+  )
+}
+swim.mod.plot2(time ~ year)
+@ 
+\end{center}
+
 This model captures some of the pattern evident in the data: that
 swimming times are improving (getting shorter) over the years.  And it
 ignores other obvious features, for example the difference between men's
@@ -252,9 +279,11 @@ improving as fast as they did in the early days.
 The model \model{\VN{time}}{\VN{sex}} breaks down the swimming times
 according to \VN{sex}:
 
-<<swim-data-2,fig=true,pdf=true,include=true,echo=false>>=
-swim.mod.plot(time ~ sex, dots=TRUE)
+\begin{center}
+<<swim-data-2,fig=true,include=true,echo=false>>=
+swim.mod.plot2(time ~ sex, dots=TRUE)
 @ 
+\end{center}
 
 This model reflects the typical difference between men's and women's
 times.  It's oblivious to the trend that records improve over the
@@ -265,9 +294,11 @@ years.  Why?  Because the variable \VN{year} was not included in the model.
 The record time evidently depends both on \VN{sex} and \VN{year}, so
 it's sensible to include both variables in the model
 
-<<swim-data-3,fig=true,pdf=true,include=true,echo=false>>=
-swim.mod.plot(time ~ sex + year, dots=TRUE)
+\begin{center}
+<<swim-data-3,fig=true,include=true,echo=false>>=
+swim.mod.plot2(time ~ sex + year, dots=TRUE)
 @ 
+\end{center}
 
 \authNote{DTK: Should these graphics be re-written to display as
   continuous forms rather than dots?}
@@ -294,9 +325,11 @@ both \VN{sex} and \VN{year}.  Such a term is constructed with the syntax
 \VN{sex}:\VN{year} (or, what would amount to the same thing,
 \VN{year}:\VN{sex}).  
 
-<<swim-data-4,fig=true,pdf=true,include=true,echo=false>>=
-swim.mod.plot(time ~ sex * year, dots=TRUE)
+\begin{center}
+<<swim-data-4,fig=true,include=true,echo=false>>=
+swim.mod.plot2(time ~ sex * year, dots=TRUE)
 @ 
+\end{center}
 
 In statistics, such a term is called an \emph{interaction term}.  (In
 mathematics, it's often called a \emph{bi-linear term}.)  It's the
@@ -325,9 +358,11 @@ It's also possible to have models that have no explanatory variables
 whatsoever.  Just the intercept term appears to the right of the
 modeling $\sim$.
 
-<<swim-data-5,fig=true,pdf=true,include=true,echo=false>>=
-swim.mod.plot(time ~ 1, dots=TRUE)
+\begin{center}
+<<swim-data-5,fig=true,include=true,echo=false>>=
+swim.mod.plot2(time ~ 1, dots=TRUE)
 @ 
+\end{center}
 
 As you might expect, by leaving out both \VN{sex} and \VN{year} from
 the model, it doesn't reflect the role of either variable in any way.
@@ -353,17 +388,23 @@ idea of quadratics and polynomials, they might be interested to see
 that the modeling language can handle this.  Here are three different
 models involving a polynomial dependence on \VN{year}:
 
-<<swim-data-6,fig=true,pdf=true,include=true,echo=false>>=
-swim.mod.plot(time ~ poly(year,2), dots=TRUE)
+\begin{center}
+<<swim-data-6,fig=true,include=true,echo=false>>=
+swim.mod.plot2(time ~ poly(year,2), dots=TRUE)
 @ 
+\end{center}
 
-<<swim-data-7,fig=true,pdf=true,include=true,echo=false>>=
-swim.mod.plot(time ~ sex + poly(year,2), dots=TRUE)
+\begin{center}
+<<swim-data-7,fig=true,include=true,echo=false>>=
+swim.mod.plot2(time ~ sex + poly(year,2), dots=TRUE)
 @ 
+\end{center}
 
-<<swim-data-8,fig=true,pdf=true,include=true,echo=false>>=
-swim.mod.plot(time ~ sex * poly(year,2), dots=TRUE)
+\begin{center}
+<<swim-data-8,fig=true,include=true,echo=false>>=
+swim.mod.plot2(time ~ sex * poly(year,2), dots=TRUE)
 @ 
+\end{center}
 
 Although these models reflect more ``detail'' in the data, namely the
 curvature, they do it in a way that ultimately does not make sense in
