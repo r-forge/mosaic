@@ -675,6 +675,8 @@ call ``phenotype,'' the observable characteristics themselves.  The MOSAIC
 dataset \texttt{Galton} contains, transcribed to a modern format, measurements that Galton himself
 collected on the heights of adult children and their parents. 
 
+
+
 <<galton-data>>=
 data(Galton)
 head(Galton)
@@ -723,20 +725,23 @@ influence of the parents is different for the different sexes, or
 whether what looks like an even split of influence between the father
 and mother could all, in fact, be attributed to the mother.
 
-\problem{Consider the \texttt{CPS} data that gives per-hour wages and
+\begin{problem}[stars=1]Consider the \texttt{CPS} data that gives per-hour wages and
   other measurements for workers in the mid-1980s.  Is there evidence in the data for
   discrimination on the basis of race and/or sex?  What covariates
   might one reasonably adjust for in measuring the difference between
-  the races or the sexes?}
+  the races or the sexes?
+\end{problem}
   
 
 \shipoutProblems
 
 \chapter{Computing by Hand}
 
-DTK: This chapter should be moved to the Master file.  I will wait
+\authNote{DTK: This chapter is currently created in
+  Chap-Multivariate.Rnw, but should be moved to a separate Rnw file
+  and included directly in the Master file.  I will wait
   until it's bigger and I have checked to make sure nobody else is
-  working on the Master file.
+  working on the Master file.}
 
 
 R is a valuable tool, but for an instructor it is just one tool among
