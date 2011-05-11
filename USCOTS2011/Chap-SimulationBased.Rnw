@@ -17,10 +17,11 @@
 source('setup.R')
 @ 
 
+
 \section{Simulation and Randomization with the  \texttt{mosaic} Package}
 
 Software environments almost always provide an important feature:
-\authNote{Why use itemize when you want to enumerate?  If we don't like the 
+\authNoted{Why use itemize when you want to enumerate?  If we don't like the 
 display of enumerate, we should reset the defaults.  I'm switching to enumerate.
 ---rjp.  DTK says, ``Thanks.''  I didn't know about the saveenumi and
 reuseenumi.  Very helpful.  One of many things I'm learning.  }
@@ -101,10 +102,6 @@ nrow(SAT)
 @ 
 
 
-\authNoted{DTK: Danny should fix the SAT data set so that states like
-  ``New York'' don't have a comma inserted in place of the space.
-
-  RJP:  done.}
 
 One of the variables to be measured from the population is the
 student/teacher ratio.  There are two equivalent ways to calculate this quantity:
@@ -137,14 +134,15 @@ realization that the random sample is exactly that.  Ask the class:
 Who got California?  (There should be one or two in a class of 20.)
 Who got Alabama?  Did anyone get the same state twice?
 \authNote{RJP:
-No one will get the same state twice with \verb!smaple()! or 
-with \verb!shuffle()! under the default settings.  \verb!resample()! 
+No one will get the same state twice with \texttt{smaple()} or 
+with \texttt{shuffle()} under the default settings.  \texttt{resample()} 
 on the other hand, samples with replacement by default.
-We could use \verb!deal()! here, but why mix metaphors when you are talking
+We could use \texttt{deal()} here, but why mix metaphors when you are talking
 about sampling?
 }
 \end{example}
 
+\authNote{We had \texttt{echo=false} here, but I think we mean \texttt{eval=false} ---rjp}%
 \begin{problem}[stars=2]
  (This isn't a question for beginning students, just one
 for developing instructor capabilities.)  
@@ -153,7 +151,6 @@ different states, rather than just 50 cases that might include
 duplicates?  
 Try each of the following
 and see if you can understand what's going on in each of them:
-\authNote{We had \verb!echo=false! here, but I think we mean \verb!eval=false! ---rjp}%
 <<eval=false>>=
 with(SAT, table(state))
 length(with(SAT, table(state)))
@@ -164,9 +161,9 @@ table(table(SAT$state))
 
 The value of some measure for the population is, of course, called the ``population
 parameter.''  
-\authNote{RJP: Why use scare quotes here?  Use \verb!\term{}! to highlight terms.  We 
+\authNote{RJP: Why use scare quotes here?  Use \texttt{\term{}} to highlight terms.  We 
 can define that to be boldface font or some such.}%
-But for a sample, it's a ``sample statistic.''  It's
+But for a sample, it's a \term{sample statistic}.  It's
 worthwhile to make the distinction concrete:
 <<>>=
 with(SAT, mean(ratio))
@@ -177,7 +174,7 @@ Good questions to ask in class at this point: Who got a sample
 statistic that's bigger than the population parameter?  (About half
 the class will say yes.)  Who got a sample statistic that's exactly
 equal to the population parameter?  (It's unlikely that there will be a match.)
-\authNote{Is it worth the effort to write a few macros that place marginal
+\authNoted{Is it worth the effort to write a few macros that place marginal
 notes alerting the reader to things like ``questions for students'', 
 ``just for instructors'', ``R pitfalls'', etc.  
 Perhaps we could use the data set identifier from Danny's book
@@ -296,10 +293,11 @@ child, and families with more children have their family size
 represented proportionally more.  
 
 
-\authNote{DTK: To be added to the style guidelines????  I like to have a macro that typesets variable names in
+\authNote{DTK: To be added to the style guidelines????  
+I like to have a macro that typesets variable names in
   a consistent way, e.g., a sans-serif font.  It doesn't matter so
   much what the typestyle is, so long as we can be consistent.  I
-  suggest \verb+\VN{}+ as the markup.  We need a similar markup for
+  suggest \texttt{\VN{}} as the markup.  We need a similar markup for
   data sets and for operators (so that we can make an index of operators.}
 There are several ways to convert the \texttt{Galton} to a new data
 set where the case is a family.  The key information is contained in
@@ -338,7 +336,7 @@ with( families, mean(nkids) )
   \authNote{RJP:  build appropriate data frames for this and Alzheimer's examples.
   Do we want to show how to build these?  I say yes.  It would be good for instructors
   to see how these are built.  Those who are not interested can simply
-  copy.  We can put this stuff into a \verb!demo()! for easy access.
+  copy.  We can put this stuff into a \texttt{demo()} for easy access.
   DTK: I agree.
   }
 
@@ -382,6 +380,10 @@ tell them which are which.
 \item
 \verb!rflip()! allows you to flip biased coins as well.  Let's simulate a 90\%
 free throw shooter shooting 10 free throws.
+
+\item 
+It can be fun to have students compare the results of flipping, spinning, and tipping pennies.
+Many are surprised to learn that these do not all have same probability of producing heads.
 \end{enumerate}
 <<>>=
 rflip(10, prob=.9)
@@ -591,7 +593,7 @@ xhistogram(~ rtest.stats, v=test.stat, groups=rtest.stats >= test.stat)
 <<two-sample-dot,fig=true,width=5,height=2.2>>=
 test.stat <-  diff(aggregate(age ~ sex, HELP, mean )$age)
 rtest.stats <- do(200) * c(diff= diff(aggregate(age ~ shuffle(sex), HELP, mean)$age))
-dotPlot(~ diff, rtest.stats, n=40, groups=rtest.stats$diff >= test.stat, pch=16 )
+dotPlot(~ diff, rtest.stats, n=40, groups=rtest.stats$diff >= test.stat, pch=16, cex=.8 )
 ladd(panel.abline(v=test.stat))                 # add a vertical line
 @
 \end{center}
@@ -760,7 +762,7 @@ carry out simulations of familiar statistical operations.   Those
 simulations tell the student what they are likely to see \emph{if they were on that planet}.   
 Our goal is to figure out whether Earth looks more like Planet Null or more like 
 Planet Alt.
-\authNote{R': Are we OK with this last sentence?  Perhaps it will get us into trouble, but I'll
+\authNote{rjp: Are we OK with this last sentence?  Perhaps it will get us into trouble, but I'll
 leave it for now and see how it goes.}
 
 For the professional statisticians, the planet metaphor is
@@ -800,7 +802,7 @@ The data set gives the \VN{sex}, \VN{age}, and \VN{net} running time
 (start line to finish line) for each of the 8636 runners who
 participated: the population of runners in that race.
 
-\authNote{I changed \verb!our.population! to \verb!population!.  If you really like the old
+\authNoted{I changed \verb!our.population! to \verb!population!.  If you really like the old
 name, you can change it back.  --rjp --- Yours is better. DTK  Thanks
 for adding TenMileRace to the package.}
 <<>>=
