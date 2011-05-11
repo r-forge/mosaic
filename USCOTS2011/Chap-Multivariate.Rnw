@@ -74,6 +74,27 @@ foundations --- using just high-school math and simple extensions
 largely specified already in the ``Common Core'' --- that make the concept
 of modeling accessible.
 
+There are three important pedagogical advantages to using multivariate linear models
+as a foundation for statistics:
+\begin{enumerate}
+  \item It provides a logically coherent framework that unifies many
+    of the disparate techniques found in introductory statistics books.
+  \item It allows the very important ideas of confounding and
+    covariates to be introduced in an integrated way, showing students
+    not only the perils of confounding, but what to do about it (and
+    when you can't do anything).
+  \item It allows the examples used in classes to be drawn from a
+    richer set of situations, and provides scope for students to
+    express their creativity and insight.  This can increase student
+    motivation.
+\end{enumerate}
+Of course, it's also important that modern statistical work is already
+and increasingly shaped by multivariate methods.  For an example of
+how over the last few decades statistical methods used in the
+literature have shifted away from the curriculum of the traditional,
+non-multivariate introductory course, see the review of statistics
+practices in the \emph{New England Journal of Medicine}. \cite{switzer-horton-2005}
+
 \section{The Mathematical Foundations}
 
 A standard part of the high-school curriculum is the equation of a
@@ -173,8 +194,8 @@ The process of finding a specific formula to make a model match the
 pattern shown by data is called ``fitting the model to the data.''  
 
 To see how different model specifications correspond to different
-``shapes'' of models, consider the world-record times in the 100-meter 
-free-style race.
+``shapes'' of models, consider the history of world-record times in the 100-meter 
+free-style swimming race.
 
 <<read-swim,echo=false>>=
 swim = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/swim100m.csv")
@@ -437,13 +458,200 @@ models that are most satisfactory to you:
 
 \section{Finding Formulas from Data}
 
-How to fit.
+Behind the graphical depictions of the models shown in the previous
+section is a process for finding specific numerical formulas for the
+models.  The software to do this is packaged into the \texttt{lm( )}
+operator and is very easy for students and professionals alike.  The
+human work, and what students need to learn, is not the mechanics of
+fitting models, but the interpretation of them.  A good place to start
+is with the interpretation of model coefficients.
 
-Fitted model values.
+To illustrate, consider the actual swimming records data employed in
+the previous examples.  This data set is available via the internet,
+and can be loaded into R with a command like the following:
 
-Residuals
+\authNote{DTK: Eventually, we have to build into MOSAIC an easy way
+  for instructors to specify a web location for their data.  The
+  \texttt{ISMdata( )} function already does this in a limited way.}
 
-Predict
+<<swim-coeffs1>>=
+swim = read.csv("http://www.macalester.edu/~kaplan/ISM/datasets/swim100m.csv")
+@ 
+
+\authNote{DTK: I couldn't stand the default printing of lm, so I
+  changed it. We might want to do this more generally, but it's not
+  something we need to worry about here.}
+
+<<redefine-print-lm,echo=false>>=
+print.lm = function (x, digits = max(3, getOption("digits") - 3), ...) 
+{
+#    cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
+#        "\n\n", sep = "")
+    if (length(coef(x))) {
+        cat("Coefficients:\n")
+        print.default(format(coef(x), digits = digits), print.gap = 2, 
+            quote = FALSE)
+    }
+    else cat("No coefficients\n")
+    cat("\n")
+    invisible(x)
+}
+@ 
+As before, we'll model the world-record \VN{time} as a function of \VN{sex}
+and \VN{year}.
+
+Here's the very simplest model: all cases are modeled as being the same.
+<<swim-coeffs2>>=
+lm( time ~ 1, data=swim )
+@ 
+The fundamental purpose of \texttt{lm( )} is to find the coefficients
+that flesh out the skeleton provided by the model description.  For
+this simple model, the coefficient works out to be the mean of the
+record times:
+<<>>=
+with( data=swim, mean(time) )
+@ 
+\authNote{DTK: I'm looking forward to being able to write mean(time, data=swim).}
+
+Models are more interesting that contain actual explanatory
+variables.  Here's one using the quantitative variable \VN{year}:
+<<swim-coeffs3>>=
+lm( time ~ year, data=swim )
+@ 
+The coefficients now are the slope and intercept of the straight-line
+relationship: $\mbox{time}  = -0.2599 \mbox{year} + 567.242$.
+
+There's a similar story with categorical variables, like \VN{sex}:
+<<swim-coeffs4>>=
+lm( time ~ sex, data=swim )
+@ 
+Based on the result of the simple all-cases-the-same model
+\model{\VN{time}}{1}, you might suspect that the coefficients are the
+group means.  That's close to being right.  Here are the group means:
+<<>>=
+mean( time ~ sex, data=swim )
+@ 
+\InstructorNote{In the MOSAIC package, the syntax of familiar
+  operators like \texttt{mean( )}, \texttt{sd( )}, etc. has been
+  extended so that the modeling notation can be used to calculate
+  group-by-group values.  Our goal is to make is straightforward to
+  transition from conventional basic stats to modeling, by getting
+  students used to the $\sim$ and \texttt{data=} notation early.  You
+  can even do \texttt{mean( time}$ ~ $ \texttt{ 1, data=swim )}. 
+  So you can talk about models in a systematic way even if all you want to cover is means,
+  proportions, medians, etc.}
+
+
+The coefficients of the linear model are organized differently than
+simple group means.
+Notice that there is a \VN{sexM} coefficient, but no similarly named
+coefficient for women.  Instead, there is the intercept coefficient.  
+This corresponds to the mean \VN{time} of one
+of the groups: the reference group.  In this case, the reference group
+is women.  
+
+The other coefficient, \VN{sexM} tells the
+\emph{difference} between the mean of the reference group and the mean
+for the men.  In other words, the coefficients are arranged in
+intercept-slope form, but for categorical variables the coefficient
+isn't a slope but a finite-difference.  
+
+\InstructorNote{The intercept is so important that the \texttt{lm( )}
+  operator includes it by default, even if you don't specify it
+  explicitly in the model design.  In those rare cases when you don't
+  want an intercept term, use the notation \texttt{-1} as part of the
+  model design.}
+
+
+It's important to keep in mind the intercept-slope/difference format
+when interpreting the coefficients from models with multiple
+explanatory variables:
+<<>>=
+lm( time ~ sex + year, data=swim )
+@ 
+As usual, there is an intercept coefficient.  It's meaning is a little bit
+subtle: it is the intercept for the reference group (in these data, women).  The coefficient
+on \VN{year} is a slope.  The \VN{sexM} coefficient is a difference:
+it's how the intercept differs for group \VN{M} from the reference
+group.  
+
+In traditional mathematical notation, the model formula corresponding
+to these coefficients is
+$$
+\mbox{time} = - 0.2515 \ \mbox{year}  + \ \left\{ \begin{array}{rll}
+  555.7168  &  & \mbox{for women}\\
+555.7168  &  - 9.7980  & \mbox{for men}
+\end{array}\right.
+$$
+
+\authNote{DTK: For problems, pull out some of the exercises from the
+  coefficients chapter, including one on interaction terms. Use Question 1 from the 2011 ISM final
+  exam.}
+
+One of the great strengths of R comes from the ability to carry out
+new computations on the results from other computations.  To
+illustrate, give a name to a fitted model.
+<<>>=
+mod1 = lm( time ~ year + sex + year:sex, data=swim )
+@ 
+
+From the model, you can now compute additional information.  Important
+operators for demonstrating basic properties of models are
+\texttt{resid( )},  \texttt{fitted( )}, and \texttt{predict}.  
+
+
+<<>>=
+mean( resid(mod1) )
+sd( resid(mod1) )
+var( fitted(mod1) )/var(swim$time) # R-squared
+sum( fitted(mod1)^2 ) # sum of squares of the fitted
+sum( resid(mod1)^2 ) # sum of squares of the residuals
+@ 
+
+For plotting the fitted model values
+<<eval=false>>=
+xyplot( fitted(mod1) ~ year, data=swim )
+@ 
+
+<<swim-plot-mod7,fig=true,echo=false>>=
+print(xyplot( fitted(mod1) ~ year, data=swim ))
+@ 
+
+<<>>=
+predict( mod1, newdata=data.frame(year=2020, sex="F") )
+predict( mod1, newdata=data.frame(year=2020, sex="M") )
+@ 
+According to the model, by year 2020, women's records will break those
+of men.
+
+
+When you get to the stage where you want to talk about statistical
+inference, you can of course show bootstrapping and permutation
+tests.  For example for bootstrapping standard errors:
+<<>>=
+s = do(100)* lm( time ~ year + sex + year:sex, data=resample(swim) )
+sd(s)
+@ 
+
+
+And, of course, you can do the conventional theoretical calculations
+for inference.  
+\begin{itemize}
+\item Confidence intervals, for instance at a 95\% level
+<<>>=
+confint(mod1, level=0.95)
+@ 
+\item Analysis of variance
+<<>>=
+anova(mod1)
+@ 
+\item The regression report and other statistics on the model
+<<>>=
+summary(mod1)
+@ 
+
+\end{itemize}
+
 
 \section{Example: Genetics before Genes}
 
