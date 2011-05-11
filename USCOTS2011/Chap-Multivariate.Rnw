@@ -617,12 +617,12 @@ xyplot( fitted(mod1) ~ year, data=swim )
 print(xyplot( fitted(mod1) ~ year, data=swim ))
 @ 
 
+The model suggests that women's times will soon break those of men.
+To evaluate the model for new values of inputs, use \texttt{predict( )}.
 <<>>=
 predict( mod1, newdata=data.frame(year=2020, sex="F") )
 predict( mod1, newdata=data.frame(year=2020, sex="M") )
 @ 
-According to the model, by year 2020, women's records will break those
-of men.
 
 
 When you get to the stage where you want to talk about statistical
@@ -632,7 +632,6 @@ tests.  For example for bootstrapping standard errors:
 s = do(100)* lm( time ~ year + sex + year:sex, data=resample(swim) )
 sd(s)
 @ 
-
 
 And, of course, you can do the conventional theoretical calculations
 for inference.  
@@ -655,22 +654,133 @@ summary(mod1)
 
 \section{Example: Genetics before Genes}
 
-About Galton's data.
+To emphasize the flexibility that multivariate models gives in asking
+questions of statistical interest, let's consider a problem of
+historical significance: Francis Galton's attempt to quantify the heritability
+of height.
 
-\section{Bias in Sampling?  Choosing library books off a shelf?}
+Galton famously developed the correlation coefficient in the late
+1880s.  (See \cite{galton-co-relations}.)  One of his motivations was to
+put on a quantitative footing the theory of evolution established
+by his half-cousin, Charles Darwin.  It's important to realize that
+Darwin himself did not know the mechanism by which traits were
+inherited.  He imagined a particle of inheritance which he called a
+``gemmule.''  The words ``gene'' and ``genetics'' date from the first
+decade of the 20th century, the same decade when William Gossett started
+publishing under the pseudonym ``Student.''  It wasn't until 1944 when
+DNA was shown to be associated with genetic heritability.
 
-\section{Taking Your Class for a Random Walk}
+Without a mechanism of genotype, Galton needed to rely on what we now
+call ``phenotype,'' the observable characteristics themselves.  The MOSAIC
+dataset \texttt{Galton} contains, transcribed to a modern format, measurements that Galton himself
+collected on the heights of adult children and their parents. 
 
-\section{Biostatistics example: gene sequencing?}
+<<galton-data>>=
+data(Galton)
+head(Galton)
+@ 
 
-\section{The perils of multiple comparisons}
+By today's standards, Galton's techniques were quite limited, but did
+suffice to quantify in some ways the heritability of height.  Galton
+examined, for the boys, the correlation between the height of the
+``mid-parent'' and the boy's height.  If Galton had R available (rather than
+having to invent $r$!), he might have done the following calculation:
+<<>>=
+Galton$midparent = (Galton$father + 1.08*Galton$mother)/2
+boys = subset(Galton, sex=="M")
+with( boys, cor(midparent,height))
+@ 
 
-\section{The sampling distribution of R2 and F under the null hypothesis}
+This is purely speculation, but it seems unlikely that Galton,
+with his interests ranging from exploring Namibia to fingerprints to meteorology (and, it
+must be mentioned, eugenics), would have restricted himself to a
+correlation between the mid-parent and boy's heights.  Might height be
+inherited differently from the mother and the father?  Is the same
+mechanism at work for girls as for boys?  Does one parent's height
+have a potentiating effect on the influence of the other parent's height?
+
+Presumably, Galton would have constructed more detailed descriptions
+of the relationship between a child's adult height and the genetic and
+environmental influences, rather than focusing on only the parent's
+height.  Even with the few variables in Galton's own dataset, one can
+use models to explore hypothesized relationships.
+
+By all means, use Galton's data to illustrate simple modeling
+techniques, e.g., 
+<<>>=
+lm( height ~ father + sex, data=Galton )
+@ 
+
+But consider going further and using inferential methods to see what
+evidence is contained in Galton's data more detailed descriptions.
+For instance, in the relatively simple model
+<<>>=
+summary( lm( height ~ sex + father + mother + nkids, data=Galton) )
+@ 
+
+Ask your students to investigate, through modeling, whether the
+influence of the parents is different for the different sexes, or
+whether what looks like an even split of influence between the father
+and mother could all, in fact, be attributed to the mother.
+
+\problem{Consider the \texttt{CPS} data that gives per-hour wages and
+  other measurements for workers in the mid-1980s.  Is there evidence in the data for
+  discrimination on the basis of race and/or sex?  What covariates
+  might one reasonably adjust for in measuring the difference between
+  the races or the sexes?}
+  
+
+\shipoutProblems
+
+\chapter{Computing by Hand}
+
+DTK: This chapter should be moved to the Master file.  I will wait
+  until it's bigger and I have checked to make sure nobody else is
+  working on the Master file.
+
+
+R is a valuable tool, but for an instructor it is just one tool among
+many for developing students' skills and understanding.   In this
+section, we illustrate some teaching strategies we have found effective
+that involve students doing the calculations themselves.  In some
+cases, these are actual paper-and-pencil calculations.  In others, we
+take a calculation or method apart, using the computer as if it were a set
+of hand tools and having the student build the operation.  Still other
+examples are kinesthetic in nature: giving students a physical
+intuition about the meaning of an operation.  And in others, we use
+the students in class collectively to illustrate variation and its meaning.
+
+Since this is a book about using the computer in teaching, it may seem
+odd to include ``by hand'' methods.  One reason we do it is to
+emphasize that the broad goal is to teach statistics and statistical skills
+and concepts.  But another reason has directly to do with building
+computing skills and the attitudes that support the skilled us of
+computing.  Among these are:
+\begin{enumerate}
+  \item The computer is not magical.  It's doing the same things you
+    can do yourself, but with greater speed and precision and with
+    much, much greater toleration of tedious repetition.
+  \item That complicated operations are constructed by putting
+    together simpler operations.  
+  \item That you should be able to open the ``black box'' and confirm
+    that the results the computer is giving you make sense.
+\end{enumerate}
+
+
+
+
+
+\section{Some Simple Model Calculations}
+
+Group means.  
 
 \section{A demonstration of shuffling and how it implements the null hypothesis}
 
 \section{Working through an ANOVA calculation by hand}
 
-\section{Sampling bias in survival studies (with a simulation)}
+\section{Coverage}
 
-\shipoutProblems
+\section{The perils of multiple comparisons}
+
+\section{Taking Your Class for a Random Walk}
+
