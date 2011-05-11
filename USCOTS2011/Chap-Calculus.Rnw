@@ -12,7 +12,86 @@ source('setup.R')
 @ 
 
 
-\chapter{Mathematics in R}
+\chapter{Teaching Calculus (and Beyond) in R}
+
+Perhaps you are thinking, ``Why a chapter about teaching
+calculus?''  Statisticians do one thing, mathematicians do
+another.  Indeed, the large majority of introductory statistics
+classes, including the AP statistics class, is taught without any
+mention of calculus-level mathematics.  As if to return the favor, a
+student taking almost any present-day calculus course will find little or no
+reason to think of a relationship to statistics.
+
+When it comes to software, hardly any calculus-level mathematics
+course is taught with R.  According to the Mathematical Association of
+America (MAA), in 2005, only about 50\% of university-level introductory
+calculus was taught using any computer technology at all, and most of
+that is graphing calculators.  When computers are used, the software
+is generally Mathematica or Maple or Sage (which, like R, is free) or sometimes MATLAB.  
+
+Indeed, if you want to teach calculus the way it is commonly taught,
+there seems to be little reason to consider R.  
+
+But do you really want to teach calculus the way it is commonly
+taught?  What do you hope to accomplish by teaching calculus and are you
+successfully accomplishing it using the present techniques?  A recent
+survey by the MAA 
+\cite{bressoud-launchings-May-2011}
+% http://maa.org/columns/launchings/launchings_05_11.html
+of students in introductory calculus in colleges and universities in the US indicates that at the start of the
+semester, 58\% of students expected to get an A and 94\%
+ a B or higher.  At the end of the semester, 50\% had gotten a C or
+ lower or withdrawn from the course. 
+The majority of students taking introductory calculus have career
+interests outside of the traditional calculus clients: engineering,
+the physical sciences, mathematics itself.  Fully 30\% of
+students surveyed had their main interest in the medical/biological
+sciences.  
+
+Now think about the people you know outside of mathematics or physics
+or engineering.  How many biology faculty have more than the vaguest
+reminiscence of the topics of calculus?  They may remember it,
+positively or negatively, but they don't use it.
+
+What scientists across the board do use is statistics.  This is true
+in almost every field: biological, physical, and social sciences.  And
+it turns out that calculus does have centrally important uses in even
+introductory statistics.  Or, rather, if introductory statistics
+students know some calculus --- certain essential parts of calculus, not the
+large majority of topics featured in almost all of today's courses --- they can develop a
+stronger understanding of statistics and a better ability to use it in practice.
+
+It's likely that the large majority of people reading this book have
+taken calculus at some point and so have a firm idea of what calculus
+is about.  Put aside for the moment what you happened to study in your
+course and think instead of what students might actually need to work
+effectively in a world of complicated systems and massive
+amounts of data. 
+
+What students need:
+\begin{itemize}
+  \item The idea of a function, especially functions of two or more variables.
+  \item An ability to visualize functional relationships graphically.
+  \item A modeling strategy: how to approximate potentially complex
+    relationships with simple-to-understand ones.
+  \item Derivatives, especially partial derivatives, to understand
+    relationships and partial relationships.
+\end{itemize}
+
+What they don't need:
+\begin{itemize}
+  \item Limits and formal definitions of continuity.
+  \item Most symbolic algorithms, e.g. elaborate applications of the
+    chain rule in differentiation or almost any symbolic integration.
+  \item A course that leads them to drop the study of mathematics
+    before they see the things that they do need.  
+\end{itemize}
+
+As evidence that this is not an eccentric view, we refer you to the
+MAA report on ``Curriculum Renewal across the First Two Years,'' which
+examined the relationship between mathematics and more than 20
+``partner'' disciplines: ranging from physics to engineering to business to
+biology.\cite{MAA-CRAFTY}
 
 \authNote{Leave out this chapter for now?}
 
