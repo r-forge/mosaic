@@ -1,7 +1,5 @@
 \name{do}
 \alias{do}
-\alias{print.repeater}
-\alias{*.repeater}
 \title{
 Do Things Repeatedly
 }
@@ -12,8 +10,6 @@ with replication and resampling methods.
 \usage{
 do(n = 1, cull=NULL, mode=NULL) 
 
-\method{print}{repeater} (x, ...)
-\method{*}{repeater} (a,f)
 }
 \arguments{
   \item{n}{ number of times to repeat }
@@ -28,10 +24,6 @@ do(n = 1, cull=NULL, mode=NULL)
   \code{matrix}.
   }
   \item{mode}{ target mode for value returned}
-  \item{x}{ an object or function to be repeated or a repeater object to be printed}
-  \item{a}{ a repeater object }
-  \item{f}{ something to repeat }
-  \item{\dots}{additional arguments}
 }
 
 \value{
@@ -55,3 +47,6 @@ do(3) * mean(rnorm(25))
 do(3) * c(mean = mean(rnorm(25)))
 }
 \keyword{ iteration }
+
+
+
