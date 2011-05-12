@@ -134,10 +134,11 @@
 }\makeatother
 
 \renewenvironment{Schunk}{
-
+\parskip=0pt
 \noindent
-\begin{whitebox}
-}{\end{whitebox}
+
+%\begin{whitebox}
+}{%\end{whitebox}
 
 }
 
