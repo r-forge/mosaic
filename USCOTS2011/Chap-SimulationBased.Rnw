@@ -8,7 +8,7 @@
 \SweaveOpts{pdf=T}          % use pdf for graphics
 \SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
-\SweaveOpts{width=3}
+\SweaveOpts{width=4.5}
 \SweaveOpts{height=2}
 \SweaveOpts{cache=T}
 
@@ -491,12 +491,13 @@ people <- data.frame(
 		sibs = with(families, rep( children, children)) 
 		)
 @
-
+Computing the mean ``family size'' two different ways reveals the bias of 
+measuring family size by sampling from children rather than from families.
 <<>>=
 with(families, mean(children))
 with(people, mean(sibs))
 @
-If the result is mysterious, the following tables might shed some light.
+If the result seems mysterious, the following tables might shed some light.
 <<>>=
 with(families, table(children))
 with(people, table(sibs))
@@ -514,6 +515,13 @@ If you don't use the Lady Tasting Tea as a course starter
 an introduction to testing a proportion.
 
 \subsection{Golfballs in the Yard}
+
+\begin{comment}
+This example can be used as a first example of hypothesis testing or as an introduction 
+to chi-squared tests.  As an introduction to hypothesis testing it is very useful
+in helping students understand what a test statistic is and its role in 
+hypothesis testing.
+\end{comment}
 
 Allan Rossman once lived along a golf course.  One summer he collect the golf balls that
 landed in his yard and tallied how many were labeled with 1's, 2's, 3's, and 4's 
@@ -551,11 +559,14 @@ The remaining 486 golf balls form our sample:
 \hline
 \end{tabular}
 \end{center}
-
 We can enter this data into \R\ using the \verb!c()! function.
 <<>>=
 golfballs <- c(137, 138, 107, 104) 
 @
+
+At this point, ask students what they think the data indicates about the hypothesis
+that the four numbers are equally likely.
+
 That's a lot of 2's.  
 %Looks like we have a lot of 1's and 2's and not so many 3's and 4's.  
 But perhaps that's just the result of random sampling.  
@@ -564,22 +575,38 @@ We can generate random samples and see how the random samples compare with the a
 table(rdata(486, 1:4))   # 486 draws from the numbers 1 thru 4 (equally likely)
 @
 
-It is useful to generate 10 or 20 such samples to get a better feel for the 
+It is useful to generate some more of these samples to get a better feel for the 
 sampling distribution under the null:
-<<>>=
-do(10) * table(rdata(486, 1:4))
+<<golf30,eval=false>>=
+do(25) * table(rdata(486, 1:4))
 @
+\begin{multicols}{3}
+<<echo=false>>=
+rgolfballs <- do(25) * table(rdata(486, 1:4))
+rgolfballs
+@
+\end{multicols}
 
+From this we see that it is not incredibly unlikely to see a count of 138 or more.
+(See samples \Sexpr{ paste(which( apply(rgolfballs, 1, max) >= 138 ), sep=', ') }.)
+
+Once students understand the idea of a test statistic and how it is computed from data,
+it's time to let the computer automate things.
+First, we generate a larger sample assuming each number is equally likely.
 <<>>=
 rgolfballs <- do(2000) * table(rdata(486, 1:4))
 @
-
-
+The \function{statTally()} function can tabulate and display the sampling distribution
+and compared to the test statistic.
 \begin{center}
-<<golfballs-max,fig=true>>=
-print(statTally( golfballs, rgolfballs, max))
+<<golfballs-max,fig=true,height=1.7>>=
+print(statTally(golfballs, rgolfballs, max))
 @
 \end{center}
+
+Our test statistic (the maximum count) feels like it isn't making full use of our data.  
+Perhaps we would do better if we looked at the difference between the maximum and 
+minimum counts.
 
 \begin{center}
 <<golfballs-range,fig=true,height=1.7>>=
@@ -589,9 +616,28 @@ print(statTally(golfballs, rgolfballs, function(x) { diff(range(x)) }))
 
 \begin{center}
 <<golfballs-var,fig=true,height=1.7>>=
-print(statTally( golfballs, rgolfballs, var))
+print(statTally(golfballs, rgolfballs, var))
 @
 \end{center}
+
+This example illustrates some important ideas about hypothesis testing, namely.
+\authNote{Need to decide where the planets analogy goes relative to this.}%
+
+\begin{boxedText}
+\begin{enumerate}
+\item The test statistic must summarize the evidence we will use to 
+judge the null hypothesis \emph{in a single number} computed from our sample.
+\item
+We judge the test statistic computed from our sample by comparing it to
+test statistics computed on random samples from Plant Null.
+\item
+Some test statistics work better than others.
+
+A good test statistic should look quite different when the null hypothesis 
+is true from how it looks when the null hypothesis is false.  
+(This is a first hint at the idea of power.)
+\end{enumerate}
+\end{boxedText}
 
 
 \subsection{Comparing Two Means}
