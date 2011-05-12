@@ -10,6 +10,7 @@ TEXFILES = \
 	  Chap-Manipulate.tex \
 	  Chap-SimulationBased.tex \
 	  Chap-Multivariate.tex \
+	  Chap-ByHand.tex \
 	  Chap-MoreExamples.tex \
 	  Chap-Core.tex \
 	  Chap-Internet.tex \

@@ -594,6 +594,8 @@ We welcome and encourage your participation in all of these initiatives.
 
 \include{Chap-Multivariate}
 
+\include{Chap-ByHand}
+
 \include{Chap-SimulationBased}
 
 \include{Chap-Internet}
