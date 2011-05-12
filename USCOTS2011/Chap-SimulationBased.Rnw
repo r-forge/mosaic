@@ -380,14 +380,14 @@ tell them which are which.
 \item
 \verb!rflip()! allows you to flip biased coins as well.  Let's simulate a 90\%
 free throw shooter shooting 10 free throws.
+<<>>=
+rflip(10, prob=.9)
+@
 
 \item 
 It can be fun to have students compare the results of flipping, spinning, and tipping pennies.
 Many are surprised to learn that these do not all have same probability of producing heads.
 \end{enumerate}
-<<>>=
-rflip(10, prob=.9)
-@
 
 \authNote{Add some more of these.  Should we include examples where the coin is 
 biased -- free throw shooting comes to mind, for example.  Also the tipping 
@@ -446,9 +446,25 @@ rdata(2, HELP, replace=TRUE)
 The heart of a simulation is doing something over and over.  
 The \verb!do()! function simplifies the syntax for this and improves 
 the output format (usually returning a data frame).
-
+Here's a silly example.
 <<>>=
-do(5) * "hello"
+do(3) * "hello"
+@
+That's a silly example, because we did the same thing each time.  If we add randomness, then
+each replication is (potentially) different:
+<<>>=
+do(3) * rflip(10)                 # 3 times we flip 10 coins
+@
+
+What makes \verb!do()! clever is that is knows about several types of things
+we might like to repeat and it tries to keep track of the most important summary 
+statistics for us.  
+If we fit a linear model, 
+for example, \verb!do()!  keeps track of the regression coefficients, 
+$\hat \sigma$, and $r^2$.
+<<>>=
+do(1) * lm( age ~ sex, HELP)            # using the data as is
+do(3) * lm( age ~ shuffle(sex), HELP)   # simulation under a null hypothesis
 @
 
 
@@ -499,10 +515,61 @@ an introduction to testing a proportion.
 
 \subsection{Golfballs in the Yard}
 
+Allan Rossman once lived along a golf course.  One summer he collect the golf balls that
+landed in his yard and tallied how many were labeled with 1's, 2's, 3's, and 4's 
+because he was curios to know whether these numbers were equally likely.%
+\footnote{You can have some discussion with your students about what population
+is of interest here.  Given the location of the house, the golf balls were primarily struck
+by golfers of modest ability and significant slice, all playing on one particular golf course.
+These results may or may not extend to other larger populations of golfers.
+}
+
+
+\begin{center}
+\includegraphics[width=.14\textwidth]{images/Wilson1}
+\quad 
+\includegraphics[width=.14\textwidth,trim=0mm 1cm 0mm 0cm,clip]{images/Callaway2}
+\quad 
+\includegraphics[width=.14\textwidth,trim=0mm 6mm 0mm 0mm,clip]{images/Nike3}
+\quad 
+\includegraphics[width=.14\textwidth]{images/Titleist4}
+\quad 
+\includegraphics[width=.14\textwidth]{images/Noodle0}
+\end{center}
+
+Of the first 500 golf balls, 14 had either no number or a number other than 1, 2, 3, or 4.
+The remaining 486 golf balls form our sample:
+
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+1 & 2 & 3 & 4 & other\\
+\hline
+\hline
+137 & 138 & 107 & 104 & 14 \\
+\hline
+\end{tabular}
+\end{center}
+
+We can enter this data into \R\ using the \verb!c()! function.
 <<>>=
 golfballs <- c(137, 138, 107, 104) 
-table(rdata(486, 1:4))
 @
+That's a lot of 2's.  
+%Looks like we have a lot of 1's and 2's and not so many 3's and 4's.  
+But perhaps that's just the result of random sampling.  
+We can generate random samples and see how the random samples compare with the actual data:
+<<>>=
+table(rdata(486, 1:4))   # 486 draws from the numbers 1 thru 4 (equally likely)
+@
+
+It is useful to generate 10 or 20 such samples to get a better feel for the 
+sampling distribution under the null:
+<<>>=
+do(10) * table(rdata(486, 1:4))
+@
+
 <<>>=
 rgolfballs <- do(2000) * table(rdata(486, 1:4))
 @
