@@ -45,7 +45,7 @@ some categorical data analysis is covered.
 
 \subsection{Numerical Summaries}
 
-R includes a number of commands to numerically summarize variables.
+\R includes a number of commands to numerically summarize variables.
 These include the capability of calculating the mean, standard deviation,
 variance, median, five number summary, intra-quartile range (IQR) as well as arbitrary quantiles.  We will
 illustrate these using the CESD (Center for Epidemiologic Studies - Depression)
@@ -84,14 +84,14 @@ favstats(HELP$cesd)
 @
 
 By default, the 
-\verb!quantile()! function displays the quartiles, but can be given
-a vector of quantiles to display.  Finally, the \verb!favstats()! 
+\VN{quantile()} function displays the quartiles, but can be given
+a vector of quantiles to display.  Finally, the \VN{favstats()}
 function in the \verb!mosaic! package provides a concise summary of 
 many useful statistics.
 
 
 \subsection{Graphical Summaries}
-The \verb!histogram()! function is used to create a histogram.
+The \VN{histogram()} function is used to create a histogram.
 
 \vspace{-4mm}
 \begin{center}
@@ -104,23 +104,23 @@ In the HELP dataset, approximately one quarter of the subjects
 are female.  It is straightforward to restrict our attention to
 just those subjects.
 
-The \verb!subset()! function can generate a new data frame containing
+The \VN{subset()} function can generate a new data frame containing
 just the women or just the men.  Once this is created, we
-used the \verb!stem()! function to create a stem and leaf plot.
+used the \VN{stem()} function to create a stem and leaf plot.
 <<cesd-stem>>=
 female <- subset(HELP, sex=='female')
 male <- subset(HELP, sex=='male')
 stem(female$cesd)
 @
 
-The \verb!dotPlot()! function is used to create a dotplot (a la Fathom).
+The \VN{dotPlot()} function is used to create a dotplot (a la Fathom).
 
 \begin{center}
 <<cesd-dot,fig=TRUE,height=1.8>>=
 dotPlot(~ cesd, data=female)
 @
 \end{center}
-Here we use the formula interface as discussed in section \ref{sec:formula} to
+Here we use the formula interface (as discussed in section \ref{sec:formula}) to
 specify that we wanted a histogram of the CESD scores.
 
 We could also have made our subset ``on the fly'', just for the purposes of graphing:
@@ -153,7 +153,7 @@ ladd(grid.text(x=0.2, y=0.8, 'only females'))
 \authNote{NH: I would like to add superimposed density plots.  Is this feasible given
 that we need to protect "densityplot" with a print to deal with Weave?}
 
-The most famous density curve is a normal distribution.  The \verb!xpnorm()! function
+The most famous density curve is a normal distribution.  The \VN{xpnorm()} function
 displays the probability that a random variable is less than the first argument, for a 
 normal distribution with mean given by the second argument and standard deviation by the 
 third.  More information about probability distributions can 
@@ -175,7 +175,7 @@ xpnorm(1.96, 0, 1)
 
 \subsection{Numerical Summaries}
 
-The \verb!xtabs()!, \verb!perctable()! and \verb!proptable()! functions can be used to calculate
+The \VN{xtabs()}, \VN{perctable()} and \VN{proptable()} functions can be used to calculate
 counts, percentages and proportions, respectively for a categorical variable.
 
 <<homeless-table>>=
@@ -189,7 +189,7 @@ proptable(HELP$homeless)     # display table using proportions
 
 An exact confidence interval for a proportion (as well as a test of the null 
 hypothesis is equal to a particular value [by default 0.5]) can be calculated
-using the \verb!binom.test()! function.
+using the \VN{binom.test()} function.
 
 <<binomtest>>=
 results = binom.test(~ homeless=="housed", HELP)
@@ -209,7 +209,7 @@ results$conf.int[1]
 
 \subsection{The Proportion Test}
 
-A similar interval and test can be calculated using \verb!prop.test()!.
+A similar interval and test can be calculated using \VN{prop.test()}.
 <<proptest>>=
 prop.test(xtabs(~ homeless, HELP), correct=FALSE)
 @
@@ -291,10 +291,10 @@ summary(model)
 <<lmclass>>=
 class(model)
 @
-The return value from \verb!lm()! is a linear model object;
+The return value from \VN{lm()} is a linear model object;
 A number of functions can operate on these objects, as
-seen previously with \verb!coef()!.  As an additional example,
-there is a function called \verb!residuals()! that will return a
+seen previously with \VN{coef()}.  As an additional example,
+there is a function called \VN{residuals()} that will return a
 vector of
 the residuals.
 
@@ -397,7 +397,7 @@ population.
 
 When a student finds a significant association, 
 it's important for them to be able to interpret this in the context of the problem. 
-The \verb!xchisq.test()! function provides additional details to help with this process.
+The \VN{xchisq.test()} function provides additional details to help with this process.
 
 <<chisq2>>=
 with(HELP, xchisq.test(homeless, sex, correct=FALSE))
@@ -420,7 +420,7 @@ with(HELP, fisher.test(homeless, sex))
 \subsection{A Bivariate Predictor: Numerical and Graphical Summaries}
 Here we will compare the distributions of CESD scores by sex.
 
-The \verb!aggregate()! function can be used to calculate the mean CESD score
+The \VN{aggregate()} function can be used to calculate the mean CESD score
 for each of the two groups 
 <<aggregate>>=
 aggregate(cesd ~ sex, HELP, FUN=mean)
@@ -428,9 +428,9 @@ aggregate(cesd ~ sex, HELP, FUN=favstats)
 @
 
 Boxplots are a particularly helpful graphical display to compare distributions.
-The \verb!bwplot()! function can be used to display the boxplots for the CESD scores separately by sex.  We see from both the numerical and graphical
+The \VN{bwplot()} function can be used to display the boxplots for the CESD scores separately by sex.  We see from both the numerical and graphical
 displays that women tend to have slightly higher CESD scores than men.
-\authNote{Should mention use of \verb!xyplot()! when the sample sizes are small.
+\authNote{Should mention use of \VN{xyplot()} when the sample sizes are small.
 No reason to compute 5-number summaries of 10 or fewer numbers really.  NH resp: I'm not sure
 what you mean by this.}
 
@@ -505,7 +505,7 @@ mod1 <- lm(cesd ~ 1, data=HELP)
 mod2 <- lm(cesd ~ substance, data=HELP)
 @
 
-The \verb!anova()! command can be used to compare two (nested) models.
+The \VN{anova()} command can be used to compare two (nested) models.
 
 <<help-aov2>>=
 anova(mod1, mod2)
@@ -528,7 +528,7 @@ TukeyHSD(mod, "substance")
 
 \subsection{Logistic Regression}
 
-Logistic regression is available from within the \verb!glm()! function: a variety of
+Logistic regression is available from within the \VN{glm()} function: a variety of
 link functions and distributional forms for generalized linear models are supported.
 
 <<help-logit>>=
@@ -595,13 +595,13 @@ anova(lm1, lm2)
 \label{sec:DiscreteDistributions}
 \label{sec:probability}
 
-R can calculate quantities related to probability distributions of all types.  
+\R can calculate quantities related to probability distributions of all types.  
 It is straightforward to generate
 random variables from these distributions, which can be used 
 for simulation and analysis.
 
 Table \ref{core:dist} displays the basenames for probability distributions 
-available within base R.
+available within base \R.
 
 XX ADD info on usage.
 
@@ -639,7 +639,7 @@ Weibull        &  {\tt weibull}   \\ \hline
 \label{sec:onesamppower}
 
 While not generally a major topic in introductory courses, power and sample size calculations
-help to reinforce key ideas in statistics.  In this section, we will explore how R
+help to reinforce key ideas in statistics.  In this section, we will explore how \R
 can be used to undertake power calculations using analytic approaches (see \ref{sec:power}
 for simulation based approaches).  We consider a simple problem with two tests (t-test and
 sign test) of
@@ -708,7 +708,7 @@ power <- 1 - pnorm(crit, 0.3, stderr)
 power
 @
 Thus, the power of the test based on normal theory is \Sexpr{round(power,3)}.
-To provide a general check (or for future calculations of this sort) we can use the {\tt power.t.test()} in R.
+To provide a general check (or for future calculations of this sort) we can use the {\tt power.t.test()} in \R.
 <<>>=
 power.t.test(n=25, delta=.3, sd=1, sig.level=alpha, alternative="one.sided",
 type="one.sample")$power

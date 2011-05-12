@@ -148,6 +148,7 @@ $$\mbox{height} = h( \mbox{age}, \mbox{sex} ) = -2\ \mbox{age} +
 
 
 \section{The Language of Models}
+\label{sec:formula}
 
 There is a language for defining models that is different from
 writing down an algebraic formula.  
