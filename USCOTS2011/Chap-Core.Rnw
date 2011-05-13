@@ -45,7 +45,7 @@ some categorical data analysis is covered.
 
 \subsection{Numerical Summaries}
 
-\R includes a number of commands to numerically summarize variables.
+\R\ includes a number of commands to numerically summarize variables.
 These include the capability of calculating the mean, standard deviation,
 variance, median, five number summary, intra-quartile range (IQR) as well as arbitrary quantiles.  We will
 illustrate these using the CESD (Center for Epidemiologic Studies - Depression)
@@ -571,6 +571,7 @@ Neither age, nor substance group was significantly associated with linkage to pr
 
 \subsection{Two-way ANOVA}
 
+\authNote{need to add a plot here}
 <<help-aov2>>=
 summary(aov(cesd ~ homeless + sex, data=HELP))
 @
@@ -595,7 +596,7 @@ anova(lm1, lm2)
 \label{sec:DiscreteDistributions}
 \label{sec:probability}
 
-\R can calculate quantities related to probability distributions of all types.  
+\R\ can calculate quantities related to probability distributions of all types.  
 It is straightforward to generate
 random variables from these distributions, which can be used 
 for simulation and analysis.
@@ -639,8 +640,8 @@ Weibull        &  {\tt weibull}   \\ \hline
 \label{sec:onesamppower}
 
 While not generally a major topic in introductory courses, power and sample size calculations
-help to reinforce key ideas in statistics.  In this section, we will explore how \R
-can be used to undertake power calculations using analytic approaches (see \ref{sec:power}
+help to reinforce key ideas in statistics.  In this section, we will explore how \R\ can 
+be used to undertake power calculations using analytic approaches (see \ref{sec:power}
 for simulation based approaches).  We consider a simple problem with two tests (t-test and
 sign test) of
 a one-sided comparison.

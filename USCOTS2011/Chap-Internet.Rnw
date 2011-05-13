@@ -328,7 +328,7 @@ They have made an application programming interface (aka API) that specify
 how software programs can interface with their system.  Duncan Temple Lang has
 crafted a package in R which talks to Zillow. 
 This can be used to dynamically generate datasets for use in courses, after
-you (and/or your students) generate a \verb!zillowId! for use with the system.
+you (and/or your students) generate a \options{zillowId} for use with the system.
 (Danny Kaplan has used {\tt cars.com} to similar ends).
 
 In this section, we describe how to use Zillow to generate and analyse a
