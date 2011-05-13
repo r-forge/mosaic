@@ -14,23 +14,157 @@
 source('setup.R')
 @ 
 
-Provocative papers by Gould \cite{Goul:2010} and Nolan and Temple Lang \cite{nola:temp:2010}
-have highlighted the importance of broadening the type of data students encounter
+The Internet provides a wealth of data spanning the world, access
+to sophisticated statistical computing, and a practical means for
+you to communicate with your own students.  In this chapter, we'll
+illustrate some mundane ways for you to distribute and share data and
+software with your students, web-based interfaces for statistical
+computing,  as well as tools for ``scraping'' data
+from the Internet.   We draw your attention particularly to 
+provocative papers by Gould \cite{Goul:2010} and Nolan and Temple Lang
+\cite{nola:temp:2010}, who
+highlight the importance of broadening the type of data students encounter
 in their first courses as well as the role of computing in modern statistics, respectively.
-In this chapter, we highlight some approaches which facilitate use of data scraping
-from the internet as well as interfaces to web based tools to achieve both these goals.
 
-\section{Google Docs and \RStudio}
+\section{Sharing with and among your Students}
 
-\authNote{Move to appendix B?}
+Instructors often have their own data sets to illustrate 
+points of statistical interest or to make a particular connection with
+a class.  Sometimes you may want your class as a whole to construct a
+data set, perhaps by filling in a survey or by contributing
+their own small bit of data to a class collection.  Students may be
+working on projects in small groups; it's nice to have tools to
+support such work so that all members of the group have access to the
+data and can contribute to a written report.
 
-\section{Sharing in \RStudio}
+There are now many technologies for supporting such sharing.  For the
+sake of simplicity, we will emphasize three that we have found
+particularly useful both in teaching statistics and in our
+professional collaborative work.  These are:
+\begin{itemize}
+\item A web site with minimal overhead, such as provided by Dropbox.
+\item The services of Google Docs.
+\item A web-based \RStudio\ server for \R.
+\end{itemize}
+The first two are already widely used in university environments and
+are readily accessible simply by setting accounts.  Setting up an
+\RStudio\ web server requires some IT support, but is well within the
+range of skills found in IT offices and even among some individual faculty.
 
-\authNote{Move to appendix B?}
+\subsection{Your Own Web Site}
 
-\section{Other Ways to Make Data Available Online}
+You may already have a web site.  We have in mind a place where you
+can place files and have them accessed directly from the Internet.
+For sharing data, it's best if this site is public, that is, it does not require a login.
+That rules out most ``course support'' systems such as Moodle or
+Blackboard.  
 
-\authNote{Move to appendix B?}
+The Dropbox service for storing files in the ``cloud'' provides a very
+convenient way to distribute files over the web.  (Go to
+\texttt{dropbox.com} for information and to sign up for an account.)
+Dropbox is routinely used to provide automated backup and coordinated
+file access on multiple computers.  But the Dropbox service also
+provides a {\sc Public} directory.  Any files that you place in that
+directory can be accessed directly by a URL.  
+
+To illustrate, suppose you wish to share some small (or large) data set with your
+students.  You've constructed this data set in a spreadsheet and
+stored it as a CSV file, let's call it ``example-A.csv''.  Move this
+file into the {\sc Public} directory under Dropbox --- on most
+computers Dropbox arranges things so that its directories appear
+exactly like ordinary directories and you'll use the ordinary familiar
+file management techniques as in Figure \ref{fig:dropbox1}.
+\begin{figure}
+\begin{center}
+\includegraphics[width=3.5in]{images/dropbox1.png}
+\end{center}
+\caption{\label{fig:dropbox1} Dragging a CSV file to a Dropbox Public directory}
+\end{figure}
+
+Dropbox also makes it straightforward to construct the web-location
+identifying URL for any file by using mouse-based menu commands to
+place the URL into the clipboard, whence it can be copied to your
+course-support software system or any other place for distribution to
+students.  For a CSV file, reading the contents of the file into \R\
+can be done with the \texttt{read.csv( )} operator, by giving it the
+quoted URL:
+<<read-quoted-URL>>=
+a = read.csv("http://dl.dropbox.com/u/5098197/USCOTS2011/ExampleA.csv")
+@ 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=4.5in]{images/dropbox2.png}
+\end{center}
+\caption{\label{fig:dropbox2}Getting the URL of a file in a Dropbox Public directory}
+\end{figure}
+
+This technique makes it straightforward to distribute data with little
+advance preparation.  It's fast enough to do in the middle of a
+class: the CSV file is instantly available to your students.  It can
+even be edited by you (but not by your students).
+
+The same technique can be applied to all sorts of files: for example,
+\R\ workspaces or even \R\ scripts.  Of course, your students need to
+use the appropriate \R\ command: \texttt{load( )} for a workspace or
+\texttt{source( )} for a script.
+
+It's a good idea to create a file with your course-specific \R\
+scripts, adding on to it and modifying it as the course progresses.
+This allows you to distribute all sorts of special-purpose functions,
+letting you distribute new \R\ material to your students.  For
+instance, that brilliant new ``manipulate'' idea you had at 2am can be
+programmed up and put in place for your students to use the next
+morning in class.  Then as you identify bugs and refine the program,
+you can make the updated software immediately available to your students.
+
+For example, in the next section of this book we will discuss reading
+directly from Google Spreadsheets.  It happens that we wanted to try a
+new technique but were not sure that it was worth including in the
+\texttt{mosaic} package.  So, we need another way to distribute it to
+you.  Use this statement:
+<<>>=
+source("http://dl.dropbox.com/u/5098197/USCOTS2011/USCOTS2011.R")
+@ 
+Among other things, the operator \texttt{readGoogleCSV( )} is defined
+in the script that gets sourced in by that command.  Again, you can
+edit the file directly on your computer and have the results instantly
+available (subject only to the several second latency of Dropbox) to
+your students.  Of course, they will have to re-issue the
+\texttt{source( )} command to re-read the script.
+
+If privacy is a concern, for instance if you want the data available
+only to your students, you can effectively accomplish this 
+by giving files names known only to your students, e.g.,
+``Example-A78r423.csv''.  
+
+
+\subsection{Google Docs}
+
+The Dropbox technique is excellent for broadcasting: taking files you
+create and distributing them in a read-only fashion to your students.
+But when you want two-way or multi-way
+sharing of files, other techniques are called for, such as provided by
+the Google Docs service.
+
+One figure: \includegraphics[width=3in]{images/google-spreadsheet1.png}
+
+Then do another image showing the interface and how to name the
+resulting data frame.
+
+Outside of RStudio: the readGoogleCSV file.
+
+Example of a project: Does the door-close button on an elevator work.
+
+Handing in a link to the file.  Creating directories for each of your
+students and having them put the files there.
+
+Google forms.
+
+\subsection{The \RStudio\ Web Server}
+
+
+
 
 \section{Data Mining Activities}
 \subsection{What percentage of Earth is Covered with Water?}
