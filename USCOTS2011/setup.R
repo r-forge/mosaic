@@ -13,6 +13,7 @@ trellis.par.set(fontsize=list(text=9))
 options(keep.blank.line=FALSE)
 options(width=85)
 options(digits=3)
+options(continue=' ')
 xyplot <- function(...) { print(lattice::xyplot(...)) }
 bwplot <- function(...) { print(lattice::bwplot(...)) }
 histogram <- function(...) { print(lattice::histogram(...)) }
