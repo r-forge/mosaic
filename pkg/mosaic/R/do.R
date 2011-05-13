@@ -8,6 +8,16 @@
 #   return(foo)
 # }
 
+.make.data.frame <- function( x ) {
+	if (is.data.frame(x)) return(x)
+	if (is.vector(x)) {
+		nn <- names(x)
+		result <- as.data.frame( matrix(x, nr=1) )
+		if (! is.null(nn) ) names(result) <- nn
+		return(result)
+	}
+	return(as.data.frame(x))
+	}
 
 .clean_names <- function(x) {
 	x <- gsub('\\(Intercept\\)','Intercept', x)
@@ -27,15 +37,43 @@ do = function(n=1L, cull=NULL, mode=NULL) {
 	new( 'repeater', n=n, cull=cull, mode=mode )
 }
 
+.merge_data_frames <- function(a, b) {
+  a <- .make.data.frame(a)
+  b <- .make.data.frame(b)
+  if (nrow(b) < 1) return (a) 
+  if (nrow(a) < 1) return (b) 
+
+	a$mosaic_merge_id <- paste('A',1:nrow(a))
+	b$mosaic_merge_id <- paste('B',1:nrow(b))
+	result <- merge(a,b,all=TRUE)
+	w <- which(names(result) == 'mosaic_merge_id')
+	result <- result[, -w]
+	return(result)
+}
+
+
+.merge_data_frames = function(a,b) {
+  a <- .make.data.frame(a)
+  b <- .make.data.frame(b)
+  if (nrow(b) < 1) return (a) 
+  if (nrow(a) < 1) return (b) 
+  missing.from.b = setdiff(names(a),names(b))
+  missing.from.a = setdiff(names(b),names(a))
+  for (var in missing.from.b) b[[var]] = NA
+  for (var in missing.from.a) a[[var]] = NA
+  rbind(a,b)
+}
+
+
 # squash names of a data frame into a single string
 .squash_names <- function(object,sep=":") {
 	if ( ncol(object) < 1 ) {return(rep("",nrow(object)))}
 
 	result <- object[,1]
-	if ( ncol(object) < 2 ) {return(result)}
+	if ( ncol(object) < 2 ) {return(as.character(result))}
 
 	for (c in 2:ncol(object)) {
-		result <- paste(result, object[,c], sep=sep)
+		result <- paste(result, as.character(object[,c]), sep=sep)
 	}
 	return(result)
 		
@@ -46,12 +84,9 @@ do = function(n=1L, cull=NULL, mode=NULL) {
 
 	if (any(class(object)=='aggregated.stat')) {
 		result <- object
-		res <- result[, ncol(result)]
-#		res <- as.vector( matrix( stat, nr=1) )
-#		class(res) <- c("flattened.stat", class(res))
-		names(res) <- paste(
-						attr(object,'stat.name'), 
-						.squash_names(object[,-ncol(object),drop=FALSE]), sep=".")
+		res <- as.vector(result[, "S"])  # ncol(result)]
+		names(res) <- paste( attr(object,'stat.name'), 
+						.squash_names(object[,1:(ncol(object)-3),drop=FALSE]), sep=".")
 		return(res)
 	}
 	if (any(class(object)=='lme')){ # for mixed effects models
@@ -158,18 +193,17 @@ setMethod("*",
 		}
 
 		if (out.mode == 'data.frame') {
-			if ( is.vector (res1) ) {
-				result <- as.data.frame( matrix(res1, nr=1) )
-			} else {
-				result <- as.data.frame(res1)
-			}
+			result <- .make.data.frame(res1)
 			if (n>1) {
 			  for (k in 2:n) {
-				result <- rbind( result, cull(e2()) ) 
+			  	res2 <- cull(e2())
+				# print(res2)
+				# result <- rbind( result, cull(e2()) ) 
+				result <- .merge_data_frames( result, res2)
 			  }
 			}
-			rownames(result) <- 1:n
-			names(result) <- nm
+			rownames(result) <- 1:nrow(result)
+			#names(result) <- nm
 			return(result)
 		}
 

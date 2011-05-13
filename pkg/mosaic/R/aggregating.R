@@ -1,8 +1,16 @@
 
+.mosaic_aggregate <- function(x, data, FUN, overall=TRUE, method='cross', ...) {
+	return( as.data.frame( summary( x, data, fun=FUN, overall=overall, method='cross',...) ) )
+	result <- summary(x, data, fun=FUN, overall=overall, method=method, ...)
+	result <- as.data.frame(oldUnclass(result))
+	return(result)
+}
+
+
 mean <- function(x, ...) UseMethod('mean')
 
 mean.formula <- function( x, data=parent.frame(), na.rm=TRUE, ... ) {
-	result <- aggregate( x, data, FUN=base::mean, na.rm=na.rm, ... )
+	result <- .mosaic_aggregate( x, data, FUN=base::mean, na.rm=na.rm, ... )
 	class(result) <- c('aggregated.stat', class(result))
 	attr(result, 'stat.name') <- 'mean'
 	return(result)
@@ -20,7 +28,7 @@ sd.default <- function(x, na.rm=TRUE, ... ) {
 }
 
 sd.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- aggregate( x, data, FUN=stats::sd, na.rm=na.rm)
+	result <- .mosaic_aggregate( x, data, FUN=stats::sd, na.rm=na.rm)
 	class(result) <- c('aggregated.stat', class(result))
 	attr(result, 'stat.name') <- 'sd'
 	return(result)
@@ -33,7 +41,7 @@ var.default <- function(x, na.rm=TRUE, ...) {
 }
 
 var.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- aggregate( x, data, FUN=stats::var, na.rm=na.rm)
+	result <- .mosaic_aggregate( x, data, FUN=stats::var, na.rm=na.rm)
 	class(result) <- c('aggregated.stat', class(result))
 	attr(result, 'stat.name') <- 'var'
 	return(result)
@@ -46,7 +54,7 @@ median.default <- function(x, na.rm=TRUE, ...) {
 }
 
 median.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- aggregate( x, data, FUN=stats::median.default, na.rm=na.rm)
+	result <- .mosaic_aggregate( x, data, FUN=stats::median.default, na.rm=na.rm)
 	class(result) <- c('aggregated.stat', class(result))
 	attr(result, 'stat.name') <- 'median'
 	return(result)
@@ -54,17 +62,20 @@ median.formula <- function( x, data, na.rm=TRUE, ... ) {
 
 count <- function(x, ...) { UseMethod('count') }
 
-count.logical <- function(x, na.rm=TRUE, ...) sum( logical, na.rm=na.rm )
+count.logical <- function(x, na.rm=TRUE, ...) 
+	c( count.TRUE = sum( logical, na.rm=na.rm ) )
 
 count.factor <- function(x, level=levels(x)[1], na.rm=TRUE, ...) {
 	if (! level %in% levels(x) ) {
 		level = levels(x) [as.numeric(level)]
 	}
-	return( sum( x == level, na.rm=na.rm ) )
+	result <- sum( x == level, na.rm=na.rm ) 
+	names(result) <- paste('count', level, sep=".")
+	return(result)
 }
 
 count.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- aggregate( x, data, FUN=count, na.rm=na.rm)
+	result <- .mosaic_aggregate( x, data, FUN=count, na.rm=na.rm)
 	class(result) <- c('aggregated.stat', class(result))
 	attr(result, 'stat.name') <- 'count'
 	return(result)
@@ -76,17 +87,22 @@ count.default <- function(x, na.rm=TRUE, ...) {
 
 prop <- function(x, ...) { UseMethod('prop') }
 
-prop.logical <- function(x, na.rm=TRUE, ...) mean( logical, na.rm=na.rm )
+prop.logical <- function(x, na.rm=TRUE, ...) 
+	c( prop.TRUE = mean( logical, na.rm=na.rm ) )
 
 prop.factor <- function(x, level=levels(x)[1], na.rm=TRUE, ...) {
+	xx <- substitute(x)
+	x.string <- tail(as.character(xx),1)
 	if (! level %in% levels(x) ) {
 		level = levels(x) [as.numeric(level)]
 	}
-	return( mean( x == level, na.rm=na.rm ) )
+	result <- mean( x == level, na.rm=na.rm ) 
+	names(result) <- paste('prop', level, sep=".")
+	return(result)
 }
 
 prop.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- aggregate( x, data, FUN=prop, na.rm=na.rm)
+	result <- .mosaic_aggregate( x, data, FUN=prop, na.rm=na.rm)
 	class(result) <- c('aggregated.stat', class(result))
 	attr(result, 'stat.name') <- 'prop'
 	return(result)
