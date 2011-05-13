@@ -460,9 +460,6 @@ The same conclusion is seen using a non-parametric (Wilcoxon rank sum) test.
 wilcox.test(cesd ~ sex, data=HELP)
 @
 
-\subsection{Non-parametric 2 group tests}
-
-
 
 \subsection{Permutation test}
 
@@ -475,13 +472,15 @@ test.stat <-  abs(diff(aggregate(cesd ~ sex, HELP, mean)$cesd))
 test.stat
 rtest.stats <- do(simulations) * c(diff= diff(aggregate(cesd ~ shuffle(sex), HELP, mean)$cesd))
 rtest.stats[simulations+1,] = test.stat  # add in the observed value
-dotPlot(~ abs(diff), rtest.stats, n=40, groups=abs(rtest.stats$diff) >= test.stat, pch=16, cex=.8 )
+dotPlot(~ abs(diff), rtest.stats, n=40, 
+  groups=abs(rtest.stats$diff) >= test.stat, pch=16, cex=.8 )
 ladd(panel.abline(v=test.stat))                 # add a vertical line
 @
 
 \authNote{NH: comments and suggestions welcomed: this is a kludge}
 
-The same conclusion is observed with a permutation test.
+The same conclusion is observed with a permutation test (the
+observed value is nowhere in the vicinity of the permuted values).
 
 \subsection{Oneway ANOVA}
 
@@ -719,6 +718,48 @@ This yields a similar estimate to the value that we calculated directly.
 Overall, we see that the t-test has higher power than the sign test, if the underlying
 data are truly normal.  It's useful to have students calculate power empirically, 
 as demonstrated for this example in \ref{sec:power}.
+
+\begin{problem}
+\label{prob:power1}
+
+<<setup,echo=FALSE>>=
+n = 100
+alpha = 0.01
+@
+Find the power of a two-sided two-sample t-test where both distributions 
+are approximately normally distributed with the same standard deviation, but the group differ by 50\% of the standard deviation.  Assume that there are 
+\Sexpr{n}
+observations per group and an alpha level of \Sexpr{alpha}.
+
+\end{problem}
+\begin{solution}
+<<power>>=
+n
+alpha
+power.t.test(n=n, delta=.5, sd=1, sig.level=alpha)
+@
+\end{solution}
+
+\begin{problem}
+Repeat problem \ref{prob:power1} by simulating using the methods of section \ref{sec:power}.
+\end{problem}
+
+\begin{problem}
+Find the sample size needed to have 90\% power for a two group t-test
+where the true 
+difference between means is 25\% of the standard deviation in the groups
+(with $\alpha=0.05$).
+\end{problem}
+\begin{solution}
+<<power2>>=
+power.t.test(delta=.25, sd=1, sig.level=alpha, power=0.90)
+@
+\end{solution}
+
+
+\section{Exercises and Problems}
+
+\shipoutProblems
 
 
 
