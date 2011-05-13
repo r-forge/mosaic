@@ -629,6 +629,9 @@ summary(aov(cesd ~ homeless + sex, data=HELP))
 <<help-aov3>>=
 summary(aov(cesd ~ homeless * sex, data=HELP))
 @
+There's little evidence for the interaction, though there is a statistically
+significant main effects terms for \VN{sex} and a borderline significant
+effect for \VN{homeless} status.
 
 
 \subsection{Multiple Regression}
@@ -660,9 +663,20 @@ random variables from these distributions, which can be used
 for simulation and analysis.
 
 Table \ref{core:dist} displays the basenames for probability distributions 
-available within base \R.
+available within base \R.  These functions can be prefixed by {\tt d} to 
+find the density function for the distribution, {\tt p} to find the 
+cumulative density function, {\tt q} to find quantiles, and {\tt r} to 
+generate random draws. For example, to find the density function of a binomial
+random variable, use the command \function{dbinom()}.
+The \function{qDIST()} function is the inverse of the 
+{\tt pDIST()} function, for a given basename {\tt DIST}. 
 
-XX ADD info on usage.
+<<probdist>>=
+pnorm(1.96, 0, 1)    # P(Z < 1.96)
+qnorm(.975, 0, 1)
+integrate(dnorm, -Inf, 0)
+@
+
 
 \begin{table}
 \begin{center}
@@ -691,6 +705,26 @@ Weibull        &  {\tt weibull}   \\ \hline
 \end{center}
 \end{table}
 
+\begin{problem}
+Generate a sample of 1000 exponential random variables with rate parameter
+equal to 2, and calculate the mean of those variables.
+\end{problem}
+\begin{solution}
+<<expprob>>=
+x <- rexp(1000, 2)
+mean(x)
+@
+\end{solution}
+
+\begin{problem}
+Find the median of the random variable X, if it is exponentially distributed
+with rate parameter 10.
+\end{problem}
+\begin{solution}
+<<expprob2>>=
+qexp(.5, 10)
+@
+\end{solution}
 
 
 \section{Power Calculations}
