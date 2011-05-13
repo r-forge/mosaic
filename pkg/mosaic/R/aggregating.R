@@ -1,4 +1,4 @@
-
+ 
 .mosaic_aggregate <- function(x, data, FUN, overall=TRUE, method='cross', ...) {
 	return( as.data.frame( summary( x, data, fun=FUN, overall=overall, method='cross',...) ) )
 	result <- summary(x, data, fun=FUN, overall=overall, method=method, ...)
@@ -87,8 +87,8 @@ count.default <- function(x, na.rm=TRUE, ...) {
 
 prop <- function(x, ...) { UseMethod('prop') }
 
-prop.logical <- function(x, na.rm=TRUE, ...) 
-	c( prop.TRUE = mean( logical, na.rm=na.rm ) )
+prop.logical <- function(x, na.rm=TRUE, level=TRUE, ...) 
+	prop.factor( as.factor(x), na.rm=na.rm, level=level )
 
 prop.factor <- function(x, level=levels(x)[1], na.rm=TRUE, ...) {
 	xx <- substitute(x)

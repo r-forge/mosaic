@@ -49,7 +49,7 @@ var(x, ...)
 \method{var}{default}(x, na.rm=TRUE, ...)
 
 prop(x,...)
-\method{prop}{logical}(x, na.rm=TRUE, ...)
+\method{prop}{logical}(x, na.rm=TRUE, level=TRUE, ...)
 \method{prop}{factor}(x, level=levels(x)[1], na.rm=TRUE, ...)
 \method{prop}{formula}(x, data, na.rm=TRUE, ...)
 \method{prop}{default}(x, na.rm=TRUE, ...)
