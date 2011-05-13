@@ -324,7 +324,7 @@ property values using tax records, sales data, and comparable homes.
 
 \centerline{\includegraphics[width=3.8in]{images/zillow1.png}}
 
-They have made an application programming interface (aka API) that specify 
+The folks who run the site have made an application programming interface (aka API) that specify 
 how software programs can interface with their system.  Duncan Temple Lang has
 crafted a package in R which talks to Zillow. 
 This can be used to dynamically generate datasets for use in courses, after
