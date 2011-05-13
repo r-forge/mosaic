@@ -62,8 +62,8 @@ median.formula <- function( x, data, na.rm=TRUE, ... ) {
 
 count <- function(x, ...) { UseMethod('count') }
 
-count.logical <- function(x, na.rm=TRUE, ...) 
-	c( count.TRUE = sum( logical, na.rm=na.rm ) )
+count.logical <- function(x, level=TRUE, na.rm=TRUE, ...) 
+	count.factor( as.factor(x), level=level, na.rm=na.rm ) 
 
 count.factor <- function(x, level=levels(x)[1], na.rm=TRUE, ...) {
 	if (! level %in% levels(x) ) {
@@ -87,8 +87,8 @@ count.default <- function(x, na.rm=TRUE, ...) {
 
 prop <- function(x, ...) { UseMethod('prop') }
 
-prop.logical <- function(x, na.rm=TRUE, level=TRUE, ...) 
-	prop.factor( as.factor(x), na.rm=na.rm, level=level )
+prop.logical <- function(x, level=TRUE, na.rm=TRUE, ...) 
+	prop.factor( as.factor(x), level=level, na.rm=na.rm )
 
 prop.factor <- function(x, level=levels(x)[1], na.rm=TRUE, ...) {
 	xx <- substitute(x)
