@@ -33,12 +33,12 @@
 \hspace*{0.5in}
 \parbox{1.2in}{\begin{tikzpicture}
 \node at (0,0) [#3]
-{\parbox{1.05in}{\footnotesize {\sc #1 }\texttt{#2}}};
+{\parbox{1.05in}{\footnotesize {\sc #1 }{#2}}};
 \end{tikzpicture}}
 ]{%
 \parbox{1.2in}{\begin{tikzpicture}
 \node at (0,0) [#3]
-{\parbox{1.05in}{\footnotesize {\sc #1 }\texttt{#2}}};
+{\parbox{1.05in}{\footnotesize {\sc #1 }{#2}}};
 \end{tikzpicture}}}
 }
 
