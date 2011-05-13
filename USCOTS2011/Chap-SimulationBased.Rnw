@@ -523,6 +523,7 @@ in helping students understand what a test statistic is and its role in
 hypothesis testing.
 \end{comment}
 
+\subsubsection{The Story}
 Allan Rossman once lived along a golf course.  One summer he collect the golf balls that
 landed in his yard and tallied how many were labeled with 1's, 2's, 3's, and 4's 
 because he was curios to know whether these numbers were equally likely.%
@@ -564,10 +565,10 @@ We can enter this data into \R\ using the \verb!c()! function.
 golfballs <- c(137, 138, 107, 104) 
 @
 
+\subsubsection{Coming up with a test statistic}
 At this point, ask students what they think the data indicates about the hypothesis
-that the four numbers are equally likely.
-
-That's a lot of 2's.  
+that the four numbers are equally likely.  Students usually notice right away that 
+there are a lot of 2's.  
 %Looks like we have a lot of 1's and 2's and not so many 3's and 4's.  
 But perhaps that's just the result of random sampling.  
 We can generate random samples and see how the random samples compare with the actual data:
@@ -575,6 +576,9 @@ We can generate random samples and see how the random samples compare with the a
 table(rdata(486, 1:4))   # 486 draws from the numbers 1 thru 4 (equally likely)
 @
 
+\InstructorNote{\texttt{rgolfballs} can be generated
+in advance if you don't want to distract your students
+with thinking about how do create it.}%
 It is useful to generate some more of these samples to get a better feel for the 
 sampling distribution under the null:
 <<golf30,eval=false>>=
@@ -587,12 +591,20 @@ rgolfballs
 @
 \end{multicols}
 
+\FoodForThought[\centerline{Tip}]{
+Have your students calculate test statistics mentally from
+a small portion of the sampling distribution.  Assign each student a row or two,
+then ask for a show of hands to see how many exceed the test statistic
+calculated from the data.}%
+
 From this we see that it is not incredibly unlikely to see a count of 138 or more.
-(See samples \Sexpr{ paste(which( apply(rgolfballs, 1, max) >= 138 ), sep=', ') }.)
+(See samples \Sexpr{ paste(which( apply(rgolfballs, 1, max) >= 138 ), collapse=', ') }.)
+Students are often surprised just how often this occurs.
 
 Once students understand the idea of a test statistic and how it is computed from data,
 it's time to let the computer automate things.
-First, we generate a larger sample assuming each number is equally likely.
+First, we generate a better approximation to the sampling distribution assuming each number 
+is equally likely.
 <<>>=
 rgolfballs <- do(2000) * table(rdata(486, 1:4))
 @
@@ -604,7 +616,17 @@ print(statTally(golfballs, rgolfballs, max))
 @
 \end{center}
 
-Our test statistic (the maximum count) feels like it isn't making full use of our data.  
+\subsubsection{More test statistics}
+One of the goals of this activity is to have the students understand the role of a test 
+statistic.  Students are encouraged to dream up test statistics of their own.  The 
+minimum count is often suggested as an alternative, so we try that one next.
+
+<<eval=false>>=
+print(statTally(golfballs, rgolfballs, min))   # output surpressed.
+@
+
+These two test statistics (maximum count and minimum count) feel like they aren't 
+making full use of our data.  
 Perhaps we would do better if we looked at the difference between the maximum and 
 minimum counts.
 
@@ -613,6 +635,32 @@ minimum counts.
 print(statTally(golfballs, rgolfballs, function(x) { diff(range(x)) }))
 @
 \end{center}
+
+\subsubsection{The World's Worst Test Statistic}
+
+Usually I get lucky and someone will suggest the worlds worst test statistic:
+The sum of the differences between the counts and $486/4 = 121.5$.
+This requires writing a simple function.
+\FoodForThought{See Section~\ref{sec:writingFunctions} for a tutorial
+on writing your own functions.}
+\begin{center}
+<<golfballs-worst,fig=true,height=1.7>>=
+print(statTally(golfballs, rgolfballs, function(x) { sum(x-121.5)} ))
+@
+\end{center}
+This test statistic is bad because it doesn't depend on the data, so 
+the distribution of the test statistic is the same whether the null hypothesis 
+is true or false.
+
+But it is close to a good idea.  Let's add in an absolute value\dots
+\begin{center}
+<<golfballs-var,fig=true,height=1.7>>=
+print(statTally(golfballs, rgolfballs, function(x) { sum(abs(x-121.5)) }))
+@
+\end{center}
+
+Squaring those differences (or equivalently using the standard deviation or variance)
+is also often suggested.
 
 \begin{center}
 <<golfballs-var,fig=true,height=1.7>>=
@@ -629,7 +677,7 @@ This example illustrates some important ideas about hypothesis testing, namely.
 judge the null hypothesis \emph{in a single number} computed from our sample.
 \item
 We judge the test statistic computed from our sample by comparing it to
-test statistics computed on random samples from Plant Null.
+test statistics computed on random samples from Planet Null.
 \item
 Some test statistics work better than others.
 
@@ -656,10 +704,19 @@ summary(age ~ sex, data=HELP, fun=mean)
 @
 the \verb!aggregate()! function stores its results in a data frame that lends 
 itself better to further computation.
+\Caution{\function{summary} uses 
+\code{fun} but \function{aggregate}
+uses \code{FUN}.}
  
 <<help102>>=
-aggregate(age ~ sex, HELP, FUN=mean)
+aggregate(age ~ sex, data=HELP, FUN=mean)
 @
+To make the syntax even simpler, the \pkg{mosaic} package has modified the \function{mean()}
+function so that the following is equivalent:
+<<>>=
+mean(age ~ sex, data=HELP)
+@
+
 A natural test statistic for comparing two means is the difference in sample means,
 which we can calculate using
 <<help103>>=

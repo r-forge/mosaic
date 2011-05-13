@@ -221,6 +221,8 @@
 \newcommand{\dfn}[1]{\texttt{#1}}
 \newcommand{\dataframe}[1]{\texttt{#1}}
 \newcommand{\function}[1]{\texttt{#1}}
+\newcommand{\pkg}[1]{\texttt{#1}}
+%\newcommand{\code}[1]{\texttt{#1}}
 % and for models
 \newcommand{\model}[2]{{$\,$\hbox{#1}\ \ensuremath{\sim}\ \hbox{#2}}}
 
