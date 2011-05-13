@@ -15,6 +15,7 @@
 
 <<setup,echo=F>>=
 source('setup.R')
+set.seed(123)
 @ 
 
 
@@ -48,7 +49,10 @@ transparent and intelligible way that reveals the underlying logic.
 
 One of the important goals of the \verb!mosaic! package is to provide
 elementary commands that can be easily strung together by novices
-without having to master the esoteric aspects of programming.  This
+without having to master the esoteric aspects of programming.  
+\FoodForThought[\centerline{Suggestion Box}]{We are interested in your 
+feedback while we develop these tools.}%
+This
 chapter will describe a few such key operations and how they connect
 to one another: random sampling and resampling, replication of random
 trials, summarizing the results of multiple trials.  As you will see,
@@ -69,6 +73,55 @@ are heading into an era when all statistical analysis can be done by simulation.
 \end{quote}
 
 
+\subsection{Sampling From Day 1 with \texttt{rflip()}}
+
+Since tossing a coin is one of the most familiar examples of randomness, we've added to
+\verb!mosaic! a function that facilitates simulating coin tosses. 
+<<>>=
+rflip(20)
+as.numeric(rflip(20))       # just count how many heads
+@
+
+
+In addition to the Lady Tasting Tea activity (Section~\ref{sec:lady-tasting-tea}),
+other activities can be devised to help students develop a sense for randomness 
+and variability.
+
+\begin{enumerate}
+\item If you flip a coin 100 times, how often will you get exactly 50 heads?
+Between 45 and 55 heads?  Between 40 and 60 heads?
+\item
+If you flip a coin 20 times, how long is the longest run of either heads or tails typically?
+
+This can be part of demonstration where you have students write down strings of H and T
+that ``look random'' and another set based on actual coin tosses.  Then see if you can 
+tell them which are which.
+
+\item
+\verb!rflip()! allows you to flip biased coins as well.  Let's simulate a 90\%
+free throw shooter shooting 10 free throws.
+<<>>=
+rflip(10, prob=.9)
+@
+
+It's the end of the game.  Your team is down by one point.  Free Throw Freddie 
+a 90\% free throw shooter has been fouled while shooting.  What are the chances 
+that your team wins (because Freddie makes 2 shots in a row), loses (because he misses 
+both shots), or has to play an overtime period (because he makes one of the two)?
+
+<<>>=
+simulated.shots <- do(2000) * rflip(2, prob=.90)
+with( simulated.shots, table(heads) )
+@
+
+\item 
+It can be fun to have students compare the results of flipping, spinning, and tipping pennies.
+Many are surprised to learn that these do not all have same probability of producing heads.
+\end{enumerate}
+
+\authNote{Add some more of these.  Should we include examples where the coin is 
+biased -- free throw shooting comes to mind, for example.  Also the tipping 
+and spinning pennies activities.}%
 
 \subsection{Sampling and Resampling}
 
@@ -91,14 +144,14 @@ One example is the population of US states:
 set has just one variable.  My view is that all such data sets should
 be data frames.  But I understand the virtue of having a few that
 students can use without the \$ notation.}%
-\authNote{RJP: I added the data and cleaned it up a bit.
+\authNoted{RJP: I added the data and cleaned it up a bit.
 All you need do is add documentation.}%
 
 \begin{example}[ (Sampling from 50 States)]
 
 Students in the US will know that there are 50 states:
 <<>>=
-nrow(SAT)
+nrow(SAT)                # SAT is a data frame in the mosaic package
 @ 
 
 
@@ -109,7 +162,7 @@ student/teacher ratio.  There are two equivalent ways to calculate this quantity
 mean(SAT$ratio)
 @ 
 
-\authNote{DTK: There's another style that we could push.  I'm
+\authNoted{DTK: There's another style that we could push.  I'm
   interested in your reaction to it. This has the advantage of segregating the
   randomization part from the calculation part.  
   I'll try using this style in the following, and we
@@ -121,7 +174,7 @@ with(SAT, mean(ratio))
 
 Every student who does this calculation will get the same result.
 But if each student takes a random sample (without replacement) of, say, 4 states:
-\authNote{RJP: If we want a sample, let's call it a sample, not a shuffle.  I've changed
+\authNoted{RJP: If we want a sample, let's call it a sample, not a shuffle.  I've changed
 the \R\ code throughout this section.}%
 <<>>=
 sample(SAT, 4)
@@ -159,15 +212,15 @@ table(table(SAT$state))
 @ 
 \end{problem}
 
-The value of some measure for the population is, of course, called the ``population
-parameter.''  
-\authNote{RJP: Why use scare quotes here?  Use \texttt{\term{}} to highlight terms.  We 
+The value of some measure for the population is, of course, called the 
+\term{population parameter}.  
+\authNoted{RJP: Why use scare quotes here?  Use \texttt{\term{}} to highlight terms.  We 
 can define that to be boldface font or some such.}%
 But for a sample, it's a \term{sample statistic}.  It's
 worthwhile to make the distinction concrete:
 <<>>=
-with(SAT, mean(ratio))
-with(sample(SAT,4), mean(ratio))
+with(SAT, mean(ratio))               # population parameter
+with(sample(SAT,4), mean(ratio))     # statistic from a sample of 4 states
 @ 
 
 Good questions to ask in class at this point: Who got a sample
@@ -186,8 +239,7 @@ At this point, it's helpful to point out that the reason we take
 samples is because it can be difficult or impossible to measure every
 member of the population.  Of course, it's not so difficult if your
 population is the 50 US States, but what if your population were the
-whole set individual people living in the US: that's over 300,000,000
-people!  
+all people living in the US: that's over 300,000,000 people!  
 
 
 \subsection{Taking Randomness Seriously}
@@ -222,7 +274,8 @@ instance, have each student in your class do this:
 with(SAT, mean(ratio))
 with(sample(SAT,25), mean(ratio))
 @ 
-Or, each student can repeat the trial several times:
+Or, each student can do this several times:
+\FoodForThought[\centerline{To Do}]{We'll have more to say about \function{do()} shortly.}%
 <<>>=
 do(10) * with(sample(SAT,25), mean(ratio))
 @ 
@@ -236,6 +289,27 @@ students should be able to see that there is nothing systematically
 wrong with the answers they get from their random samples.  Some are too high compared to the
 population parameter, some are too low, but as a group they are pretty
 well centered.
+
+For some applications it is useful to have an alternative vocabulary.  If you are fond
+of examples involving cards, you can use \function{deal()} and \function{shuffle()}
+instead of \function{sample()}.
+<<>>=
+# These are equivalent
+sample(cards, 5)
+deal(cards, 5)
+@
+<<>>=
+# These are equivalent
+sample(cards) 
+shuffle(cards) 
+@
+
+And for sampling with replacement, we offer \function{resample()}:
+<<>>=
+# These are equivalent
+sample(1:10, 5, replace=TRUE)
+resample(1:10, 5)
+@
 
 \subsection{Illuminating Sampling Mistakes}
 \authNote{RJP: The word 'illuminating' has two meanings intentionally -- but feel free to 
@@ -260,7 +334,7 @@ are in each book.
   
 \item A simulation of a real-world study of Alzheimer's disease.  The
   sampling process was to go to nursing homes on a given day and
-  randomly pick out patients who were diagnosed with Alzheimers.
+  randomly pick out patients who were diagnosed with Alzheimer's.
   Their files were flagged and, after a few years, the data were
   examined to find the mean survival time, from when they entered the
   nursing home to when they died.  
@@ -270,7 +344,7 @@ are in each book.
   of the year for the sampling.  A graphic shows how the random day
   tends to select those who are at the nursing home for a long time,
   rather than equally picking all patients.  Students can then compare
-  the mean for the population to the mean for their haphazard sample.}
+  the mean for the population to the mean for their haphazard sample.}%
 
   \item Sample people and find out how many siblings are in their family
   (including themselves).
@@ -353,83 +427,39 @@ the formally generated sample gives results that are more
 representative of the population than the haphazardly sampled data.
 
 
-\subsection{Sampling From Day 1 with \texttt{rflip()}}
 
-Since tossing a coin is one of the most familiar examples of randomness, we've added to
-\verb!mosaic! a function that facilitates simulating coin tosses. 
-<<>>=
-rflip(20)
-as.numeric(rflip(20))       # just count how many heads
-@
-
-
-In addition to the Lady Tasting Tea activity (Section~\ref{sec:lady-tasting-tea}),
-other activities can be devised to help students develop a sense for randomness 
-and variability.
-
-\begin{enumerate}
-\item If you flip a coin 100 times, how often will you get exactly 50 heads?
-Between 45 and 55 heads?  Between 40 and 60 heads?
-\item
-If you flip a coin 20 times, how long is the longest run of either heads or tails typically?
-
-This can be part of demonstration where you have students write down strings of H and T
-that ``look random'' and another set based on actual coin tosses.  Then see if you can 
-tell them which are which.
-
-\item
-\verb!rflip()! allows you to flip biased coins as well.  Let's simulate a 90\%
-free throw shooter shooting 10 free throws.
-<<>>=
-rflip(10, prob=.9)
-@
-
-\item 
-It can be fun to have students compare the results of flipping, spinning, and tipping pennies.
-Many are surprised to learn that these do not all have same probability of producing heads.
-\end{enumerate}
-
-\authNote{Add some more of these.  Should we include examples where the coin is 
-biased -- free throw shooting comes to mind, for example.  Also the tipping 
-and spinning pennies activities.}%
-
-\subsection{Basic Sampling With \texttt{sample()}, \texttt{resample()}, and Cousins}
-
-<<>>=
-rdata(20, 1:4)              # samples with replacement
-@
-
-\authNote{\texttt{rdata()} could go in this section or in the next.  It serves as a 
-transition from sampling from data to sampling from an abstract distribution.}%
+%\subsection{Basic Sampling With \texttt{sample()}, \texttt{resample()}, and Cousins}
 
 \subsection{Sampling from Distributions}
 
-%But better to sample from less abstract quantities and use these to
-%generate some of the distributions that are used later.
-
+Later in the course, if you cover modeling with distributions, you can sample from 
+these distributions instead of from data sets (treated like populations).
+\R\ includes set of functions beginning with the letter \code{r} followed by the (abbreviated)
+name of a family of distributions.  These functions all work similarly to produce 
+a random sample from the distribution given a sample size and any necessary parameters 
+for the distribution.
 
 <<>>=
-rnorm(20, mean=500, sd=100) 
-rexp(20, rate=1/5)
+rnorm(20, mean=500, sd=100)              # fake SAT scores
+rexp(20, rate=1/5)                       # fake lifetime data
+rbinom(20, 10, .5)                       # how many heads in 10 coin tosses?
+rgeom(20, .1)                            # how long until Freddy misses his next free throw?
 @
 
+The \pkg{mosaic} package offers \function{rdata()} as an alternative to 
+\function{resample()} with syntax that mirrors these functions for sampling from
+a distribution.
+
 <<>>=
-# These are equivalent
-sample(cards, 5)
-deal(cards, 5)
-@
-<<>>=
-# These are equivalent
-sample(cards) 
-shuffle(cards) 
+rdata(20, 1:4)              # samples with replacement
 @
 
 <<echo-false>>=
 set.seed(123)
 @
 <<>>=
-# These are equivalent.  Note the order of the arguments.
-sample(HELP, 2)
+# these are equivalent;  note the order of the arguments.
+resample(HELP, 2)
 rdata(2, HELP)
 @
 
@@ -437,9 +467,9 @@ rdata(2, HELP)
 set.seed(123)
 @
 <<>>=
-# These are equivalent; sampling with replacement now
-resample(HELP, 2)
-rdata(2, HELP, replace=TRUE)
+# these are equivalent; sampling without replacement now.
+sample(HELP, 2)
+rdata(2, HELP, replace=FALSE)
 @
 
 \subsection{\texttt{do()}}
@@ -462,12 +492,14 @@ statistics for us.
 If we fit a linear model, 
 for example, \verb!do()!  keeps track of the regression coefficients, 
 $\hat \sigma$, and $r^2$.
+That makes it useful even if we just want to summarize our data.
 <<>>=
 do(1) * lm( age ~ sex, HELP)            # using the data as is
+@
+But it really shines when we start looking at sampling distributions.
+<<>>=
 do(3) * lm( age ~ shuffle(sex), HELP)   # simulation under a null hypothesis
 @
-
-
 
 \subsection{Generating Fake Data For Sampling Activities}
 \label{sec:fake-families}%
@@ -508,11 +540,18 @@ Once built, you can provide these data frames to your students for a sampling ex
 (See \ref{sec:distributingData}.)
 
 
-\section{Empirical p-values}
+%\section{Empirical p-values}
+
+Now that we have discussed various methods for generating random data, it's time to put those 
+skills to good use computing p-values.
+
 \subsection{Lady Tasting Tea}
+
+\begin{comment}
 If you don't use the Lady Tasting Tea as a course starter 
 (Section~\ref{sec:lady-tasting-tea}), you can use it as 
 an introduction to testing a proportion.
+\end{comment}
 
 \subsection{Golfballs in the Yard}
 
@@ -613,6 +652,7 @@ and compared to the test statistic.
 \begin{center}
 <<golfballs-max,fig=true,height=1.7>>=
 print(statTally(golfballs, rgolfballs, max))
+ladd(print(panel.abline(v=138)))                # add a vertical line
 @
 \end{center}
 
@@ -629,10 +669,14 @@ These two test statistics (maximum count and minimum count) feel like they aren'
 making full use of our data.  
 Perhaps we would do better if we looked at the difference between the maximum and 
 minimum counts.
+This requires writing a simple function.
+\FoodForThought{See Section~\ref{sec:writingFunctions} for a tutorial
+on writing your own functions.}
 
 \begin{center}
 <<golfballs-range,fig=true,height=1.7>>=
-print(statTally(golfballs, rgolfballs, function(x) { diff(range(x)) }))
+mystat1 <- function(x) { diff(range(x)) }
+print(statTally(golfballs, rgolfballs, mystat1, v=mystat1(golfballs)))   # add a vertical line
 @
 \end{center}
 
@@ -640,22 +684,26 @@ print(statTally(golfballs, rgolfballs, function(x) { diff(range(x)) }))
 
 Usually I get lucky and someone will suggest the worlds worst test statistic:
 The sum of the differences between the counts and $486/4 = 121.5$.
-This requires writing a simple function.
-\FoodForThought{See Section~\ref{sec:writingFunctions} for a tutorial
-on writing your own functions.}
 \begin{center}
 <<golfballs-worst,fig=true,height=1.7>>=
-print(statTally(golfballs, rgolfballs, function(x) { sum(x-121.5)} ))
+mystat2 <- function(x) { sum( x - 121.5 ) }
+print(statTally(golfballs, rgolfballs, mystat2))
 @
 \end{center}
 This test statistic is bad because it doesn't depend on the data, so 
 the distribution of the test statistic is the same whether the null hypothesis 
 is true or false.
 
+\FoodForThought[\centerline{Tip}]{As students come up with test statistics, let them
+name them, or name them after them (S for the Smith statistic, etc.)
+It adds to the fun of the activity and mirrors how the statistics they will
+learn about got their names.
+}
 But it is close to a good idea.  Let's add in an absolute value\dots
 \begin{center}
 <<golfballs-var,fig=true,height=1.7>>=
-print(statTally(golfballs, rgolfballs, function(x) { sum(abs(x-121.5)) }))
+sad <- function(x) { sum(abs(x-121.5)) }
+print(statTally(golfballs, rgolfballs, sad, v=sad(golfballs)))
 @
 \end{center}
 
@@ -664,7 +712,7 @@ is also often suggested.
 
 \begin{center}
 <<golfballs-var,fig=true,height=1.7>>=
-print(statTally(golfballs, rgolfballs, var))
+print(statTally(golfballs, rgolfballs, var, v=var(golfballs)))
 @
 \end{center}
 
@@ -677,7 +725,7 @@ This example illustrates some important ideas about hypothesis testing, namely.
 judge the null hypothesis \emph{in a single number} computed from our sample.
 \item
 We judge the test statistic computed from our sample by comparing it to
-test statistics computed on random samples from Planet Null.
+test statistics computed on random samples \emph{assuming the Null Hypothesis is true.}
 \item
 Some test statistics work better than others.
 
@@ -687,145 +735,21 @@ is true from how it looks when the null hypothesis is false.
 \end{enumerate}
 \end{boxedText}
 
-
-\subsection{Comparing Two Means}
-
-\label{sec:comparing-two-means}
-
-In this section we show two ways to see if the mean ages of men and women in the HELP study 
-are significantly different.
-
-\subsubsection{Using \texttt{aggregate()}}
-
-While \verb!summary()! from \verb!Hmisc! makes a nice visual display
-of summary statistics by groups,
-<<help101>>=
-summary(age ~ sex, data=HELP, fun=mean)
-@
-the \verb!aggregate()! function stores its results in a data frame that lends 
-itself better to further computation.
-\Caution{\function{summary} uses 
-\code{fun} but \function{aggregate}
-uses \code{FUN}.}
- 
-<<help102>>=
-aggregate(age ~ sex, data=HELP, FUN=mean)
-@
-To make the syntax even simpler, the \pkg{mosaic} package has modified the \function{mean()}
-function so that the following is equivalent:
-<<>>=
-mean(age ~ sex, data=HELP)
-@
-
-A natural test statistic for comparing two means is the difference in sample means,
-which we can calculate using
-<<help103>>=
-diff(aggregate( age ~ sex, HELP, mean )$age)                  # actual
-with(aggregate( age ~ sex, HELP, mean ), diff(age))           # actual
-@
-
-Using \verb!do()! and \verb!shuffle()! we can now compare
-\Sexpr{round(diff(aggregate(age ~ sex, HELP, mean )$age),2)} with
-the values we obtain if we randomly shuffle the \verb!female! variable.
-
-<<help104>>=
-do(1) * diff(aggregate(age ~ sex, HELP, mean)$age)                    # actual
-do(2) * diff(aggregate(age ~ shuffle(sex), HELP, mean)$age)           # shuffled
-do(2) * c(diff=diff(aggregate(age ~ shuffle(sex), HELP, mean)$age))   # shuffled & renamed
-@
-
-
-If we increase the number of random shufflings, we get an approximate sampling distribution
-that we can use to compute an empirical p-value.
-
-<<two-sample,width=4>>=
-set.seed(123)
-test.stat <- diff(aggregate(age ~ sex, HELP, mean )$age)
-rtest.stats <- do(1000) * c(diff= diff(aggregate(age ~ shuffle(sex), HELP, mean )$age))
-rtest.stats <- rtest.stats$diff
-@
-<<two-sample-pval>>=
-table(rtest.stats >= test.stat)
-mean(rtest.stats <= test.stat)            # compute proportion of extreme statistics
-@
-With an empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, 
-there is no reason to reject the null hypothesis that the mean
-age is the same for men and women.
-
-We can use histograms or dotplots to display the sampling distributions graphically.
-\begin{center}
-<<two-sample-hist,fig=true,width=5>>=
-xhistogram(~ rtest.stats, v=test.stat, groups=rtest.stats >= test.stat)      
-@
-\end{center}
-
-\begin{center}
-<<two-sample-dot,fig=true,width=5,height=2.2>>=
-test.stat <-  diff(aggregate(age ~ sex, HELP, mean )$age)
-rtest.stats <- do(200) * c(diff= diff(aggregate(age ~ shuffle(sex), HELP, mean)$age))
-dotPlot(~ diff, rtest.stats, n=40, groups=rtest.stats$diff >= test.stat, pch=16, cex=.8 )
-ladd(panel.abline(v=test.stat))                 # add a vertical line
-@
-\end{center}
-
-\subsubsection{Using \texttt{t.test()}}
-
-If you prefer to teach randomization methods as an alternative to traditional 
-methods when the assumptions of those procedures are violated, you can use 
-simulation to approximate the sampling distribution of the usual test statistic.
-<<>>=
-data.t <- stat(t.test( age ~ sex, HELP)); data.t
-simulated <- do(1000) * stat(t.test(age ~ shuffle(sex), HELP))
-table(simulated$t >= data.t)
-@
-\begin{center}
-<<t-test-simulation-histogram,fig=true,width=5>>=
-xhistogram(~ t, simulated, groups=t >= data.t, v=data.t)
-@
-\end{center}
-
-
-
-\subsubsection{Using \texttt{lm()}}
-\label{sec:lm}
-An alternative approach to comparing two means is based on the use of linear models. 
-
-\begin{example}
-In this example,
-\R\ will automatically convert the \verb!sex! factor into 0's and 1's, so the slope parameter in the model
-is the difference in the means.  
-<<>>=
-lm(age ~ sex, HELP)                        # actual data
-@
-The \verb!do()! function conveniently stores the values of the 
-estimated parameters that result from fitting with \verb!lm()!, so it is relatively easy to obtain
-the sampling distribution for any of these estimated parameters.
-<<>>=
-do(1) * lm(age ~ sex, HELP)                # actual data
-do(2) * lm(age ~ shuffle(sex), HELP)       # shuffled data
-@
-
-Since this is just another way of computing the difference in the sample means, the two approaches
-are equivalent.  If we reset the random seed, we get exactly the same simulation results.
-<<>>=
-set.seed(123)
-simulated <- do(1000) * lm(age ~ shuffle(sex), HELP) 
-test.stat <- (do(1) * lm(age ~ sex, HELP) )$sexmale -> test.stat
-rtest.stats <- simulated$sexmale
-table(rtest.stats >= test.stat)
-mean(rtest.stats >= test.stat)
-@
-\end{example}
-
 \section{The Multi-World Metaphor for Statistical Inference}
 
-Statistical inference is hard to teach.
+\begin{comment}
+In this section we move toward a more systematic approach to 
+empirical p-values with goal of providing a flexible tool 
+that works in a wide range of situations.
+\end{comment}
+
+Statistical inference is hard to teach.%
 \footnote{Here we are considering only the
   frequentist version of inference.  The Bayesian approach is
   different and has different features that make it hard to teach and
   understand.  In these notes, we will be agnostic about frequentist
   vs Bayesian, except to acknowledge that, for good or bad, the
-  frequentist approach is vastly dominant in introductory statistics courses.}%
+  frequentist approach is vastly dominant in introductory statistics courses.}
 Often, instead of teaching
 the logic of inference, we teach methods and techniques for
 calculating the quantities used in inference: standard errors,
@@ -895,7 +819,7 @@ so we know which hypotheses are true and which are false on these planets.
 %they are ``proposition[s] made as a
 %basis for reasoning, without any assumption of [their] truth.''  \cite{needCitation}
 
-These hypothetical planets are:
+These planets are:
 
 \begin{center}
 \begin{tabular}{ccc}
@@ -909,6 +833,7 @@ Planet Sample & Planet Null & Planet Alt\\
 Planet Sample is populated entirely with the cases we have collected
 on Planet Earth.  As such, it somewhat resembles Earth, but many of
 the details are missing, perhaps even whole countries or continents or seas.
+And of course, it is much smaller than Planet Earth.
 
 Planet Null is a boring planet.  Nothing is happening there. Express
 it how you will: All groups all have the same mean values.
@@ -989,16 +914,16 @@ so you want to examine just a small subset of the population.
 
 Here's a sample of 100 runners:
 <<run-sample>>=
-mysamp <- sample(population, 100)
+planet.sample <- sample(population, 100)
 @ 
 
 With that sample, you can calculate whatever statistics are of
 interest to you, for instance:
 <<>>=
-with(mysamp, mean(age))
-with(mysamp, sd(age))
-with(mysamp, mean(sex=="F"))
-lm(net ~ age + sex, data=mysamp)
+with(planet.sample, mean(age))
+with(planet.sample, sd(age))
+with(planet.sample, mean(sex=="F"))
+lm(net ~ age + sex, data=planet.sample)
 @ 
 
 These various numbers are informative in their own way about the
@@ -1010,7 +935,7 @@ their results likely be?
 Given that we have the population in hand, that we're on Planet Earth,
 we can go back and collect such samples many more times and study how much
 they vary one to the other.  We'll do this by replacing
-\texttt{mysamp} with a command to sample anew from the population.
+\texttt{planet.sample} with a command to sample anew from the population.
 
 <<>>=
 with(sample(population,100), mean(age))
@@ -1121,23 +1046,6 @@ measuring their relevant attributes, and recording that data.
 So let's pretend that's what we did.  Pretend that 
 \verb!planet.sample! is the result of laborious data collection.
 
-\authNote{R' deleted (at least temporarily):
-But here, in order to make a point, we're going to pretend to be
-sampling from the runners' population rather than doing the actual
-calculations.  Why?  In order to show you how the results on Planet
-Sample relate to the results on Planet Earth.  The idea is, of course,
-to show you that the work you will do on Planet Sample corresponds to
-what's happening on Planet Earth.
-
-To drive home the point that Planet Sample just consists of many
-copies of the data in the sample itself, here's a way to construct it explicitly:
- <<making-planet-sample>>=
-planet.sample = rbind(mysamp, mysamp, mysamp, mysamp, 
-                      mysamp, mysamp, mysamp, mysamp,
-                      mysamp, mysamp, mysamp, mysamp)
-nrow(mysamp)
-nrow(planet.sample)
-}
 
 Now you can go through the exact calculations you did to construct the
 sampling distribution (on Planet Earth), but instead sample from 
@@ -1162,9 +1070,11 @@ our actual sample, so that's not a good option.
 Our solution to this problem is to sample \emph{with replacement}.  That is, we will select
 an inhabitant of Planet Sample, record the appropriate data, and then put them back on the planet
 -- possibly selecting that same inhabitant again later in our sample.  We'll call sampling with
-replacement from Planet Sample \term{resampling} for short.  The \verb!resample()! function
-in the \verb!\mosaic! package can do this as easily as sampling without replacement.
+replacement from Planet Sample \term{resampling} for short.  The \function{resample()} function
+in the \pkg{mosaic} package can do this as easily as sampling without replacement.
 
+\Caution{Remember to \function{resample()} rather than 
+\function{sample()} to compute a resampling distribution.}
 <<>>=
 with(resample(planet.sample,100), mean(age))
 with(resample(planet.sample,100), mean(age))
@@ -1197,36 +1107,6 @@ sd(resample.props)        # standard deviation of fraction female
 sd(resample.regressions)  # standard deviation of resampled regression statistics 
 @ 
 
-\iffalse
-It's an affectation, and unnecessary, actually to populate Planet
-Sample by repeated copying of the data in your sample.  Instead, you
-can arrange things so that the copying is done during the sampling
-process.  Do this by using the \texttt{resample} operator rather
-than \texttt{sample}.  As the name suggests, \texttt{resample} takes a
-sample from a sample --- re-sampling --- and does so with replacement
-so that it's possible that some cases will be duplicated and some will
-be left out entirely.
-
-You can illustrate this easily by comparing the process of sampling
-and resampling on a short series of numbers:
-<<>>=
-our.set = c(1,2,3,4,5,6)
-our.set
-sample(our.set)  # no replacement
-sample(our.set)
-sample(our.set)
-resample(our.set) # with replacement
-resample(our.set)
-resample(our.set)
-@ 
-
-Going back to the previous example, it will suffice to show what the
-statements look like for just one of the statistics.
-<<>>=
-ps1 = do(500) * with(resample(mysamp), mean(age))
-sd(ps1)
-@ 
-\fi
 
 \begin{center}
 <<resample-mean-run,fig=true>>=
@@ -1306,7 +1186,40 @@ of explanatory variables in each case to a response variable.  By
 randomizing the explanatory variables relative to the response, you
 generate the world in which the Null Hypothesis holds true: Planet Null. 
 
-Let's look as some more examples.
+\subsubsection{Examples}
+Let's look as some examples.
+
+\begin{example}
+The \dfn{Whickham} data set contains data from a 1970's sample of \Sexpr{nrow(Whickham)}
+residents of Whickham,  a mixed urban and rural district near Newcastle upon Tyne, in the UK.
+Did more than half of the adult residents of Whickham smoke at that time?
+
+We could use the same approach that worked for the Lady Tasting Tea, but we'll do things 
+a little differently this time.  First, let's take a quick look at some of the data.
+<<>>=
+n <- nrow(Whickham); n
+head(Whickham,3)
+@
+We'll answer our question by comparing the smoking rate on Planet Sample 
+<<>>=
+with(Whickham, proptable(smoker))                    # less than 50% of sample smoke
+@
+to the sampling distribution on Planet Null.
+<<>>=
+planet.null <- data.frame( smoker=c('Yes','No') )    # equal mix of Yes and No on Planet Null
+null.dist <- do(2000) * with( resample(planet.null, n), proptable(smoker) )
+head(null.dist,3)
+table(with(null.dist, Yes < .4429))
+@
+\Sexpr{count(null.dist$Yes < .4429)} of our 2000 samples from Planet Null had a proportion 
+of smokers smaller than the proportion on Planet Sample.  It does not appear that our 
+sample came from Planet Null.
+\begin{center}
+<<Whickham-smokers,fig=true>>=
+histogram( ~ Yes, null.dist, main='Sampling distribution of smoking proportion')
+@
+\end{center}
+\end{example}
 
 \begin{example}
 Do the foot widths differ between boys and girls, judging from
@@ -1536,6 +1449,166 @@ We'll discuss how to use such simulations to compute power in Section \ref{sec:p
   Write an alternative hypothesis simulation of the two suppliers.
 \end{enumerate}  
 \end{problem}
+
+\section{More Examples}
+
+\subsection{Comparing Two Means}
+
+\label{sec:comparing-two-means}
+
+In this section we show several ways to see if the mean ages of men and women in the HELP study 
+are significantly different.
+
+
+
+\subsubsection{Using \texttt{lm()}}
+\label{sec:lm}
+We begin with a simple method that uses a big tool -- linear models.  If you do 
+linear models early, this is the way to go.
+
+
+In this example, \R\ will automatically convert the \variable{sex} factor into
+0's and 1's, so the slope parameter in the model is the difference in the means.  
+<<>>=
+mean(age ~ sex, data=HELP)
+lm(age ~ sex, data=HELP)                        # actual data
+@
+The \function{do()} function conveniently stores the values of the 
+estimated parameters that result from fitting with \function{lm()}, 
+so it is relatively easy to obtain
+the sampling distribution for any of these estimated parameters.
+<<>>=
+do(1) * lm(age ~ sex, data=HELP)                # actual data
+do(2) * lm(age ~ shuffle(sex), data=HELP)       # shuffled data
+@
+
+%Since this is just another way of computing the difference in the sample means, the two approaches
+%are equivalent.  If we reset the random seed, we get exactly the same simulation results.
+<<>>=
+set.seed(123)                                          # for later comparison purposes
+null.dist <- do(1000) * lm(age ~ shuffle(sex), HELP) 
+test.stat <- (do(1) * lm(age ~ sex, HELP) )$sexmale 
+rtest.stats <- null.dist$sexmale
+table(rtest.stats >= test.stat)
+mean(rtest.stats >= test.stat)         # compute proportion of extreme statistics
+prop(rtest.stats >= test.stat)         # compute proportion of extreme statistics (mosaic)
+@
+\FoodForThought[\centerline{Note}]{The functions \function{prop()} and \function{count()}
+in the \pkg{mosaic} package are designed to make the syntax clearer for students.
+Typically you will see these computed using \function{mean()} and \function{sum()}.
+}
+We can't reject the null hypotheses.  Many samples on Planet Null have 
+differences in the mean age of men and women at least as large as the 
+different on Planet Sample.
+
+We can use histograms or dotplots to display the sampling distributions graphically.
+\begin{center}
+<<two-sample-hist,fig=true,width=5>>=
+xhistogram(~ rtest.stats, v=test.stat, groups=rtest.stats >= test.stat)      
+@
+\end{center}
+
+\begin{center}
+<<two-sample-dot,fig=true,width=5,height=2.2>>=
+test.stat <-  diff(aggregate(age ~ sex, HELP, mean )$age)
+rtest.stats <- do(200) * c(diff= diff(aggregate(age ~ shuffle(sex), HELP, mean)$age))
+dotPlot(~ diff, rtest.stats, n=40, groups=rtest.stats$diff >= test.stat, pch=16, cex=.8 )
+@
+\end{center}
+\subsubsection{Using \texttt{aggregate()} and friends}
+
+While \function{summary()} from \pkg{Hmisc} makes a nice visual display
+of summary statistics by groups,
+<<help101>>=
+summary(age ~ sex, data=HELP, fun=mean)
+@
+the \verb!aggregate()! function stores its results in a data frame that lends 
+itself better to further computation.
+\Caution{\function{summary} uses 
+\code{fun} but \function{aggregate}
+uses \code{FUN}.}
+ 
+<<help102>>=
+aggregate(age ~ sex, data=HELP, FUN=mean)
+@
+To make the syntax even simpler, the \pkg{mosaic} package has modified the \function{mean()}
+function so that the following is (roughly) equivalent:
+<<>>=
+mean(age ~ sex, data=HELP)
+@
+The \function{do()} function flattens these results into a single row.  This is especially
+useful when we add some sampling and/or permuting to the mix.
+<<>>=
+do(1) * mean(age ~ sex, data=HELP)
+@
+
+A natural test statistic for comparing two means is the difference in sample means,
+which we can calculate using any of the following
+<<help103>>=
+diff(aggregate( age ~ sex, HELP, mean )$age)                         # actual
+with(aggregate( age ~ sex, HELP, mean ), diff(age))                  # actual
+with( do(1) * mean(age ~ sex, data=HELP), mean.female - mean.male)   # actual
+@
+
+\InstructorNote{Although we often show multiple ways to do things,
+you may prefer to show your students ``the one true way''.  Better that
+they understand one way well than several ways poorly, or get confused
+among them.}
+
+Using \function{do()} and \function{shuffle()} we can now compare
+\Sexpr{round(diff(aggregate(age ~ sex, HELP, mean )$age),2)} with
+the values we obtain if we randomly shuffle the \variable{sex} variable.
+
+<<help104>>=
+with( do(1) * mean(age ~ sex, data=HELP), mean.female - mean.male)    # actual
+null.dist <- do(3) * mean(age ~ shuffle(sex), data=HELP); null.dist   # shuffled
+diff <- with (null.dist, mean.female - mean.male);  diff
+@
+
+
+If we increase the number of random shufflings, we get an approximate sampling distribution
+that we can use to compute an empirical p-value.
+
+<<two-sample,width=4>>=
+set.seed(123)                                           # re-use seed to get same results
+test.stat <- with( do(1) * mean(age ~ sex, data=HELP), mean.female - mean.male)  # actual
+null.dist <- do(1000) * mean(age ~ shuffle(sex), data=HELP); head(null.dist)     # shuffled
+rtest.stats <- with(null.dist, mean.female - mean.male)
+@
+<<two-sample-pval>>=
+table(rtest.stats >= test.stat)
+prop(rtest.stats >= test.stat)         # compute proportion of extreme statistics (mosaic)
+@
+With an empirical p-value of approximately \Sexpr{round(mean(rtest.stats >= test.stat),3)}, 
+there is no reason to reject the null hypothesis that the mean
+age is the same for men and women.  It is no coincidence that this is exactly the same
+p-value we obtained using linear models.  By using the same seed, we are obtaining the same
+approximation to the sampling distribution.  And since both methods are computing the same
+test statistic, the results are identical.
+
+
+\subsubsection{Using \texttt{t.test()}}
+
+If you prefer to teach randomization methods as an alternative to traditional 
+methods when the assumptions of those procedures are violated, you can use 
+simulation to approximate the sampling distribution of the usual test statistic.
+
+<<>>=
+set.seed(123)                                # so we get the same samples again
+data.t <- stat(t.test( age ~ sex, HELP)); data.t
+null.dist <- do(1000) * stat(t.test(age ~ shuffle(sex), HELP))
+table(null.dist$t >= data.t)
+@
+Although we have again used the same samples, notice that the p-value is now a bit 
+different.  This is because the $t$ statistic is using the standard deviation as well
+as the difference in means.  So this is a different test.
+The conclusion, however, is the same.
+
+\begin{center}
+<<t-test-simulation-histogram,fig=true,width=5>>=
+xhistogram(~ t, null.dist, groups=t >= data.t, v=data.t)
+@
+\end{center}
 
 
 
