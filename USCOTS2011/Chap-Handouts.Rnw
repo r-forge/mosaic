@@ -1,0 +1,63 @@
+
+
+
+\chapter{Handouts}
+
+\SweaveOpts{prefix.string=figures/fig}  % location of 
+\SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
+\SweaveOpts{tidy=F}         % keep.source probably disables this
+\SweaveOpts{pdf=T}          % use pdf for graphics
+\SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
+\SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+\SweaveOpts{width=4.5}
+\SweaveOpts{height=2}
+\SweaveOpts{cache=T}
+
+
+<<setup,echo=F>>=
+source('setup.R')
+@ 
+
+This appendix contains materials that can be handed out as part of class activities (or repurposed
+for other situations).
+
+\newpage
+
+\ 
+
+\newpage
+
+\begin{center}
+\section*{Activity Tile Here}
+\end{center}
+
+Activity content here.  Page break between activities.
+
+
+\newpage
+
+
+\begin{center}
+\section*{Activity Tile Here}
+\end{center}
+
+Activity content here.  Page break between activities.
+
+\newpage
+
+
+
+
+\begin{center}
+\section*{Activity Tile Here}
+\end{center}
+
+Activity content here.  Page break between activities.
+
+\newpage
+
+
+
+
+
+

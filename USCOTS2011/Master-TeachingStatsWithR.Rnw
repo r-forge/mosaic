@@ -621,6 +621,8 @@ We welcome and encourage your participation in all of these initiatives.
 
 \appendix
 
+\include{Chap-Handouts}
+
 \include{Chap-MoreR}
 
 \include{Chap-Misc}

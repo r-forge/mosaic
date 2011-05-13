@@ -16,6 +16,7 @@ TEXFILES = \
 	  Chap-Internet.tex \
 	  Chap-Calculus.tex \
 	  Chap-Misc.tex \
+	  Chap-Handouts.tex \
 	  Chap-MoreR.tex \
 	  Chap-RIntro.tex \
 
