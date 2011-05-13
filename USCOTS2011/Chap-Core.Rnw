@@ -28,6 +28,7 @@ it straightforward to find what you are looking for even if you present
 things in a different order.  This is also a good organizational template
 to give your students to help them keep straight ``what to do when".
 
+\InstructorNote{Just what is the \emph{traditional course}, anyways?}
 It's worth noting how we teach the ``Traditional Course'', which, contrary
 to rumor, some of us do on occasion.  Nick has used the 5th edition of
 Moore and McCabe \cite{moor:mcca:2006}, where he introduces least squares 
@@ -51,7 +52,7 @@ variance, median, five number summary, intra-quartile range (IQR) as well as arb
 illustrate these using the CESD (Center for Epidemiologic Studies - Depression)
 measure of depressive symptoms.  To improve the legibility of output,
 we will also set the default number of digits to display to a more reasonable
-level (see \verb!?options! for more configuration possibilities).
+level (see {\tt ?options} for more configuration possibilities).
 
 <<cesd1,cache=F>>=
 options(digits=3)
@@ -77,6 +78,9 @@ IQR(HELP$cesd)
 The user can interact with the objects created by these
 functions to calculate the IQR (or the built-in a function can generate this directly).
 
+\Caution{Note that the hinges are not necessarily the same as the
+quartiles, due to interpolation in small datasets}
+
 <<cesd4>>=
 quantile(HELP$cesd)   
 quantile(HELP$cesd, c(.25, .50))
@@ -84,14 +88,16 @@ favstats(HELP$cesd)
 @
 
 By default, the 
-\VN{quantile()} function displays the quartiles, but can be given
-a vector of quantiles to display.  Finally, the \VN{favstats()}
-function in the \verb!mosaic! package provides a concise summary of 
+\function{quantile()} function displays the quartiles, but can be given
+a vector of quantiles to display.  Finally, the \function{favstats()}
+function in the \pkg{mosaic} package provides a concise summary of 
 many useful statistics.
 
 
 \subsection{Graphical Summaries}
-The \VN{histogram()} function is used to create a histogram.
+The \function{histogram()} function is used to create a histogram.
+Here we use the formula interface (as discussed in section \ref{sec:formula}) to
+specify that we wanted a histogram of the CESD scores.
 
 \vspace{-4mm}
 \begin{center}
@@ -104,24 +110,35 @@ In the HELP dataset, approximately one quarter of the subjects
 are female.  It is straightforward to restrict our attention to
 just those subjects.
 
-The \VN{subset()} function can generate a new data frame containing
+The \function{subset()} function can generate a new data frame containing
 just the women or just the men.  Once this is created, we
-used the \VN{stem()} function to create a stem and leaf plot.
+used the \function{stem()} function to create a stem and leaf plot.
+\Caution{Note that the comparison operator is \emph{two} equal signs}
 <<cesd-stem>>=
 female <- subset(HELP, sex=='female')
 male <- subset(HELP, sex=='male')
 stem(female$cesd)
 @
 
-The \VN{dotPlot()} function is used to create a dotplot (a la Fathom).
+\begin{problem}
+Using the HELP dataset, 
+create side by side boxplots of the CESD scores by substance abuse
+group, just for the male subjects.
+\end{problem}
+\begin{solution}
+<<subsmale,fig=TRUE>>=
+male <- subset(HELP, sex=="male")
+bwplot(cesd ~ substance, data=male)
+@
+\end{solution}
+
+The \function{dotPlot()} function is used to create a dotplot (a la Fathom).
 
 \begin{center}
 <<cesd-dot,fig=TRUE,height=1.8>>=
 dotPlot(~ cesd, data=female)
 @
 \end{center}
-Here we use the formula interface (as discussed in section \ref{sec:formula}) to
-specify that we wanted a histogram of the CESD scores.
 
 We could also have made our subset ``on the fly'', just for the purposes of graphing:
 \begin{center}
@@ -138,7 +155,7 @@ dotPlot(~ cesd | sex, data=HELP)
 \end{center}
 
 
-\subsection{Density Curves }
+\subsection{Density Curves}
 
 One disadvantage of histograms is that they can be sensitive to the choice of the
 number of bins.  Another display to consider is a density curve.
@@ -150,10 +167,12 @@ ladd(grid.text(x=0.2, y=0.8, 'only females'))
 @
 \end{center}
 
+\authNote{NH: is there a way to turn off the rug plot (though by default
+I like having this here}
 \authNote{NH: I would like to add superimposed density plots.  Is this feasible given
 that we need to protect "densityplot" with a print to deal with Weave?}
 
-The most famous density curve is a normal distribution.  The \VN{xpnorm()} function
+The most famous density curve is a normal distribution.  The \function{xpnorm()} function
 displays the probability that a random variable is less than the first argument, for a 
 normal distribution with mean given by the second argument and standard deviation by the 
 third.  More information about probability distributions can 
@@ -175,7 +194,7 @@ xpnorm(1.96, 0, 1)
 
 \subsection{Numerical Summaries}
 
-The \VN{xtabs()}, \VN{perctable()} and \VN{proptable()} functions can be used to calculate
+The \function{xtabs()}, \function{perctable()} and \function{proptable()} functions can be used to calculate
 counts, percentages and proportions, respectively for a categorical variable.
 
 <<homeless-table>>=
@@ -189,7 +208,7 @@ proptable(HELP$homeless)     # display table using proportions
 
 An exact confidence interval for a proportion (as well as a test of the null 
 hypothesis is equal to a particular value [by default 0.5]) can be calculated
-using the \VN{binom.test()} function.
+using the \function{binom.test()} function.
 
 <<binomtest>>=
 results = binom.test(~ homeless=="housed", HELP)
@@ -201,7 +220,7 @@ names(results)
 p=0.539)}
 
 As is generally the case with commands of this sort, there are a number of useful quantities available from 
-the \verb!results! object.  For example, the user can extract the confidence interval.
+the \VN{results} object.  For example, the user can extract the confidence interval.
 <<binomtest2>>=
 results$conf.int
 results$conf.int[1]
@@ -209,7 +228,8 @@ results$conf.int[1]
 
 \subsection{The Proportion Test}
 
-A similar interval and test can be calculated using \VN{prop.test()}.
+A similar interval and test can be calculated using \function{prop.test()}.
+This takes a table (as generated by \function{xtabs()} as an argument).  
 <<proptest>>=
 prop.test(xtabs(~ homeless, HELP), correct=FALSE)
 @
@@ -228,7 +248,7 @@ substab
 @
 <<gofmore>>=
 perctable(HELP$substance)
-p <- c(1/3, 1/3, 1/3)
+p <- c(1/3, 1/3, 1/3)   # equivalent to rep(1, 3)/3
 chisq.test(substab, p=p)
 total <- sum(substab); total
 total*p
@@ -236,6 +256,7 @@ total*p
 
 We can also calculate this quantity manually, in terms of observed and expected values.
 
+\InstructorNote{We don't encourage much manual calculations in our courses}
 <<gof2>>=
 chisq <- sum((substab - total*p)^2/(total*p)); chisq
 1 - pchisq(chisq, 2)
@@ -251,6 +272,7 @@ We always encourage students to start any analysis by graphing their data.  Here
 of the CESD (depressive symptoms) and the MCS (mental component score from the SF-36)
 with a lowess (locally weighted scatterplot smoother) line.  
 
+\InstructorNote{The lowess line can help to assess linearity of a relationship}
 \begin{center}
 <<xyplot,fig=TRUE,height=3>>=
 xyplot(cesd ~ mcs, data=HELP)
@@ -267,16 +289,19 @@ with(HELP, cor(cbind(cesd, mcs, pcs)))
 @
 
 By default, Pearson correlations are provided, other variants can be specified using the
-\verb!method! option.
+\option{method} option.
 <<corrspear>>=
 with(HELP, cor(cesd, mcs), method="spearman")
 @
 
 \subsection{Simple Linear Regression}
 
+\InstructorNote{As mentioned earlier, we tend to introduce linear regression
+early in our courses}
+
 Linear regression models were introduced previously in 
 section \ref{sec:lm}.  These use the same formula interface to specify the outcome 
-and predictors.
+and predictors.  Here we consider fitting the model \model{\VN{cesd}}{\VN{mcs}}.
 
 
 <<lm>>=
@@ -291,29 +316,42 @@ summary(model)
 <<lmclass>>=
 class(model)
 @
-The return value from \VN{lm()} is a linear model object;
+The return value from \function{lm()} is a linear model object;
 A number of functions can operate on these objects, as
-seen previously with \VN{coef()}.  As an additional example,
-there is a function called \VN{residuals()} that will return a
+seen previously with \function{coef()}.  As an additional example,
+there is a function called \function{residuals()} that will return a
 vector of
 the residuals.
-
+\InstructorNote{Another useful function is \function{predict()} }
 
 \begin{center}
 <<lmhist,fig=TRUE>>=
 histogram(~ residuals(model))
 @
 \end{center}
+\authNote{NH: how to add a superimposed normal density?}
 In addition, there are 
 default methods 
 to generate plots of
 linear regression objects
-(see \verb!?plot.lm!).
+(see {\tt ?plot.lm}).
 \begin{center}
 <<lmplot,fig=TRUE,height=4>>=
 plot(model)
 @
 \end{center}
+
+\begin{problem}
+Using the HELP dataset, fit a simple linear regression model 
+predicting the number of drinks per day as a function of the mental
+component score.  
+
+This model can be specified using the formula:
+\model{\VN{i1}}{\VN{mcs}}.  
+
+Assess the distribution of the residuals for this model.
+\end{problem}
+
 
 \section{Two Categorical Variables}
 
@@ -367,12 +405,14 @@ sex      homeless housed
   female      177     67
 \end{verbatim}
 
-\authNote{Suggestions about how to format this?}
+\authNote{NH: I'd welcome suggestions about how to format this?}
 
 \subsubsection{Graphical Summaries}
 
 Graphical summaries of cross classification tables may be helpful in visualizing
-associations.  Mosaic plots are one example.  Here we see that males tend to be over-represented
+associations.  Mosaic plots are one example (though the jury is still out
+regarding its utility, relative to the low data to ink ratio \cite{Tufte:2001:Visual}.  
+Here we see that males tend to be over-represented
 amongst the homeless subjects (as represented by the horizontal line which is higher for
 the homeless rather than the housed).  
 
@@ -397,7 +437,7 @@ population.
 
 When a student finds a significant association, 
 it's important for them to be able to interpret this in the context of the problem. 
-The \VN{xchisq.test()} function provides additional details to help with this process.
+The \function{xchisq.test()} function provides additional details to help with this process.
 
 <<chisq2>>=
 with(HELP, xchisq.test(homeless, sex, correct=FALSE))
@@ -420,7 +460,7 @@ with(HELP, fisher.test(homeless, sex))
 \subsection{A Bivariate Predictor: Numerical and Graphical Summaries}
 Here we will compare the distributions of CESD scores by sex.
 
-The \VN{aggregate()} function can be used to calculate the mean CESD score
+The \function{aggregate()} function can be used to calculate the mean CESD score
 for each of the two groups 
 <<aggregate>>=
 aggregate(cesd ~ sex, HELP, FUN=mean)
@@ -428,9 +468,9 @@ aggregate(cesd ~ sex, HELP, FUN=favstats)
 @
 
 Boxplots are a particularly helpful graphical display to compare distributions.
-The \VN{bwplot()} function can be used to display the boxplots for the CESD scores separately by sex.  We see from both the numerical and graphical
+The \function{bwplot()} function can be used to display the boxplots for the CESD scores separately by sex.  We see from both the numerical and graphical
 displays that women tend to have slightly higher CESD scores than men.
-\authNote{Should mention use of \VN{xyplot()} when the sample sizes are small.
+\authNote{Should mention use of \function{xyplot()} when the sample sizes are small.
 No reason to compute 5-number summaries of 10 or fewer numbers really.  NH resp: I'm not sure
 what you mean by this.}
 
@@ -467,7 +507,7 @@ Here we extend the methods introduced in section \ref{sec:comparing-two-means} t
 undertake a two-sided test.
 
 <<permute,fig=TRUE>>=
-simulations <- 1000
+simulations <- 500
 test.stat <-  abs(diff(aggregate(cesd ~ sex, HELP, mean)$cesd))
 test.stat
 rtest.stats <- do(simulations) * c(diff= diff(aggregate(cesd ~ shuffle(sex), HELP, mean)$cesd))
@@ -499,12 +539,16 @@ aggregate(cesd ~ substance, HELP, FUN=mean)
 mod <- aov(cesd ~ substance, data=HELP)
 summary(mod)
 @
+While still high (scores of 16 or more are generally considered to be 
+``severe'' symptoms), the cocaine-involved group tend to have lower 
+scores than those whose primary substances are alcohol or heroin.
 <<help-aovlm>>=
 mod1 <- lm(cesd ~ 1, data=HELP)
 mod2 <- lm(cesd ~ substance, data=HELP)
 @
 
-The \VN{anova()} command can be used to compare two (nested) models.
+The \function{anova()} command can be used to formally 
+compare two (nested) models.
 
 <<help-aov2>>=
 anova(mod1, mod2)
@@ -513,8 +557,10 @@ anova(mod1, mod2)
 
 \subsection{Tukey's Honest Significant Differences}
 
-There are a variety of multiple comparison procedures.  One of these is Tukey's Honest
-Significant Difference (HSD).  Other options are available with the \verb!multcomp! package.
+There are a variety of multiple comparison procedures that can be
+used after fitting an ANOVA model.  One of these is Tukey's Honest
+Significant Difference (HSD).  Other options are available with the 
+\pkg{multcomp} package.
 
 <<help-hsd>>=
 with(HELP, tapply(cesd, substance, mean))
@@ -522,12 +568,14 @@ with(HELP, tapply(cesd, substance, mean))
 <<help-hsd2>>=
 TukeyHSD(mod, "substance")
 @
+Again, we see that the cocaine group has significantly lower CESD scores
+than the other two groups.
 
 \section{Categorical Response to a Quantitative Predictor}
 
 \subsection{Logistic Regression}
 
-Logistic regression is available from within the \VN{glm()} function: a variety of
+Logistic regression is available from within the \function{glm()} function: a variety of
 link functions and distributional forms for generalized linear models are supported.
 
 <<help-logit>>=
@@ -537,7 +585,7 @@ summary(glm(homeless ~ age + female, binomial, data=HELP))
 \section{Survival Time Outcomes}
 
 Extensive support for Survival (Time to Event) analysis is available within the 
-\verb!survival! package.
+\pkg{survival} package.
 
 \subsection{Kaplan-Meier plot}
 
@@ -568,11 +616,18 @@ Neither age, nor substance group was significantly associated with linkage to pr
 
 \section{More than Two Variables}
 
-\subsection{Two-way ANOVA}
+\subsection{Two (or more) way ANOVA}
 
-\authNote{need to add a plot here}
+We can fit a two (or more) way ANOVA model, without or with an interaction,
+using the same modeling syntax.
+<<help-aovplot,fig=TRUE>>=
+bwplot(cesd ~ homeless | sex, data=HELP)
+@
 <<help-aov2>>=
 summary(aov(cesd ~ homeless + sex, data=HELP))
+@
+<<help-aov3>>=
+summary(aov(cesd ~ homeless * sex, data=HELP))
 @
 
 
@@ -589,6 +644,10 @@ summary(lm2)
 <<help-multreg3>>=
 anova(lm1, lm2)
 @
+There is little evidence for an interaction effect: we may want
+to drop this from the model.
+
+
 
 \section{Probability and Random Variables}
 
@@ -721,7 +780,6 @@ as demonstrated for this example in \ref{sec:power}.
 
 \begin{problem}
 \label{prob:power1}
-
 <<setup,echo=FALSE>>=
 n = 100
 alpha = 0.01
