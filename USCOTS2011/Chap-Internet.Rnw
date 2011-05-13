@@ -20,11 +20,16 @@ you to communicate with your own students.  In this chapter, we'll
 illustrate some mundane ways for you to distribute and share data and
 software with your students, web-based interfaces for statistical
 computing,  as well as tools for ``scraping'' data
-from the Internet.   We draw your attention particularly to 
+from the Internet using application program interfaces (API's) or
+through XML (eXtensible Markup Language).   
+
+We draw your attention particularly to 
 provocative papers by Gould \cite{Goul:2010} and Nolan and Temple Lang
 \cite{nola:temp:2010}, who
 highlight the importance of broadening the type of data students encounter
 in their first courses as well as the role of computing in modern statistics, respectively.
+\FoodForThought{The wealth of data accessible to students on the internet
+continues to increase at what feels like an exponential rate}
 
 \section{Sharing with and among your Students}
 
@@ -331,6 +336,9 @@ This can be used to dynamically generate datasets for use in courses, after
 you (and/or your students) generate a \VN{zillowId} for use with the system.
 (Danny Kaplan has used {\tt cars.com} to similar ends).
 
+\InstructorNote{While this is a cool interface, students tend to be less interested
+in house prices than their instructors!}
+
 In this section, we describe how to use Zillow to generate and analyse a
 dataset comprised of comparable sites to an arbitrary house of interest.
 
@@ -400,7 +408,8 @@ summary(finishedSqFt ~ bedrooms, data=comps, fun=favstats)
 @
 We can look at the distribution of Zillow price lower bound, upper bound, as well as assessed
 (tax) value.
-\authNote{NH: that's a better plot, but not the simplest syntax I've ever seen...}
+\InstructorNote{This syntax is somewhat dense, since the \function{bwplot()}
+function is expecting a data frame, not 3 vectors}
 <<zillowprices-bwplot,fig=TRUE,width=6>>=
 bwplot(rep(c("Low", "Assessed", "High"), each=nrow(comps)) ~ c(low, taxAssessment, high),
   data=comps, horizontal=TRUE, xlab='value ($)')
