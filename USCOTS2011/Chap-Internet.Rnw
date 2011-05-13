@@ -179,7 +179,7 @@ algebraically solving
 \[
 (1.96) \sqrt{ \hat p (1-\hat p) /n} = 0.05
 \]
-for $n$ given some estimated value of $p$.  The \verb!uniroot()! function
+for $n$ given some estimated value of $p$.  The \function{uniroot()} function
 can solve this sort of thing numerically.  Here we take an approach 
 that looks at a table of values of $n$ and $\hat p$ and margin of error.
 <<google-sample-size>>=
@@ -216,7 +216,7 @@ googleMap(pos=positions, mark=TRUE)
 You may need to turn off pop-up block for this to work smoothly.
 
 \item
-For each map, record whether the center is located in water or on land.  \verb!mark=TRUE!
+For each map, record whether the center is located in water or on land.  \option{mark=TRUE}
 is used to place a marker at the center of the map which is helpful for locations that are close to 
 the coast.  
 \begin{center}
@@ -253,7 +253,7 @@ sum(Water$Water)
 sum(Water$Land)
 @
 
-Then use your favorite method of analysis, perhaps \verb!binom.test()!.
+Then use your favorite method of analysis, perhaps \function{binom.test()}.
 
 <<googleMap-binom.test>>=
 interval(binom.test(215,300))
@@ -263,7 +263,7 @@ interval(binom.test(215,300))
 
 \subsection{Roadless America}
 
-The \verb!rgeo()! can also sample within a latitude longitude ``rectangle".
+The \function{rgeo()} function can also sample within a latitude longitude ``rectangle".
 This allows us to sample subsets of the globe.  In this activity we will estimate 
 the proportion of the continental United States that is within 1 mile of a road.
 
@@ -328,7 +328,7 @@ They have made an application programming interface (aka API) that specify
 how software programs can interface with their system.  Duncan Temple Lang has
 crafted a package in R which talks to Zillow. 
 This can be used to dynamically generate datasets for use in courses, after
-you (and/or your students) generate a \options{zillowId} for use with the system.
+you (and/or your students) generate a \VN{zillowId} for use with the system.
 (Danny Kaplan has used {\tt cars.com} to similar ends).
 
 In this section, we describe how to use Zillow to generate and analyse a
@@ -357,7 +357,7 @@ You should receive information about your Zillow ID (a character string
 of letters and numbers).  
 
 Once you've set up your Zillow account, and gotten your Zillow Id,
-the next step is to install the \verb!Zillow! package. The \verb!Zillow! package is
+the next step is to install the \pkg{Zillow} package. This package is
 not on CRAN, but can be obtained from Omegahat (a different repository from CRAN) using
 <<zillowinst,echo=TRUE, eval=FALSE>>=
 install.packages("RCurl")
@@ -365,7 +365,7 @@ install.packages("Zillow", repos="http://www.omegahat.org/R", type="source",
   dependencies="Depends")
 @
 
-Next, you should initialize your \verb!zillowID! to the value that you 
+Next, you should initialize your \VN{zillowID} to the value that you 
 received when you registered with {\tt Zillow.com}.
 <<fakezillow>>=
 zillowId = "set_to_your_zillowId"
@@ -374,9 +374,9 @@ zillowId = "set_to_your_zillowId"
 zillowId = "X1-ZWz1bvi5ru1gqz_4srxq"  # this is Nick's, please don't share!
 @
 
-This allows you to make calls to functions such as \verb!zestimate()! (which
+This allows you to make calls to functions such as \function{zestimate()} (which
 allows you to search for information about a particular property) and
-\verb!getComps()! (which facilitates finding a set of comparable properties.  
+\function{getComps()} (which facilitates finding a set of comparable properties.  
 Here we find information about an arbitrary house in California, as well as
 comparable properties.
 <<zillow1>>=
