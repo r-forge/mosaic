@@ -458,6 +458,7 @@ downloading contents, and uploading files (\url{http://www.omegahat.org/RGoogleD
 \item[last.fm:] interface to the \verb!last.fm! music recommendation site (\url{http://cran.r-project.org/web/packages/RLastFM})
 \end{description}
 
+\authNote{Twitter example?}
 
 
 

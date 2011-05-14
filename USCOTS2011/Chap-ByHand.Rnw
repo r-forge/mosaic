@@ -52,6 +52,11 @@ computing.  Among these are:
 
 Group means.  
 
+\section{Mites and Wilt Disease}
+
+\authNote{NH to flesh out}
+
+
 \section{A demonstration of shuffling and how it implements the null hypothesis}
 
 \section{Working through an ANOVA calculation by hand}
