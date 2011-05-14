@@ -932,10 +932,14 @@ but it does use a similar formula interface.
 
 \begin{center}
 <<mosaic1,fig=true,width=4,height=2>>=
-require(vcd)                              # load the visualing categorical data package
+require(vcd)                         # load the visualizing categorical data package
 mosaic(~ sex + race, CPS)
 @
 \end{center}
+\authNote{NH: this is pretty boring, but I couldn't get "sector" to display
+as the second variable without major headaches}
+\authNote{NH: can we standardize on either the use of mosaic (from vcd, which
+has a confusing name given our package) or mosaicplot?}
 
 
 Alternatively, we can send \function{mosaic()} the output of \function{xtabs()}:
