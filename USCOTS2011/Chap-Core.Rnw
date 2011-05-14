@@ -176,7 +176,7 @@ dotPlot(~ cesd | sex, data=HELP)
 
 One disadvantage of histograms is that they can be sensitive to the choice of the
 number of bins.  Another display to consider is a density curve.
-\FoodForThought{Density plots are also sensitive to certain choices.  If you density plot
+\FoodForThought{Density plots are also sensitive to certain choices.  If your density plot
 is too jagged or too smooth, try adjusting the \option{adjust} argument (larger than 1 for
 smoother plots, less than 1 for more jagged plots.}
 
