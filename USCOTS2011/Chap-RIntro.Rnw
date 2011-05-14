@@ -595,17 +595,17 @@ calculate that for us.
 
 \begin{center}
 <<iris-dotPlot,cache=T,fig=T,width=5,height=3.0>>=
-dotPlot(~Sepal.Length, data=iris, n=20)   # n=20 gives us approximately 20 towers
+dotPlot(~ Sepal.Length, data=iris, n=20)   # n=20 gives us approximately 20 towers
 @
 \end{center}
 We can use a conditional variable to give us separate dot plots for each species.
 
 <<iris-dotPlot-condA,cache=T,eval=F,fig=F,width=6.0,height=2.5>>=
-dotPlot(~Sepal.Length|Species, data=iris, n=20)
+dotPlot(~ Sepal.Length | Species, data=iris, n=20)
 @
 \begin{center}
 <<iris-dotPlot-condB,cache=T,fig=T,echo=F,width=6.0,height=2.0>>=
-dotPlot(~Sepal.Length|Species, data=iris, n=20, cex=.6)
+dotPlot(~ Sepal.Length | Species, data=iris, n=20, cex=.6)
 @
 \end{center}
 
@@ -616,14 +616,14 @@ Again the \verb!y! component of the formula is empty since we let \R\
 compute the heights of the bars for us.
 \begin{center}
 <<iris-histogram,cache=T,fig=T,width=3,height=1.8>>=
-histogram(~Sepal.Length, data=iris, n=20)       # n= 20 gives approx. 20 bars
+histogram(~ Sepal.Length, data=iris, n=20)       # n= 20 gives approx. 20 bars
 @
 \end{center}
 We can use a conditional variable to give us separate histograms for each species.
 
 \begin{center}
 <<iris-histogram-cond,cache=T,fig=T,width=4.5,height=2.0>>=
-histogram(~Sepal.Length|Species, data=iris, n=20)
+histogram(~ Sepal.Length | Species, data=iris, n=20)
 @
 \end{center}
 
@@ -638,7 +638,7 @@ prefer.)
 Boxplots are made pretty much the same way as histograms:
 \begin{center}
 <<iris-bwplot,fig=T,width=3,height=1.3>>=
-bwplot(~Sepal.Length, data=iris)
+bwplot(~ Sepal.Length, data=iris)
 @
 \end{center}
 
@@ -646,7 +646,7 @@ We can use conditioning as we did for histograms:
 
 \begin{center}
 <<iris-bwplot-cond,cache=T,fig=T,width=5,height=1.6,print=T>>=
-bwplot(~Sepal.Length|Species, data=iris)
+bwplot(~ Sepal.Length | Species, data=iris)
 @
 \end{center}
 
@@ -655,7 +655,7 @@ bwplot(~Sepal.Length|Species, data=iris)
 But there are betters ways to do this.
 \begin{center}
 <<iris-bwplot-2d,cache=T,fig=T,width=2,height=1.5,print=T>>=
-bwplot(Sepal.Length~Species, data=iris)
+bwplot(Sepal.Length ~ Species, data=iris)
 @
 \end{center}
 This is better, but the species names run into each other.
@@ -686,7 +686,7 @@ xyplot(Sepal.Length ~ Sepal.Width, data=iris)
 Again, we can use conditioning to make a panel for each species.
 \begin{center}
 <<iris-xyplot-cond,cache=T,fig=T,width=4.5,height=1.7,print=T>>=
-xyplot(Sepal.Length ~ Sepal.Width|Species, data=iris)
+xyplot(Sepal.Length ~ Sepal.Width | Species, data=iris)
 @
 \end{center}
 
@@ -853,8 +853,8 @@ Categorical variables are  often summarized in a table.
 \R\ can make a table for a categorical variable using \verb!xtabs()!.
 
 <<table>>=
-xtabs(~race, CPS)
-xtabs(~sector, CPS)
+xtabs(~ race, CPS)
+xtabs(~ sector, CPS)
 @
 
 Alternatively, we can use \verb!table()!, \verb!proptable()!, and \verb!perctable()! 
@@ -873,7 +873,7 @@ summarizing this data with \verb!xtabs()!.  This is often a more useful view of
 data with two categorical variables.
 
 <<xtabs>>=
-xtabs( ~ race + sector, CPS)
+xtabs(~ race + sector, CPS)
 @
 
 \subsubsection*{Entering Tables by Hand}
@@ -908,17 +908,17 @@ column-wise instead.
 The \verb!lattice! function \verb!barchart()! can display these tables as barcharts.
 \begin{center}
 <<barchart1a,fig=T,width=3,height=1.8,echo=T>>=
-barchart(xtabs(~sector, CPS))
+barchart(xtabs(~ sector, CPS))
 @
 <<barchart2a,fig=T,width=4,height=1.4,echo=T>>=
-barchart(xtabs(~sector, CPS), horizontal=FALSE)  # vertical bars
+barchart(xtabs(~ sector, CPS), horizontal=FALSE)  # vertical bars
 @
 \end{center}
 
 
 Just as bar charts are used to display the distribution
 of one categorical variable,  mosaic plots can do the same for cross tables.
-\verb!mosaic()! (from the \verb!vcd! package) is not a \verb!lattice! plot, 
+\function{mosaic()} (from the \pkg{vcd} package) is not a \verb!lattice! plot, 
 but it does use a similar formula interface.  
 
 \begin{center}
@@ -929,7 +929,7 @@ mosaic(~ sex + race, CPS)
 \end{center}
 
 
-Alternatively, we can send \verb!mosaic()! the output of \verb!xtabs()!:
+Alternatively, we can send \function{mosaic()} the output of \function{xtabs()}:
 \begin{center}
 <<mosaic2,fig=F>>=
 mosaic(xtabs(~ sex + race, CPS))
@@ -1028,7 +1028,7 @@ the cross-table to a data frame.
 Then we can use this data frame for plotting.
 
 <<barchart3a>>=
-cps <- as.data.frame( xtabs(~ sector + race, data=CPS) ); cps   
+cps <- as.data.frame(xtabs(~ sector + race, data=CPS)); cps   
 @
 <<<barchart3aa,eval=false>>=
 barchart(Freq ~ sector, groups=race, data=cps)
