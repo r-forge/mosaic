@@ -250,6 +250,8 @@ Daniel Kaplan
 
 
 \begin{document}
+\numberwithin{page}{chapter}
+\renewcommand{\thepage}{\thechapter -\arabic{page}}
 
 %%%%%%%%%%% comment this out if not using highlight %%%%%%%%%%%%%%%%%%%%%%
 \newif\ifhweave
@@ -622,16 +624,12 @@ We welcome and encourage your participation in all of these initiatives.
 
 \appendix
 
-\renewcommand{\thepage}{\thechapter-\arabic{page}}
 
-\setcounter{page}{1}
 \include{Chap-Handouts}
 
 
-\setcounter{page}{1}
 \include{Chap-MoreR}
 
-\setcounter{page}{1}
 \include{Chap-Misc}
 
 \renewcommand{\thepage}{X-\arabic{page}}
