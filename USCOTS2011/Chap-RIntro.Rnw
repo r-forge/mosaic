@@ -285,7 +285,7 @@ Here are some other packages you may like to install as well.
 following packages:
 \begin{itemize}
 \item
-\verb!Hmisc! (Frank Harell's miscellaneous utilities),
+\verb!Hmisc! (Frank Harrell's miscellaneous utilities),
 \item
 \verb!vcd! (visualizing categorical data),
 \item
@@ -1140,7 +1140,7 @@ at the moment, and we can pass along your feedback to the developers.
 
 This should be all you need for this course.  But if you prefer to have a
 stand-alone version (because you study somewhere without an internet
-connection, for example), read on.
+connection, or have data that can't be loaded into the cloud, for example), read on.
 
 
 \subsection{RStudio on Your Desktop/Laptop}
