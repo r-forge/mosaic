@@ -188,12 +188,6 @@ ladd( panel.mathdensity(args=list(mean=mean(female$cesd), sd=sd(female$cesd))) )
 @
 \end{center}
 
-\authNoted{NH: is there a way to turn off the rug plot (though by default
-I like having this here)}%
-\authNote{rjp:  It's not really a rug, but in any case I don't know if there is a way to 
-turn it off.  Seems like there should be, but I didn't see it in the documentation.}%
-\authNote{rjp: added superimposed density plots as per Nick's wish.}%
-
 The most famous density curve is a normal distribution.  The \function{xpnorm()} function
 displays the probability that a random variable is less than the first argument, for a 
 normal distribution with mean given by the second argument and standard deviation by the 
@@ -220,7 +214,7 @@ perctable(HELP$homeless)     # display table using percentages
 proptable(HELP$homeless)     # display table using proportions
 @
 \authNote{NH: how best to add row and/or column totals?  rjp:  Seems like someone must
-have done this already, but I don't know of a function to do it.  I've thought about writing one.}
+have done this already, but I don't know of a function to do it.  I've thought about writing one.  NH: would "addmargins()" be helpful?}
 
 \subsection{The Binomial Test}
 
@@ -229,7 +223,7 @@ hypothesis is equal to a particular value [by default 0.5]) can be calculated
 using the \function{binom.test()} function.
 The standard \function{binom.test()} requires us to tabulate.
 <<>>=
-binom.test(244, 209 + 244)
+binom.test(209, 209 + 244)
 @
 The \pkg{mosaic} package provides a formula interface that avoids the need to pre-tally
 the data.
@@ -285,14 +279,12 @@ prop.test(209, 209 + 244, correct=FALSE)
 @
 or counts of successes and failures as a single vector.
 <<>>=
-prop.test(c(209, 209), correct=FALSE)
+prop.test(c(209, 244), correct=FALSE)
 @
 To make things simpler still, we've added a formula interface in the \pkg{mosaic} package.
 <<>>=
 prop.test(~ homeless, data=HELP)
 @
-
-\authNoted{NH: suggestions for a better approach?  rjp:  I've added prop() to mosaic.}
 
 \subsection{Goodness of Fit Tests}
 
@@ -403,7 +395,6 @@ vector of the residuals.
 xhistogram(~ residuals(model), density=TRUE)
 @
 \end{center}
-\authNoted{rjp: done. NH: how to add a superimposed normal density?}%
 \begin{center}
 <<HELP-resid-qq,fig=TRUE>>=
 qqmath(~ resid(model))
@@ -507,8 +498,23 @@ sex      homeless housed
 \function{rbind()} and \function{cbind()}?}
 
 \subsubsection{Epidemiologic statistics}
+\label{sec:epistats}
 
-XX NH to flesh out XX
+To demonstrate how to extend \R\ using your own functions, we can write
+one which calculates epidemiologic statistics such as the odds ratio (OR).
+More information about writing your own functions can be found in 
+section
+\ref{sec:writingFunctions}.
+
+<<orfunc>>=
+odds.ratio <- function(x, y, ds) {
+  tab = xtabs(~ x + y)
+  return(tab[1,1]*tab[2,2]/(tab[1,2]*tab[2,1]))
+}
+with(HELP, odds.ratio(homeless, sex))
+@
+
+\authNote{NH to expand}
 
 \subsubsection{Graphical Summaries}
 
@@ -577,10 +583,6 @@ Boxplots are a particularly helpful graphical display to compare distributions.
 The \function{bwplot()} function can be used to display the boxplots for the
 CESD scores separately by sex.  We see from both the numerical and graphical
 displays that women tend to have slightly higher CESD scores than men.
-\authNoted{Should mention use of \function{xyplot()} when the sample sizes are small.
-No reason to compute 5-number summaries of 10 or fewer numbers really.  NH resp: I'm not sure
-what you mean by this. rjp: done}
-\authNote{A slightly smaller data set might have been better, but this works.}%
 
 \FoodForThought{Although we usually put explanatory variables along the horizontal axis,
 page layout sometimes makes the other orientation preferable for these plots.}
@@ -642,7 +644,7 @@ ladd(panel.abline(v=test.stat))
 @
 
 
-\authNote{NH: comments and suggestions welcomed: this is a kludge}
+\authNote{NH: line still isn't showing up}
 
 The same conclusion is observed with a permutation test (the
 observed value is nowhere in the vicinity of the permuted values).
@@ -692,8 +694,13 @@ Significant Difference (HSD).  Other options are available with the
 with(HELP, tapply(cesd, substance, mean))
 @
 <<help-hsd2>>=
-TukeyHSD(mod, "substance")
+compare <- TukeyHSD(mod, "substance")
+compare
 @
+<<help-hsd3,fig=TRUE,height=4>>=
+plot(compare)
+@
+
 Again, we see that the cocaine group has significantly lower CESD scores
 than the other two groups.
 
@@ -708,7 +715,9 @@ link functions and distributional forms for generalized linear models are suppor
 \option{link}.  The \code{logit} link is the default link for the binomial family,
 so we don't need to specify it here.}
 <<help-logit>>=
-summary(glm(homeless ~ age + female, family=binomial, data=HELP))
+logitmod <- glm(homeless ~ age + female, family=binomial, data=HELP)
+summary(logitmod)
+exp(coef(logitmod))
 @
 
 \section{Survival Time Outcomes}
@@ -750,20 +759,20 @@ Neither age, nor substance group was significantly associated with linkage to pr
 We can fit a two (or more) way ANOVA model, without or with an interaction,
 using the same modeling syntax.
 <<help-aovplot,fig=TRUE>>=
-bwplot(cesd ~ homeless | sex, data=HELP)
+bwplot(cesd ~ substance | sex, data=HELP)
 @
 <<help-aov2>>=
-summary(aov(cesd ~ homeless + sex, data=HELP))
+summary(aov(cesd ~ substance + sex, data=HELP))
 @
 <<help-aov3>>=
-summary(aov(cesd ~ homeless * sex, data=HELP))
+summary(aov(cesd ~ substance * sex, data=HELP))
 @
-There's little evidence for the interaction, though there is a statistically
-significant main effects terms for \VN{sex} and a borderline significant
-effect for \VN{homeless} status.
+There's little evidence for the interaction, though there are statistically
+significant main effects terms for \VN{substance} group and 
+\VN{sex}.
 
 <<help-interaction,fig=true>>=
-xyplot(cesd ~ homeless, data=HELP, groups=sex, type='a')
+xyplot(cesd ~ substance, data=HELP, groups=sex, type='a')
 @
 
 
