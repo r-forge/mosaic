@@ -97,7 +97,7 @@ binom.test.logical <- function(
 	if (missing(data.name)) { 
 		data.name <- deparse(substitute(x)) 
 	}
-	binom.test(x=factor(x), p=p, alternative=alternative, 
+	binom.test(x=factor(x, levels=c('TRUE','FALSE')), p=p, alternative=alternative, 
 		conf.level=conf.level, 
 		success=success, 
 		data.name=data.name, ...)

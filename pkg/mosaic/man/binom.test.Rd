@@ -6,12 +6,26 @@
 \alias{binom.test.logical}
 \alias{binom.test.factor}
 \alias{binom.test.formula}
+\alias{prop.test}
+\alias{prop.test.default}
+\alias{prop.test.character}
+\alias{prop.test.numeric}
+\alias{prop.test.logical}
+\alias{prop.test.factor}
+\alias{prop.test.formula}
 \title{
-Exact Binomial Test
+Exact and Approximate Tests for Proportions
 }
 \description{
-Performs an exact test of a simple null hypothesis about the probability of success in a 
+These are wrapper functions around the functions of the same name in \pkg{stats}.
+They provide an extended interface (including formulas).
+\code{binom.test} 
+performs an exact test of a simple null hypothesis about the probability of success in a 
 Bernoulli experiment from summarized data or from raw data.
+\code{prop.test}
+performs an approximate test of a simple null hypothesis about the 
+probability of success in a Bernoulli or multinomial experiment
+from summarized data or from raw data.
 }
 \usage{
 binom.test(x, n, p=0.5, 
@@ -35,6 +49,30 @@ binom.test(x, n, p=0.5,
 	conf.level = 0.95, success, data.name, ...)
 
 \method{binom.test}{formula}(x, n , p = 0.5, 
+	alternative = c("two.sided", "less", "greater"), 
+	conf.level = 0.95,  success, data.name, ...)
+
+prop.test(x, n, p=NULL, 
+	alternative = c("two.sided", "less", "greater"), 
+	conf.level = 0.95, ...)
+
+\method{prop.test}{default}(x, n,  p = NULL, 
+	alternative = c("two.sided", "less", "greater"), 
+	conf.level = 0.95, ...)
+
+\method{prop.test}{numeric}(x, n, p = NULL, 
+	alternative = c("two.sided", "less", "greater"), 
+	conf.level = 0.95, success, data.name, ...)
+
+\method{prop.test}{character}(x, n, p = NULL, 
+	alternative = c("two.sided", "less", "greater"), 
+	conf.level = 0.95, success, data.name, ...)
+
+\method{prop.test}{factor}(x, n, p = NULL, 
+	alternative = c("two.sided", "less", "greater"), 
+	conf.level = 0.95, success, data.name, ...)
+
+\method{prop.test}{formula}(x, n , p = NULL, 
 	alternative = c("two.sided", "less", "greater"), 
 	conf.level = 0.95,  success, data.name, ...)
 }
