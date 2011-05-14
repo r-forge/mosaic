@@ -661,7 +661,7 @@ historical significance: Francis Galton's attempt to quantify the heritability
 of height.
 
 Galton famously developed the correlation coefficient in the late
-1880s.  (See \cite{galton-co-relations}.)  One of his motivations was to
+1880s (see \cite{galton-co-relations}.)  One of his motivations was to
 put on a quantitative footing the theory of evolution established
 by his half-cousin, Charles Darwin.  It's important to realize that
 Darwin himself did not know the mechanism by which traits were
@@ -672,8 +672,10 @@ publishing under the pseudonym ``Student.''  It wasn't until 1944 when
 DNA was shown to be associated with genetic heritability.
 
 Without a mechanism of genotype, Galton needed to rely on what we now
-call ``phenotype,'' the observable characteristics themselves.  The MOSAIC
-dataset \texttt{Galton} contains, transcribed to a modern format, measurements that Galton himself
+call ``phenotype,'' the observable characteristics themselves.  The 
+\pkg{mosaic} package
+includes the 
+\texttt{Galton} dataset, transcribed to a modern format, of measurements that Galton himself
 collected on the heights of adult children and their parents. 
 
 
