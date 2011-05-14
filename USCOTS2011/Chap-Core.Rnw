@@ -71,15 +71,16 @@ It is also straightforward to calculate quantiles of the distribution.
 median(HELP$cesd)
 five <- fivenum(HELP$cesd)
 five     # display the object (vector of length 5)
+@
+The user can interact with the objects created by these
+functions to calculate the IQR (or the built-in a function can generate this directly).
+\Caution{Note that the hinges are not necessarily the same as the
+quartiles, due to interpolation in small datasets}
+<<>>=
 five[4] - five[2]
 IQR(HELP$cesd)
 @
 
-The user can interact with the objects created by these
-functions to calculate the IQR (or the built-in a function can generate this directly).
-
-\Caution{Note that the hinges are not necessarily the same as the
-quartiles, due to interpolation in small datasets}
 
 <<cesd4>>=
 quantile(HELP$cesd)   
@@ -97,27 +98,44 @@ many useful statistics.
 \subsection{Graphical Summaries}
 The \function{histogram()} function is used to create a histogram.
 Here we use the formula interface (as discussed in section \ref{sec:formula}) to
-specify that we wanted a histogram of the CESD scores.
+specify that we want a histogram of the CESD scores.
 
 \vspace{-4mm}
 \begin{center}
 <<cesd-hist,fig=TRUE>>=
-histogram(~ cesd, HELP)
+histogram(~ cesd, data=HELP)
 @
 \end{center}
 
-In the HELP dataset, approximately one quarter of the subjects
-are female.  It is straightforward to restrict our attention to
-just those subjects.
 
+In the HELP dataset, approximately one quarter of the subjects are female.  
+<<>>=
+with( HELP, table(sex) )
+@
+It is straightforward to restrict our attention to just those subjects.
+If we are going to do many things with a subset of our data, it may be easiest
+to make a new data frame containing only the cases we are interested in.
 The \function{subset()} function can generate a new data frame containing
 just the women or just the men.  Once this is created, we
 used the \function{stem()} function to create a stem and leaf plot.
-\Caution{Note that the comparison operator is \emph{two} equal signs}
+\Caution{Note that the equality operator is \emph{two} equal signs}
 <<cesd-stem>>=
 female <- subset(HELP, sex=='female')
 male <- subset(HELP, sex=='male')
 stem(female$cesd)
+@
+
+The plotting functions in the \pkg{lattice} package have a \option{subset}
+argument that allows us to select only a portion of the data.
+This can be handy for explaration and avoids the need to make (and name)
+various subsets.
+<<women-cesd-hist,fig=true>>=
+histogram(~ cesd, data=HELP, subset=sex=='female')   # notice the quotes
+@
+
+Alternatively, we can make side-by-side plots to compare multiple subsets.
+<<cesd-male-female,fig=true>>=
+histogram(~ cesd | sex, data=HELP)
 @
 
 \begin{problem}
@@ -127,8 +145,7 @@ group, just for the male subjects.
 \end{problem}
 \begin{solution}
 <<subsmale,fig=TRUE>>=
-male <- subset(HELP, sex=="male")
-bwplot(cesd ~ substance, data=male)
+bwplot(cesd ~ substance, data=HELP, subset=sex=='male')
 @
 \end{solution}
 
@@ -159,18 +176,23 @@ dotPlot(~ cesd | sex, data=HELP)
 
 One disadvantage of histograms is that they can be sensitive to the choice of the
 number of bins.  Another display to consider is a density curve.
+\FoodForThought{Density plots are also sensitive to certain choices.  If you density plot
+is too jagged or too smooth, try adjusting the \option{adjust} argument (larger than 1 for
+smoother plots, less than 1 for more jagged plots.}
 
 \begin{center}
 <<dens1,fig=TRUE>>=
 densityplot(~ cesd, data=female)
 ladd(grid.text(x=0.2, y=0.8, 'only females'))
+ladd( panel.mathdensity(args=list(mean=mean(female$cesd), sd=sd(female$cesd))) )
 @
 \end{center}
 
-\authNote{NH: is there a way to turn off the rug plot (though by default
-I like having this here}
-\authNote{NH: I would like to add superimposed density plots.  Is this feasible given
-that we need to protect "densityplot" with a print to deal with Weave?}
+\authNoted{NH: is there a way to turn off the rug plot (though by default
+I like having this here)}%
+\authNote{rjp:  It's not really a rug, but in any case I don't know if there is a way to 
+turn it off.  Seems like there should be, but I didn't see it in the documentation.}%
+\authNote{rjp: added superimposed density plots as per Nick's wish.}%
 
 The most famous density curve is a normal distribution.  The \function{xpnorm()} function
 displays the probability that a random variable is less than the first argument, for a 
@@ -180,15 +202,10 @@ be found in section \ref{sec:probability}.
 
 \subsection{Normal Distributions}
 \begin{center}
-<<norm1,fig=TRUE,height=2.4>>=
+<<norm1,fig=TRUE,width=5,height=2.4>>=
 xpnorm(1.96, 0, 1)
 @
 \end{center}
-
-\authNote{NH: I would like to add superimposed normal on top of a density plots.  Help!}
-
-
-
 
 \section{One Categorical Variable}
 
@@ -202,38 +219,83 @@ xtabs(~ homeless, HELP)      # display table using counts
 perctable(HELP$homeless)     # display table using percentages
 proptable(HELP$homeless)     # display table using proportions
 @
-\authNote{NH: how best to add row and/or column totals?}
+\authNote{NH: how best to add row and/or column totals?  rjp:  Seems like someone must
+have done this already, but I don't know of a function to do it.  I've thought about writing one.}
 
 \subsection{The Binomial Test}
 
 An exact confidence interval for a proportion (as well as a test of the null 
 hypothesis is equal to a particular value [by default 0.5]) can be calculated
 using the \function{binom.test()} function.
-
+The standard \function{binom.test()} requires us to tabulate.
+<<>>=
+binom.test(244, 209 + 244)
+@
+The \pkg{mosaic} package provides a formula interface that avoids the need to pre-tally
+the data.
 <<binomtest>>=
-results = binom.test(~ homeless=="housed", HELP)
-results
-names(results)
+result <- binom.test(~ homeless=="housed", HELP)
+result
+names(result)
 @
 
-\authNote{NH: this is pretty strange (I would have thought that this would have estimated
-p=0.539)}
+\authNoted{NH: this is pretty strange (I would have thought that this would have estimated
+p=0.539).  rjp:  Was strange.  I've fixed this.  Now you get the value you wanted.}
 
-As is generally the case with commands of this sort, there are a number of useful quantities available from 
-the \VN{results} object.  For example, the user can extract the confidence interval.
+As is generally the case with commands of this sort, 
+there are a number of useful quantities available from 
+the object returned by the function.  
+For example, the user can extract the confidence interval either manually
 <<binomtest2>>=
-results$conf.int
-results$conf.int[1]
+result$conf.int
+result$conf.int[1]
 @
+or via the \function{interval()} function in the \pkg{mosaic} package.%
+\footnote{A word of explanation is in order here.  In \R\ what you see is not 
+what you get.  Most of the objects we encounter in \R\ have a \function{print()}
+method.  So when we get \code{result}, what we are seeing displayed is
+\code{print(result)}.  There may be a good deal of additional information
+lurking inside the object itself.  To make matter even more complicated, some
+objects are returned \emph{invisibly}, so nothing prints.  You can still assign
+the returned object to a variable and process it later, even if nothing shows up
+on the screen.  This is the case for the \pkg{lattice} graphics functions, for example.
+You can save a plot into a variable, say \code{myplot} and display the plot again later 
+using \code{print(myplot)}.}%
+\InstructorNote{You may want to read the footnote that describes what's going on here in 
+a bit more detail.}%
+<<>>=
+interval(result)
+@
+We can extract the p-value similarly.
+<<>>=
+pval(result)
+@
+
 
 \subsection{The Proportion Test}
 
 A similar interval and test can be calculated using \function{prop.test()}.
 This takes a table (as generated by \function{xtabs()} as an argument).  
-<<proptest>>=
+<<>>=
 prop.test(xtabs(~ homeless, HELP), correct=FALSE)
 @
-\authNote{suggestions for a better approach?}
+It also accepts summarized data, the way \function{binom.test()} does.
+\InstructorNote{\function{prop.test()} uses a Chi-squared statistic.
+Most introductory texts use a $z$-statistic.  They are equivalent, but
+you may need to address this with your students.}%
+<<>>=
+prop.test(244, 209 + 244, correct=FALSE)
+@
+or counts of successes and failures as a single vector.
+<<>>=
+prop.test(c(244, 209), correct=FALSE)
+@
+To make things simpler still, we've added a formula interface in the \pkg{mosaic} package.
+<<>>=
+prop.test(~ homeless, data=HELP)
+@
+
+\authNoted{NH: suggestions for a better approach?  rjp:  I've added prop() to mosaic.}
 
 \subsection{Goodness of Fit Tests}
 
@@ -243,12 +305,12 @@ proportion of subjects back in the original population in each of the
 substance abuse groups were equal.
 
 <<gof>>=
-substab <- xtabs(~ substance, HELP)
+substab <- xtabs(~ substance, data=HELP)
 substab
 @
 <<gofmore>>=
 perctable(HELP$substance)
-p <- c(1/3, 1/3, 1/3)   # equivalent to rep(1, 3)/3
+p <- c(1/3, 1/3, 1/3)   # equivalent to rep(1/3, 3)
 chisq.test(substab, p=p)
 total <- sum(substab); total
 total*p
@@ -260,7 +322,14 @@ We can also calculate this quantity manually, in terms of observed and expected 
 <<gof2>>=
 chisq <- sum((substab - total*p)^2/(total*p)); chisq
 1 - pchisq(chisq, 2)
-rm(substab, p, total, chisq)
+@
+
+Alternatively, the \pkg{mosaic} package provides a version of \function{chisq.test()} with
+more verbose output.
+\FoodForThought{\code{x} is for eXtra.}
+<<>>=
+xchisq.test(substab, p=p)
+rm(substab, p, total, chisq)                       # disposing of variables no longer needed.
 @
 
 
@@ -268,47 +337,54 @@ rm(substab, p, total, chisq)
 
 \subsection{Scatterplots}
 
-We always encourage students to start any analysis by graphing their data.  Here we augment a scatterplot
+We always encourage students to start any analysis by graphing their data.  
+Here we augment a scatterplot
 of the CESD (depressive symptoms) and the MCS (mental component score from the SF-36)
 with a lowess (locally weighted scatterplot smoother) line.  
 
 \InstructorNote{The lowess line can help to assess linearity of a relationship}
 \begin{center}
-<<xyplot,fig=TRUE,height=3>>=
-xyplot(cesd ~ mcs, data=HELP)
-ladd(panel.loess(HELP$mcs, HELP$cesd))
+<<HELP-xyplot,fig=TRUE,height=3>>=
+xyplot(cesd ~ mcs, data=HELP, type=c('p','smooth'), pch=1)
 @
 \end{center}
+
+For multivariate data sets, \function{splom()} will generate pairwise
+scatterplots for selected variables.
+<<HELP-splom,fig=true,height=4>>=
+splom(HELP[,c("age","cesd","d1")])
+@
+
 
 \subsection{Correlation}
 
 Correlations can be calculated for a pair of variables, or for a matrix of variables.
-<<corr>>=
+<<>>=
 with(HELP, cor(cesd, mcs))
 with(HELP, cor(cbind(cesd, mcs, pcs)))
 @
 
 By default, Pearson correlations are provided, other variants can be specified using the
 \option{method} option.
-<<corrspear>>=
+<<>>=
 with(HELP, cor(cesd, mcs), method="spearman")
 @
 
 \subsection{Simple Linear Regression}
 
 \InstructorNote{As mentioned earlier, we tend to introduce linear regression
-early in our courses}
+early in our courses.}
 
 Linear regression models were introduced previously in 
 section \ref{sec:lm}.  These use the same formula interface to specify the outcome 
 and predictors.  Here we consider fitting the model \model{\VN{cesd}}{\VN{mcs}}.
 
 
-<<lm>>=
+<<>>=
 model <- lm(cesd ~ mcs, data=HELP)
 coef(model)
 @
-<<lmsum>>=
+<<>>=
 summary(model)
 @
 
@@ -320,26 +396,42 @@ The return value from \function{lm()} is a linear model object;
 A number of functions can operate on these objects, as
 seen previously with \function{coef()}.  As an additional example,
 there is a function called \function{residuals()} that will return a
-vector of
-the residuals.
+vector of the residuals.
+\FoodForThought{\function{residuals()} can be abbreviated 
+\function{resid()}.}
 \InstructorNote{Another useful function is \function{predict()} }
 
 \begin{center}
 <<lmhist,fig=TRUE>>=
-histogram(~ residuals(model))
+xhistogram(~ residuals(model), density=TRUE)
 @
 \end{center}
-\authNote{NH: how to add a superimposed normal density?}
-In addition, there are 
-default methods 
-to generate plots of
-linear regression objects
-(see {\tt ?plot.lm}).
+\authNoted{rjp: done. NH: how to add a superimposed normal density?}%
 \begin{center}
-<<lmplot,fig=TRUE,height=4>>=
-plot(model)
+<<HELP-resid-qq,fig=TRUE>>=
+qqmath(~ resid(model))
 @
 \end{center}
+\begin{center}
+<<HELP-resid-plot,fig=TRUE>>=
+xyplot(resid(model) ~ fitted(model))
+@
+\end{center}
+
+
+In addition, the \function{plot()} method can produce a number of diagnostic plots
+(see \texttt{?plot.lm}).
+
+\begin{multicols}{2}
+\begin{center}
+<<HELP-lmplot1,fig=TRUE,width=3,height=4>>=
+plot(model, which=1)
+@
+<<HELP-lmplot2,fig=TRUE,width=3,height=4>>=
+plot(model, which=2)
+@
+\end{center}
+\end{multicols}
 
 \begin{problem}
 Using the HELP dataset, fit a simple linear regression model 
@@ -365,7 +457,7 @@ and sex.
 
 \subsubsection{From Raw Data}
 <<homeless-sex>>=
-xtabs(~ homeless + sex, HELP)     
+xtabs(~ homeless + sex, data=HELP)     
 @
 
 \subsubsection{Building Cross Tables from Already Summarized Data}
@@ -374,8 +466,11 @@ It can be handy to create a table from existing summaries.  Here
 we demonstrate how to generate this for our table of homeless status
 by sex.
 
-\begin{verbatim}
+\begin{Schunk}
+\begin{Sinput}
 > mytab <- enterxtab()
+\end{Sinput}
+\begin{Soutput}
 Row variable name: 
 1: sex
 Read 1 item
@@ -398,14 +493,21 @@ Read 2 items
 Row 2: 
 1: 177 67
 Read 2 items
+\end{Soutput}
+\begin{Sinput}
 > mytab
+\end{Sinput}
+\begin{Soutput}
         status
 sex      homeless housed
   male        169     40
   female      177     67
-\end{verbatim}
+\end{Soutput}
+\end{Schunk}
 
-\authNote{NH: I'd welcome suggestions about how to format this?}
+\authNoted{NH: I'd welcome suggestions about how to format this?  rjp: done.}
+\authNote{I never went back to clean this up.  Is it worth showing?  Should we show 
+\function{rbind()} and \function{cbind()}?}
 
 \subsubsection{Graphical Summaries}
 
@@ -415,18 +517,20 @@ regarding its utility, relative to the low data to ink ratio \cite{Tufte:2001:Vi
 Here we see that males tend to be over-represented
 amongst the homeless subjects (as represented by the horizontal line which is higher for
 the homeless rather than the housed).  
-
+\FoodForThought{The \function{mosaic()} function 
+in the \pkg{vcd} package also makes mosaic plots.}
 
 \begin{center}
 <<mosaicplot,fig=TRUE,height=3.5>>=
-with(HELP, mosaicplot(table(homeless, sex)))
+mosaicplot(xtabs(~ homeless + sex, data=HELP))
 @
 \end{center}
 
 \subsection{Chi-squared tests}
 
+%with(HELP, chisq.test(homeless, sex, correct=FALSE))
 <<chisq1>>=
-with(HELP, chisq.test(homeless, sex, correct=FALSE))
+chisq.test(xtabs(~ homeless + sex, data=HELP), correct=FALSE)
 @
 
 There is a statistically significant association found: it is unlikely that we would observe
@@ -440,7 +544,7 @@ it's important for them to be able to interpret this in the context of the probl
 The \function{xchisq.test()} function provides additional details to help with this process.
 
 <<chisq2>>=
-with(HELP, xchisq.test(homeless, sex, correct=FALSE))
+xchisq.test(xtabs(~homeless + sex, data=HELP), correct=FALSE)
 @
 
 We observe that there are fewer homeless women, and more homeless men that would be expected.
@@ -451,8 +555,9 @@ An exact test can also be calculated.  This is fairly computationally straightfo
 tables.  Options to help constrain the size of the problem for larger tables exist
 (see \verb!?fisher.test()!).
 
+%with(HELP, fisher.test(homeless, sex))
 <<help-fisher>>=
-with(HELP, fisher.test(homeless, sex))
+fisher.test(xtabs(~homeless + sex, data=HELP))
 @
 
 \section{Quantitative Response to a Categorical Predictor}
@@ -463,23 +568,41 @@ Here we will compare the distributions of CESD scores by sex.
 The \function{aggregate()} function can be used to calculate the mean CESD score
 for each of the two groups 
 <<aggregate>>=
-aggregate(cesd ~ sex, HELP, FUN=mean)
-aggregate(cesd ~ sex, HELP, FUN=favstats)
+aggregate(cesd ~ sex, data=HELP, FUN=mean)
+aggregate(cesd ~ sex, data=HELP, FUN=favstats)
 @
 
 Boxplots are a particularly helpful graphical display to compare distributions.
-The \function{bwplot()} function can be used to display the boxplots for the CESD scores separately by sex.  We see from both the numerical and graphical
+The \function{bwplot()} function can be used to display the boxplots for the
+CESD scores separately by sex.  We see from both the numerical and graphical
 displays that women tend to have slightly higher CESD scores than men.
-\authNote{Should mention use of \function{xyplot()} when the sample sizes are small.
+\authNoted{Should mention use of \function{xyplot()} when the sample sizes are small.
 No reason to compute 5-number summaries of 10 or fewer numbers really.  NH resp: I'm not sure
-what you mean by this.}
+what you mean by this. rjp: done}
+\authNote{A slightly smaller data set might have been better, but this works.}%
 
+\FoodForThought{Although we usually put explanatory variables along the horizontal axis,
+page layout sometimes makes the other orientation preferable for these plots.}
 %\vspace{-8mm}
 \begin{center}
-<<cesd-box,fig=TRUE>>=
-bwplot(cesd ~ sex, data=HELP)
+<<cesd-box,fig=TRUE,height=1.5>>=
+bwplot(sex ~ cesd, data=HELP)
 @
 \end{center}
+
+When sample sizes are small, there is no reason to summarize with a boxplot
+since  \function{xyplot()} can handle categorical predictors.
+Even with 10--20 observations in a group, a scatter plot is often quite readable.
+Setting the alpha level helps detect multiple observations with the same value.
+\begin{center}
+<<KidsFeet-xy,fig=true,height=1.5>>=
+xyplot(sex ~ length, KidsFeet, alpha=.6, cex=1.4) 
+@
+\end{center}
+\FoodForThought{One of us once saw a biologist proudly present
+side-by-side boxplots.  Thinking a major victory had been won, he naively
+asked how many observations were in each group.  ``Four,'' replied the 
+biologist.}
 
 \subsection{A Bivariate Predictor: Two-sample t}
 
@@ -506,23 +629,24 @@ wilcox.test(cesd ~ sex, data=HELP)
 Here we extend the methods introduced in section \ref{sec:comparing-two-means} to 
 undertake a two-sided test.
 
-<<permute,fig=TRUE>>=
+%rtest.stats[simulations+1,] <- test.stat  # add in the observed value
+<<permute-HELP,fig=TRUE>>=
 simulations <- 500
-test.stat <-  abs(diff(aggregate(cesd ~ sex, HELP, mean)$cesd))
+test.stat <-  abs(diff(aggregate(cesd ~ sex, data=HELP, mean)$cesd))
 test.stat
 rtest.stats <- do(simulations) * c(diff= diff(aggregate(cesd ~ shuffle(sex), HELP, mean)$cesd))
-rtest.stats[simulations+1,] = test.stat  # add in the observed value
-dotPlot(~ abs(diff), rtest.stats, n=40, 
+dotPlot(~ abs(diff), rtest.stats, n=40, xlim=c(0, 6),
   groups=abs(rtest.stats$diff) >= test.stat, pch=16, cex=.8 )
-ladd(panel.abline(v=test.stat))                 # add a vertical line
+ladd(panel.abline(v=test.stat))
 @
+
 
 \authNote{NH: comments and suggestions welcomed: this is a kludge}
 
 The same conclusion is observed with a permutation test (the
 observed value is nowhere in the vicinity of the permuted values).
 
-\subsection{Oneway ANOVA}
+\subsection{One-way ANOVA}
 
 Earlier comparisons were between two groups: we can also consider testing differences 
 in CESD scores by primary substance of abuse (heroin, cocaine, or alcohol).
@@ -533,8 +657,9 @@ bwplot(cesd ~ substance, data=HELP)
 @
 \end{center}
 
+
 <<aggregate2>>=
-aggregate(cesd ~ substance, HELP, FUN=mean)
+aggregate(cesd ~ substance, data=HELP, FUN=mean)
 <<help-aov>>=
 mod <- aov(cesd ~ substance, data=HELP)
 summary(mod)
@@ -578,8 +703,11 @@ than the other two groups.
 Logistic regression is available from within the \function{glm()} function: a variety of
 link functions and distributional forms for generalized linear models are supported.
 
+\FoodForThought{\function{glm()} has arguments \option{family}  and
+\option{link}.  The \code{logit} link is the default link for the binomial family,
+so we don't need to specify it here.}
 <<help-logit>>=
-summary(glm(homeless ~ age + female, binomial, data=HELP))
+summary(glm(homeless ~ age + female, family=binomial, data=HELP))
 @
 
 \section{Survival Time Outcomes}
@@ -632,6 +760,10 @@ summary(aov(cesd ~ homeless * sex, data=HELP))
 There's little evidence for the interaction, though there is a statistically
 significant main effects terms for \VN{sex} and a borderline significant
 effect for \VN{homeless} status.
+
+<<help-interaction,fig=true>>=
+xyplot(cesd ~ homeless, data=HELP, groups=sex, type='a')
+@
 
 
 \subsection{Multiple Regression}
@@ -752,7 +884,7 @@ xvals <- 15:19
 probs <- 1 - pbinom(xvals, 25, 0.5)
 cbind(xvals, probs)
 @
-So we see that if we decide to reject when X = the number of positive values is
+So we see that if we decide to reject when $X =$ the number of positive values is
 17 or larger, we will have an $\alpha$ level of \Sexpr{round(1-pbinom(16, 25, 0.5), 3)},
 which is near the nominal value in the problem.
 
@@ -763,7 +895,7 @@ We calculate the power of the sign test as follows. The probability that $X > 0$
 We can view this graphically using the command:
 
 \begin{center}
-<<pnorm2,fig=TRUE,width=6,height=1.9>>= 
+<<pnorm2,fig=TRUE,width=5,height=1.9>>= 
 xpnorm(0, 0.3, 1)
 @
 \end{center}
@@ -783,7 +915,7 @@ fair, we will set our $\alpha$ level equal to 0.05388.
 First we need to find the rejection region.  
 
 <<>>=
-alpha <- 1-pbinom(16, 25, .5) # = 0.0539, our alpha level.
+alpha <- 1-pbinom(16, 25, .5) # == 0.0539, our alpha level.
 n <- 25; sigma <- 1 # given
 stderr <- sqrt(sigma^2/n)
 zstar <- qnorm(1-alpha, 0, 1)
@@ -815,8 +947,8 @@ as demonstrated for this example in \ref{sec:power}.
 \begin{problem}
 \label{prob:power1}
 <<setup,echo=FALSE>>=
-n = 100
-alpha = 0.01
+n <- 100
+alpha <- 0.01
 @
 Find the power of a two-sided two-sample t-test where both distributions 
 are approximately normally distributed with the same standard deviation, but the group differ by 50\% of the standard deviation.  Assume that there are 
