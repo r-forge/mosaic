@@ -22,26 +22,34 @@ binom.test.formula <- function(
 	conf.level = 0.95, success, data.name, data, ...) 
 {
     formula <- x
-	if (missing(n) && !missing(data)) n <- data
-
-	data <- n
+	missing.n <- missing(n)
+	missing.data <- missing(data)
     dots <- list(...)
 #    groups <- eval(substitute(groups), data, environment(formula))
 #    subset <- eval(substitute(subset), data, environment(formula))
-    form <- lattice::latticeParseFormula(formula, data, #subset = subset, 
-        #groups = groups,  
-		subscripts = TRUE, drop = TRUE)
+	if (missing.n && !missing.data) {
+    	form <- lattice::latticeParseFormula(formula, data, #subset = subset, #groups = groups,  
+					subscripts = TRUE, drop = TRUE)
+		if (missing(data.name)) {
+			data.name <- paste( deparse(substitute(data)), "$", form$right.name, sep="" )
+		}
+	} else {
+    	form <- lattice::latticeParseFormula(formula, n, #subset = subset, #groups = groups,  
+					subscripts = TRUE, drop = TRUE)
+		if (missing(data.name)) {
+			data.name <- paste( deparse(substitute(n)), "$", form$right.name, sep="" )
+		}
+		data <- n
+	}
+	# now data.name should be set and data should hold the data
     groups <- form$groups
-        subscr <- form$subscr
+    subscr <- form$subscr
     cond <- form$condition
     x <- form$right
     if (length(cond) == 0) {
         cond <- list(gl(1, length(x)))
     }
 
-	if (missing(data.name)) {
-		data.name <- paste( deparse(substitute(n)), "$", form$right.name, sep="" )
-	}
 
 	binom.test(x, p=p, alternative=alternative, 
 		conf.level=conf.level, success=success, data.name=data.name, ...)
