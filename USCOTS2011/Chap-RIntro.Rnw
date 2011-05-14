@@ -161,6 +161,79 @@ syntax error.  If you have messed up and just want to get back to the normal plo
 hit the escape key and start the command fresh.
 \end{enumerate}
 
+\section{R Packages}
+
+In addition to its core features, \R\ provides many more features through a (large) number 
+of packages.  To use a package, it must be installed (one time), and loaded (each session).
+A number of packages are already available in \Rstudio.  
+The \tab{Packages} tab in \Rstudio\ will show you the list of installed packages and indicate
+which of these are loaded.
+
+\begin{center}
+\includegraphics[width=.55\textwidth]{images/RStudio-packages}
+\end{center}
+
+%(A similar thing is true for the stand-alone versions of \R.)
+
+Here are some packages we will use frequently:
+\begin{itemize}
+\item \verb!lattice!  (for graphics; this will always be installed in \R)
+\item \verb!mosaic!  (for teaching statistics; this will need to be installed in \R\
+from CRAN, see section \ref{sec:CRAN})
+\item \verb!Hmisc!    (a package with some nice utilities; available on CRAN)
+%\item \verb!vcd!      (a package for visualizing categorical data; available on CRAN)
+%\item \verb!fastR!    (a package with some nice utilities; available on CRAN)
+%\item \verb!abd!      (a package with some nice datasets; available on CRAN)
+\end{itemize}
+There may be others that we use from time to time as well.  
+%\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
+\authNote{R': I think we can reduce to \verb!lattice! and \verb!mosaic!.  Possibly \verb!Hmisc!.
+I'll remove dependencies on \verb!abd! as I go.}%
+You should install \verb!Hmisc! and 
+\verb!mosaic! the first time you use \R.
+Once a package is installed, it is available to be loaded in the current or any future session.
+You can install these packages 
+by clicking on the ``Install Package" button and following the directions
+or by using the following command:
+
+<<install,eval=F>>=
+install.packages('Hmisc')                # note the quotation marks 
+install.packages('mosaic')               # note the quotation marks 
+@
+
+Once these are installed, you can load them by checking the box in the 
+\tab{Packages} tab or by using \verb!require()! (or \verb!library()!)
+
+\authNote{R': Can't move \verb!findData()! into \verb!mosaic! since it is only for finding data in 
+\verb!abd! and is designed for use with a text book to help figures out data frame names to match
+examples and problems.}%
+
+<<require>>=
+require(lattice)         # could also use library(lattice)
+require(Hmisc)           # do this one before mosaic
+require(mosaic)          # do this one 
+@
+
+\authNote{Add bibliography entries for books associated with packages.}
+\begin{problem}
+Install and load the \verb!mosaic! package.
+Make sure \verb!lattice! is also loaded (no need to install it, it is already installed).
+
+Here are some other packages you may like to install as well.
+following packages:
+\begin{itemize}
+\item
+\verb!Hmisc! (Frank Harrell's miscellaneous utilities),
+\item
+\verb!vcd! (visualizing categorical data),
+\item
+\verb!fastR! (\textit{Foundations and Applications of Statistics}), and 
+\item
+\verb!abd! (\textit{Analysis of Biological Data}).
+\end{itemize}
+\end{problem}
+
+
 \section{Getting Help}
 
 If something doesn't go quite right, or if you can't remember something, it's good to know
@@ -205,7 +278,10 @@ For example,
 example(histogram)
 @
 will generate a number of example plots (and provide you with the commands used to create them).
-
+Examples such as this are intended to help you learn how specific \R\ functions work.
+\FoodForThought{Not all authors are equally skilled at creating examples.  Some of the examples
+are next to useless, others are excellent.}
+These examples also appear at the end of the documentation for functions and data sets.
 
 The \verb!mosaic! package (and some other packages as well) also includes demos.  
 Demos are bits of \R\ code that can be executed using the \verb!demo()! command
@@ -214,9 +290,12 @@ with the name of the demo.
 To see how demos work, give this a try:
 \begin{center}
 <<demo,eval=false,fig=T,width=2.2,height=1.8>>=
-demo(funplots)
+demo(histogram)
 @
 \end{center}
+
+Demos are intended to illustrate a concept, a method, or some such thing, and are 
+independent of any particular function or data set.
 
 You can get a list of available demos using
 
@@ -224,76 +303,6 @@ You can get a list of available demos using
 demo()                     # all demos
 demo(package='mosaic')     # just demos from mosaic package
 @
-
-\section{R Packages}
-
-In addition to its core features, \R\ provides many more features through a (large) number 
-of packages.  To use a package, it must be installed (one time), and loaded (each session).
-A number of packages are already available in \Rstudio.  
-The \tab{Packages} tab in \Rstudio\ will show you the list of installed packages and indicate
-which of these are loaded.
-
-\begin{center}
-\includegraphics[width=.55\textwidth]{images/RStudio-packages}
-\end{center}
-
-%(A similar thing is true for the stand-alone versions of \R.)
-
-Here are some packages we will use frequently:
-\begin{itemize}
-\item \verb!lattice!  (for graphics; this will always be installed in \R)
-\item \verb!mosaic!  (for teaching statistics; this will need to be installed in \R\
-from CRAN, see section \ref{sec:CRAN})
-%\item \verb!Hmisc!    (a package with some nice utilities; available on CRAN)
-%\item \verb!vcd!      (a package for visualizing categorical data; available on CRAN)
-%\item \verb!fastR!    (a package with some nice utilities; available on CRAN)
-%\item \verb!abd!      (a package with some nice datasets; available on CRAN)
-\end{itemize}
-There may be others that we use from time to time as well.  
-%\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
-\authNote{R': I think we can reduce to \verb!lattice! and \verb!mosaic!.  Possibly \verb!Hmisc!.
-I'll remove dependencies on \verb!abd! as I go.}%
-You should install %\verb!Hmisc! and 
-\verb!mosaic! the first time you use \R.
-One a package is installed, it is available to be loaded in the current or any future session.
-You can install these packages 
-by clicking on the ``Install Package" button and following the directions
-or by using the following command:
-
-<<install,eval=F>>=
-install.packages('mosaic')               # note the quotation marks 
-@
-
-Once these are installed, you can load them by checking the box in the 
-\tab{Packages} tab or by using \verb!require()! (or \verb!library()!)
-
-\authNote{R': Can't move \verb!findData()! into \verb!mosaic! since it is only for finding data in 
-\verb!abd! and is designed for use with a text book to help figures out data frame names to match
-examples and problems.}%
-
-<<require>>=
-require(lattice)         # could also use library(lattice)
-require(mosaic)
-@
-
-\authNote{Add bibliography entries for books associated with packages.}
-\begin{problem}
-Install and load the \verb!mosaic! package.
-Make sure \verb!lattice! is also loaded (no need to install it, it is already installed).
-
-Here are some other packages you may like to install as well.
-following packages:
-\begin{itemize}
-\item
-\verb!Hmisc! (Frank Harrell's miscellaneous utilities),
-\item
-\verb!vcd! (visualizing categorical data),
-\item
-\verb!fastR! (\textit{Foundations and Applications of Statistics}), and 
-\item
-\verb!abd! (\textit{Analysis of Biological Data}).
-\end{itemize}
-\end{problem}
 
 
 \section{Data}
