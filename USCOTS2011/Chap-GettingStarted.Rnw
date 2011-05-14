@@ -174,6 +174,7 @@ intuitive way, setting it up as a topic for later discussion and analysis.
 \section{ Examples for Early in the Course }
 The remainder of this chapter has some of our favorite activities for early 
 in the course.  
+\authNote{need to edit}
 
 
 \subsection{Coins and Cups: The Lady Tasting Tea}
@@ -434,7 +435,6 @@ set.seed(123)
 <<lady-dolots,cache=true>>=
 random.ladies <- do(10000) * rflip(10)
 @
-\vspace{-5mm}
 
 <<lady-table>>=
 table(random.ladies$heads)
