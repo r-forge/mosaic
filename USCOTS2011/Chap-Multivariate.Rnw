@@ -728,7 +728,9 @@ influence of the parents is different for the different sexes, or
 whether what looks like an even split of influence between the father
 and mother could all, in fact, be attributed to the mother.
 
-\begin{problem}[stars=1]Consider the \texttt{CPS} data that gives per-hour wages and
+\begin{problem}
+%[stars=1]
+Consider the \texttt{CPS} data that gives per-hour wages and
   other measurements for workers in the mid-1980s.  Is there evidence in the data for
   discrimination on the basis of race and/or sex?  What covariates
   might one reasonably adjust for in measuring the difference between

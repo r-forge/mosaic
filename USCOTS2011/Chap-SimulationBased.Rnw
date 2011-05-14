@@ -196,7 +196,7 @@ about sampling?
 \end{example}
 
 \authNote{We had \texttt{echo=false} here, but I think we mean \texttt{eval=false} ---rjp}%
-\begin{problem}[stars=2]
+\begin{problem}
  (This isn't a question for beginning students, just one
 for developing instructor capabilities.)  
 How would you demonstrate that there are 50

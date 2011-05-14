@@ -14,7 +14,7 @@
 \usepackage{probstat}
 \usepackage{hyperref}
 \usepackage[shownotes]{authNote}
-\usepackage[answerdelayed,exercisedelayed,lastexercise]{problems}
+\usepackage[answerdelayed,exercisedelayed,lastexercise,chapter]{problems}
 \usepackage{longtable}
 
 \usepackage{tikz}
