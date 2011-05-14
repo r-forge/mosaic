@@ -107,7 +107,8 @@ You can zoom in or out to get a better look.
 Record your data in a GoogleForm at 
 
 \begin{center}
-\url{https://spreadsheets.google.com/viewform?formkey=dGREcUR6YjRLSWFTWVpNNXA5ZUZ1TXc6MQ}
+\url{http://mosaic-web.org/uscots2011/google-water.html}
+%https://spreadsheets.google.com/viewform?formkey=dGREcUR6YjRLSWFTWVpNNXA5ZUZ1TXc6MQ}
 
 \includegraphics[width=.4\textwidth]{images/googleForm-water}
 \end{center}
