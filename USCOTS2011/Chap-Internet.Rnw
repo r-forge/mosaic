@@ -91,7 +91,7 @@ identifying URL for any file by using mouse-based menu commands to
 place the URL into the clipboard, whence it can be copied to your
 course-support software system or any other place for distribution to
 students.  For a CSV file, reading the contents of the file into \R\
-can be done with the \texttt{read.csv( )} operator, by giving it the
+can be done with the \texttt{read.csv()} operator, by giving it the
 quoted URL:
 <<read-quoted-URL>>=
 a = read.csv("http://dl.dropbox.com/u/5098197/USCOTS2011/ExampleA.csv")
@@ -104,15 +104,15 @@ a = read.csv("http://dl.dropbox.com/u/5098197/USCOTS2011/ExampleA.csv")
 \caption{\label{fig:dropbox2}Getting the URL of a file in a Dropbox Public directory}
 \end{figure}
 
-This technique makes it straightforward to distribute data with little
+This technique makes it easy to distribute data with little
 advance preparation.  It's fast enough to do in the middle of a
 class: the CSV file is instantly available to your students.  It can
 even be edited by you (but not by your students).
 
 The same technique can be applied to all sorts of files: for example,
 \R\ workspaces or even \R\ scripts.  Of course, your students need to
-use the appropriate \R\ command: \texttt{load( )} for a workspace or
-\texttt{source( )} for a script.
+use the appropriate \R\ command: \function{load()} for a workspace or
+\function{source()} for a script.
 
 It's a good idea to create a file with your course-specific \R\
 scripts, adding on to it and modifying it as the course progresses.
@@ -131,12 +131,12 @@ you.  Use this statement:
 <<>>=
 source("http://dl.dropbox.com/u/5098197/USCOTS2011/USCOTS2011.R")
 @ 
-Among other things, the operator \texttt{readGoogleCSV( )} is defined
+Among other things, the operator \texttt{readGoogleCSV()} is defined
 in the script that gets sourced in by that command.  Again, you can
 edit the file directly on your computer and have the results instantly
 available (subject only to the several second latency of Dropbox) to
 your students.  Of course, they will have to re-issue the
-\texttt{source( )} command to re-read the script.
+\function{source()} command to re-read the script.
 
 If privacy is a concern, for instance if you want the data available
 only to your students, you can effectively accomplish this 
