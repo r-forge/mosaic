@@ -10,9 +10,10 @@ panel.dotPlot <-
 function (x, breaks, equal.widths = TRUE, groups = NULL, nint = round(log2(length(x)) + 1), 
 	pch = if (is.null(groups)) trellis.par.get("dot.symbol")$pch else trellis.par.get("superpose.symbol")$pch, 
     col = if (is.null(groups)) trellis.par.get("dot.symbol")$col else trellis.par.get("superpose.symbol")$col, 
+    gcol = trellis.par.get("add.line")$col, glwd = 2, 
     lty = trellis.par.get("dot.line")$lty, lwd = trellis.par.get("dot.line")$lwd, 
     col.line = trellis.par.get("dot.line")$col, alpha = trellis.par.get("dot.symbol")$alpha, cex=1, 
-    type = "count", ...) 
+    type = "count", v, h, ...) 
 {
     dot.line <- trellis.par.get("dot.line")
     dot.symbol <- trellis.par.get("dot.symbol")
@@ -59,5 +60,16 @@ function (x, breaks, equal.widths = TRUE, groups = NULL, nint = round(log2(lengt
 				col <- col[ -(1:y[bin]) ]
             }
         }
+
+		if (!missing(v)) {
+			for (x in v) {
+				panel.abline(v = x, col = gcol, lwd = glwd)
+			}
+		}
+		if (!missing(h)) {
+			for (y in h) {
+				panel.abline(h = y, col = gcol, lwd = glwd)
+			}
+		}
     }
 }
