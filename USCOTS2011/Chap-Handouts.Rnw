@@ -110,7 +110,7 @@ Record your data in a GoogleForm at
 \url{http://mosaic-web.org/uscots2011/google-water.html}
 %https://spreadsheets.google.com/viewform?formkey=dGREcUR6YjRLSWFTWVpNNXA5ZUZ1TXc6MQ}
 
-\includegraphics[width=.4\textwidth]{images/googleForm-water}
+\includegraphics[width=.5\textwidth]{images/googleForm-water}
 \end{center}
 
 For the latitude and longitude information, simply copy and paste the output of 
