@@ -204,7 +204,7 @@ For example,
 <<eval=false>>=
 example(histogram)
 @
-will generate a number of example plots (and you the commands used to create them).
+will generate a number of example plots (and provide you with the commands used to create them).
 
 
 The \verb!mosaic! package (and some other packages as well) also includes demos.  
