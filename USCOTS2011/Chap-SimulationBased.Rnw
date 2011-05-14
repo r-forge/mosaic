@@ -541,6 +541,7 @@ with(people, table(sibs))
 Once built, you can provide these data frames to your students for a sampling exercise.
 (See \ref{sec:distributingData}.)
 
+\authNote{need to track down}
 
 %\section{Empirical p-values}
 
@@ -565,9 +566,9 @@ hypothesis testing.
 \end{comment}
 
 \subsubsection{The Story}
-Allan Rossman once lived along a golf course.  One summer he collect the golf balls that
+Allan Rossman once lived along a golf course.  One summer he collected the golf balls that
 landed in his yard and tallied how many were labeled with 1's, 2's, 3's, and 4's 
-because he was curios to know whether these numbers were equally likely.%
+because he was curious to know whether these numbers were equally likely.%
 \footnote{You can have some discussion with your students about what population
 is of interest here.  Given the location of the house, the golf balls were primarily struck
 by golfers of modest ability and significant slice, all playing on one particular golf course.
