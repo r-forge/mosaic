@@ -435,7 +435,9 @@ representative of the population than the haphazardly sampled data.
 Later in the course, if you cover modeling with distributions, you can sample from 
 these distributions instead of from data sets (treated like populations).
 \R\ includes set of functions beginning with the letter \code{r} followed by the (abbreviated)
-name of a family of distributions.  These functions all work similarly to produce 
+name of a family of distributions (see 
+Table \ref{core:dist} in section \ref{sec:probability} for a list of probability distributions
+available within base \R).  These functions all generate
 a random sample from the distribution given a sample size and any necessary parameters 
 for the distribution.
 
