@@ -33,7 +33,7 @@
 \hspace*{0.5in}
 \parbox{1.2in}{\begin{tikzpicture}
 \node at (0,0) [#3]
-{\parbox{1.05in}{\footnotesize {\sc #1 }{#2}}};
+{\parbox{1.05in}{\footnotesize {\sc #1 }{\raggedright #2}}};
 \end{tikzpicture}}
 ]{%
 \parbox{1.2in}{\begin{tikzpicture}
@@ -42,11 +42,11 @@
 \end{tikzpicture}}}
 }
 
-\newcommand{\InstructorNote}[2][For Instructors\\]{%
+\newcommand{\InstructorNote}[2][\relax]{%
 \tikzNote{#1}{#2}{double copy shadow={opacity=.5},tape,fill=blue!10,draw=blue,thick}
 }
 
-\renewcommand{\InstructorNote}[2][For Instructors\\]{%
+\renewcommand{\InstructorNote}[2][\relax]{%
 \tikzNote{#1}{#2}{tape,fill=blue!10,draw=blue,thick}
 }
 
