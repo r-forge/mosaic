@@ -502,6 +502,7 @@ and loaded separately. These packages include
 \verb!abd!
 \end{itemize}
 \end{multicols}
+\authNote{need to check and update}
 
 We also make use of \verb!lattice! and \verb!grid! which are installed with 
 \R\ but must be loaded before use.
