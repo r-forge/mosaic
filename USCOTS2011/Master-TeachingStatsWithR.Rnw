@@ -622,13 +622,23 @@ We welcome and encourage your participation in all of these initiatives.
 
 \appendix
 
+\renewcommand{\thepage}{\thechapter-\arabic{page}}
+
+\setcounter{page}{1}
 \include{Chap-Handouts}
 
+
+\setcounter{page}{1}
 \include{Chap-MoreR}
 
+\setcounter{page}{1}
 \include{Chap-Misc}
 
+\renewcommand{\thepage}{X-\arabic{page}}
+\setcounter{page}{1}
+
 \bibliographystyle{amsalpha}
+\renewcommand{\thepage}{\arabic{page}}
 %\bibliography{StatsBook,DataSets,jamstatassoc,RS,R,kaplan}
 \bibliography{USCOTS}
 

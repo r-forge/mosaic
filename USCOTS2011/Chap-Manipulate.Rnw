@@ -60,6 +60,8 @@ if(require(manipulate)) {
 }
 @
 
+\centerline{\includegraphics[width=3.8in]{images/manipulate-checkbox}}
+
 \subsection{Drop-down Menus}
 
 <<manipulate-histogram>>=
@@ -74,11 +76,39 @@ if(require(manipulate)) {
 }
 @
 
+\centerline{\includegraphics[width=3.8in]{images/manipulate-picker}}
+
 \subsection{Visualizing Normal Distributions}
 <<manipulate-xpnorm>>=
 if(require(manipulate)) {
   manipulate( xpnorm( x, 500, 100 ), x = slider(200,800) )
 }
 @
+\centerline{\includegraphics[width=3.8in]{images/manipulate-xpnorm}}
 
+
+\begin{problem}
+The following code makes a scatterplot with separate symbols for each sex.
+<<eval=false>>=
+xyplot(cesd ~ age, data=HELP, groups=sex)
+@
+Build a \pkg{manipulate} example that allows you to turn the grouping on and off with a 
+checkbox.
+\end{problem}
+
+\begin{problem}
+Build a \pkg{manipulate} example that uses a picker to select from a number of 
+variables to make a plot for.  Here's an example with a histogram:
+
+\medskip
+\centerline{\includegraphics[width=3.8in]{images/manipulate-multihist}}
+\end{problem}
+
+\begin{problem}
+Design your own  interactive demonstration idea and implement it using 
+\RStudio\ \pkg{manipulate} tools.
+\end{problem}
+
+\section*{Exercises}
+\shipoutProblems
 

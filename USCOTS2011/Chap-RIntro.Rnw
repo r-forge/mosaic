@@ -193,7 +193,7 @@ You should install \verb!Hmisc! and
 \verb!mosaic! the first time you use \R.
 Once a package is installed, it is available to be loaded in the current or any future session.
 You can install these packages 
-by clicking on the ``Install Package" button and following the directions
+by clicking on the ``Install Package" button in \RStudio\ and following the directions
 or by using the following command:
 
 <<install,eval=F>>=
@@ -211,7 +211,7 @@ examples and problems.}%
 <<require>>=
 require(lattice)         # could also use library(lattice)
 require(Hmisc)           # do this one before mosaic
-require(mosaic)          # do this one 
+require(mosaic)          # do this one after Hmisc
 @
 
 \authNote{Add bibliography entries for books associated with packages.}
@@ -1106,24 +1106,24 @@ give the arguments in the correct order}.
 
 If you use names, you can give the arguments out of order.  
 The following do the same thing,
-\end{itemize}
+%\end{itemize}
 
 <<argument-order-good,eval=F>>=
 xyplot(Sepal.Length ~ Sepal.Width, data=iris, groups=Species)
 xyplot(Sepal.Length ~ Sepal.Width, iris, groups=Species)
 xyplot(Sepal.Length ~ Sepal.Width, groups=Species, iris)
 @
-\begin{itemize}
-\item[]
+%\begin{itemize}
+%\item[]
 But these do not work
-\end{itemize}
+%\end{itemize}
 
 <<argument-order-bad,eval=F>>=
 xyplot(Sepal.Length ~ Sepal.Width, Species, iris)
 xyplot(Sepal.Length ~ Sepal.Width, iris, Species)
 @
-\begin{itemize}
-\item[]
+%\begin{itemize}
+%\item[]
 The first fails because the second argument is \verb!data!, so \verb!iris!
 needs to be in the second position if it is not named.
 The second fails because \verb!groups! is not the third argument.
