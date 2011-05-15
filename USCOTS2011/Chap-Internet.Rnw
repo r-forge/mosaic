@@ -594,7 +594,70 @@ areas.
 can generate maps using the mechanisms described in \ref{sec:googleMap}.
 \end{enumerate}
 
-\subsection{Other variants}
+\subsection{Twitter}
+\label{sec:twitter}
+
+Twitter (\url{twitter.com}) is a social networking and microblogging service, where users
+(estimated at 200 million as of May, 2011) can send and read posts of up to 140 characters.
+Approximately 65 million ``tweets'' are posted per day.
+
+The \pkg{twitteR} package (due to Jeff Gentry) implements a Twitter client for R.
+This can be used to generate data for student projects, class assignments or data mining.
+
+\Caution{Pulling live data from Twitter may generate some unsavory content}
+
+The package provides a number of interface functions to connect with the service (see
+Table \ref{tab:twitter} for details).
+\begin{table}
+\begin{center}
+\caption{Functions available within the \pkg{twitteR} package}
+\label{tab:twitter}
+\begin{tabular}{|l|l|} \hline
+Function   & Description                 \\ \hline
+\function{getUser(userstring, ...)} & returns an object of class {\tt user} \\
+\function{userFriends(user, ...)} & returns lists of class {\tt user} \\
+\function{userFollowers(user, ...)} & returns lists of class {\tt user} \\
+\function{searchTwitter(searchstring, ...)} & returns lists of class {\tt status} \\
+\function{Rtweets(...)} & hardcodes a search for {\tt \#rstats} \\
+\function{showstatus(id, ...)} & take a numeric ID of a tweet and return it \\
+\function{publicTimeline(...)} & current snapshot of the public timeline \\
+\function{userTimeline(user, ...)} & current snapshot of the users public timeline \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+Some examples may help to better understand the interface.  Let's start by seeing what 
+the U.S. Census Bureau has been up to recently.
+<<twitter1>>=
+require(twitteR)
+census <- getUser("uscensusbureau")
+census$getName()
+census$getDescription()
+census$getUrl()
+census$getFollowersCount()
+census$getStatusesCount()
+census$getCreated()
+@
+Detailed reports of the last {\tt n} twitter status updates can be returned.
+<<twitter2>>=
+censustweets <- userTimeline(census, n=10)
+censustweets
+censustweets[[1]]$getText()
+censustweets[[1]]$getCreated()
+censustweets[[1]]$getId()
+@
+
+We can also see what's happening on the \R\ front:
+<<twitter3>>=
+tweets <- Rtweets(n=10)
+tweets
+@
+
+Further support for posting tweets requires use of the Twitter API (with appropriate 
+authentication).  More details are provided in the \pkg{twitteR} vignette file.
+
+\subsection{Other ideas}
 
 We've outlined several approaches which efficiently scrape data from the web.
 But there are lots of other examples (many due to Duncan Temple Lang) which may be worth exploring.  These include:
@@ -606,9 +669,6 @@ for searching articles, meta-data, user-generated content and best seller lists
 (\url{http://www.omegahat.org/Rflickr})
 \item[Google Docs:] interface to allow listing documents on Google Docs along with details,
 downloading contents, and uploading files (\url{http://www.omegahat.org/RGoogleDocs})
-
-\item[Twitter:] interface to access Twitter feeds in various ways 
-(\url{http://cran.r-project.org/web/packages/twitteR})
 \item[last.fm:] interface to the \verb!last.fm! music recommendation site (\url{http://cran.r-project.org/web/packages/RLastFM})
 \end{description}
 
