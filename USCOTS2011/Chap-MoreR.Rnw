@@ -426,6 +426,7 @@ formats, see the
 students.  Perhaps multiple methods? --RJP}%
 
 \section{Primary \R\ Data Structures}
+\label{sec:datastruct}
 
 \subsection{Modes and other attributes} %factors, numeric, character, etc.}
 In \R, data is stored in objects.  Each \rterm{object} 

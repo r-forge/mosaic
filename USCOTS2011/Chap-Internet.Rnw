@@ -473,7 +473,6 @@ whether the nearest lake is within 1/2 mile, between 1/2 mile and 1 mile, betwee
 between 2 miles, and 4 miles, between 4 miles and 10 miles, or more than 10 miles away.  It may be 
 interesting to discuss what sort of model should be used for distances from random locations to lakes.
 (It probably isn't normally distributed.)
-\authNote{Is this example too complicated?}%
 \end{enumerate}
 
 \subsection{Zillow}
@@ -614,14 +613,14 @@ Table \ref{tab:twitter} for details).
 \label{tab:twitter}
 \begin{tabular}{|l|l|} \hline
 Function   & Description                 \\ \hline
-\function{getUser(userstring, ...)} & returns an object of class {\tt user} \\
-\function{userFriends(user, ...)} & returns lists of class {\tt user} \\
-\function{userFollowers(user, ...)} & returns lists of class {\tt user} \\
-\function{searchTwitter(searchstring, ...)} & returns lists of class {\tt status} \\
-\function{Rtweets(...)} & hardcodes a search for {\tt \#rstats} \\
-\function{showstatus(id, ...)} & take a numeric ID of a tweet and return it \\
-\function{publicTimeline(...)} & current snapshot of the public timeline \\
-\function{userTimeline(user, ...)} & current snapshot of the users public timeline \\ \hline
+\function{getUser} & returns an object of class {\tt user} \\
+\function{userFriends} & returns lists of class {\tt user} \\
+\function{userFollowers} & returns lists of class {\tt user} \\
+\function{searchTwitter} & returns lists of class {\tt status} \\
+\function{Rtweets} & hardcodes a search for {\tt \#rstats} \\
+\function{showstatus} & take a numeric ID of a tweet and return it \\
+\function{publicTimeline} & current snapshot of the public timeline \\
+\function{userTimeline} & current snapshot of the users public timeline \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -639,20 +638,46 @@ census$getFollowersCount()
 census$getStatusesCount()
 census$getCreated()
 @
-Detailed reports of the last {\tt n} twitter status updates can be returned.
+That's a lot of followers (but then again, the census is a big job).  
+Detailed reports of the last set of twitter status updates can be returned.
 <<twitter2>>=
-censustweets <- userTimeline(census, n=10)
+censustweets <- userTimeline(census, n=5)
 censustweets
+@
+
+Detailed information can be found for individual tweets.
+
+<<twitter2b>>=
 censustweets[[1]]$getText()
 censustweets[[1]]$getCreated()
 censustweets[[1]]$getId()
 @
+\InstructorNote{section \ref{sec:datastruct} provides details on accessing lists}
+
+Alternatively, we can download information about how active Census Bureau followers are 
+in terms of posting their own status updates.
+
+<<twitter2c>>=
+censusfollow <- userFollowers(census)
+count <- sapply(censusfollow, function(x) x$getStatusesCount())
+favstats(count)
+censusfollow[[which.max(count)]]
+@
+\InstructorNote{the \function{sapply()} applies a function to each element of a list}
 
 We can also see what's happening on the \R\ front:
-<<twitter3>>=
-tweets <- Rtweets(n=10)
+<<twitterr>>=
+tweets <- Rtweets(n=5)
 tweets
 @
+
+Finally, we can see who has been tweeting the most at USCOTS:
+<<twitteruscots>>=
+sort(table(sapply(searchTwitter("#uscots11"), function(x) x$getScreenName())), 
+  decreasing=TRUE)
+@
+\InstructorNote{Support functions could be written to simplify this interface for 
+student use}
 
 Further support for posting tweets requires use of the Twitter API (with appropriate 
 authentication).  More details are provided in the \pkg{twitteR} vignette file.
@@ -660,7 +685,8 @@ authentication).  More details are provided in the \pkg{twitteR} vignette file.
 \subsection{Other ideas}
 
 We've outlined several approaches which efficiently scrape data from the web.
-But there are lots of other examples (many due to Duncan Temple Lang) which may be worth exploring.  These include:
+But there are lots of other examples which may be worth exploring (and this is clearly 
+a growth area).  These include:
 \begin{description}
 \item[NY Times:] interface to several of the \emph{New York Times} web services
 for searching articles, meta-data, user-generated content and best seller lists 
@@ -671,9 +697,4 @@ for searching articles, meta-data, user-generated content and best seller lists
 downloading contents, and uploading files (\url{http://www.omegahat.org/RGoogleDocs})
 \item[last.fm:] interface to the \verb!last.fm! music recommendation site (\url{http://cran.r-project.org/web/packages/RLastFM})
 \end{description}
-
-\authNote{Twitter example?}
-
-
-
 
