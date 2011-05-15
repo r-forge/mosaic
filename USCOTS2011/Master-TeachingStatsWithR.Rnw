@@ -1,6 +1,7 @@
 
 \documentclass[twoside]{report}
 \usepackage{mparhack}
+\usepackage{xstring}
 
 \usepackage{etoolbox}
 \usepackage{multicol}
@@ -38,7 +39,7 @@
 ]{%
 \parbox{1.2in}{\begin{tikzpicture}
 \node at (0,0) [#3]
-{\parbox{1.05in}{\footnotesize {\sc #1 }{#2}}};
+{\parbox{1.05in}{\footnotesize {\sc #1 }{\raggedright #2}}};
 \end{tikzpicture}}}
 }
 
@@ -134,6 +135,7 @@
 }\makeatother
 
 \renewenvironment{Schunk}{
+\smallskip
 \parskip=0pt
 \noindent
 
@@ -214,15 +216,15 @@
 % Looking for a consistent typography for variable names.
 % for consistency, we need to match all the verbatim uses elsewhere 
 % unless someone wants to recode all that.
-\newcommand{\VN}[1]{\texttt{#1}}
-\newcommand{\vn}[1]{\texttt{#1}}
-\newcommand{\variable}[1]{\texttt{#1}}
-\newcommand{\DFN}[1]{\texttt{#1}}
-\newcommand{\dfn}[1]{\texttt{#1}}
-\newcommand{\dataframe}[1]{\texttt{#1}}
-\newcommand{\function}[1]{\texttt{#1}}
-\newcommand{\option}[1]{\texttt{#1}}
-\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\VN}[1]{{\color{blue!70}\texttt{#1}}}
+\newcommand{\vn}[1]{{\color{blue!70}\texttt{#1}}}
+\newcommand{\variable}[1]{{\color{blue!70}\texttt{#1}}}
+\newcommand{\DFN}[1]{{\color{blue!70}\texttt{#1}}}
+\newcommand{\dfn}[1]{{\color{blue!70}\texttt{#1}}}
+\newcommand{\dataframe}[1]{{\color{blue!70}\texttt{#1}}}
+\newcommand{\function}[1]{{\color{blue!70}\texttt{\StrSubstitute{#1}{()}{}()}}}
+\newcommand{\option}[1]{{\color{blue!70}\texttt{#1}}}
+\newcommand{\pkg}[1]{{\color{blue!70}\texttt{#1}}}
 %\newcommand{\code}[1]{\texttt{#1}}
 % and for models
 \newcommand{\model}[2]{{$\,$\hbox{#1}\ \ensuremath{\sim}\ \hbox{#2}}}
