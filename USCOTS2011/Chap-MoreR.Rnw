@@ -7,21 +7,14 @@
 \SweaveOpts{pdf=T}          % use pdf for graphics
 \SweaveOpts{strip.white=T}  % remove blank lines at beginning and end 
 \SweaveOpts{keep.source=T}  % keeps formatting from original; allows ? to work
+\SweaveOpts{width=3}
+\SweaveOpts{height=2}
+
 
 <<setup,echo=F>>=
-#setCacheDir("cache")
-require(grDevices); require(datasets); require(stats); require(lattice)
-require(grid); require(mosaic); require(fastR)
-trellis.par.set(theme=col.mosaic(bw=FALSE))
-trellis.par.set(fontsize=list(text=9))
-options(keep.blank.line=FALSE); options(width=100)
-xyplot <- function(...) { print(lattice::xyplot(...)) }
-bwplot <- function(...) { print(lattice::bwplot(...)) }
-histogram <- function(...) { print(lattice::histogram(...)) }
-barchart <- function(...) { print(lattice::barchart(...)) }
-require(vcd)
-mosaic <- function(...) { print(vcd::mosaic(...)) }
-@ 
+source('setup.R')
+@
+
 
 \begin{center}
 \it
@@ -549,9 +542,8 @@ ncol(ddd)
 <<>>=
 names(ddd)
 row.names(ddd)
-row.names(ddd) <- c("Abe","Betty","Claire","Don","Ethel")
-ddd                 # row.names affects how a data.frame prints
 @
+
 
 \subsection{What \texttt{is} it?}
 
@@ -564,7 +556,7 @@ c(is.vector(xm), is.matrix(xm), is.array(xm))
 @
 
 
-\subsection{Changing modes and attributes}
+\subsection{Changing modes (coercion)}
 \Rindex{is.numeric()}%
 \Rindex{as.numeric()}%
 \Rindex{is.integer()}%
@@ -577,7 +569,8 @@ can also coerce things manually using one of the many &as.???()& functions.
 
 <<asYouLikeIt>>=
 apropos("^as\\.")[1:10]      # just a small sample
-# convert numbers to strings (this drops attributes)
+xm
+# convert numbers to strings (this drops attributes, including dimension)
 as.character(xm)             
 @
 <<>>=
@@ -595,6 +588,7 @@ as.integer(alpha)      # notice coercion of 0.5 to 0
 @
 
 \section{More About Vectors}
+\label{sec:Rvectors}
 Vectors are so important in \R\ that they deserve some additional discussion.
 In Section~\ref{sec:generatingData} we learned how to generate some simple
 vectors.  Here we will learn about some of the operations and functions
@@ -817,14 +811,125 @@ table(a+b > 50)
 
 %\includepdf[pages=36-37,landscape,rotateoversize,turn=false,nup=1x2,frame]{Paradis-rdebuts_en.pdf}
 
-\section{Manipulating Data}
+\section{Manipulating Data Frames}
 \label{sec:manipulatingData}%
 
 %\subsection{Cross Tabulation with \texttt{xtabs()}}
 %\subsection{\texttt{aggregate()} and \texttt{Hmisc::summary()}}
 \subsection{Adding new variables to a data frame}
+The \dfn{CPS} data frame contains data from a Current Population Survey (current in 1985, that is).
+Two of the variables in this data frame are \variable{age} and \variable{educ}.  We can estimate
+the number of years a worker has been in the workforce if we assume they have been in the workforce
+since completing their education and that their age at graduation is 6 more than the number
+of years of education obtained.  We can this as a new variable in the data frame simply
+by assigning to it:
+<<>>=
+CPS$workforce.years <- with(CPS, age - 6 - educ)
+favstats(CPS$workforce.years)
+@
+In fact this is exactly what was done to create the \variable{exper} variable.
+<<>>=
+with(CPS, table(exper - workforce.years))
+@
+
 \subsection{Dropping variables}
+Since we already have \variable{educ}, there is no reason to keep our new variable.  Let's drop it.
+Notice the clever use of the minus sign.
+<<>>=
+CPS1 <- subset(CPS, select = -workforce.years)
+@
+Any number of variables can be dropped or kept in this manner by supplying a vectors
+of variables names.
+<<>>=
+CPS1 <- subset(CPS, select = -c(workforce.years,exper))
+@
+
+If we only want to work with the first few variables, we can discard the rest in a similar way.
+Columns can be specified by number as well as name (but this can be dangerous if you are wrong 
+about where the columns are):
+<<>>=
+CPSsmall <- subset(CPS, select=1:4)
+head(CPSsmall,2)
+@
+
 \subsection{Renaming variables}
+Both the column (variable) names and the row names of a data frames can be changed by
+simple assignment using \function{names()} or \function{row.names()}.
+<<>>=
+ddd                        # small data frame we defined earlier
+row.names(ddd) <- c("Abe","Betty","Claire","Don","Ethel")
+ddd                        # row.names affects how a data.frame prints
+@
+More interestingly, it is possible to reset just individual names with the following
+syntax.
+<<>>=
+row.names(ddd)[2] <- "Bette"         # misspelled a name, let's fix it
+row.names(ddd)
+@
+
+The \dfn{faithful} data set (in the \pkg{datasets} package, which is always available)
+has very unfortunate names.
+<<>>=
+names(faithful)
+@
+The measurements are the duration of an euption and the time until the subsequent eruption,
+so let's give it some better names.
+<<>>=
+names(faithful) <- c('duration', 'time.til.next')
+head(faithful, 3)
+@
+\begin{center}
+<<faithful-xy,fig=true>>=
+xyplot(time.til.next ~ duration, faithful)
+@
+\end{center}
+If the variable containing a data frame is modified or used to store a different object,
+the original data from the package can be recovered using \function{data()}.
+<<>>=
+data(faithful)
+head(faithful, 3)
+@
+
+\begin{problem}
+Using \dfn{faithful} data frame, make a scatter plot of eruption duration times vs. the time
+since the previous eruption.
+\end{problem}
+
+If we want to rename a variable, we can do this using \function{names()}.
+For example, perhaps we want to rename \variable{educ} (the second column) to \variable{education}.
+<<>>=
+names(CPS)[2] <- 'education'
+CPS[1,1:4]
+@
+
+If we don't know the column number (or generally to make our code clearer), a few more 
+keystrokes produces
+\FoodForThought{See Section \ref{sec:Rvectors} for information that will make 
+it clearer what is going on here.}
+<<>>=
+names(CPS)[names(CPS) == 'education'] <- 'educ'
+CPS[1,1:4]
+@
+
+\subsection{Creating subsets}
+We can also use \function{subset()} to reduce the size of a data set by selecting 
+only certain rows.
+\begin{center}
+<<faithful-long-xy,fig=true>>=
+data(faithful)
+names(faithful) <- c('duration', 'time.til.next')
+faithfulLong <- subset(faithful, duration > 3)        # any logical can be used to creat subsets
+xyplot( time.til.next ~ duration, faithfulLong )
+@
+\end{center}
+
+Of course, if all we want to do is produce a graph, there is now reason to create 
+a new data frame.  The plot above could also be made with
+<<eval=false>>=
+xyplot( time.til.next ~ duration, faithful, subset=duration > 3 )
+@
+
+
 \subsection{Creating variables}
 
 % HELP$newsex <- factor(HELP$female, labels=c('M','F'))
@@ -833,7 +938,6 @@ table(a+b > 50)
 \subsubsection{coercing variables}
 \subsubsection{recoding variables}
 \subsection{Accounting for missing data}
-\subsection{Creating subsets}
 \subsection{Merging datasets}
 
 
