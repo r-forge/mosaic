@@ -459,7 +459,7 @@ You may need to zoom in or out a bit to figure this out.
 There are many other quantities one could estimate using these tools.  For example:
 \begin{enumerate}
 \item
-What proportion of you home state is within $m$ miles of a lake?  (The choice of $m$ may depend upon
+What proportion of your home state is within $m$ miles of a lake?  (The choice of $m$ may depend upon
 your state of interest.)
 \item
 Use two proportion procedures  or chi-squared tests to compare states or continents.  
