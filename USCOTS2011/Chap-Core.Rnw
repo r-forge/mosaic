@@ -885,7 +885,7 @@ is known.
 
 \subsection{Sign test}
 
-We first start by calculating the Type-I error rate for the sign test.  Here we want to
+We first start by calculating the Type I error rate for the sign test.  Here we want to
 reject when the number of positive values is large.  Under the null hypothesis, this is
 distributed as a Binomial random variable with n=25 trials and p=0.5 probability of being
 a positive value.  Let's consider values between 15 and 19.
