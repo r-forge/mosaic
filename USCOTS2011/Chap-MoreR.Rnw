@@ -39,7 +39,7 @@ for a wide variety of tasks.
 If you need to install a package, most likely it will be on \cran.
 Before a package can be used, it must be \term{installed} 
 (once per computer) and 
-\term{loaded} (once per \R\ session).  For example, to use &mosaic&:
+\term{loaded} (once per \R\ session).  For example, to use \pkg{mosaic}:
 \Rindex{install.packages()}%
 \Rindex{require()}%
 
@@ -219,16 +219,16 @@ The two most useful formats are &.csv&
 Excel and most statistical packages can read and write data in these 
 formats, so these formats  make it easy to transfer data
 between different software.  
-\R\ provides &read.csv()& and &read.table()& to
+\R\ provides \function{read.csv()} and \function{read.table()} to
 \Rindex{read.csv()}%
 \Rindex{read.table()}%
 \Rindex{read.file()}%
 handle these two situations.  They work nearly identically except for their 
 default settings:
-&read.csv()& assumes that the first line of the file contains
-the variable names but &read.table()& assumes that the data begins on the first
+\function{read.csv()} assumes that the first line of the file contains
+the variable names but \function{read.table()} assumes that the data begins on the first
 line with no names for the variables,
-and &read.table()& will ignore lines that begin with `&#&' but &read.csv()& will
+and \function{read.table()} will ignore lines that begin with `&#&' but \function{read.csv()} will
 not.
 
 The default behavior can be overridden for each function, 
@@ -253,19 +253,19 @@ traffic <-
 traffic
 @
 
-Notice the use of &<-& in the example above.  
+Notice the use of \code{<-} in the example above.  
 This is the \rterm{assignment operator}
 %\myindex{<-@\texttt{<-}|seeonly{assignment operator}}%
 %\myindex{assignment operator}%
 in \R.  
-It can be used in either direction (&<-& or &->&).  In the first line of the 
-example above, the results of &read.table()& are stored in a variable called 
-&traffic&.  &traffic& is a \rterm{data frame}, \R's preferred container for
+It can be used in either direction (\code{<-} or \code{->}).  In the first line of the 
+example above, the results of \function{read.table()} are stored in a variable called 
+\dfn{traffic}.  \dfn{traffic} is a \rterm{data frame}, \R's preferred container for
 data.  (More about data types in \R\ as we go along.)
 
 
 
-The &na.strings& argument can be used to specify
+The \option{na.strings} argument can be used to specify
 codes for missing values.  
 The following can be useful for SAS output, for example:
 <<eval=false>>=
@@ -275,18 +275,19 @@ because SAS uses a period (\verb!.!) to code missing data, but \R\ by default
 reads that as string data, which forces the entire variable to be of character 
 type instead of numeric.
 
-For convenience the \verb!mosaic! package provides &read.file()& which uses the file name to
-determine which of &read.csv()&, &read.table()&, and \verb!load()! to use and sets the defaults
+For convenience the \verb!mosaic! package provides \function{read.file()} which
+uses the file name to determine which of \function{read.csv()},
+\function{read.table()}, and \function{load()} to use and sets the defaults
 to 
 \begin{itemize}
 \item
-&header=T&, 
+\option{header=TRUE}, 
 \item
-&comment.char="#"&, and 
+\verb!comment.char="#"!, and 
 \item
-&na.strings=c('NA','','.','na')& 
+\verb!na.strings=c('NA','','.','na')! 
 \end{itemize}
-for &read.csv()& and &read.table()&.
+for \function{read.csv()} and \function{read.table()}.
 
 <<>>=
 traffic <- read.file("http://www.calvin.edu/~rpruim/fastR/trafficTufte.txt")
@@ -295,15 +296,15 @@ traffic <- read.file("http://www.calvin.edu/~rpruim/fastR/trafficTufte.txt")
 \subsection{Manually typing in data}
 
 If you need to enter a small data set by hand, 
-the &scan()& function is quick and easy.
+the \function{scan()} function is quick and easy.
 \Rindex{scan()}%
 Individual values are separated by white space or new lines.  
 A blank line is used to signal the end of the data.
-By default, &scan()& is expecting decimal data (which it calls \rterm{double}, 
-for double precision), but it is possible to tell &scan()& to expect something else,
+By default, \function{scan()} is expecting decimal data (which it calls \rterm{double}, 
+for double precision), but it is possible to tell \function{scan()} to expect something else,
 like \rterm{character} data (i.e., text). 
 There are other options for data types, but numerical and text data will usually suffice
-for our purposes.  See &?scan& for more information and examples.
+for our purposes.  See \code{?scan} for more information and examples.
 
 \begin{Rcode}
 myData1 <- scan()
@@ -324,13 +325,13 @@ myData1 <- c(15, 18, 12, 21, 23, 50, 15)
 myData2 <- c("red","red","orange","green","blue","blue","red")
 @
 %
-Be sure when using &scan()& that you remember to save your data somewhere.
+Be sure when using \function{scan()} that you remember to save your data somewhere.
 Otherwise you will have to type it again.
 
 \subsection{Creating data frames from vectors}
 
 \Rindex{data.frame()}%
-The &scan()& function puts data into a \rterm{vector}, not a \rterm{data frame}.  We can
+The \function{scan()} function puts data into a \rterm{vector}, not a \rterm{data frame}.  We can
 build a \rterm{data frame} for our data as follows.
 
 <<dataframe>>=
@@ -340,7 +341,7 @@ myDataFrame
 
 \subsection{Getting data from mySQL data bases}
 
-The &RMySQL& package allows direct access to data in MySQL data bases.
+The \pkg{RMySQL} package allows direct access to data in MySQL data bases.
 This can be convenient when dealing with subsets of very large data sets.
 A great example of this is the 12 gigabytes of data from the Airline on-time
 performance dataset included in the 2009 Data Expo (\url{http://stat-computing.org/dataexpo/2009}).
@@ -379,18 +380,18 @@ sample(x, size=5)         # random sample of size 5 from x (no replacement)
 @
 
 Functions for sampling from other distributions include
-&rbinom()&,
-&rchisq()&,
-&rt()&,
-&rf()&,
-&rhyper()&,
+\function{rbinom()},
+\function{rchisq()},
+\function{rt()},
+\function{rf()},
+\function{rhyper()},
 etc.
 See Section~\ref{sec:DiscreteDistributions} for more information.
 
 
 
 \subsection{Saving Data}
-&write.table()& and &write.csv()& can be used to save data from \R\ into
+\function{write.table()} and \function{write.csv()} can be used to save data from \R\ into
 delimited flat files.
 
 <<writingData>>=
@@ -405,7 +406,7 @@ system("head -20 ddd.txt ddd.csv")
 
 
 Data can also be saved in native \R\ format.  Saving data sets 
-(and other \R\ objects) using &save()& has some advantages over other file formats:
+(and other \R\ objects) using \function{save()} has some advantages over other file formats:
 \begin{itemize}
   \item 
   Complete information about the objects is saved, including attributes.
@@ -472,12 +473,12 @@ Each of the objects in the example above is a \rterm{vector}, an ordered contain
 of values that all have the same mode.%
 \footnote{
 There are other modes in addition to the ones shown here, including
-\verb&complex& (for complex numbers), 
-\verb&function&, \verb&list&, \verb&call&, and \verb&expression&.}
-The &c()& function concatenates vectors (or lists).
-Notice that &w&, &y&, and &z& are 
-vectors of length~1.  Missing values are coded as &NA& (not available).  Asking
-for an entry ``off the end'' of a vector returns &NA&.
+\code{complex} (for complex numbers), 
+\code{function}, \code{list}, \code{call}, and \code{expression}.}
+The \function{c()} function concatenates vectors (or lists).
+Notice that \code{w}, \code{y}, and \code{z} are 
+vectors of length~1.  Missing values are coded as \code{NA} (not available).  Asking
+for an entry ``off the end'' of a vector returns \code{NA}.
 Assigning a value ``off the end'' of a vector results in the vector being
 lengthened so that the new value can be stored in the appropriate location.
 
@@ -488,10 +489,10 @@ For categorical data, a \rterm{factor} is a special type of vector that includes
 an additional attribute called \emph{levels}.  
 A factor can be ordered or unordered (which can affect how statistics
 are done and graphs are made) and its elements can have mode
-&numeric& or &character&.
+\code{numeric} or \code{character}.
 
 A \rterm{list} is similar to a vector, but its elements may be of different 
-modes (including &list&, &vector&, etc.).
+modes (including \code{list}, \code{vector}, etc.).
 A \rterm{data frame} is a list of vectors (or factors), 
 each of the same length, but not necessarily of the same mode.  
 This is \R's primary way of storing data sets.
@@ -501,8 +502,8 @@ mode.  A \rterm{matrix} is a 2-dimensional array.
 
 \Rindex{[ ]}%
 \Rindex{[[ ]]}%
-The access operators (&[ ]& for vectors, matrices, arrays, and data frames,
-and  &[[ ]]& for lists) are actually \emph{functions} in \R.
+The access operators (\code{[ ]} for vectors, matrices, arrays, and data frames,
+and  \code{[[ ]]} for lists) are actually \emph{functions} in \R.
 This has some important consequences:
 \begin{itemize}
   \item Accessing elements is slower than in a language like C/C++
