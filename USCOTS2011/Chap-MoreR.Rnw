@@ -178,6 +178,12 @@ using the History panel in \Rstudio.
 
 \noindent
 Then you can go back and edit the file.
+\FoodForThought{\RStudio\ makes this especially easy by providing a 
+integrated environment for working with \R\ script files, an active
+\R\ session, the \R\ session history, etc.  Many of these tasks can 
+be done with the click of a button in \RStudio.}
+
+
 
   \item Use meaningful names.
   \item Write reusable functions.
@@ -282,7 +288,9 @@ to
 \end{itemize}
 for &read.csv()& and &read.table()&.
 
-
+<<>>=
+traffic <- read.file("http://www.calvin.edu/~rpruim/fastR/trafficTufte.txt")
+@
 
 \subsection{Manually typing in data}
 
@@ -411,8 +419,8 @@ The downside is that these files are only readable in \R.
 <<savingData,exec=F,echo=T>>=
 abc <- "abc"
 ddd <- data.frame(number=1:5, letter=letters[1:5])
-save(ddd, abc, file="ddd.zip")     # saves both objects in a single file
-load("ddd.zip")                  # loads them both
+save(ddd, abc, file="ddd.rda")   # saves both objects in a single file
+load("ddd.rda")                  # loads them both
 @
 
 For more on importing and exporting data, especially from other
@@ -420,7 +428,7 @@ formats, see the
 %\href{http://cran.r-project.org/manuals.html}%
 \textit{R Data Import/Export} manual available on \cran.
 
-\subsection{Making Data Available to Students}
+%\subsection{Making Data Available to Students}
 
 \authNote{Need to decide what to say about making data available to 
 students.  Perhaps multiple methods? --RJP}%
@@ -595,6 +603,20 @@ In Section~\ref{sec:generatingData} we learned how to generate some simple
 vectors.  Here we will learn about some of the operations and functions
 that can be applied to vectors.
 
+\subsection{Names and vectors}
+
+We can give each position in a vector a name.  This can be very handy for certain uses
+of vectors.
+
+<<>>=
+myvec <- 1:5; myvec
+names(myvec) <- c('one','two','three','four','five'); myvec
+@
+
+Names can also be specified as a vector is created using \function{c()}.
+<<>>=
+another <- c(mean=10, sd=2, "trimmed mean"=9.7); another
+@
 \subsection{Vectorized functions}
 
 Many \R\ functions and operations are ``vectorized'' and can be applied
@@ -818,6 +840,23 @@ table(a+b > 50)
 %\subsection{Cross Tabulation with \texttt{xtabs()}}
 %\subsection{\texttt{aggregate()} and \texttt{Hmisc::summary()}}
 \subsection{Adding new variables to a data frame}
+We can add additional variables to an existing data frame by simple assignment.
+
+<<adding-variable2>>=
+summary(iris)
+@
+
+<<adding-variable>>=
+iris$SLength <- cut(iris$Sepal.Length, 4:8)    # cut places data into bins
+@
+
+<<adding-variable2>>=
+summary(iris)
+@
+\Rindex{summary()}
+
+It is an error to add a vector of the wrong length.
+
 The \dfn{CPS} data frame contains data from a Current Population Survey (current in 1985, that is).
 Two of the variables in this data frame are \variable{age} and \variable{educ}.  We can estimate
 the number of years a worker has been in the workforce if we assume they have been in the workforce
@@ -828,7 +867,8 @@ by assigning to it:
 CPS$workforce.years <- with(CPS, age - 6 - educ)
 favstats(CPS$workforce.years)
 @
-In fact this is exactly what was done to create the \variable{exper} variable.
+In fact this is what was done for all but one of the cases to create the \variable{exper} 
+variable that is already in the \dfn{CPS} data.
 <<>>=
 with(CPS, table(exper - workforce.years))
 @
@@ -919,46 +959,81 @@ only certain rows.
 <<faithful-long-xy,fig=true>>=
 data(faithful)
 names(faithful) <- c('duration', 'time.til.next')
-faithfulLong <- subset(faithful, duration > 3)        # any logical can be used to creat subsets
+# any logical can be used to create subsets
+faithfulLong <- subset(faithful, duration > 3)        
 xyplot( time.til.next ~ duration, faithfulLong )
 @
 \end{center}
 
-Of course, if all we want to do is produce a graph, there is now reason to create 
+Of course, if all we want to do is produce a graph, there is no reason to create 
 a new data frame.  The plot above could also be made with
 <<eval=false>>=
 xyplot( time.til.next ~ duration, faithful, subset=duration > 3 )
 @
 
 
-\subsection{Creating variables}
+\authNote{rjp: deleted stubs for creating variables and accounting for missing data.
+We can add them back in if/when we write them.}%
+%\subsection{Creating variables}
+%
+%% HELP$newsex <- factor(HELP$female, labels=c('M','F'))
+%
+%\subsubsection{character variables}
+%\subsubsection{coercing variables}
+%\subsubsection{recoding variables}
+%\subsection{Accounting for missing data}
 
-% HELP$newsex <- factor(HELP$female, labels=c('M','F'))
-
-\subsubsection{character variables}
-\subsubsection{coercing variables}
-\subsubsection{recoding variables}
-\subsection{Accounting for missing data}
 \subsection{Merging datasets}
 
+The \dfn{fusion1} data frame in the \pkg{fastR} package contains 
+genotype information for a SNP (single nucleotide polymorphism) in the gene
+\emph{TCF7L2}.  
+The \dfn{pheno} data frame contains phenotypes
+(including type 2 diabetes case/control status) for an intersecting set of individuals.
+We can merge these together to explore the association between
+genotypes and phenotypes using \verb!merge()!.
 
-We can add additional variables to an existing data frame by simple assignment.
-
-<<adding-variable2>>=
-summary(iris)
+%\Rindex{merge()}%
+<<>>=
+require(fastR)
+head(fusion1,3)
+head(pheno,3)
 @
 
-<<adding-variable>>=
-iris$SLength <- cut(iris$Sepal.Length, 4:8)
+<<>>=
+# merge fusion1 and pheno keeping only id's that are in both
+fusion1m <- merge(fusion1, pheno, by.x='id', by.y='id', all.x=FALSE, all.y=FALSE)
+head(fusion1m, 3)
+@
+In this case, since the values are the same for each data frame, we could collapse
+\option{by.x} and \option{by.y} to \option{by} and collapse
+\option{all.x} and \option{all.y} to \option{all}.
+The first of these specifies which column(s) to use to identify matching cases.
+The second indicates whether cases in one data frame that do not appear in the other 
+should be kept (\code{TRUE}) or dropped 
+(filling in \code{NA} as needed) or dropped from the merged data frame.
+
+Now we are ready to begin our analysis.
+<<fusion1-xtabs>>=
+xtabs(~t2d + genotype + marker, fusion1m)
 @
 
-<<adding-variable2>>=
-summary(iris)
+\begin{problem}
+The \dfn{fusion2} data set in the \pkg{fastR} package contains genotypes for 
+another SNP.  Merge \dfn{fusion1}, \dfn{fusion2}, and \dfn{pheno} into a single data
+frame.
+
+Note that \dfn{fusion1} and \dfn{fusion2} have the same columns.
+<<>>=
+names(fusion1)
+names(fusion2)
 @
-\Rindex{summary()}
+You may want to use the \option{suffixes} argument to \function{merge()} or rename the variables
+after you are done merging to make the resulting data frame easier to navigate.
 
-It is an error to add a vector of the wrong length.
-
+Tidy up your data frame by dropping any columns that are redundant or that you just don't want to
+have in your final data frame.
+\end{problem}
 
 \subsection{Slicing and dicing}
 \authNote{NH to expand}
@@ -971,17 +1046,30 @@ time series data and its arguments are named with that in mind.
 
 A common situation is when we want to convert from a wide form to a 
 long form because of a change in perspective about what a unit of 
-observation is.  For example,
+observation is.  For example, in the \dfn{traffic} data frame, each 
+row is a year, and data for multiple states are provided.
 
 <<traffic-reshape>>=
 traffic
+@
+We can reformat this so that each row contains a measurement for a 
+single state in one year.
 
-reshape(traffic[,-2], idvar="year", ids=row.names(traffic),
+<<>>=
+longTraffic <-
+	reshape(traffic[,-2], idvar="year", ids=row.names(traffic),
         times=names(traffic)[3:6], timevar="state",
         varying=list(names(traffic)[3:6]),
         v.names="deathRate",
-        direction="long") -> longTraffic
+        direction="long") 
 head(longTraffic)
+@
+And now we can reformat the other way, this time having all data for a given state 
+form a row in the data frame.
+<<>>=
+stateTraffic <- reshape(longTraffic, direction='wide', 
+                           v.names="deathRate", idvar="state", timevar="year")
+stateTraffic
 @
 
 In simpler cases, &stack()& or &unstack()& may suffice.
@@ -990,41 +1078,17 @@ to \verb!reshape()!.
 \Rindex{stack()}%
 \Rindex{unstack()}%
 
-\subsection{Simple Relational Database Operations}
+%\subsection{Simple Relational Database Operations}
+%
+%\subsubsection*{Example: Grades/Courses}
+%
+%Using the grade/courses database, show how to combine data from
+%different data frames. [DTK]
 
-\subsubsection*{Example: Grades/Courses}
-
-Using the grade/courses database, show how to combine data from
-different data frames. [DTK]
-
-\subsubsection{Example: Merging Genotype and Phenotype Data}
+%\subsubsection{Example: Merging Genotype and Phenotype Data}
 %\label{example:fusion1-glm1}%
 %\myindex{FUSION|exampleidx}%
 %\myindex{logistic regression}%
-The \verb!fusion1! data frame in the \verb!fastR! package contains
-genotypes of subjects from the FUSION study of the genetics of type 
-2 diabetes.
-The \verb!pheno! data frame contains phenotypes (including T2D 
-case/control status) for an intersecting set of individuals.
-We can merge these together to explore the association between
-genotypes and phenotypes using \verb!merge()!.
-\pagebreak
-
-%\Rindex{merge()}%
-<<fusion1-head>>=
-require(fastR)
-head(fusion1,3)
-head(pheno,3)
-@
-
-<<fusion1-merge>>=
-# merge fusion1 and pheno keeping only id's that are in both
-fusion1m <- merge(fusion1, pheno, by='id', all.x=FALSE, all.y=FALSE)
-@
-<<fusion1-xtabs>>=
-head(fusion1m, 3)
-xtabs(~t2d + Gdose + marker, fusion1m)
-@
 
 \section{Functions in \R} %{An introduction to writing functions}
 \label{sec:writingFunctions}
@@ -1136,6 +1200,7 @@ altfavstats((1:20)^2)
 @
 Either of these methods will allow us to see all three values, 
 but if we try to store them \dots
+\authNote{Talk about \function{paste()} some more somewhere?}%
 
 <<defFun02a>>=
 temp <- favstats((1:20)^2)
@@ -1172,13 +1237,29 @@ favstats <- function(x) {
 }
 favstats((1:20)^2)
 summary(Sepal.Length~Species, data=iris, fun=favstats)
+aggregate(Sepal.Length~Species, data=iris, FUN=favstats)
 @
 
-Notice how nicely this works with &summary()& from the &Hmisc& package.
-You can, of course, define your own favorite function to use with &summary()&.
+Notice how nicely this works with \function{aggregate()} and with the \function{summary()} 
+function from the \pkg{Hmisc} package.
+You can, of course, define your own favorite function to use with \function{summary()}.
 \Rindex{favstats()}%
-The &favstats()& function in &fastR& includes the quartiles, mean, standard
-deviation, and variance.
+The \function{favstats()} function in the \pkg{mosaic} package includes the 
+quartiles, mean, standard, deviation, sample size and number of missing observations.
+\FoodForThought{Notice the use of \code{::} to select 
+the \function{favstats{}} function from the \pkg{mosaic}
+package rather than the one we just defined.}%
+<<>>=
+mosaic::favstats(rnorm(100))
+@
+
+\authNote{Add a problem to create a function to \dots}
+
+
+\section*{Exercises}
+
+\shipoutProblems
+
 \Rindex{summary()}%
 \Rindex{Hmisc}%
 
