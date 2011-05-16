@@ -567,6 +567,17 @@ function is expecting a data frame, not 3 vectors}
 bwplot(rep(c("Low", "Assessed", "High"), each=nrow(comps)) ~ c(low, taxAssessment, high),
   data=comps, horizontal=TRUE, xlab='value ($)')
 @
+As an alternative to the code above, we could first build a dataframe and then use that for our 
+plot.
+<<fig=false>>=
+zillowData <- data.frame(
+	value = with(comps, c( low, taxAssessment, high )),
+	type  = rep(c("Low", "Assessed", "High"), each=nrow(comps)) 
+	)
+bwplot( value ~ type, zillowData)
+@
+\authNote{perhaps use reshape as another method?}%
+
 
 It's interesting that for these properties, assessed values tend to lag far behind the lower and
 upper Zillow estimates.  We could explore whether this is true in California more generally.
