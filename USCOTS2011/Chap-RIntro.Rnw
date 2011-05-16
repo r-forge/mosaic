@@ -279,7 +279,7 @@ example(histogram)
 @
 will generate a number of example plots (and provide you with the commands used to create them).
 Examples such as this are intended to help you learn how specific \R\ functions work.
-\FoodForThought{Not all authors are equally skilled at creating examples.  Some of the examples
+\FoodForThought{Not all package authors are equally skilled at creating examples.  Some of the examples
 are next to useless, others are excellent.}
 These examples also appear at the end of the documentation for functions and data sets.
 
@@ -490,7 +490,7 @@ The \verb!abd! package contains data sets from \textit{The Analysis of Biologica
 Kevin Middleton and Randall Pruim contacted the authors and obtained permission to 
 build and disseminate this package.
 
-The \verb!findData()! function makes in \verb!abd! it easy to map examples and exercises in that book to 
+The \verb!findData()! function in \verb!abd! makes it easy to map examples and exercises in that book to 
 data frame names in the \verb!abd! package.
 
 <<findData-human>>=
