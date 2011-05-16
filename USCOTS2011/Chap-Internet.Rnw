@@ -66,7 +66,7 @@ Blackboard.
 
 The Dropbox service for storing files in the ``cloud'' provides a very
 convenient way to distribute files over the web.  (Go to
-\texttt{dropbox.com} for information and to sign up for an account.)
+\texttt{dropbox.com} for information and to sign up for a free account.)
 Dropbox is routinely used to provide automated backup and coordinated
 file access on multiple computers.  But the Dropbox service also
 provides a {\sc Public} directory.  Any files that you place in that
@@ -91,11 +91,13 @@ identifying URL for any file by using mouse-based menu commands to
 place the URL into the clipboard, whence it can be copied to your
 course-support software system or any other place for distribution to
 students.  For a CSV file, reading the contents of the file into \R\
-can be done with the \texttt{read.csv()} operator, by giving it the
+can be done with the \texttt{read.csv} operator, by giving it the
 quoted URL:
 <<read-quoted-URL>>=
-a = read.csv("http://dl.dropbox.com/u/5098197/USCOTS2011/ExampleA.csv")
+a <- read.csv("http://dl.dropbox.com/u/5098197/USCOTS2011/ExampleA.csv")
 @ 
+\InstructorNote{The history feature in \RStudio\ can be used to 
+re-run this command in future sessions}
 
 \begin{figure}
 \begin{center}
@@ -136,12 +138,16 @@ in the script that gets sourced in by that command.  Again, you can
 edit the file directly on your computer and have the results instantly
 available (subject only to the several second latency of Dropbox) to
 your students.  Of course, they will have to re-issue the
-\function{source()} command to re-read the script.
+\function{source} command to re-read the script.
 
 If privacy is a concern, for instance if you want the data available
 only to your students, you can effectively accomplish this 
 by giving files names known only to your students, e.g.,
 ``Example-A78r423.csv''.  
+
+\Caution{\emph{Security through Obscurity} of this sort will 
+not generally satisfy institutional data protection regulations}
+
 
 
 \subsection{Google Docs}
@@ -179,11 +185,12 @@ For teaching, this has a variety of uses:
     into the document.
 \end{itemize}
 
-An effective technique for organizing the student work and ensuring
+An effective technique for organizing student work and ensuring
 that the instructor (and other graders) have access to it, is to
-create a separate Google directory for each student in your class.
-Then set the permission on this directory to share it with the
-student.  Anything he or she drops into the directory is automatically
+create a separate Google directory for each student in your class
+(Dropbox can also be used in this manner).
+Set the permission on this directory to share it with the
+student.  Anything she or he drops into the directory is automatically
 available to the instructor.  The student can also share with specific
 other students (e.g., members of a project group).
 
@@ -218,7 +225,7 @@ data.
 
 Once you have a spreadsheet file in Google Docs, you will want to open
 it in \R.  Of course, it's possible to export it as a CSV file, then
-open it using the CSV tools in \R, such as \function{read.csv( )}.
+open it using the CSV tools in \R, such as \function{read.csv}.
 But there are easier ways that let you work with the data ``live.''
 
 \paragraph{In the web-server version of \RStudio}, described below, you can
@@ -228,7 +235,7 @@ But there are easier ways that let you work with the data ``live.''
   \includegraphics[width=3in]{images/google-spreadsheet1.png}
 \end{center}
 
-\paragraph{If you are using other interfaces for \R}, you must first use the Google
+\paragraph{If you are using other \R\ interfaces}, you must first use the Google
   facilities for publishing documents.
 \begin{enumerate}
   \item From within the document, use the ``Share'' dropdown menu and
@@ -258,7 +265,7 @@ available to students, we have created a function that takes a quoted
 string with the Google-published URL and reads the corresponding file
 into a data frame:
 <<>>=
-elev = readGoogleCSV("https://spreadsheets.google.com/spreadsheet/pub?hl=en&hl=en&key=0Am13enSalO74dEVzMGJSMU5TbTc2eWlWakppQlpjcGc&single=true&gid=0&output=csv")
+elev <- readGoogleCSV("https://spreadsheets.google.com/spreadsheet/pub?hl=en&hl=en&key=0Am13enSalO74dEVzMGJSMU5TbTc2eWlWakppQlpjcGc&single=true&gid=0&output=csv")
 head(elev)
 @ 
 
@@ -269,7 +276,7 @@ course support system.
 Note that the \function{readGoogleCSV} function is not part of the
 \texttt{mosaic} package.  As described previously, we make it
 available via an \R\ source file that can be read into the current
-session of \R\ using the \function{source(~)} command:
+session of \R\ using the \function{source} command:
 <<eval=false>>=
 source("http://dl.dropbox.com/u/5098197/USCOTS2011/USCOTS2011.R")
 @ 
@@ -404,7 +411,7 @@ positions
 After importing the data from Google, it is simple to sum the counts across the class.
 
 <<sum-water-setup,echo=false>>=
-Water = data.frame(Water=215, Land=85)
+Water <- data.frame(Water=215, Land=85)
 @
 
 <<sum-water>>=
@@ -529,10 +536,10 @@ install.packages("Zillow", repos="http://www.omegahat.org/R", type="source",
 Next, you should initialize your \VN{zillowID} to the value that you 
 received when you registered with {\tt Zillow.com}.
 <<fakezillow>>=
-zillowId = "set_to_your_zillowId"
+zillowId <- "set_to_your_zillowId"
 @
 <<zillowid, eval=TRUE, echo=FALSE>>=
-zillowId = "X1-ZWz1bvi5ru1gqz_4srxq"  # this is Nick's, please don't share!
+zillowId <- "X1-ZWz1bvi5ru1gqz_4srxq"  # this is Nick's, please don't share!
 @
 
 This allows you to make calls to functions such as \function{zestimate()} (which
@@ -542,8 +549,8 @@ Here we find information about an arbitrary house in California, as well as
 comparable properties.
 <<zillow1>>=
 require(Zillow)
-est = zestimate("1280 Monterey Avenue", "94707", zillowId)
-comps = getComps(rownames(est), zillowId)
+est <- zestimate("1280 Monterey Avenue", "94707", zillowId)
+comps <- getComps(rownames(est), zillowId)
 est
 rownames(est)
 names(comps)
@@ -577,8 +584,8 @@ zillowData <- data.frame(
 	)
 bwplot( value ~ type, zillowData)
 @
-\authNote{perhaps use reshape as another method?}%
-
+\InstructorNote{the \pkg{reshape} package also provides support for 
+restructuring datasets}
 
 It's interesting that for these properties, assessed values tend to lag far behind the lower and
 upper Zillow estimates.  We could explore whether this is true in California more generally.
