@@ -381,9 +381,9 @@ googleMap(pos=positions, mark=TRUE)
 You may need to turn off pop-up block for this to work smoothly.
 
 \item
-For each map, record whether the center is located in water or on land.  \option{mark=TRUE}
-is used to place a marker at the center of the map which is helpful for locations that are close to 
-the coast.  
+For each map, record whether the center is located in water or on land.  The options \option{mark=TRUE}
+is used to place a marker at the center of the map (this is helpful for locations that are close to 
+the coast).  
 \begin{center}
 \includegraphics[width=.8\textwidth]{images/google-water1}
 \end{center}
@@ -422,7 +422,7 @@ sum(Water$Land)
 Then use your favorite method of analysis, perhaps \function{binom.test()}.
 
 <<googleMap-binom.test>>=
-interval(binom.test(215,300))
+interval(binom.test(215, 300))   # numbers of successes and trials
 @
 \end{enumerate}
 
