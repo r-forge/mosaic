@@ -143,7 +143,7 @@ have no required arguments, but you still need the parentheses.
 
 \item
 If you type a function name without the parentheses, you will see the \emph{code} for that
-function -- which probably isn't what you want at this point.
+function (this probably isn't what you want at this point).
 \end{itemize}
 \item
 TAB completion and arrows can improve typing speed and accuracy.
@@ -154,7 +154,7 @@ the list of arguments it expects.  The up and down arrows can be used to retriev
 \item
 If you see a \verb!+! prompt, it means \R\ is waiting for more input.
 
-\Caution{Your students will get into a syntactic hole from which they cannot
+\Caution{Your students will sometimes find themselves in a syntactic hole from which they cannot
 dig out.  Teach them about the ESC key early.}%
 Often this means that you have forgotten a closing parenthesis or made some other
 syntax error.  If you have messed up and just want to get back to the normal plot,
@@ -185,7 +185,7 @@ from CRAN, see section \ref{sec:CRAN})
 %\item \verb!fastR!    (a package with some nice utilities; available on CRAN)
 %\item \verb!abd!      (a package with some nice datasets; available on CRAN)
 \end{itemize}
-There may be others that we use from time to time as well.  
+There are others that we use from time to time as well.  
 %\verb!Hmisc!, \verb!vcd!, \verb!fastR!, \verb!abd!, and \verb!mosaic! 
 \authNote{R': I think we can reduce to \verb!lattice! and \verb!mosaic!.  Possibly \verb!Hmisc!.
 I'll remove dependencies on \verb!abd! as I go.}%
