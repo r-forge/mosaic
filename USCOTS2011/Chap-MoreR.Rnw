@@ -954,6 +954,7 @@ CPS[1,1:4]
 @
 
 \subsection{Creating subsets}
+\label{sec:subsets}
 We can also use \function{subset()} to reduce the size of a data set by selecting 
 only certain rows.
 \begin{center}

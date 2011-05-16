@@ -88,7 +88,7 @@
 \rhead[\sf \leftmark]{\sf \thepage}
 \lfoot[\sf USCOTS 2011]{\sf Teaching Statistics With R}
 \rfoot[\sf Teaching Statistics With R]{\sf USCOTS 2011}
-\cfoot{\sf \copyright 2011, R Pruim, D Kaplan, N Horton}
+\cfoot{\sf \copyright 2011, R Pruim, N J Horton and D Kaplan}
 
 \newcounter{myenumi}
 \newcommand{\saveenumi}{\setcounter{myenumi}{\value{enumi}}}

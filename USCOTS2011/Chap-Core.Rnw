@@ -21,6 +21,9 @@ We will use data from the HELP study: a randomized trial of a novel
 way to link at-risk subjects with primary care.  More information on the
 dataset can be found in section \ref{sec:help}.
 
+Some data management is needed by students (and more by instructors).  This
+material is reviewed in section \ref{sec:manipulatingData}.
+
 Since the selection and order of topics can vary greatly from 
 textbook to textbook and instructor to instructor, we have chosen to 
 organize this material by the kind of data being analyzed.  This should make
@@ -116,7 +119,7 @@ It is straightforward to restrict our attention to just those subjects.
 If we are going to do many things with a subset of our data, it may be easiest
 to make a new data frame containing only the cases we are interested in.
 The \function{subset()} function can generate a new data frame containing
-just the women or just the men.  Once this is created, we
+just the women or just the men  (see also section \ref{sec:subsets}).  Once this is created, we
 used the \function{stem()} function to create a stem and leaf plot.
 \Caution{Note that the equality operator is \emph{two} equal signs}
 <<cesd-stem>>=
@@ -184,7 +187,8 @@ smoother plots, less than 1 for more jagged plots.}
 <<dens1,fig=TRUE>>=
 densityplot(~ cesd, data=female)
 ladd(grid.text(x=0.2, y=0.8, 'only females'))
-ladd( panel.mathdensity(args=list(mean=mean(female$cesd), sd=sd(female$cesd))) )
+ladd( panel.mathdensity(args=list(mean=mean(female$cesd), sd=sd(female$cesd)),
+  col="red"))
 @
 \end{center}
 
