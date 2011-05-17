@@ -1,6 +1,6 @@
 
 
-\SweaveOpts{prefix.string=figures/fig}  % location of 
+\SweaveOpts{prefix.string=figures/calculus}  % location of 
 \SweaveOpts{highlight=T}    % not sure this does anything unless we use pgfSweave
 \SweaveOpts{tidy=F}         % keep.source probably disables this
 \SweaveOpts{pdf=T}          % use pdf for graphics
@@ -97,9 +97,173 @@ biology.\cite{MAA-CRAFTY}
 
 \section{Calculus}
 
-\section{Discrete}
+Most people familiar with R assume that it provides no facilities for
+the central operations of calculus: differentiation and integration.
+Nonsense.  What those people are thinking of is the way
+they learned calculus, where the technology for taking integrals and
+derivatives was based on rules for moving symbols,
+e.g., $\frac{d}{dx} x^n = n x^{n-1}$ or $\int \cos( a x ) dx =
+\frac{1}{a} \sin(a x)$.
+
+Those rules, and the algebraic notation that underlies them,  seem to
+be so fundamental to people's conception of calculus that they forget
+that differentiation and integration are general operations that
+relate functions to one another, not rules for moving symbols.
+
+To illustrate, consider the following function, which we will call
+\texttt{decay} 
+<<>>=
+k = 0.1
+P = 4
+decay = function(t){ exp(-k*t)*sin(2*pi*t/P) }
+@ 
+Traditional notation is not so different: $e^{-kt} \sin(
+\frac{2\pi}{P} t)$.  
+
+
+With \R\, of course, you can evaluate the function at a given input or
+set of inputs:
+<<>>=
+decay(5)
+decay(1:5)
+@ 
+and you can plot it out over a in interval for the input:
+<<decay-plot,fig=true,include=true,pdf=true,height=3>>=
+curve( decay, 0, 20)
+@ 
+
+To find the derivative of this function, use the \function{D} operator:
+<<>>=n
+ddecay = D(decay)
+@ 
+
+Again, you can evaluate and plot such functions:
+<<decay-plot-deriv,fig=true,include=true,pdf=true,height=3>>=
+ddecay(4)
+curve( ddecay, 0, 20)
+@ 
+
+Integration is a little tricker, because there is  a ``constant of
+integration'' to be considers.  The \texttt{mosaic} \function{integral} operator
+let's you compute either a definite or indefinite integral.
+
+Here's an indefinite integral:
+<<decay-plot-integrate,fig=true,include=true,pdf=true,height=3>>=
+f = antiD(decay)
+curve(f, 0, 20)
+@ 
+Of course, there's not just a single indefinite integral.  There is
+the ``constant of integration.''  You can show this directly to students:
+<<>>=
+f1 = antiD(decay, 1)
+f2 = antiD(decay, 3)
+f3 = antiD(decay, 6)
+@ 
+
+<<decay-plot-integrate,fig=true,include=true,pdf=true,height=3>>=
+curve(f1, 0, 20, col="red", ylab="Anti-derivs of decay")
+curve(f2, add=TRUE, col="blue")
+curve(f3, add=TRUE, col="green")
+@ 
+
+Each of \texttt{f1}, \texttt{f2}, etc. are functions, and
+like any other functions they have a derivative.  
+<<>>=
+df1 = D(f1)
+df2 = D(f2)
+df3 = D(f3)
+@ 
+
+You can plot out these three functions and confirm that they are all
+the same, as you would expect: the derivative operation undoes the anti-derivative operation.
+
+\authNote{DTK: I have an integral function that lets you specify
+neither,  either or both of the endpoints, using \texttt{from} and
+\texttt{to} arguments that can be missing.  That works better for
+indefinite integrals.}
+
+
+
+To calculate a definite integral, you need to specify the boundaries
+of integration.  Currently, the syntax is unnatural.
+<<>>=
+antiD(decay, 140)(150)    
+@ 
+This constructs a particular antiderivative integrating from a lower
+bound of 140, and
+that evaluates that antiderivative at an upper bound of 150.
+
+\InstructorNote{There are different styles for dealing with parameters.}
+
+In this example with \texttt{decay}, we are using a style of defining the 
+parameters {\em outside} of the function itself.  That makes it easy to explore
+different parameter values; just change the assigned values of
+\texttt{P} and \texttt{k}.
+
+Another style is to create a function that itself constructs a function:
+<<>>=
+makeDecay = function(P=3,k=.8){ 
+  function(t){ exp(-k*t)*sin(2*pi*t/P) } 
+}
+@ 
+It's still unclear what are the relative merits of these different
+styles when it comes to teaching.  As the \texttt{mosaic} package
+develops, we'll try to support an effective style for handling parameters.
+
+\authNote{DTK: a generalization of the way curve does things might be
+  nice, so that everything that isn't one of the named variables in
+  the evaluation, plotting, differentiation, integration routines can
+  be assigned a particular numerical value in the function definition.}
+
+What might be troubling to those experienced with traditional ways of
+teaching integration and differentiation is that no formula is being
+given.  But the resulting function is still a function, and you can do
+with it what you need: evaluate it or plot it over an interval,
+differentiate it, integrate it, find where it takes on a specified value.
+
+Keep in mind that not all important functions have formulas that are
+readily interpretable.  Indeed, students learn a set of names for such
+functions and study their properties, rather than learning how to
+identify them from a formula.  The trigonometric functions, $\sin$,
+$\cos$, etc. are examples.
+
+Many important functions do not have integrals that can be expressed
+in terms of a simple formula.  For instance, the normal distribution
+$$ f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left( \frac{(x - mu)^2}{2  \sigma^2}\right) .$$
+
+We could, of course, write this out as the equivalent formula in \R,
+but the function is so important it already has a name in \R: \function{dnorm}.
+
+Let's integrate it, setting $\mu=3$ and $\sigma=1.5$:
+<<>>=
+f = function(x){dnorm(x, mean=3, sd=1.5) }
+@ 
+This $f$ is a particular member of the family of normal
+distributions.  Here is its cumulative function:
+<<norm-cumulative,fig=true,include=true,pdf=true,height=3>>=
+fcumulative = antiD(f,-Inf)
+curve(fcumulative, -2,10, lwd=4) # by integration
+curve( pnorm(x, mean=3, sd=1.5), add=TRUE, col="red") # the built-in
+@ 
+
+There's little point in computing this integral, however, except to
+show that it matches the built-in \function{pnorm} function.
+
+One of the advantages to teaching integration and differentiation in a
+way that doesn't depend on constructing formulas, is that you can use
+functions that don't have simple formulas for modeling.  For example,
+you can use functions generated by splining through data points.
+
+\authNote{Show a spline example.}
+
+  
+%\section{Discrete}
 
 \section{Linear Algebra}
 
+Showing how to introduce Linear Algebra by taking linear combinations
+of functions to fit a set of data.
+
 \section{Differential Equations}
 
+Showing dynamics in one variable and two, e.g., the phase plane.
