@@ -130,7 +130,7 @@ Focus on diagnosing what they don't know and how to help them ``get it''.
 Tell students to copy and paste \R\ code and error messages into email when they
 have trouble.  When you reply, explain how the error message helped you diagnose their
 problem and help them generalize your solution to other situations.
-\FoodForThought[Tip]{Tell your students to copy and paste error messages
+\TeachingTip{Tell your students to copy and paste error messages
 into email rather than describe them vaguely.  It's a big time saver for
 both of you.}%
 \end{enumerate}

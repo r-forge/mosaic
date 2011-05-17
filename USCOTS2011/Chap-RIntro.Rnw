@@ -72,10 +72,12 @@ The console panel is where we type commands that \R\ will execute.
 
 \begin{problem}
 Calculate the natural logarithm (log base $e$) and base 10 logarithm of 12,345.
-Copy-and-paste your \R\ code into your Word document.  
-Be sure to use a fixed-width font (like Courier) when you display \R\ code.  This will
-(1) make it clear that you are displaying \R\ input or output, and (2) keep things aligned 
-properly.
+
+What happens if you leave the comma in this number?
+%Copy-and-paste your \R\ code into your Word document.  
+%Be sure to use a fixed-width font (like Courier) when you display \R\ code.  This will
+%(1) make it clear that you are displaying \R\ input or output, and (2) keep things aligned 
+%properly.
 \end{problem}
 
 %\pagebreak
@@ -88,7 +90,7 @@ properly.
 sqrt(16)
 @
 You can save values to named variables for later reuse.
-\FoodForThought[\centerline{Tip}]{It's probably best to settle on using 
+\TeachingTip{It's probably best to settle on using 
 one or the other of the right-to-left assignment operators rather than to switch
 back and forth.  The authors of this document have different preferences.}%
 
@@ -131,7 +133,7 @@ Functions in \R\ use the following syntax:
 functionname( argument1, argument2, ... )
 @
 \vspace{-5mm}
-\FoodForThought[\centerline{Tip}]{To help students get the hang of function arguments,
+\TeachingTip{To help students get the hang of function arguments,
 ask them \emph{What information does the computer need to compute this?}
 }%
 \begin{itemize}
@@ -279,8 +281,8 @@ example(histogram)
 @
 will generate a number of example plots (and provide you with the commands used to create them).
 Examples such as this are intended to help you learn how specific \R\ functions work.
-\FoodForThought{Not all package authors are equally skilled at creating examples.  Some of the examples
-are next to useless, others are excellent.}
+\FoodForThought{Not all package authors are equally skilled at creating examples.  
+Some of the examples are next to useless, others are excellent.}
 These examples also appear at the end of the documentation for functions and data sets.
 
 The \verb!mosaic! package (and some other packages as well) also includes demos.  
@@ -404,13 +406,13 @@ We would prefer to compute numerical or graphical summaries.  We'll do that shor
 The \verb!attach()! function in R can be used to make objects within dataframes
 accessible in R with fewer keystrokes, but we strongly discourage its use, as
 it often leads to name conflicts.  
-\Caution{Avoid the use of \texttt{attach()}.}
+\Caution{Avoid the use of \function{attach()}.}
 The Google R Style Guide
 (\url{http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html})
 echoes this advice, stating that \emph{The possibilities for creating errors
 when using attach are numerous. Avoid it.} 
 It is far better to directly access
-variables using the \verb!\$! syntax or to use the \verb!with()! function.
+variables using the \verb!\$! syntax or to use the \function{with()} function.
 
 \subsection{Using Your Own Data}
 \Rstudio\ will help you import your own data.  To do so use the ``Import Dataset" 
@@ -445,10 +447,10 @@ In either case, be sure to do the following:
 \item Use each subsequent row for one observational unit.
 \item Give the resulting data frame a good name.
 \end{itemize}
-\authNote{I moved Danny's Simple Relational Database suggestion
+\authNoted{I moved Danny's Simple Relational Database suggestion
 to \ref{sec:manipulatingData}.
 I don't think I would use a grade/courses example for students nor that
-I would introduce \verb!merge()! \emph{et al} to newbies right away.
+I would introduce \function{merge()} \emph{et al} to newbies right away.
 My goal was to have this appendix look like something that I would give
 to students as is in the first week.
 In any case, I agree that we should have a section on this somewhere.
@@ -456,10 +458,12 @@ In any case, I agree that we should have a section on this somewhere.
 }%
 
 If you are not using \RStudio, you can read files using
-\verb!read.csv()! or \verb!read.table()! (for white space delimited files).
-The \verb!mosaic! package includes a function called \verb!read.file()! that uses 
-slightly different default settings and infers whether it should use \verb!read.csv()!,
-\verb!read.table!, or \verb!load()! based on the file name.  
+\function{read.csv()} or \function{read.table()} (for white space delimited files).
+The \function{mosaic} package includes a function called \function{read.file()} that uses 
+slightly different default settings and infers whether it should use \function{read.csv()},
+\function{read.table()}, or \function{load()} based on the file name.  
+\DiggingDeeper[\centerline{\function{load()}}]{\function{load()} is used
+for opening files that store \R\ objects in `native' format.}
 
 Each of these functions 
 also accepts a URL in place of a file name, which provides an easy way to distribute data
@@ -468,7 +472,13 @@ via the Internet:
 births <- read.table('http://www.calvin.edu/~rpruim/data/births.txt', header=TRUE)
 head(births)        # number of live births in the US each day of 1978.
 @
-\authNote{rjp: use \texttt{read.file} after fixing bug?}
+The \pkg{mosaic} package provides \function{read.file()} which attempts to infer
+the file type from its extension and then applies 
+\function{read.csv()}, \function{read.table()}, or \function{load()}.
+<<>>=
+births <- read.file('http://www.calvin.edu/~rpruim/data/births.txt')
+@
+It also sets a number of defaults, including \option{header=TRUE}.
 
 \begin{problem}
 Enter the following small data set in an Excel or Google spreadsheet and import the 
@@ -796,7 +806,11 @@ show.settings()
 trellis.par.set(theme=col.mosaic())        # a theme in the mosaic package
 show.settings()
 @
+\SuggestionBox{Do you have a great eye for colors?  Help us design other 
+lattice themes.}%
 
+\DiggingDeeper{The \pkg{RColorBrewer} package provides several
+palettes of colors that are highly distinguishable and aesthetically pleasing.}%
 <<themes-mosaicbw,cache=T,fig=T,height=4,width=6>>=
 trellis.par.set(theme=col.mosaic(bw=TRUE)) # black and white version of previous theme
 show.settings()
@@ -927,27 +941,35 @@ barchart(xtabs(~ sector, CPS), horizontal=FALSE)  # vertical bars
 
 Just as bar charts are used to display the distribution
 of one categorical variable,  mosaic plots can do the same for cross tables.
-\function{mosaic()} (from the \pkg{vcd} package) is not a \verb!lattice! plot, 
+\function{mosaic()} (from the \pkg{vcd} package) is not a \pkg{lattice} plot, 
 but it does use a similar formula interface.  
 
 \begin{center}
 <<mosaic1,fig=true,width=4,height=2>>=
 require(vcd)                         # load the visualizing categorical data package
-mosaic(~ sex + race, CPS)
+mosaic(~ sex + union, CPS)
 @
 \end{center}
 \authNote{NH: this is pretty boring, but I couldn't get "sector" to display
 as the second variable without major headaches}
 \authNote{NH: can we standardize on either the use of mosaic (from vcd, which
 has a confusing name given our package) or mosaicplot?}
+\FoodForThought{The \function{mosaic()} function has nothing to do with 
+the \pkg{mosaic} package, they just happen to share the same name.}%
+\DiggingDeeper{ }
+
 
 
 Alternatively, we can send \function{mosaic()} the output of \function{xtabs()}:
 \begin{center}
 <<mosaic2,fig=F>>=
-mosaic(xtabs(~ sex + race, CPS))
+mosaic(xtabs(~ sex + union, CPS))  # non-whites are more likely to be unionized
 @
 \end{center}
+\FoodForThought{Neither \function{mosaic()} nor the similar \function{mosaicplot()}
+are as clever as one could hope.  In particular, without some extra customization,
+both tend to look bad if the levels of the variables have long names.
+\function{mosaic()} plots also always stay square.}
 
 
 Or we can send our own hand-made table (although the output isn't quite as nice without some
@@ -1022,7 +1044,7 @@ darkness & 155 & 15 & 2 \\
 %\item
 %Do you think this was an experiment or an observational study?  Why?
 \item
-Recreate the table in \Rstudio.  Copy and paste the results into your Word document.
+Recreate the table in \Rstudio.  %Copy and paste the results into your Word document.
 \item
 What percent of the subjects slept with a nightlight as infants?
 
@@ -1299,7 +1321,7 @@ quantiles of \verb!x!.
 \vspace*{-.5in}
 \section{Exercises}
 
-For these problems, create a single Word document containing all of your work.
+%For these problems, create a single Word document containing all of your work.
 
 \shipoutProblems
 

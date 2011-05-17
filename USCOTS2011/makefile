@@ -6,6 +6,7 @@ SWEAVEOPTS = ""
 
 TEXFILES = \
 	  Master-TeachingStatsWithR.tex \
+	  Chap-FrontMatter.tex \
 	  Chap-GettingStarted.tex \
 	  Chap-Manipulate.tex \
 	  Chap-SimulationBased.tex \

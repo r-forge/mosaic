@@ -29,9 +29,9 @@ provocative papers by Gould \cite{Goul:2010} and Nolan and Temple Lang
 highlight the importance of broadening the type of data students encounter
 in their first courses as well as the role of computing in modern statistics, respectively.
 \FoodForThought{The wealth of data accessible to students on the internet
-continues to increase at what feels like an exponential rate}
+continues to increase at what feels like an exponential rate.}
 
-\section{Sharing with and among your Students}
+\section{Sharing With and Among Your Students}
 \label{sec:distributing-data}
 
 Instructors often have their own data sets to illustrate 
@@ -53,7 +53,7 @@ professional collaborative work.  These are:
 \item A web-based \RStudio\ server for \R.
 \end{itemize}
 The first two are already widely used in university environments and
-are readily accessible simply by setting accounts.  Setting up an
+are readily accessible simply by setting up accounts.  Setting up an
 \RStudio\ web server requires some IT support, but is well within the
 range of skills found in IT offices and even among some individual faculty.
 
@@ -64,6 +64,8 @@ can place files and have them accessed directly from the Internet.
 For sharing data, it's best if this site is public, that is, it does not require a login.
 That rules out most ``course support'' systems such as Moodle or
 Blackboard.  
+\FoodForThought{Our discussion of Dropbox is primarily for those who do
+not already know how to do this other ways.}%
 
 The Dropbox service for storing files in the ``cloud'' provides a very
 convenient way to distribute files over the web.  (Go to
@@ -73,7 +75,7 @@ file access on multiple computers.  But the Dropbox service also
 provides a {\sc Public} directory.  Any files that you place in that
 directory can be accessed directly by a URL.  
 
-To illustrate, suppose you wish to share some small (or large) data set with your
+To illustrate, suppose you wish to share some data set with your
 students.  You've constructed this data set in a spreadsheet and
 stored it as a CSV file, let's call it ``example-A.csv''.  Move this
 file into the {\sc Public} directory under Dropbox --- on most
@@ -109,8 +111,9 @@ re-run this command in future sessions}
 
 This technique makes it easy to distribute data with little
 advance preparation.  It's fast enough to do in the middle of a
-class: the CSV file is instantly available to your students.  It can
-even be edited by you (but not by your students).
+class: the CSV file is available to your students (after a brief lag
+while Dropbox synchronizes).  
+It can even be edited by you (but not by your students).
 
 The same technique can be applied to all sorts of files: for example,
 \R\ workspaces or even \R\ scripts.  Of course, your students need to
@@ -151,31 +154,31 @@ not generally satisfy institutional data protection regulations}
 
 
 
-\subsection{Google Docs}
+\subsection{GoogleDocs}
 
 The Dropbox technique is excellent for broadcasting: taking files you
 create and distributing them in a read-only fashion to your students.
 But when you want two-way or multi-way
 sharing of files, other techniques are called for, such as provided by
-the Google Docs service.
+the GoogleDocs service.
 
-Google Docs allows students and instructors to create various forms of
+GoogleDocs allows students and instructors to create various forms of
 documents, including reports, presentations, and spreadsheets. (In
 addition to creating documents {\em de novo}, Google will also convert
 existing documents in a variety of formats.)
 
-Once on the Google Docs system, the documents can be edited 
+Once on the GoogleDocs system, the documents can be edited 
 {\em  simultaneously} by multiple users in different locations.  They
 can be shared with individuals or groups and published for
 unrestricted viewing and even editing.
 
 For teaching, this has a variety of uses:
 \begin{itemize}
-  \item Students working on group project can all simultaneously have
+  \item Students working on group projects can all simultaneously have
     access to the report as it is being written and to data that is
     being assembled by the group.
   \item The entire class can be given access to a data set, both for
-    reading and writing.
+    reading and for writing.
   \item The Google Forms system can be used to construct surveys, the
     responses to which automatically populate a spreadsheet that can
     be read by the survey creators.
@@ -197,7 +200,7 @@ other students (e.g., members of a project group).
 
 \begin{example}
 One exercise for students starting out in a statistics course is to
-collect data to inform whether the ``close door'' button on an
+collect data to find out whether the ``close door'' button on an
 elevator has any effect.  This is an opportunity to introduce simple
 ideas of experimental design.  But it's also a chance to teach about
 the organization of data.
@@ -224,19 +227,19 @@ importance of a consistent measurement and coding system for recording
 data. 
 \end{example}
 
-Once you have a spreadsheet file in Google Docs, you will want to open
+Once you have a spreadsheet file in GoogleDocs, you will want to open
 it in \R.  Of course, it's possible to export it as a CSV file, then
 open it using the CSV tools in \R, such as \function{read.csv}.
 But there are easier ways that let you work with the data ``live.''
 
-\paragraph{In the web-server version of \RStudio}, described below, you can
+\paragraph{In the web-server version of \RStudio,} described below, you can
   use a menu item to locate and load your spreadsheet.
 
 \begin{center}
   \includegraphics[width=3in]{images/google-spreadsheet1.png}
 \end{center}
 
-\paragraph{If you are using other \R\ interfaces}, you must first use the Google
+\paragraph{If you are using other \R\ interfaces,} you must first use the Google
   facilities for publishing documents.
 \begin{enumerate}
   \item From within the document, use the ``Share'' dropdown menu and
@@ -259,14 +262,15 @@ But there are easier ways that let you work with the data ``live.''
     directly into \R.}
 \end{figure}
 
-It turns out that communicating with Google Docs requires facilities
+It turns out that communicating with GoogleDocs requires facilities
 that are not present in the base version of \R, but are available
 through the \texttt{RCurl} package.  In order to make these readily
 available to students, we have created a function that takes a quoted
 string with the Google-published URL and reads the corresponding file
 into a data frame:
 <<>>=
-elev <- readGoogleCSV("https://spreadsheets.google.com/spreadsheet/pub?hl=en&hl=en&key=0Am13enSalO74dEVzMGJSMU5TbTc2eWlWakppQlpjcGc&single=true&gid=0&output=csv")
+elev <- readGoogleCSV(
+"https://spreadsheets.google.com/spreadsheet/pub?hl=en&hl=en&key=0Am13enSalO74dEVzMGJSMU5TbTc2eWlWakppQlpjcGc&single=true&gid=0&output=csv")
 head(elev)
 @ 
 
@@ -302,7 +306,7 @@ using the web-server version.
   computer.  So a student can move seamlessly from the classroom to
   the dorm to a friend's computer.  
 \item The web-server system provides facilities for direct access to
-  Google Docs.
+  GoogleDocs.
 \end{itemize}
 
 
@@ -313,6 +317,9 @@ added that will enhance even more the ability to teach with R:
 
 
 \begin{itemize}
+\item
+The ability to create URLs that launch \RStudio\ and read in a data set all in a single 
+click.
 \item The ability to share sessions simultaneously, so that more than
   one person can be giving commands.  This will be much like Google Docs, but with the
   \R\ console as the document.   Imagine being able to start a
@@ -333,19 +340,25 @@ student can log in securely to his or her own account.
 
 
 \section{Data Mining Activities}
+
+\begin{comment}
+We end this chapter with several examples that do data mining via the Internet.
+Some of these are mere glimpses into what might be possible as tools for 
+accessing this kind of data become more prevalent and easier to use.
+\end{comment}
 \subsection{What percentage of Earth is Covered with Water?}
 \label{sec:googleMap}
 We can estimate the proportion of the world covered with water by randomly 
 sampling points on the globe and inspecting them using GoogleMaps.
 
 First, let's do a sample size computation.  Suppose we want to 
-estimate (at the 95\% confidence level) this proportion with $\pm 5$\%.
+estimate (at the 95\% confidence level) this proportion within $\pm 5$\%.
 There are several ways to estimate the necessary sample size, including
 algebraically solving
 \[
 (1.96) \sqrt{ \hat p (1-\hat p) /n} = 0.05
 \]
-for $n$ given some estimated value of $p$.  The \function{uniroot()} function
+for $n$ given some estimated value of $\hat p$.  The \function{uniroot()} function
 can solve this sort of thing numerically.  Here we take an approach 
 that looks at a table of values of $n$ and $\hat p$ and margin of error.
 <<google-sample-size>>=
@@ -354,6 +367,7 @@ p.hat <- seq(.5, .9, by=0.10)
 margin_of_error <- function(n, p, conf.level=.95) { 
 	-qnorm( (1-conf.level)/2) * sqrt( p * (1-p) / n ) 
 }
+# calculate margin of error for all combos of n and p.hat
 outer(n, p.hat, margin_of_error) -> tbl
 colnames(tbl) <- p.hat
 rownames(tbl) <- n
@@ -363,7 +377,7 @@ From this it appears that a sample size of approximately 300--400 will get
 us the accuracy we desire.  A class of students can easily generate
 this much data in a matter of minutes if each student inspects 10--20 maps.
 The example below assumes a sample size of 10 locations per student.
-This can be adjusted depending on the number of students and the desiered
+This can be adjusted depending on the number of students and the desired
 margin of error.
 
 \begin{enumerate}
@@ -379,7 +393,7 @@ Open a GoogleMap centered at each position.
 <<googleMap,eval=false>>=
 googleMap(pos=positions, mark=TRUE)
 @
-You may need to turn off pop-up block for this to work smoothly.
+You may need to turn off pop-up blocking for this to work smoothly.
 
 \item
 For each map, record whether the center is located in water or on land.  The options \option{mark=TRUE}
@@ -408,16 +422,18 @@ For the latitude and longitude information, simply copy and paste the output of
 <<googleMap-positions,eval=false>>=
 positions
 @
+\Caution{This sort of copy-and-paste operation works better in some 
+browsers (Firefox) than in others (Safari).}%
 \item
 After importing the data from Google, it is simple to sum the counts across the class.
 
 <<sum-water-setup,echo=false>>=
-Water <- data.frame(Water=215, Land=85)
+googleData <- data.frame(Water=215, Land=85)
 @
 
 <<sum-water>>=
-sum(Water$Water)
-sum(Water$Land)
+sum(googleData$Water)
+sum(googleData$Land)
 @
 
 Then use your favorite method of analysis, perhaps \function{binom.test()}.
@@ -455,7 +471,7 @@ googleMap(pos=positions, mark=TRUE, zoom=12, radius=1)
 \begin{center}
 \includegraphics[width=.8\textwidth]{images/google-roadless}
 \end{center}
-You may need to turn off pop-up block for this to work smoothly.
+You may need to turn off pop-up blocking for this to work smoothly.
 \item
 For each map, record whether the center is close (to a road), far (from a road), water, or foreign.
 You may need to zoom in or out a bit to figure this out.
@@ -490,9 +506,10 @@ property values using tax records, sales data, and comparable homes.
 
 \centerline{\includegraphics[width=3.8in]{images/zillow1.png}}
 
-The folks who run the site have made an application programming interface (aka API) that specify 
+The folks who run the site have made an application programming interface (API) 
+that specifies 
 how software programs can interface with their system.  Duncan Temple Lang has
-crafted a package in R which talks to Zillow. 
+crafted a package in R that talks to Zillow. 
 This can be used to dynamically generate datasets for use in courses, after
 you (and/or your students) generate a \VN{zillowId} for use with the system.
 (Danny Kaplan has used {\tt cars.com} to similar ends).
@@ -506,6 +523,9 @@ dataset comprised of comparable sites to an arbitrary house of interest.
 The first step is to create a Zillow account (click on \verb!Register! on the
 top right of the page at \verb!zillow.com!).  You can set up an account or register
 using Facebook.
+\SuggestionBox{\pkg{Zillow} is new to the authors and we are still looking for 
+the ``killer activity'' using \pkg{Zillow}.  We wonder if it is possible, for example,
+to sample uniformly among all houses in a city or zip code.}%
 
 Once you have the account, log in, then click on \verb!My Zillow! at the top right.
 This should display your profile (in this case, for a user named \verb!SC_z!).
@@ -551,18 +571,20 @@ comparable properties.
 <<zillow1>>=
 require(Zillow)
 est <- zestimate("1280 Monterey Avenue", "94707", zillowId)
-comps <- getComps(rownames(est), zillowId)
 est
+comps <- getComps(rownames(est), zillowId)
 rownames(est)
 names(comps)
 @
 <<zillow2>>=
 table(comps$bathrooms)
+perctable(comps$bathrooms)
 table(comps$bedrooms)
-fivenum(comps$finishedSqFt)
+perctable(comps$bedrooms)
+favstats(comps$finishedSqFt)
 @
 We can compare numerical summaries of the size of the house for houses with different 
-number of bedrooms:
+numbers of bedrooms:
 <<zillowfav>>=
 require(Hmisc)
 summary(finishedSqFt ~ bedrooms, data=comps, fun=favstats)
@@ -576,8 +598,10 @@ bwplot(rep(c("Low", "Assessed", "High"), each=nrow(comps)) ~ c(low, taxAssessmen
   data=comps, horizontal=TRUE, xlab='value ($)')
 @
 
-As an alternative to the code above, we could first build a dataframe and then use that for our 
-plot.
+As an alternative to the code above, we could first build a data frame and then
+use that for our plot.
+\InstructorNote{the \pkg{reshape} package also provides support for 
+restructuring datasets}
 <<fig=false>>=
 zillowData <- data.frame(
 	value = with(comps, c( low, taxAssessment, high )),
@@ -585,11 +609,10 @@ zillowData <- data.frame(
 	)
 bwplot( value ~ type, zillowData)
 @
-\InstructorNote{the \pkg{reshape} package also provides support for 
-restructuring datasets}
 
-It's interesting that for these properties, assessed values tend to lag far behind the lower and
-upper Zillow estimates.  We could explore whether this is true in California more generally.
+It's interesting that for these properties, assessed values tend to be lower
+that both the lower and upper Zillow estimates.  
+We could explore whether this is true in California more generally.
 
 It's possible to plot the results of our comparable properties, which yields a scatterplot
 of price by square feet (with the number of bedrooms as well as the low and high range) as
@@ -631,13 +654,13 @@ Table \ref{tab:twitter} for details).
 \begin{center}
 \caption{Functions available within the \pkg{twitteR} package}
 \label{tab:twitter}
-\begin{tabular}{|l|l|} \hline
+\begin{tabular}{|l|l|l|} \hline
 Function   & Description                 \\ \hline
 \function{getUser} & returns an object of class {\tt user} \\
 \function{userFriends} & returns lists of class {\tt user} \\
-\function{userFollowers} & returns lists of class {\tt user} \\
-\function{searchTwitter} & returns lists of class {\tt status} \\
-\function{Rtweets} & hardcodes a search for {\tt \#rstats} \\
+\function{userFollowers} & returns a list of class {\tt user} \\
+\function{searchTwitter} & returns a list of class {\tt status} \\
+\function{Rtweets} & search for {\tt \#rstats} \\
 \function{showstatus} & take a numeric ID of a tweet and return it \\
 \function{publicTimeline} & current snapshot of the public timeline \\
 \function{userTimeline} & current snapshot of the users public timeline \\ \hline
@@ -654,41 +677,57 @@ census <- getUser("uscensusbureau")
 census$getName()
 census$getDescription()
 census$getUrl()
-census$getFollowersCount()
 census$getStatusesCount()
 census$getCreated()
+census$getFollowersCount()
 @
 That's a lot of followers (but then again, the census is a big job).  
 Detailed reports of the last set of twitter status updates can be returned.
 <<twitter2>>=
-censustweets <- userTimeline(census, n=5)
-censustweets
+census.tweets <- userTimeline(census, n=5)
 @
-
+By default, the tweets don't print very nicely.  So let's define our 
+own function to extract the text from a tweet and format it more
+nicely.
+<<>>=
+printTweet <- function(x) paste( strwrap(x$getText())) 
+printTweet(census.tweets[[1]])
+@
 Detailed information can be found for individual tweets.
 
 <<twitter2b>>=
-censustweets[[1]]$getText()
-censustweets[[1]]$getCreated()
-censustweets[[1]]$getId()
+census.tweets[[1]]$getCreated()
+census.tweets[[1]]$getId()
 @
-\InstructorNote{section \ref{sec:datastruct} provides details on accessing lists}
+\DiggingDeeper{Section \ref{sec:datastruct} provides details on accessing lists.}
+
+Using \function{sapply()}, we can inspect all of the tweets at once.
+<<>>=
+sapply(census.tweets, printTweet)
+@
+\DiggingDeeper{the \function{sapply()} applies a function to each element of a list
+or vector.  It is one of several ``apply'' functions in \R, including
+\function{apply}, and 
+\function{sapply}, and 
+\function{lapply}, and 
+\function{tapply}.
+The \pkg{mosaic} package even include
+\function{dfapply} for application to data frames.}
 
 Alternatively, we can download information about how active Census Bureau followers are 
 in terms of posting their own status updates.
 
 <<twitter2c>>=
-censusfollow <- userFollowers(census)
-count <- sapply(censusfollow, function(x) x$getStatusesCount())
-favstats(count)
-censusfollow[[which.max(count)]]
+census.followers <- userFollowers(census)
+follower.tweets <- sapply(census.followers, function(x) x$getStatusesCount())
+favstats(follower.tweets)
+census.followers[[which.max(follower.tweets)]]
 @
-\InstructorNote{the \function{sapply()} applies a function to each element of a list}
 
 We can also see what's happening on the \R\ front:
 <<twitterr>>=
-tweets <- Rtweets(n=5)
-tweets
+R.tweets <- Rtweets(n=5)    # short for searchTwitter("#rstats", n=5)
+sapply(R.tweets, printTweet)
 @
 
 Finally, we can see who has been tweeting the most at USCOTS:
@@ -697,7 +736,7 @@ sort(table(sapply(searchTwitter("#uscots11"), function(x) x$getScreenName())),
   decreasing=TRUE)
 @
 \InstructorNote{Support functions could be written to simplify this interface for 
-student use}
+student use.  Just another thing for us to do in our spare time...}
 
 Further support for posting tweets requires use of the Twitter API (with appropriate 
 authentication).  More details are provided in the \pkg{twitteR} vignette file.
@@ -708,13 +747,14 @@ We've outlined several approaches which efficiently scrape data from the web.
 But there are lots of other examples which may be worth exploring (and this is clearly 
 a growth area).  These include:
 \begin{description}
-\item[NY Times:] interface to several of the \emph{New York Times} web services
+\item[\pkg{RNYTimes}] interface to several of the \emph{New York Times} web services
 for searching articles, meta-data, user-generated content and best seller lists 
 (\url{http://www.omegahat.org/RNYTimes})
-\item[Flickr:] interface to the Flickr photo sharing service 
+\item[\pkg{Rflickr}] interface to the Flickr photo sharing service 
 (\url{http://www.omegahat.org/Rflickr})
-\item[Google Docs:] interface to allow listing documents on Google Docs along with details,
-downloading contents, and uploading files (\url{http://www.omegahat.org/RGoogleDocs})
-\item[last.fm:] interface to the \verb!last.fm! music recommendation site (\url{http://cran.r-project.org/web/packages/RLastFM})
+\item[\pkg{RGoogleDocs}] interface to allow listing documents on Google Docs 
+along with details, downloading contents, and uploading files 
+(\url{http://www.omegahat.org/RGoogleDocs})
+\item[\pkg{RLastFM}] interface to the \verb!last.fm! music recommendation site (\url{http://cran.r-project.org/web/packages/RLastFM})
 \end{description}
 
