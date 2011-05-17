@@ -9,17 +9,16 @@ TEXFILES = \
 	  Chap-GettingStarted.tex \
 	  Chap-Manipulate.tex \
 	  Chap-SimulationBased.tex \
-	  Chap-Multivariate.tex \
 	  Chap-ByHand.tex \
 	  Chap-MoreExamples.tex \
 	  Chap-Core.tex \
-	  Chap-Internet.tex \
 	  Chap-Calculus.tex \
 	  Chap-Misc.tex \
 	  Chap-Handouts.tex \
-	  Chap-MoreR.tex \
 	  Chap-RIntro.tex \
-
+	  Chap-MoreR.tex \
+	  Chap-Internet.tex \
+	  Chap-Multivariate.tex \
 
 all: Master-TeachingStatsWithR.pdf
 

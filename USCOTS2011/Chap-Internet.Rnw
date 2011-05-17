@@ -32,6 +32,7 @@ in their first courses as well as the role of computing in modern statistics, re
 continues to increase at what feels like an exponential rate}
 
 \section{Sharing with and among your Students}
+\label{sec:distributing-data}
 
 Instructors often have their own data sets to illustrate 
 points of statistical interest or to make a particular connection with
@@ -91,7 +92,7 @@ identifying URL for any file by using mouse-based menu commands to
 place the URL into the clipboard, whence it can be copied to your
 course-support software system or any other place for distribution to
 students.  For a CSV file, reading the contents of the file into \R\
-can be done with the \texttt{read.csv} operator, by giving it the
+can be done with the \function{read.csv} function, by giving it the
 quoted URL:
 <<read-quoted-URL>>=
 a <- read.csv("http://dl.dropbox.com/u/5098197/USCOTS2011/ExampleA.csv")

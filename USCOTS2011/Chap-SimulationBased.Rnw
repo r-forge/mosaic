@@ -47,7 +47,7 @@ computing, the programming-language features of \R\ also enable the
 operations in (1) to be de-constructed and presented to students in a
 transparent and intelligible way that reveals the underlying logic.
 
-One of the important goals of the \verb!mosaic! package is to provide
+One of the important goals of the \pkg{mosaic} package is to provide
 elementary commands that can be easily strung together by novices
 without having to master the esoteric aspects of programming.  
 \FoodForThought[\centerline{Suggestion Box}]{We are interested in your 
@@ -56,7 +56,7 @@ This
 chapter will describe a few such key operations and how they connect
 to one another: random sampling and resampling, replication of random
 trials, summarizing the results of multiple trials.  As you will see,
-the \verb!mosaic! operations allow students to implement each of the
+the \pkg{mosaic} operations allow students to implement each of the
 operations in what George Cobb calls the ``3 Rs'' of statistical
 inference: Randomization, Replication, and Rejection \cite{USCOTS-cobb-2005}.
 By putting the 3 Rs together in various ways, students learn to
@@ -76,7 +76,7 @@ are heading into an era when all statistical analysis can be done by simulation.
 \subsection{Sampling From Day 1 with \texttt{rflip()}}
 
 Since tossing a coin is one of the most familiar examples of randomness, we've added to
-\verb!mosaic! a function that facilitates simulating coin tosses. 
+\pkg{mosaic} a function that facilitates simulating coin tosses. 
 <<>>=
 rflip(20)
 as.numeric(rflip(20))       # just count how many heads
@@ -98,14 +98,14 @@ that ``look random'' and another set based on actual coin tosses.  Then see if y
 tell them which are which.
 
 \item
-\verb!rflip()! allows you to flip biased coins as well.  Let's simulate a 90\%
+\function{rflip()} allows you to flip biased coins as well.  Let's simulate a 90\%
 free throw shooter shooting 10 free throws.
 <<>>=
 rflip(10, prob=.9)
 @
 
-It's the end of the game.  Your team is down by one point.  Free Throw Freddie 
-a 90\% free throw shooter has been fouled while shooting.  What are the chances 
+It's the end of the game.  Your team is down by one point.  Free Throw Freddie,
+a 90\% free throw shooter, has been fouled while shooting.  What are the chances 
 that your team wins (because Freddie makes 2 shots in a row), loses (because he misses 
 both shots), or has to play an overtime period (because he makes one of the two)?
 
@@ -140,7 +140,7 @@ In doing so, why not start right off with a sample from a population?
 One example is the population of US states:
 
 \authNoted{DTK: I'm reading it in this awkward way until I can add the dataset to
-  the \verb!mosaic! package.  In the \verb!mosaic! package, the current ``SAT'' data
+  the \pkg{mosaic} package.  In the \pkg{mosaic} package, the current ``SAT'' data
 set has just one variable.  My view is that all such data sets should
 be data frames.  But I understand the virtue of having a few that
 students can use without the \$ notation.}%
@@ -277,7 +277,7 @@ with(sample(SAT,25), mean(ratio))
 Or, each student can do this several times:
 \FoodForThought[\centerline{To Do}]{We'll have more to say about \function{do()} shortly.}%
 <<>>=
-do(10) * with(sample(SAT,25), mean(ratio))
+do(5) * with(sample(SAT,25), mean(ratio))
 @ 
 This raises the question, naturally enough, of what ``reasonably
 close'' means, and what it means to measure ``how close.''
@@ -359,7 +359,7 @@ are in each book.
 data(Galton)
 with(sample(Galton,300), mean(nkids))
 with(sample(Galton,300), mean(nkids))
-do(10) * with(sample(Galton,300), mean(nkids))
+do(5) * with(sample(Galton,300), mean(nkids))
 @ 
 The samples all give about the same answer: about 6 kids in a family.
 But this is misleading!  The case in the \texttt{Galton} data is a
@@ -415,7 +415,7 @@ with( families, mean(nkids) )
   }
 
   \item
-  Using \verb!googleMap()! (see Section~\ref{sec:googleMap}) 
+  Using \function{googleMap()} (see Section~\ref{sec:googleMap}) 
   we can compare uniform sampling of longitude 
   and latitude with correct sampling that takes into account that the earth
   is a sphere, not a cylinder.
@@ -476,7 +476,7 @@ rdata(2, HELP, replace=FALSE)
 
 \subsection{\texttt{do()}}
 The heart of a simulation is doing something over and over.  
-The \verb!do()! function simplifies the syntax for this and improves 
+The \function{do()} function simplifies the syntax for this and improves 
 the output format (usually returning a data frame).
 Here's a silly example.
 <<>>=
@@ -488,11 +488,11 @@ each replication is (potentially) different:
 do(3) * rflip(10)                 # 3 times we flip 10 coins
 @
 
-What makes \verb!do()! clever is that is knows about several types of things
+What makes \function{do()} clever is that is knows about several types of things
 we might like to repeat and it tries to keep track of the most important summary 
 statistics for us.  
 If we fit a linear model, 
-for example, \verb!do()!  keeps track of the regression coefficients, 
+for example, \function{do()}  keeps track of the regression coefficients, 
 $\hat \sigma$, and $r^2$.
 That makes it useful even if we just want to summarize our data.
 <<>>=
@@ -539,7 +539,7 @@ with(people, table(sibs))
 \end{example}
 
 Once built, you can provide these data frames to your students for a sampling exercise.
-(See \ref{sec:distributingData}.)
+(See Section~\ref{sec:distributing-data}.)
 
 \authNote{need to track down}
 
@@ -602,7 +602,7 @@ The remaining 486 golf balls form our sample:
 \hline
 \end{tabular}
 \end{center}
-We can enter this data into \R\ using the \verb!c()! function.
+We can enter this data into \R\ using the \function{c()} function.
 <<>>=
 golfballs <- c(137, 138, 107, 104) 
 @
@@ -620,7 +620,8 @@ table(rdata(486, 1:4))   # 486 draws from the numbers 1 thru 4 (equally likely)
 
 \InstructorNote{\texttt{rgolfballs} can be generated
 in advance if you don't want to distract your students
-with thinking about how do create it.}%
+with thinking about how do create it.  There is a pre-built
+\texttt{rgolfballs} in the \pkg{fastR} package.}%
 It is useful to generate some more of these samples to get a better feel for the 
 sampling distribution under the null:
 <<golf30,eval=false>>=
@@ -679,7 +680,7 @@ on writing your own functions.}
 \begin{center}
 <<golfballs-range,fig=true,height=1.7>>=
 mystat1 <- function(x) { diff(range(x)) }
-print(statTally(golfballs, rgolfballs, mystat1, v=mystat1(golfballs)))   # add a vertical line
+print(statTally(golfballs, rgolfballs, mystat1, v=mystat1(golfballs))) # add a vertical line
 @
 \end{center}
 
@@ -697,11 +698,10 @@ This test statistic is bad because it doesn't depend on the data, so
 the distribution of the test statistic is the same whether the null hypothesis 
 is true or false.
 
-\FoodForThought[\centerline{Tip}]{As students come up with test statistics, let them
+\InstructorNote[\centerline{Tip}]{As students come up with test statistics, let them
 name them, or name them after them (S for the Smith statistic, etc.)
 It adds to the fun of the activity and mirrors how the statistics they will
-learn about got their names.
-}
+learn about got their names.}%
 But it is close to a good idea.  Let's add in an absolute value\dots
 \begin{center}
 <<golfballs-var,fig=true,height=1.7>>=
@@ -709,6 +709,11 @@ sad <- function(x) { sum(abs(x-121.5)) }
 print(statTally(golfballs, rgolfballs, sad, v=sad(golfballs)))
 @
 \end{center}
+\InstructorNote{It is a matter of teaching style whether you write this 
+function with the magic number 121.5 hard-coded in or use
+\code{mean(x)} instead.  The latter is preferable for generalizable 
+method, of course.  But the former may have pedagogical advantages, 
+especially in the Intro Stats course.}%
 
 Squaring those differences (or equivalently using the standard deviation or variance)
 is also often suggested.
@@ -742,7 +747,7 @@ is true from how it looks when the null hypothesis is false.
 
 \begin{comment}
 In this section we move toward a more systematic approach to 
-empirical p-values with goal of providing a flexible tool 
+empirical methods with goal of providing a flexible tool 
 that works in a wide range of situations.
 \end{comment}
 
@@ -769,7 +774,16 @@ the logic is genuinely hard.  It involves contrapositives, it
 involves conditional probabilities, it involves ``hypotheses.''
 And what is a hypothesis?  To a scientist, it is a kind of theory, an idea of how
 things work, an idea to be proven through lab or field research or the
-collection of data.  But statistics hews not to the scientist's but to
+collection of data.  
+\FoodForThought{The simpler ``definition'' is a useful way to describe this to students, but
+it is not equivalent to the dictionary definition which includes an important notion
+of the reason for hypotheses.  
+A hypothesis is a statement that is posed 
+for the purposes of determining what would follow if the statement were true.  This is 
+the sense of `hypothesis of a theorem'.  It is also the sense of the null hypothesis.
+We assume the null hypothesis is true and `see what follows' from that assumption.
+Unfortunately, it is not the way this word is often used in high school science courses.}%
+But statistics hews not to the scientist's but to
 the philosopher's or logician's rather abstract notion 
 of a hypothesis: a ``proposition made as a basis for reasoning, without any
 assumption of its truth.''  (Oxford American Dictionaries)  Or more simply:
@@ -780,6 +794,9 @@ A hypothesis is a statement that may be true or false.
 
 What kind of scientist would frame a hypothesis without some disposition to
 think it might be true?  Only a philosopher or a logician.
+\FoodForThought{Thought of another way, the scientists have conflated 
+the words 'hypothesis' and 'conjecture'.
+}%
 
 To help connect the philosophy and logic of statistical hypotheses
 with the sensibilities of scientists, 
@@ -813,8 +830,7 @@ But Earth is a big place and complicated,
 and it's hard to know exactly what's going on.  So, to
 deal with the limits of our abilities to collect data and to
 understand complexity, statistical inference involves a different set
-of planets: ones that are entirely hypothetical constructions.  They resemble Planet
-Earth in some ways and not in others.  
+of planets.  These planets resemble Planet Earth in some ways and not in others.  
 But they are simple enough that we know exactly what's happening on them, 
 so we know which hypotheses are true and which are false on these planets.
 %they are ``proposition[s] made as a
@@ -846,15 +862,15 @@ returns.  But it varies from place to place, and that variation is not
 informative. It's just random.
 
 Finally, there is Planet Alt.  This is a cartoon planet, a caricature,
-a simplified representation of our idea of what's going on, our theory
-of how the world might be working.  It's not going to be exactly the
+a simplified representation of our idea of what is (or might be) going on, 
+our theory of how the world might be working.  It's not going to be exactly the
 same as Planet Earth.  For one thing, our theory might be wrong.  But
 also, no theory is going to capture all the detail and complexity of
 the real world.
 
 In teaching statistical inference in a pseudo-kinesthetic way, we use
-the computer to let students construct each of the hypothetical
-planets.  Then, working on that hypothetical planet, the student can
+the computer to let students construct each of the planets.  
+Then, working on that planet, the student can
 carry out simulations of familiar statistical operations.   Those
 simulations tell the student what they are likely to see \emph{if they were on that planet}.   
 Our goal is to figure out whether Earth looks more like Planet Null or more like 
@@ -891,8 +907,10 @@ one plausible setting, where
 you have, for example, the names and attributes of every professional
 player.  The ability to sample from Earth mapping software
 provides another compelling setting.  (See Section~\ref{sec:googleMap}.)
+\authNote{We don't really have the whole population here either.  I guess perhaps
+Google does.  But we only get to sample from their data base.}%
 
-As one example, we will take the complete list of results from a
+For our example, we will take the complete list of results from a
 running race held in Washington, D.C. in April 2005 --- the Cherry
 Blossom Ten-Mile Run.  
 The data set gives the \VN{sex}, \VN{age}, and \VN{net} running time
@@ -913,13 +931,13 @@ consequences of taking a sample.  So, imagine that in fact it was
 difficult or expensive or dangerous or destructive to collect the data on a runner,
 so you want to examine just a small subset of the population.
 
-Here's a sample of 100 runners:
+Let's collect a sample of 100 runners:
 <<run-sample>>=
 planet.sample <- sample(population, 100)
 @ 
 
-With that sample, you can calculate whatever statistics are of
-interest to you, for instance:
+With that sample, we can calculate whatever statistics are of
+interest to us, for instance:
 <<>>=
 with(planet.sample, mean(age))
 with(planet.sample, sd(age))
@@ -936,7 +954,7 @@ their results likely be?
 Given that we have the population in hand, that we're on Planet Earth,
 we can go back and collect such samples many more times and study how much
 they vary one to the other.  We'll do this by replacing
-\texttt{planet.sample} with a command to sample anew from the population.
+\variable{planet.sample} with a command to sample anew from the population.
 
 <<>>=
 with(sample(population,100), mean(age))
@@ -946,7 +964,7 @@ lm(net ~ age + sex, data=sample(population,100))
 @ 
 
 Slightly different results!  To quantify this, repeat the sampling
-process many times and look at the distribution: the {\bf sampling distribution}.
+process many times and look at the distribution: the \term{sampling distribution}.
 
 <<run-samp-dist>>=
 sample.means <- do(500) * with(sample(population,100), mean(age))
@@ -985,7 +1003,7 @@ of students at a computer.
 
 \begin{enumerate}
   \item Make sure you can replicate the calculations for the standard
-    error of one of the statistics in the \verb!TenMileRace! example with a
+    error of one of the statistics in the \dfn{TenMileRace} example with a
     sample of size $n=100$.  Your reproduction won't be exact, but it
     should be reasonably close.
   \item Now repeat the calculations, but use sample sizes that are
@@ -1006,9 +1024,9 @@ of students at a computer.
       the actual simulation of repeated sampling using that sample size and compare your
       prediction to the result you actually got.
       
-    \item In the above, you used \texttt{do(500)} replications of
-      random sampling.  Suppose you use \texttt{do(100)} or
-      \texttt{do(2000)} replications instead?  Do your results depend
+    \item In the above, you used \code{do(500)} replications of
+      random sampling.  Suppose you use \code{do(100)} or
+      \code{do(2000)} replications instead?  Do your results depend
       systematically on the number of replications?
  
  \end{enumerate}
@@ -1026,13 +1044,21 @@ and repeat the process that was so difficult in the first place.
 Remember, real samples from the real population (on planet Earth) 
 can't be obtained by simply asking a computer to sample for us.
 
-This is where our hypothetical Planet Sample comes in.
+This is where Planet Sample comes in.
 \smallskip
 
 \centerline{\includegraphics[width=0.6in]{images/planet-sample.png}}
 
-All the data for Planet Sample is in our computer, so \emph{although sampling
+\FoodForThought{In our example we have access to the entire population, but this 
+is not typically the case.}%
+Although Planet Earth is very large and we have only incomplete information about
+it, all the data for Planet Sample is in our computer. So 
+
+\begin{center}
+\emph{Although sampling
 from Planet Earth is difficult, sampling from Planet Sample is easy}.
+\end{center}
+
 \authNote{R' deleted: 
 You create Planet Sample yourself.  You do this by taking your sample
 using it to populate Planet Sample.  It consists of many, many copies of your sample.}
@@ -1045,7 +1071,7 @@ In reality, of course, you wouldn't run a command to create the sample.
 You would go out and do the hard work of randomly selecting cases from your population,
 measuring their relevant attributes, and recording that data.  
 So let's pretend that's what we did.  Pretend that 
-\verb!planet.sample! is the result of laborious data collection.
+\variable{planet.sample} is the result of laborious data collection.
 
 
 Now you can go through the exact calculations you did to construct the
@@ -1074,7 +1100,7 @@ an inhabitant of Planet Sample, record the appropriate data, and then put them b
 replacement from Planet Sample \term{resampling} for short.  The \function{resample()} function
 in the \pkg{mosaic} package can do this as easily as sampling without replacement.
 
-\Caution{Remember to \function{resample()} rather than 
+\Caution{Remember to use \function{resample()} rather than 
 \function{sample()} to compute a resampling distribution.}
 <<>>=
 with(resample(planet.sample,100), mean(age))
@@ -1172,6 +1198,11 @@ means or proportions, so it turns out to be easier to introduce the
 null hypothesis with the
 supposedly more complicated cases, e.g., differences in means or
 proportions, regression coefficients, etc.
+\FoodForThought{Planet Null is, however, easy to describe
+in the case of hypotheses about a single proportion.  In fact,
+that is what our Lady Tasting Tea example did (Section~\ref{sec:lady-tasting-tea}).
+}
+
 
 \centerline{\includegraphics[width=1.2in]{images/venus.png}}
 
@@ -1203,11 +1234,11 @@ head(Whickham,3)
 @
 We'll answer our question by comparing the smoking rate on Planet Sample 
 <<>>=
-with(Whickham, proptable(smoker))                    # less than 50% of sample smoke
+with(Whickham, proptable(smoker))                  # less than 50% of sample smoke
 @
 to the sampling distribution on Planet Null.
 <<>>=
-planet.null <- data.frame( smoker=c('Yes','No') )    # equal mix of Yes and No on Planet Null
+planet.null <- data.frame( smoker=c('Yes','No') )  # equal mix of Yes and No on Planet Null
 null.dist <- do(2000) * with( resample(planet.null, n), proptable(smoker) )
 head(null.dist,3)
 table(with(null.dist, Yes < .4429))
@@ -1224,12 +1255,17 @@ histogram( ~ Yes, null.dist, main='Sampling distribution of smoking proportion')
 
 \begin{example}
 Do the foot widths differ between boys and girls, judging from
-  the \texttt{KidsFeet} data?
+the \texttt{KidsFeet} data?
 <<kidsfeet-null>>=
 data(KidsFeet)
 lm( width ~ sex, data=KidsFeet ) # our sample
 @ 
-\authNote{DTK: What do you say we re-define display.lm in the mosaic
+\FoodForThought{Conceptually, this example can be done without the use of \function{lm()},
+but the syntax is trickier.  \function{lm()} takes care of computing the means of the two
+groups and the difference in those means.  See Section~\ref{sec:comparing-two-means}.}%
+\authNote{rjp: I installed local copies of \function{print.lm()} and \function{print.summary.lm()}
+in \texttt{setup.R}, so at least in this document, the extra clutter is gone.}%
+\authNoted{DTK: What do you say we re-define display.lm in the mosaic
   package to get rid of the report about the Call.  It just takes up
   useless space.}
 Looks like girls' feet are a little bit narrower.  But is this the
@@ -1523,7 +1559,7 @@ of summary statistics by groups,
 <<help101>>=
 summary(age ~ sex, data=HELP, fun=mean)
 @
-the \verb!aggregate()! function stores its results in a data frame that lends 
+the \function{aggregate()} function stores its results in a data frame that lends 
 itself better to further computation.
 \Caution{\function{summary} uses 
 \code{fun} but \function{aggregate}

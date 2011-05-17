@@ -24,10 +24,23 @@ dotPlot <- function(...) { print(mosaic::dotPlot(...)) }
 barchart <- function(...) { print(lattice::barchart(...)) }
 densityplot <- function(...) { print(lattice::densityplot(...)) }
 splom <- function(...) { print(lattice::splom(...)) }
-foo <- function(object, correlation = FALSE, symbolic.cor = FALSE, ...) {
-  output <- capture.output( 
-  	stats::summary.lm(object, correlation=correlation, symbolic.cor=symbolic.cor, ...)
-  )
-  prselect(output, stop="Coefficients:")
+print.summary.lm <- function(
+	object, 
+	digits=max(3, getOption("digits")-3), 
+    symbolic.cor=x$symbolic.cor, 
+    signif.stars=getOption("show.signif.stars"), 
+    ...) {
+  output <- capture.output( stats:::print.summary.lm(object, 
+        digits=digits, 
+		symbolic.cor=symbolic.cor, 
+		signif.stars=signif.stars, ...))
+    prselect(output, stop="Coefficients:") 
 }
 
+print.lm <- function (x, digits = max(3, getOption("digits") - 3), ...) 
+{
+  output <- capture.output( stats:::print.lm(x, 
+        digits=digits, 
+		...))
+    prselect(output, stop="Coefficients:") 
+}
