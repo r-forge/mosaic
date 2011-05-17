@@ -113,6 +113,8 @@ accounts on their servers.
 %introductory level.  Exercises marked with 2 stars are intended primarily for
 %instructors (but may also be appropriate for students in higher level courses).
 
+\newpage    % hack to avoid bad page break
+
 \subsection*{Marginal Notes}
 Marginal notes appear here and there.  
 \DiggingDeeper{Many marginal notes will look like this one.}%
