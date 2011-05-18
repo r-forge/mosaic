@@ -27,6 +27,7 @@ demos as part of a statistics lecture.
 
 \subsection{Sliders}
 
+\authNote{need to remove \emph{if(require)}}
 
 <<manipulate-histogram,echo=TRUE, eval=FALSE>>=
 if(require(manipulate)) {
