@@ -501,6 +501,8 @@ interesting to discuss what sort of model should be used for distances from rand
 
 \subsection{Zillow}
 
+\authNote{NH to work with Duncan about expanding the package and its other API}
+
 Zillow.com is an online real estate database that can be used to estimate
 property values using tax records, sales data, and comparable homes.  
 
@@ -638,6 +640,8 @@ can generate maps using the mechanisms described in \ref{sec:googleMap}.
 
 \subsection{Twitter}
 \label{sec:twitter}
+
+\authNote{NH to reimplement the proposed interface}
 
 Twitter (\url{twitter.com}) is a social networking and microblogging service, where users
 (estimated at 200 million as of May, 2011) can send and read posts of up to 140 characters.
