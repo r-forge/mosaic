@@ -1,6 +1,9 @@
 # examples for twitter activity (Nick Horton @ USCOTS 2011 workshop)
+# Wed May 18 10:18:08 EDT 2011
+
 
 require(twitteR)
+require(mosaic)
 
 getnumtweets = function(userlist) { 
   return(sapply(userlist, function(x) x$getStatusesCount()))
@@ -60,15 +63,18 @@ downloadtweets <- function(searchfield, n=10, since="2011-01-01") {
     whencreated=whencreated, text=text))
 }
 
-ds1 <- downloadfollowers("williamshatner")
-ds2 <- downloadfollowers("uscensusbureau")
-ds <- rbind(ds1, ds2)
+# ds1 <- downloadfollowers("williamshatner")
+# ds2 <- downloadfollowers("uscensusbureau")
+# ds <- rbind(ds1, ds2)
+# aggregate(numtweets ~ username, data=ds, FUN=mean)
+# aggregate(numtweets ~ username, data=ds, FUN=sd)
+# bwplot( numtweets ~ username, data=ds)
+# bwplot( numfriends ~ username, data=ds)
 
 
+# sas <- downloadtweets("#sas", n=200)
+# r <- downloadtweets("#rstats", n=200)
+# system <- rbind(sas, r)
 
-sas <- downloadtweets("#sas", n=200)
-r <- downloadtweets("#rstats", n=200)
-system <- rbind(sas, r)
-
-xtabs(timeofday ~ searchfield, system)
+# xtabs(~ timeofday + searchfield, system)
 
