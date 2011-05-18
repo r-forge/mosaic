@@ -5,6 +5,8 @@
 require(twitteR)
 require(mosaic)
 
+printTweet <- function(x) paste(strwrap(x$getText()))
+
 getnumtweets = function(userlist) { 
   return(sapply(userlist, function(x) x$getStatusesCount()))
 }
@@ -63,6 +65,14 @@ downloadtweets <- function(searchfield, n=10, since="2011-01-01") {
     whencreated=whencreated, text=text))
 }
 
+sapply(searchTwitter("#uscots11", n=100), function(x) x$getScreenName())
+
+sort(table(sapply(searchTwitter("#uscots11"), function(x) x$getScreenName())),
+  decreasing=TRUE)
+
+
+# uscots <- downloadtweets("#uscots11", n=100)
+
 # ds1 <- downloadfollowers("williamshatner")
 # ds2 <- downloadfollowers("uscensusbureau")
 # ds <- rbind(ds1, ds2)
@@ -70,6 +80,9 @@ downloadtweets <- function(searchfield, n=10, since="2011-01-01") {
 # aggregate(numtweets ~ username, data=ds, FUN=sd)
 # bwplot( numtweets ~ username, data=ds)
 # bwplot( numfriends ~ username, data=ds)
+# xyplot( numfriends ~ numtweets | username, data=ds)
+# xyplot( numfriends ~ numtweets | username, data=ds, subset=numfriends<1000)
+# with(ds, cor(numfriends, numtweets, method="spearman"))
 
 
 # sas <- downloadtweets("#sas", n=200)
