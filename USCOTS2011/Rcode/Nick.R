@@ -27,7 +27,11 @@ gettext = function(userlist) {
 }
 
 gethour <- function(time) {
-  return(substr(as.character(time), 12, 13))
+  return(as.numeric(substr(as.character(time), 12, 13)))
+}
+
+gettimeofday <- function(hour) {
+  ifelse(hour <= 17 & hour >= 8, "workday", "othertime")
 }
 
 downloadfollowers <- function(username) {
@@ -49,8 +53,10 @@ downloadtweets <- function(searchfield, n=10, since="2011-01-01") {
   screenname <- getscreenname(timeline)
   whencreated <- as.POSIXlt(getwhencreated(timeline), origin="1970-01-01")
   hour <- gethour(whencreated)
-  return(data.frame(username=rep(searchfield, length(whencreated)),
-    screenname=screenname, hour=hour,
+  timeofday <- gettimeofday(hour)
+  timeofday <- gettimeofday(hour)
+  return(data.frame(searchfield=rep(searchfield, length(whencreated)),
+    screenname=screenname, hour=hour, timeofday=timeofday,
     whencreated=whencreated, text=text))
 }
 
@@ -62,8 +68,7 @@ ds <- rbind(ds1, ds2)
 
 sas <- downloadtweets("#sas", n=200)
 r <- downloadtweets("#rstats", n=200)
-hours = c(sas$hour, r$hour)
-system = c(rep("SAS", length(sas$hour)), rep("R", length(r$hour)))
+system <- rbind(sas, r)
 
-xtabs(hours ~ system)
+xtabs(timeofday ~ searchfield, system)
 
