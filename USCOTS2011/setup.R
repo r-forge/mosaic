@@ -44,3 +44,4 @@ print.lm <- function (x, digits = max(3, getOption("digits") - 3), ...)
 		...))
     prselect(output, stop="Coefficients:") 
 }
+favstats <- mosaic::favstats

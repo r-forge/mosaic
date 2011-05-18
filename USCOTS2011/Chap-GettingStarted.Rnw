@@ -458,7 +458,7 @@ specifying the breaks from -.5 to 10.5:
 
 You might be surprised to see that the number of correct guesses
 is exactly 5 (half of the 10 tries) only 
-\Sexpr{round(as.numeric(perctable(random.ladies)[6],1))}\%
+\Sexpr{round(as.numeric(perctable(random.ladies$heads)[6],2))}\%
 of the time.  But most of the results are quite close to 5 correct.
 \Sexpr{round(sum(table(random.ladies$heads)[5:7]/100,1))}\% of the results are 
 4, 5, or 6, for example.
@@ -469,7 +469,7 @@ more unusual.
 
 So what do we conclude?  It is possible that the lady could get 9 or 10 correct
 just by guessing, but it is not very likely (it only happened in about
-\Sexpr{round( sum(table(random.ladies)[10:11]/100), 1 )}\% of our simulations). 
+\Sexpr{round( sum(table(random.ladies$heads)[10:11]/100), 1 )}\% of our simulations). 
 So \emph{one of two things must be true}:
 \begin{itemize}
 \item The lady got unusually ``lucky", or 

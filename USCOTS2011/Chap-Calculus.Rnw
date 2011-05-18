@@ -131,6 +131,9 @@ and you can plot it out over a in interval for the input:
 <<decay-plot,fig=true,include=true,pdf=true,height=3>>=
 curve( decay, 0, 20)
 @ 
+\SuggestionBox{We have a dream... of a better way to plot functions.
+But we're not quite there yet.  Suggestions (and offers to help) 
+appreciated.}%
 
 To find the derivative of this function, use the \function{D} operator:
 <<>>=n

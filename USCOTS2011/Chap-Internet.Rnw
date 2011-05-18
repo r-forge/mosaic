@@ -719,10 +719,22 @@ in terms of posting their own status updates.
 
 <<twitter2c>>=
 census.followers <- userFollowers(census)
-follower.tweets <- sapply(census.followers, function(x) x$getStatusesCount())
-favstats(follower.tweets)
-census.followers[[which.max(follower.tweets)]]
+followers.ntweets <- sapply(census.followers, function(x) x$getStatusesCount())
+favstats(followers.ntweets)
+census.followers[[which.max(followers.ntweets)]]
 @
+That's probably a bit much for students to swallow.  Let's write a function to hide 
+some of the gory details from the students.
+<<>>=
+CountTweets <- function ( users ) {
+	return( sapply( users,  function(x) x$getStatusesCount()) )
+}
+@
+Now we can count tweets like this.
+<<>>=
+sort(CountTweets(census.followers))
+@
+
 
 We can also see what's happening on the \R\ front:
 <<twitterr>>=

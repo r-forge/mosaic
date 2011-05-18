@@ -148,28 +148,3 @@ give a 95\% confidence interval for the proportion of the world covered with wat
 \end{enumerate}
 
 
-
-
-\newpage
-
-
-\section{Activity Tile Here}
-
-Activity content here.  Page break between activities.
-
-\newpage
-
-
-
-
-\section{Activity Tile Here}
-
-Activity content here.  Page break between activities.
-
-\newpage
-
-
-
-
-
-

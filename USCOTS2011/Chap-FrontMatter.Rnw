@@ -28,6 +28,9 @@ while also supporting the core material of a traditional course.
 
 
 \subsection*{A Work in Progress}
+\Caution{You WILL find bugs both in this document and in our code.
+Please let us know when you encounter them so we can call in the 
+exterminators.}
 Consider these notes a work in progress.  We hope to continue
 improving them over the summer of 2011 with the goal of making a stable version
 available sometime in August 2011.

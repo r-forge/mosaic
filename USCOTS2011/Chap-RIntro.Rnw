@@ -74,6 +74,9 @@ The console panel is where we type commands that \R\ will execute.
 Calculate the natural logarithm (log base $e$) and base 10 logarithm of 12,345.
 
 What happens if you leave the comma in this number?
+<<>>=
+log(12,345)
+@
 %Copy-and-paste your \R\ code into your Word document.  
 %Be sure to use a fixed-width font (like Courier) when you display \R\ code.  This will
 %(1) make it clear that you are displaying \R\ input or output, and (2) keep things aligned 
@@ -954,9 +957,8 @@ mosaic(~ sex + union, CPS)
 as the second variable without major headaches}
 \authNote{NH: can we standardize on either the use of mosaic (from vcd, which
 has a confusing name given our package) or mosaicplot?}
-\FoodForThought{The \function{mosaic()} function has nothing to do with 
+\Caution{The \function{mosaic()} function has nothing to do with 
 the \pkg{mosaic} package, they just happen to share the same name.}%
-\DiggingDeeper{ }
 
 
 

@@ -1530,13 +1530,13 @@ table(rtest.stats >= test.stat)
 mean(rtest.stats >= test.stat)         # compute proportion of extreme statistics
 prop(rtest.stats >= test.stat)         # compute proportion of extreme statistics (mosaic)
 @
+We can't reject the null hypotheses.  Many samples on Planet Null have 
+differences in the mean age of men and women at least as large as the 
+different on Planet Sample.
 \FoodForThought[\centerline{Note}]{The functions \function{prop()} and \function{count()}
 in the \pkg{mosaic} package are designed to make the syntax clearer for students.
 Typically you will see these computed using \function{mean()} and \function{sum()}.
 }
-We can't reject the null hypotheses.  Many samples on Planet Null have 
-differences in the mean age of men and women at least as large as the 
-different on Planet Sample.
 
 We can use histograms or dotplots to display the sampling distributions graphically.
 \begin{center}

@@ -356,9 +356,9 @@ source('setup.R')
 %\bibliography{StatsBook,DataSets,jamstatassoc,RS,R,kaplan}
 \bibliography{USCOTS}
 
-\chapter*{Solutions}
-
-\shipoutSolutions
+%\chapter*{Solutions}
+%
+%\shipoutSolutions
 
 %\chapter*{Author Notes}
 
