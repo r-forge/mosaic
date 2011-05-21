@@ -9,15 +9,20 @@
 
 mean <- function(x, ...) UseMethod('mean')
 
+# do similar thing to other functions later
+# isolate reusable elements to make maintenance easier...
+
 mean.formula <- function( x, data=parent.frame(), na.rm=TRUE, ... ) {
+	if (length(x) == 2) { return( mean( eval(x[[2]], data) ) ) }
+	
 	result <- .mosaic_aggregate( x, data, FUN=base::mean, na.rm=na.rm, ... )
 	class(result) <- c('aggregated.stat', class(result))
 	attr(result, 'stat.name') <- 'mean'
-	return(result)
+	return(mean=result)
 }
 
 mean.default <- function( x, na.rm=TRUE, ... ) {
-	base::mean.default(x, na.rm=na.rm, ...)
+	c(mean = base::mean.default(x, na.rm=na.rm, ...))
 }
 
 

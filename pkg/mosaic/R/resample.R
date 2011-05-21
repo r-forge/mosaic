@@ -55,7 +55,8 @@ print.cointoss <- function(x, ...) {
 
 	if (attributes(x)$verbose) {
 			cat('\n')
-			cat(paste(other$sequence, sep=" "))
+			#print(other$sequence)
+			cat(strwrap( paste(other$sequence, sep=" ")))
 			cat('\n')
 			cat(paste('\nResult: ', heads, ' heads.\n\n', sep=""))
 	}
