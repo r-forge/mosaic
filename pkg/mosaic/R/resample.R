@@ -4,10 +4,12 @@
 deal    <- function(x, size, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FALSE) {
 	sample(x, size, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids )
 }
+
 resample <- function(x, size, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE, ...) {
 	sample(x, size, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids, ...)
 }
-shuffle <- function(x, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE) 
+
+shuffle <- function(x, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FALSE) 
 {
 	if (!is.null(groups)){
 		return( .shuffle_within(x, groups=groups, replace=replace) )

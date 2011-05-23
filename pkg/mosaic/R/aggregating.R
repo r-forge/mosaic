@@ -1,6 +1,11 @@
  
-.mosaic_aggregate <- function(x, data, FUN, overall=TRUE, method='cross', ...) {
-	return( as.data.frame( summary( x, data, fun=FUN, overall=overall, method='cross',...) ) )
+.mosaic_aggregate <- function(x, data, FUN, overall=TRUE, ...) {
+	if (length(x) == 2 ) {
+		return( data.frame( FUN (eval( x[[2]], data) ) ) )
+	} else {
+		return( as.data.frame( 
+			Hmisc::summary.formula( x, data, fun=FUN, overall=overall, method='cross',...) ) )
+	}
 	result <- summary(x, data, fun=FUN, overall=overall, method=method, ...)
 	result <- as.data.frame(oldUnclass(result))
 	return(result)
@@ -13,8 +18,6 @@ mean <- function(x, ...) UseMethod('mean')
 # isolate reusable elements to make maintenance easier...
 
 mean.formula <- function( x, data=parent.frame(), na.rm=TRUE, ... ) {
-	if (length(x) == 2) { return( mean( eval(x[[2]], data) ) ) }
-	
 	result <- .mosaic_aggregate( x, data, FUN=base::mean, na.rm=na.rm, ... )
 	class(result) <- c('aggregated.stat', class(result))
 	attr(result, 'stat.name') <- 'mean'

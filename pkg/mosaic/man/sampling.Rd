@@ -35,7 +35,7 @@ sample(x, size, replace = FALSE, ...)
 
 resample (x, size, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE, ...) 
 
-shuffle(x, replace = TRUE, prob = NULL, 
+shuffle(x, replace = FALSE, prob = NULL, 
 	groups = NULL, orig.ids = FALSE)
 deal(x, size, replace = FALSE, prob = NULL, 
 	groups = NULL, orig.ids = FALSE)
