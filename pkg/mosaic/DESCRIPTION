@@ -1,8 +1,8 @@
 Package: mosaic
 Type: Package
 Title: Project MOSAIC (mosaic-web.org) math and stats teaching utilities 
-Version: 0.1-35
-Date: 2011-05-21
+Version: 0.1-36
+Date: 2011-05-27
 Depends: lattice, grid, methods, Hmisc
 Suggests: MASS 
 Author: Randall Pruim <rpruim@calvin.edu>, Daniel Kaplan <kaplan@macalester.edu>, Nicholas Horton <nhorton@smith.edu>

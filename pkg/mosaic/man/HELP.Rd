@@ -12,7 +12,7 @@ or usual care, with the goal of linking them to primary medical care.
 data(HELP)
 }
 \format{
-  Data frame with 453 observations on the following variables.
+  Data frame with 453 observations on the following variables.  
   
   \describe{
     \item{\code{age}}{subject age at baseline (in years)}
@@ -60,6 +60,12 @@ stay and follow-up interviews were undertaken every 6 months for 2
 years.  A variety of continuous, count, discrete, and survival time
 predictors and outcomes were collected at each of these five
 occasions.
+
+This dataset is a subset of the HELPmiss data which includes an
+additional 17 subjects with 
+partially observed data on some of the baseline variables.  This is
+also a subset of the HELPfull data which includes 5 timepoints and many
+additional variables for all subjects.
 }
 \source{
 \url{http://www.math.smith.edu/help}
@@ -71,6 +77,11 @@ A randomized controlled trial of
 a multi-disciplinary health intervention in a detoxification unit.  
 \emph{Addiction}, 2003; 98(4):509-516.
 }
+\seealso{
+\code{\link{HELP}}, and
+\code{\link{HELPfull}}.
+}
+
 \examples{
 data(HELP)
 }
