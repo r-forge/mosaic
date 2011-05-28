@@ -1,51 +1,809 @@
 \name{HELPfull}
 \alias{HELPfull}
 \docType{data}
-\title{Health Evaluation and Linkage to Primary Care}
+\title{
+Health Evaluation and Linkage to Primary Care
+}
 \description{
 The HELP study was a clinical trial for adult inpatients recruited from a
 detoxification unit.  Patients with no primary care physician were randomized
 to receive a multidisciplinary assessment and a brief motivational intervention
 or usual care, with the goal of linking them to primary medical care.
 }
-\usage{
-data(HELPfull)
-}
+\usage{data(HELPfull)}
 \format{
-  Data frame with 470 observations on the following variables.  
-  
+  A data frame with 1472 observations on the following 788 variables.
   \describe{
-    \item{\code{age}}{subject age at baseline (in years)}
-    \item{\code{anysub}}{use of any substance post-detox: a factor with levels \code{no} \code{yes}} 
-    \item{\code{cesd}}{Center for Epidemiologic Studies Depression measure at baseline}
-    \item{\code{d1}}{lifetime number of hospitalizations for medical problems (measured at baseline)}
-    \item{\code{daysanysub}}{time (in days) to first use of any substance post-detox}
-    \item{\code{dayslink}}{time (in days) to linkage to primary care}
-    \item{\code{drugrisk}}{Risk Assessment Battery drug risk scale at baseline}
-    \item{\code{e2b}}{number of times in past 6 months entered a detox program (measured at baseline)}
-    \item{\code{female}}{0 for male, 1 for female} 
-    \item{\code{sex}}{a factor with levels \code{male} \code{female}} 
-    \item{\code{g1b}}{experienced serious thoughts of suicide in last 30 days (measured at baseline): a factor with levels \code{no} \code{yes}}
-    \item{\code{homeless}}{housing status: a factor with levels \code{housed} \code{homeless}}
-    \item{\code{i1}}{average number of drinks (standard units) consumed per day, in the 
-past 30 days (measured at baseline)}
-    \item{\code{i2}}{maximum number of drinks (standard units) consumed per day, in the 
-past 30 days (measured at baseline)}
-    \item{\code{id}}{subject identifier}
-    \item{\code{indtot}}{Inventory of Drug Use Consequences (InDUC) total score (measured at baseline)}
-    \item{\code{linkstatus}}{post-detox linkage to primary care (0 = no, 1 = yes)}
-    \item{\code{link}}{post-detox linkage to primary care: \code{no} \code{yes}} 
-    \item{\code{mcs}}{SF-36 Mental Component Score (measured at baseline)}
-    \item{\code{pcs}}{SF-36 Physical Component Score (measured at baseline)}
-    \item{\code{pss_fr}}{perceived social support by friends (measured at baseline)}
-    \item{\code{racegrp}}{race/ethnicity: levels \code{black} \code{hispanic} \code{other} \code{white}}
-    \item{\code{satreat}}{any BSAS substance abuse treatment at baseline: \code{no} \code{yes}}
-    \item{\code{sexrisk}}{Risk Assessment Battery sex risk score (measured at baseline)}
-    \item{\code{substance}}{primary substance of abuse: \code{alcohol} \code{cocaine} \code{heroin}}
-    \item{\code{treat}}{randomized to HELP clinic: \code{no} \code{yes}}
+    \item{\code{ID}}{a numeric vector}
+    \item{\code{TIME}}{a numeric vector}
+    \item{\code{NUM_INTERVALS}}{a numeric vector}
+    \item{\code{INT_TIME1}}{a numeric vector}
+    \item{\code{DAYS_SINCE_BL}}{a numeric vector}
+    \item{\code{INT_TIME2}}{a numeric vector}
+    \item{\code{DAYS_SINCE_PREV}}{a numeric vector}
+    \item{\code{PREV_TIME}}{a numeric vector}
+    \item{\code{DEAD}}{a numeric vector}
+    \item{\code{A1}}{a numeric vector}
+    \item{\code{A9}}{a numeric vector}
+    \item{\code{A10}}{a numeric vector}
+    \item{\code{A11A}}{a numeric vector}
+    \item{\code{A11B}}{a numeric vector}
+    \item{\code{A11C}}{a numeric vector}
+    \item{\code{A11D}}{a numeric vector}
+    \item{\code{A11E}}{a numeric vector}
+    \item{\code{A12B}}{a numeric vector}
+    \item{\code{A13}}{a numeric vector}
+    \item{\code{A14A}}{a numeric vector}
+    \item{\code{A14B}}{a numeric vector}
+    \item{\code{A14C}}{a numeric vector}
+    \item{\code{A14D}}{a numeric vector}
+    \item{\code{A14E}}{a numeric vector}
+    \item{\code{A14F}}{a numeric vector}
+    \item{\code{A14G}}{a numeric vector}
+    \item{\code{A14G_T}}{a factor with levels \code{} \code{1/2 WAY HOUSE} \code{3/4 HOUSE} \code{ANCHOR INN} \code{ARMY} \code{ASSOCIATES} \code{BOARDERS} \code{BOYFRIENDS MOM} \code{CORRECTIONAL FACILIT} \code{CRACK HOUSE} \code{DEALER} \code{ENTRE FAMILIA} \code{FENWOOD} \code{GAVIN HSE} \code{GIRLFRIENDS DAUGHTE} \code{GIRLFRIENDS SON} \code{GIRLFRIENDS CHILDREN} \code{GIRLFRIENDS DAUGHTER} \code{GROUP HOME} \code{HALF-WAY HOUSE} \code{HALFWAY HOUSE} \code{HALFWAY HOUSES} \code{HALFWAY HSE} \code{HOLDING UNIT} \code{HOME BORDER} \code{HOMELESS} \code{HOMELESS SHELTER} \code{IN JAIL} \code{IN PROGRAMS} \code{INCARCERATED} \code{JAIL} \code{JAIL HALFWAY HOUSE} \code{JAIL, SHELTER} \code{JAIL, STREET} \code{JAIL/PROGRAM} \code{JAIL/SHELTER} \code{JAILS} \code{LANDLADY} \code{LANDLORD} \code{LODGING HOUSE} \code{MERIDIAN HOUSE} \code{NURSING HOME} \code{ON THE STREET} \code{PARTNERS MOTHER} \code{PARTNERS CHILD} \code{PARTNERS CHILDREN} \code{PRDGRAMS} \code{PRISON} \code{PROGRAM} \code{PROGRAM MTHP} \code{PROGRAM ROOMMATES} \code{PROGRAM SOBER HOUSE} \code{PROGRAM-RESIDENTIAL} \code{PROGRAM/HALFWAY HOUS} \code{PROGRAM/JAIL} \code{PROGRAM/SHELTER} \code{PROGRAM/SHELTERS} \code{PROGRAMS} \code{PROGRAMS SUBSTANCE} \code{PROGRAMS/SHELTER} \code{PROGRAMS/SHELTERS} \code{PROGRAMS/SHELTERS/DE} \code{PROJECT SOAR} \code{RESIDENTIAL FACILITY} \code{RESIDENTIAL PROGRAM} \code{ROOMING HOUSE} \code{ROOMING HOUSE (RELIG} \code{ROOMMATE} \code{ROOMMATES} \code{ROOMMATES AT TRANSIT} \code{RYAN HOUSE} \code{SALVATION ARMY} \code{SHELTER} \code{SHELTER/HALFWAY HSE} \code{SHELTER/HOTEL} \code{SHELTER/PROGRAM} \code{SHELTERS} \code{SHELTERS/HOSPITALS} \code{SHELTERS/JAIL} \code{SHELTERS/PROGRAMS} \code{SHELTERS/STREETS} \code{SOBER HOUSE} \code{SOBER HOUSING} \code{SOUTH BAY JAIL} \code{STEPSON} \code{STREET} \code{STREETS} \code{SUBSTANCE ABUSE TREA} \code{TRANSITIONAL HOUSE} \code{VA SHELTER}}
+    \item{\code{A15A}}{a numeric vector}
+    \item{\code{A15B}}{a numeric vector}
+    \item{\code{A15C}}{a numeric vector}
+    \item{\code{A16A}}{a numeric vector}
+    \item{\code{A16B}}{a numeric vector}
+    \item{\code{A16C}}{a numeric vector}
+    \item{\code{A17A}}{a numeric vector}
+    \item{\code{A17B}}{a numeric vector}
+    \item{\code{A17C}}{a numeric vector}
+    \item{\code{A17D}}{a numeric vector}
+    \item{\code{A17E}}{a numeric vector}
+    \item{\code{A17F}}{a numeric vector}
+    \item{\code{A17G}}{a numeric vector}
+    \item{\code{A17H}}{a numeric vector}
+    \item{\code{A17I}}{a numeric vector}
+    \item{\code{A17I_T}}{a factor with levels \code{} \code{DISABLED VETERAN} \code{EBT (FOOD STAMPS)} \code{EMERGENCY FOOD STAMP} \code{FOOD STAMP} \code{FOOD STAMPS} \code{FOOD STAMPS/VETERAN} \code{FOOD STAMPS/VETERANS} \code{INSURANCE SETTLEMENT} \code{PENSION CHECK} \code{SECTION 8} \code{SERVICE CONNECTED DI} \code{SOCIAL SECURITY} \code{SSDI FOR SON} \code{SURVIVORS BENEFITS} \code{TEMPORARY DISABILITY} \code{VA BENEFITS-DISABILI} \code{VA COMPENSATION} \code{VA DISABILITY PENSIO} \code{VETERAN BENEFITS} \code{VETERANS SERVICES} \code{VETERANS AFFAIRS}}
+    \item{\code{A18}}{a numeric vector}
+    \item{\code{B1}}{a numeric vector}
+    \item{\code{B2}}{a numeric vector}
+    \item{\code{B3A}}{a numeric vector}
+    \item{\code{B3B}}{a numeric vector}
+    \item{\code{B3C}}{a numeric vector}
+    \item{\code{B3D}}{a numeric vector}
+    \item{\code{B3E}}{a numeric vector}
+    \item{\code{B3F}}{a numeric vector}
+    \item{\code{B3G}}{a numeric vector}
+    \item{\code{B3H}}{a numeric vector}
+    \item{\code{B3I}}{a numeric vector}
+    \item{\code{B3J}}{a numeric vector}
+    \item{\code{B4A}}{a numeric vector}
+    \item{\code{B4B}}{a numeric vector}
+    \item{\code{B4C}}{a numeric vector}
+    \item{\code{B4D}}{a numeric vector}
+    \item{\code{B5A}}{a numeric vector}
+    \item{\code{B5B}}{a numeric vector}
+    \item{\code{B5C}}{a numeric vector}
+    \item{\code{B6}}{a numeric vector}
+    \item{\code{B7}}{a numeric vector}
+    \item{\code{B8}}{a numeric vector}
+    \item{\code{B9A}}{a numeric vector}
+    \item{\code{B9B}}{a numeric vector}
+    \item{\code{B9C}}{a numeric vector}
+    \item{\code{B9D}}{a numeric vector}
+    \item{\code{B9E}}{a numeric vector}
+    \item{\code{B9F}}{a numeric vector}
+    \item{\code{B9G}}{a numeric vector}
+    \item{\code{B9H}}{a numeric vector}
+    \item{\code{B9I}}{a numeric vector}
+    \item{\code{B10}}{a numeric vector}
+    \item{\code{B11A}}{a numeric vector}
+    \item{\code{B11B}}{a numeric vector}
+    \item{\code{B11C}}{a numeric vector}
+    \item{\code{B11D}}{a numeric vector}
+    \item{\code{C1A}}{a numeric vector}
+    \item{\code{C1B}}{a numeric vector}
+    \item{\code{C1C}}{a numeric vector}
+    \item{\code{C1D}}{a numeric vector}
+    \item{\code{C1E}}{a numeric vector}
+    \item{\code{C1F}}{a numeric vector}
+    \item{\code{C1G}}{a numeric vector}
+    \item{\code{C1H}}{a numeric vector}
+    \item{\code{C1I}}{a numeric vector}
+    \item{\code{C1J}}{a numeric vector}
+    \item{\code{C1K}}{a numeric vector}
+    \item{\code{C1L}}{a numeric vector}
+    \item{\code{C1M}}{a numeric vector}
+    \item{\code{C2A1}}{a numeric vector}
+    \item{\code{C2A2}}{a numeric vector}
+    \item{\code{C2B1}}{a numeric vector}
+    \item{\code{C2B2}}{a numeric vector}
+    \item{\code{C2C1}}{a numeric vector}
+    \item{\code{C2C2}}{a numeric vector}
+    \item{\code{C2D1}}{a numeric vector}
+    \item{\code{C2D2}}{a numeric vector}
+    \item{\code{C2E1}}{a numeric vector}
+    \item{\code{C2E2}}{a numeric vector}
+    \item{\code{C2F1}}{a numeric vector}
+    \item{\code{C2F2}}{a numeric vector}
+    \item{\code{C2G1}}{a numeric vector}
+    \item{\code{C2G2}}{a numeric vector}
+    \item{\code{C2H1}}{a numeric vector}
+    \item{\code{C2H2}}{a numeric vector}
+    \item{\code{C2I1}}{a numeric vector}
+    \item{\code{C2I2}}{a numeric vector}
+    \item{\code{C2J1}}{a numeric vector}
+    \item{\code{C2J2}}{a numeric vector}
+    \item{\code{C2K1}}{a numeric vector}
+    \item{\code{C2K2}}{a numeric vector}
+    \item{\code{C2L1}}{a numeric vector}
+    \item{\code{C2L2}}{a numeric vector}
+    \item{\code{C2M1}}{a numeric vector}
+    \item{\code{C2M2}}{a numeric vector}
+    \item{\code{C2N1}}{a numeric vector}
+    \item{\code{C2N2}}{a numeric vector}
+    \item{\code{C2O1}}{a numeric vector}
+    \item{\code{C2O2}}{a numeric vector}
+    \item{\code{C2P1}}{a numeric vector}
+    \item{\code{C2P2}}{a numeric vector}
+    \item{\code{C2Q1}}{a numeric vector}
+    \item{\code{C2Q2}}{a numeric vector}
+    \item{\code{C2R1}}{a numeric vector}
+    \item{\code{C2R2}}{a numeric vector}
+    \item{\code{C2S1}}{a numeric vector}
+    \item{\code{C2S2}}{a numeric vector}
+    \item{\code{C2T1}}{a numeric vector}
+    \item{\code{C2T2}}{a numeric vector}
+    \item{\code{C2U1}}{a numeric vector}
+    \item{\code{C2U2}}{a numeric vector}
+    \item{\code{C2V1}}{a numeric vector}
+    \item{\code{C2V2}}{a numeric vector}
+    \item{\code{C2W1}}{a numeric vector}
+    \item{\code{C2W2}}{a numeric vector}
+    \item{\code{C3A1}}{a numeric vector}
+    \item{\code{C3A2}}{a numeric vector}
+    \item{\code{C3A3}}{a numeric vector}
+    \item{\code{C3B1}}{a numeric vector}
+    \item{\code{C3B2}}{a numeric vector}
+    \item{\code{C3B3}}{a numeric vector}
+    \item{\code{C3C1}}{a numeric vector}
+    \item{\code{C3C2}}{a numeric vector}
+    \item{\code{C3C3}}{a numeric vector}
+    \item{\code{C3D}}{a numeric vector}
+    \item{\code{C3E}}{a numeric vector}
+    \item{\code{C3F1}}{a numeric vector}
+    \item{\code{C3F2}}{a numeric vector}
+    \item{\code{C3F3}}{a numeric vector}
+    \item{\code{C3F_T}}{a factor with levels \code{} \code{7} \code{CRABS} \code{CRABS - TRICHONOMIS} \code{CRABS, HEP B} \code{DOESNT KNOW NAME} \code{HAS HAD ALL 3  ABC} \code{HEP B} \code{HEP B, TRICAMONAS} \code{HEP. B} \code{HEPATITIS B} \code{HEPATITS B} \code{TRICHAMONAS VAGINALA} \code{TRICHAMONIS} \code{TRICHOMONAS} \code{TRICHOMONIASIS} \code{TRICHOMONIS} \code{TRICHOMONIS VAGINITI} \code{TRICHOMORAS} \code{TRICHONOMIS}}
+    \item{\code{C3G1}}{a numeric vector}
+    \item{\code{C3G2}}{a numeric vector}
+    \item{\code{C3G3}}{a numeric vector}
+    \item{\code{C3G4}}{a numeric vector}
+    \item{\code{C3H1}}{a numeric vector}
+    \item{\code{C3H2}}{a numeric vector}
+    \item{\code{C3H3}}{a numeric vector}
+    \item{\code{C3I}}{a numeric vector}
+    \item{\code{C3J}}{a numeric vector}
+    \item{\code{C3K}}{a numeric vector}
+    \item{\code{C3K_M}}{a numeric vector}
+    \item{\code{D1}}{a numeric vector}
+    \item{\code{D2}}{a numeric vector}
+    \item{\code{D3}}{a numeric vector}
+    \item{\code{D4}}{a numeric vector}
+    \item{\code{D5}}{a numeric vector}
+    \item{\code{E2A}}{a numeric vector}
+    \item{\code{E2B}}{a numeric vector}
+    \item{\code{E2C}}{a numeric vector}
+    \item{\code{E3A}}{a numeric vector}
+    \item{\code{E3B}}{a numeric vector}
+    \item{\code{E3C}}{a numeric vector}
+    \item{\code{E4A}}{a numeric vector}
+    \item{\code{E4B}}{a numeric vector}
+    \item{\code{E4C}}{a numeric vector}
+    \item{\code{E5A}}{a numeric vector}
+    \item{\code{E5B}}{a numeric vector}
+    \item{\code{E6}}{a numeric vector}
+    \item{\code{E7A}}{a numeric vector}
+    \item{\code{E7B}}{a numeric vector}
+    \item{\code{E8A1}}{a numeric vector}
+    \item{\code{E8A2}}{a numeric vector}
+    \item{\code{E8A3}}{a numeric vector}
+    \item{\code{E8A4}}{a numeric vector}
+    \item{\code{E9A}}{a numeric vector}
+    \item{\code{E9B}}{a numeric vector}
+    \item{\code{E10A}}{a numeric vector}
+    \item{\code{E10B1}}{a numeric vector}
+    \item{\code{E10B2}}{a numeric vector}
+    \item{\code{E10C19}}{a numeric vector}
+    \item{\code{E11A}}{a numeric vector}
+    \item{\code{E11B}}{a numeric vector}
+    \item{\code{E11C}}{a numeric vector}
+    \item{\code{E12A}}{a numeric vector}
+    \item{\code{E12B}}{a numeric vector}
+    \item{\code{E13}}{a numeric vector}
+    \item{\code{E14A}}{a numeric vector}
+    \item{\code{E14B}}{a numeric vector}
+    \item{\code{E14C}}{a numeric vector}
+    \item{\code{E14D}}{a numeric vector}
+    \item{\code{E14E}}{a numeric vector}
+    \item{\code{E14F}}{a numeric vector}
+    \item{\code{E14G}}{a numeric vector}
+    \item{\code{E15A}}{a numeric vector}
+    \item{\code{E15B}}{a numeric vector}
+    \item{\code{E15C1}}{a numeric vector}
+    \item{\code{E15C2}}{a numeric vector}
+    \item{\code{E15C3}}{a numeric vector}
+    \item{\code{E15C4}}{a numeric vector}
+    \item{\code{E15C5}}{a numeric vector}
+    \item{\code{E15C6}}{a numeric vector}
+    \item{\code{E15C7}}{a numeric vector}
+    \item{\code{E15C8}}{a numeric vector}
+    \item{\code{E15C9}}{a numeric vector}
+    \item{\code{E15C10}}{a numeric vector}
+    \item{\code{E15C11}}{a numeric vector}
+    \item{\code{E15C12}}{a numeric vector}
+    \item{\code{E16A1}}{a numeric vector}
+    \item{\code{E16A2}}{a numeric vector}
+    \item{\code{E16A3}}{a numeric vector}
+    \item{\code{E16A4}}{a numeric vector}
+    \item{\code{E16A5}}{a numeric vector}
+    \item{\code{E16A6}}{a numeric vector}
+    \item{\code{E16A7}}{a numeric vector}
+    \item{\code{E16A8}}{a numeric vector}
+    \item{\code{E16A9}}{a numeric vector}
+    \item{\code{E16A10}}{a numeric vector}
+    \item{\code{E16A11}}{a numeric vector}
+    \item{\code{E16A12}}{a numeric vector}
+    \item{\code{E16A13}}{a numeric vector}
+    \item{\code{E18A}}{a numeric vector}
+    \item{\code{E18B}}{a numeric vector}
+    \item{\code{E18C}}{a numeric vector}
+    \item{\code{E18D}}{a numeric vector}
+    \item{\code{E18F}}{a numeric vector}
+    \item{\code{E18G}}{a numeric vector}
+    \item{\code{E18H}}{a numeric vector}
+    \item{\code{E18I}}{a numeric vector}
+    \item{\code{E18J}}{a numeric vector}
+    \item{\code{E18K}}{a numeric vector}
+    \item{\code{E18L}}{a numeric vector}
+    \item{\code{E18M}}{a numeric vector}
+    \item{\code{F1A}}{a numeric vector}
+    \item{\code{F1B}}{a numeric vector}
+    \item{\code{F1C}}{a numeric vector}
+    \item{\code{F1D}}{a numeric vector}
+    \item{\code{F1E}}{a numeric vector}
+    \item{\code{F1F}}{a numeric vector}
+    \item{\code{F1G}}{a numeric vector}
+    \item{\code{F1H}}{a numeric vector}
+    \item{\code{F1I}}{a numeric vector}
+    \item{\code{F1J}}{a numeric vector}
+    \item{\code{F1K}}{a numeric vector}
+    \item{\code{F1L}}{a numeric vector}
+    \item{\code{F1M}}{a numeric vector}
+    \item{\code{F1N}}{a numeric vector}
+    \item{\code{F1O}}{a numeric vector}
+    \item{\code{F1P}}{a numeric vector}
+    \item{\code{F1Q}}{a numeric vector}
+    \item{\code{F1R}}{a numeric vector}
+    \item{\code{F1S}}{a numeric vector}
+    \item{\code{F1T}}{a numeric vector}
+    \item{\code{G1A}}{a numeric vector}
+    \item{\code{G1A_30}}{a numeric vector}
+    \item{\code{G1B}}{a numeric vector}
+    \item{\code{G1B_30}}{a numeric vector}
+    \item{\code{G1C}}{a numeric vector}
+    \item{\code{G1C_30}}{a numeric vector}
+    \item{\code{G1D}}{a numeric vector}
+    \item{\code{G1D_30}}{a numeric vector}
+    \item{\code{H1_30}}{a numeric vector}
+    \item{\code{H1_LT}}{a numeric vector}
+    \item{\code{H1_RT}}{a numeric vector}
+    \item{\code{H2_30}}{a numeric vector}
+    \item{\code{H2_LT}}{a numeric vector}
+    \item{\code{H2_RT}}{a numeric vector}
+    \item{\code{H3_30}}{a numeric vector}
+    \item{\code{H3_LT}}{a numeric vector}
+    \item{\code{H3_RT}}{a numeric vector}
+    \item{\code{H4_30}}{a numeric vector}
+    \item{\code{H4_LT}}{a numeric vector}
+    \item{\code{H4_RT}}{a numeric vector}
+    \item{\code{H5_30}}{a numeric vector}
+    \item{\code{H5_LT}}{a numeric vector}
+    \item{\code{H5_RT}}{a numeric vector}
+    \item{\code{H6_30}}{a numeric vector}
+    \item{\code{H6_LT}}{a numeric vector}
+    \item{\code{H6_RT}}{a numeric vector}
+    \item{\code{H7_30}}{a numeric vector}
+    \item{\code{H7_LT}}{a numeric vector}
+    \item{\code{H7_RT}}{a numeric vector}
+    \item{\code{H8_30}}{a numeric vector}
+    \item{\code{H8_LT}}{a numeric vector}
+    \item{\code{H8_RT}}{a numeric vector}
+    \item{\code{H9_30}}{a numeric vector}
+    \item{\code{H9_LT}}{a numeric vector}
+    \item{\code{H9_RT}}{a numeric vector}
+    \item{\code{H10_30}}{a numeric vector}
+    \item{\code{H10_LT}}{a numeric vector}
+    \item{\code{H10_RT}}{a numeric vector}
+    \item{\code{H11_30}}{a numeric vector}
+    \item{\code{H11_LT}}{a numeric vector}
+    \item{\code{H11_RT}}{a numeric vector}
+    \item{\code{H12_30}}{a numeric vector}
+    \item{\code{H12_LT}}{a numeric vector}
+    \item{\code{H12_RT}}{a numeric vector}
+    \item{\code{H13_30}}{a numeric vector}
+    \item{\code{H13_LT}}{a numeric vector}
+    \item{\code{H13_RT}}{a numeric vector}
+    \item{\code{H14}}{a numeric vector}
+    \item{\code{H15A}}{a numeric vector}
+    \item{\code{H15B}}{a numeric vector}
+    \item{\code{H16A}}{a numeric vector}
+    \item{\code{H16B}}{a numeric vector}
+    \item{\code{H17A}}{a numeric vector}
+    \item{\code{H17B}}{a numeric vector}
+    \item{\code{H18A}}{a numeric vector}
+    \item{\code{H18B}}{a numeric vector}
+    \item{\code{H19A}}{a numeric vector}
+    \item{\code{H19B}}{a numeric vector}
+    \item{\code{I1}}{a numeric vector}
+    \item{\code{I2}}{a numeric vector}
+    \item{\code{I3}}{a numeric vector}
+    \item{\code{I4}}{a numeric vector}
+    \item{\code{I5}}{a numeric vector}
+    \item{\code{I6A}}{a numeric vector}
+    \item{\code{I6B}}{a numeric vector}
+    \item{\code{I7A}}{a numeric vector}
+    \item{\code{I7B}}{a numeric vector}
+    \item{\code{I8}}{a numeric vector}
+    \item{\code{J1}}{a numeric vector}
+    \item{\code{J2}}{a numeric vector}
+    \item{\code{J3}}{a numeric vector}
+    \item{\code{J4}}{a numeric vector}
+    \item{\code{J5A}}{a numeric vector}
+    \item{\code{J5B}}{a numeric vector}
+    \item{\code{J6}}{a numeric vector}
+    \item{\code{J7}}{a numeric vector}
+    \item{\code{J8}}{a numeric vector}
+    \item{\code{J9}}{a numeric vector}
+    \item{\code{J10A}}{a numeric vector}
+    \item{\code{J10B}}{a numeric vector}
+    \item{\code{K1}}{a numeric vector}
+    \item{\code{K2}}{a numeric vector}
+    \item{\code{K3}}{a numeric vector}
+    \item{\code{L1}}{a numeric vector}
+    \item{\code{L2}}{a numeric vector}
+    \item{\code{L3}}{a numeric vector}
+    \item{\code{L4}}{a numeric vector}
+    \item{\code{L5}}{a numeric vector}
+    \item{\code{L6}}{a numeric vector}
+    \item{\code{L7}}{a numeric vector}
+    \item{\code{L8}}{a numeric vector}
+    \item{\code{L9}}{a numeric vector}
+    \item{\code{L10}}{a numeric vector}
+    \item{\code{L11}}{a numeric vector}
+    \item{\code{L12}}{a numeric vector}
+    \item{\code{L13}}{a numeric vector}
+    \item{\code{L14}}{a numeric vector}
+    \item{\code{L15}}{a numeric vector}
+    \item{\code{L16}}{a numeric vector}
+    \item{\code{L17}}{a numeric vector}
+    \item{\code{L18}}{a numeric vector}
+    \item{\code{L19}}{a numeric vector}
+    \item{\code{L20}}{a numeric vector}
+    \item{\code{L21}}{a numeric vector}
+    \item{\code{L22}}{a numeric vector}
+    \item{\code{L23}}{a numeric vector}
+    \item{\code{L24}}{a numeric vector}
+    \item{\code{L25}}{a numeric vector}
+    \item{\code{M1}}{a numeric vector}
+    \item{\code{M2}}{a numeric vector}
+    \item{\code{M3}}{a numeric vector}
+    \item{\code{M4}}{a numeric vector}
+    \item{\code{M5}}{a numeric vector}
+    \item{\code{M6}}{a numeric vector}
+    \item{\code{M7}}{a numeric vector}
+    \item{\code{M8}}{a numeric vector}
+    \item{\code{M9}}{a numeric vector}
+    \item{\code{M10}}{a numeric vector}
+    \item{\code{M11}}{a numeric vector}
+    \item{\code{M12}}{a numeric vector}
+    \item{\code{M13}}{a numeric vector}
+    \item{\code{M14}}{a numeric vector}
+    \item{\code{M15}}{a numeric vector}
+    \item{\code{M16}}{a numeric vector}
+    \item{\code{M17}}{a numeric vector}
+    \item{\code{M18}}{a numeric vector}
+    \item{\code{M19}}{a numeric vector}
+    \item{\code{M20}}{a numeric vector}
+    \item{\code{M21}}{a numeric vector}
+    \item{\code{M22}}{a numeric vector}
+    \item{\code{M23}}{a numeric vector}
+    \item{\code{M24}}{a numeric vector}
+    \item{\code{M25}}{a numeric vector}
+    \item{\code{M26}}{a numeric vector}
+    \item{\code{M27}}{a numeric vector}
+    \item{\code{M28}}{a numeric vector}
+    \item{\code{M29}}{a numeric vector}
+    \item{\code{M30}}{a numeric vector}
+    \item{\code{M31}}{a numeric vector}
+    \item{\code{M32}}{a numeric vector}
+    \item{\code{M33}}{a numeric vector}
+    \item{\code{M34}}{a numeric vector}
+    \item{\code{M35}}{a numeric vector}
+    \item{\code{M36}}{a numeric vector}
+    \item{\code{M37}}{a numeric vector}
+    \item{\code{M38}}{a numeric vector}
+    \item{\code{M39}}{a numeric vector}
+    \item{\code{M40}}{a numeric vector}
+    \item{\code{M41}}{a numeric vector}
+    \item{\code{M42}}{a numeric vector}
+    \item{\code{M43}}{a numeric vector}
+    \item{\code{M44}}{a numeric vector}
+    \item{\code{M45}}{a numeric vector}
+    \item{\code{M46}}{a numeric vector}
+    \item{\code{M47}}{a numeric vector}
+    \item{\code{M48}}{a numeric vector}
+    \item{\code{M49}}{a numeric vector}
+    \item{\code{M50}}{a numeric vector}
+    \item{\code{N1A}}{a numeric vector}
+    \item{\code{N1B}}{a numeric vector}
+    \item{\code{N1C}}{a numeric vector}
+    \item{\code{N1D}}{a numeric vector}
+    \item{\code{N1E}}{a numeric vector}
+    \item{\code{N1F}}{a numeric vector}
+    \item{\code{N1G}}{a numeric vector}
+    \item{\code{N1H}}{a numeric vector}
+    \item{\code{N1I}}{a numeric vector}
+    \item{\code{N1J}}{a numeric vector}
+    \item{\code{N1K}}{a numeric vector}
+    \item{\code{N1L}}{a numeric vector}
+    \item{\code{N1M}}{a numeric vector}
+    \item{\code{N1N}}{a numeric vector}
+    \item{\code{N2A}}{a numeric vector}
+    \item{\code{N2B}}{a numeric vector}
+    \item{\code{N2C}}{a numeric vector}
+    \item{\code{N2D}}{a numeric vector}
+    \item{\code{N2E}}{a numeric vector}
+    \item{\code{N2F}}{a numeric vector}
+    \item{\code{N2G}}{a numeric vector}
+    \item{\code{N2H}}{a numeric vector}
+    \item{\code{N2I}}{a numeric vector}
+    \item{\code{N2J}}{a numeric vector}
+    \item{\code{N2K}}{a numeric vector}
+    \item{\code{N2L}}{a numeric vector}
+    \item{\code{N2M}}{a numeric vector}
+    \item{\code{N2N}}{a numeric vector}
+    \item{\code{O1A}}{a numeric vector}
+    \item{\code{O1B}}{a numeric vector}
+    \item{\code{O1C}}{a numeric vector}
+    \item{\code{O1D}}{a numeric vector}
+    \item{\code{O2}}{a numeric vector}
+    \item{\code{P1A}}{a numeric vector}
+    \item{\code{P1B}}{a numeric vector}
+    \item{\code{P1C}}{a numeric vector}
+    \item{\code{P2A}}{a numeric vector}
+    \item{\code{P2B}}{a numeric vector}
+    \item{\code{P2C}}{a numeric vector}
+    \item{\code{P3}}{a numeric vector}
+    \item{\code{P4}}{a numeric vector}
+    \item{\code{P5A}}{a numeric vector}
+    \item{\code{P5B}}{a numeric vector}
+    \item{\code{P5C}}{a numeric vector}
+    \item{\code{P6A}}{a numeric vector}
+    \item{\code{P6B}}{a numeric vector}
+    \item{\code{P6C}}{a numeric vector}
+    \item{\code{P7}}{a numeric vector}
+    \item{\code{P8}}{a numeric vector}
+    \item{\code{Q1A}}{a numeric vector}
+    \item{\code{Q1B}}{a numeric vector}
+    \item{\code{Q2}}{a numeric vector}
+    \item{\code{Q3}}{a numeric vector}
+    \item{\code{Q4}}{a numeric vector}
+    \item{\code{Q5}}{a numeric vector}
+    \item{\code{Q6}}{a numeric vector}
+    \item{\code{Q7}}{a numeric vector}
+    \item{\code{Q8}}{a numeric vector}
+    \item{\code{Q9}}{a numeric vector}
+    \item{\code{Q10}}{a numeric vector}
+    \item{\code{Q11}}{a numeric vector}
+    \item{\code{Q12}}{a numeric vector}
+    \item{\code{Q13}}{a numeric vector}
+    \item{\code{Q14}}{a numeric vector}
+    \item{\code{Q15}}{a numeric vector}
+    \item{\code{Q16}}{a numeric vector}
+    \item{\code{Q17}}{a numeric vector}
+    \item{\code{Q18}}{a numeric vector}
+    \item{\code{Q19}}{a numeric vector}
+    \item{\code{Q20}}{a numeric vector}
+    \item{\code{R1A}}{a numeric vector}
+    \item{\code{R1B}}{a numeric vector}
+    \item{\code{R1C}}{a numeric vector}
+    \item{\code{R1D}}{a numeric vector}
+    \item{\code{R1E}}{a numeric vector}
+    \item{\code{R1F}}{a numeric vector}
+    \item{\code{R1G}}{a numeric vector}
+    \item{\code{R1H}}{a numeric vector}
+    \item{\code{R1I}}{a numeric vector}
+    \item{\code{R1J}}{a numeric vector}
+    \item{\code{R1K}}{a numeric vector}
+    \item{\code{R1L}}{a numeric vector}
+    \item{\code{R1M}}{a numeric vector}
+    \item{\code{R1N}}{a numeric vector}
+    \item{\code{R1O}}{a numeric vector}
+    \item{\code{R1P}}{a numeric vector}
+    \item{\code{R1Q}}{a numeric vector}
+    \item{\code{R1R}}{a numeric vector}
+    \item{\code{R1S}}{a numeric vector}
+    \item{\code{S1A}}{a numeric vector}
+    \item{\code{S1B}}{a numeric vector}
+    \item{\code{S1C}}{a numeric vector}
+    \item{\code{S1D}}{a numeric vector}
+    \item{\code{S1E}}{a numeric vector}
+    \item{\code{S1F}}{a numeric vector}
+    \item{\code{T1}}{a numeric vector}
+    \item{\code{T1B}}{a numeric vector}
+    \item{\code{T1C}}{a numeric vector}
+    \item{\code{T2}}{a numeric vector}
+    \item{\code{T2B}}{a numeric vector}
+    \item{\code{T2C}}{a numeric vector}
+    \item{\code{T3}}{a numeric vector}
+    \item{\code{T3B}}{a numeric vector}
+    \item{\code{T3C}}{a numeric vector}
+    \item{\code{U1}}{a numeric vector}
+    \item{\code{U2A}}{a numeric vector}
+    \item{\code{U2B}}{a numeric vector}
+    \item{\code{U2C}}{a numeric vector}
+    \item{\code{U2D}}{a numeric vector}
+    \item{\code{U2E}}{a numeric vector}
+    \item{\code{U2F}}{a numeric vector}
+    \item{\code{U2G}}{a numeric vector}
+    \item{\code{U2H}}{a numeric vector}
+    \item{\code{U2I}}{a numeric vector}
+    \item{\code{U2J}}{a numeric vector}
+    \item{\code{U2K}}{a numeric vector}
+    \item{\code{U2L}}{a numeric vector}
+    \item{\code{U2M}}{a numeric vector}
+    \item{\code{U2N}}{a numeric vector}
+    \item{\code{U2O}}{a numeric vector}
+    \item{\code{U2P}}{a numeric vector}
+    \item{\code{U2Q}}{a numeric vector}
+    \item{\code{U2Q_T}}{a factor with many levels}
+    \item{\code{U2R}}{a factor with levels \code{} \code{7} \code{A} \code{B} \code{C} \code{D} \code{E} \code{F} \code{G} \code{H} \code{I} \code{J} \code{K} \code{L} \code{M} \code{N} \code{O} \code{P} \code{Q}}
+    \item{\code{U3A}}{a numeric vector}
+    \item{\code{U3B}}{a numeric vector}
+    \item{\code{U4}}{a numeric vector}
+    \item{\code{U5}}{a numeric vector}
+    \item{\code{U6A}}{a numeric vector}
+    \item{\code{U6B}}{a numeric vector}
+    \item{\code{PCP_ID}}{a numeric vector}
+    \item{\code{U7A}}{a numeric vector}
+    \item{\code{U7A_T}}{a factor with levels \code{} \code{ARTHRITIS DOCTOR} \code{CHIROPRACTOR} \code{COCAINE STUDY} \code{DETOX DOCTOR} \code{DO} \code{EAR DOCTOR} \code{EAR SPECIALIST} \code{EAR, NOSE, & THROAT.} \code{EAR/NOSE/THROAT} \code{ENT} \code{FAMILY PHYSICIAN} \code{GENERAL MEDICINE} \code{GENERAL PRACTICE} \code{GENERAL PRACTIONER} \code{GENERAL PRACTITIONER} \code{HEAD & NECK SPECIALIST} \code{HERBAL/HOMEOPATHIC/ACUPUNCTURE} \code{ID DOCTOR} \code{MAYBE GENERAL PRACTITIONER} \code{MEDICAL STUDENT} \code{NEUROLOGIST} \code{NURSE} \code{NURSE PRACTICIONER} \code{NURSE PRACTITIONER} \code{ONCOLOGIST} \code{PRENATAL} \code{PRIMARY} \code{PRIMARY CAAE} \code{PRIMARY CARE} \code{PRIMARY CARE DOCTOR} \code{PRIMERY CARE} \code{THERAPIST} \code{UROLOGIST} \code{WOMENS CLINIC BMC}}
+    \item{\code{U8A}}{a numeric vector}
+    \item{\code{U8B}}{a numeric vector}
+    \item{\code{U8C}}{a numeric vector}
+    \item{\code{U8D}}{a numeric vector}
+    \item{\code{U8E}}{a numeric vector}
+    \item{\code{U8F}}{a numeric vector}
+    \item{\code{U10A}}{a numeric vector}
+    \item{\code{U10B}}{a numeric vector}
+    \item{\code{U10C}}{a numeric vector}
+    \item{\code{U11}}{a numeric vector}
+    \item{\code{U12}}{a numeric vector}
+    \item{\code{U13}}{a numeric vector}
+    \item{\code{U14}}{a numeric vector}
+    \item{\code{U15A}}{a numeric vector}
+    \item{\code{U15B}}{a numeric vector}
+    \item{\code{U16A}}{a numeric vector}
+    \item{\code{U16B}}{a numeric vector}
+    \item{\code{U17}}{a numeric vector}
+    \item{\code{U18A}}{a numeric vector}
+    \item{\code{U18B}}{a numeric vector}
+    \item{\code{U19}}{a numeric vector}
+    \item{\code{U20}}{a numeric vector}
+    \item{\code{U21A}}{a numeric vector}
+    \item{\code{U21B}}{a numeric vector}
+    \item{\code{U22A}}{a numeric vector}
+    \item{\code{U22B}}{a numeric vector}
+    \item{\code{U22C}}{a numeric vector}
+    \item{\code{U22D}}{a numeric vector}
+    \item{\code{U22E}}{a numeric vector}
+    \item{\code{U23}}{a numeric vector}
+    \item{\code{U24A}}{a numeric vector}
+    \item{\code{U24B}}{a numeric vector}
+    \item{\code{U24C}}{a numeric vector}
+    \item{\code{U24D}}{a numeric vector}
+    \item{\code{U24E}}{a numeric vector}
+    \item{\code{U25A}}{a numeric vector}
+    \item{\code{U25B}}{a numeric vector}
+    \item{\code{U25C}}{a numeric vector}
+    \item{\code{U25D}}{a numeric vector}
+    \item{\code{U25E}}{a numeric vector}
+    \item{\code{U25F}}{a numeric vector}
+    \item{\code{U25G}}{a numeric vector}
+    \item{\code{U25H}}{a numeric vector}
+    \item{\code{U25I}}{a numeric vector}
+    \item{\code{U26A}}{a numeric vector}
+    \item{\code{U26B}}{a numeric vector}
+    \item{\code{U26C}}{a numeric vector}
+    \item{\code{U26D}}{a numeric vector}
+    \item{\code{U26E}}{a numeric vector}
+    \item{\code{U26F}}{a numeric vector}
+    \item{\code{U26G}}{a numeric vector}
+    \item{\code{U26H}}{a numeric vector}
+    \item{\code{U26I}}{a numeric vector}
+    \item{\code{U27A}}{a numeric vector}
+    \item{\code{U27B}}{a numeric vector}
+    \item{\code{U27C}}{a numeric vector}
+    \item{\code{U27D}}{a numeric vector}
+    \item{\code{U27E}}{a numeric vector}
+    \item{\code{U27F}}{a numeric vector}
+    \item{\code{U27G}}{a numeric vector}
+    \item{\code{U28}}{a numeric vector}
+    \item{\code{U29A}}{a numeric vector}
+    \item{\code{U29B}}{a numeric vector}
+    \item{\code{U29C}}{a numeric vector}
+    \item{\code{U29D}}{a numeric vector}
+    \item{\code{U30}}{a numeric vector}
+    \item{\code{U31}}{a numeric vector}
+    \item{\code{U32A}}{a numeric vector}
+    \item{\code{U32B}}{a numeric vector}
+    \item{\code{U32C}}{a numeric vector}
+    \item{\code{U32D}}{a numeric vector}
+    \item{\code{U32D_T}}{a numeric vector}
+    \item{\code{U33}}{a numeric vector}
+    \item{\code{U34}}{a numeric vector}
+    \item{\code{U35A}}{a numeric vector}
+    \item{\code{U35B}}{a numeric vector}
+    \item{\code{U35C}}{a numeric vector}
+    \item{\code{U35D}}{a numeric vector}
+    \item{\code{U35E}}{a numeric vector}
+    \item{\code{U35F}}{a numeric vector}
+    \item{\code{U36}}{a numeric vector}
+    \item{\code{U37}}{a numeric vector}
+    \item{\code{U38}}{a numeric vector}
+    \item{\code{U39}}{a numeric vector}
+    \item{\code{V1}}{a numeric vector}
+    \item{\code{V2}}{a numeric vector}
+    \item{\code{Z1}}{a numeric vector}
+    \item{\code{Z2}}{a numeric vector}
+    \item{\code{AGE}}{a numeric vector}
+    \item{\code{REALM}}{a numeric vector}
+    \item{\code{E16A_RT}}{a numeric vector}
+    \item{\code{E16A_IB}}{a numeric vector}
+    \item{\code{E16A_TM}}{a numeric vector}
+    \item{\code{E16A_DD}}{a numeric vector}
+    \item{\code{GROUP}}{a numeric vector}
+    \item{\code{MMSEC}}{a numeric vector}
+    \item{\code{PRIM_SUB}}{a numeric vector}
+    \item{\code{SECD_SUB}}{a numeric vector}
+    \item{\code{ALCOHOL}}{a numeric vector}
+    \item{\code{COC_HER}}{a numeric vector}
+    \item{\code{REALM2}}{a numeric vector}
+    \item{\code{REALM3}}{a numeric vector}
+    \item{\code{RACE}}{a numeric vector}
+    \item{\code{RACE2}}{a numeric vector}
+    \item{\code{BIRTHPLC}}{a numeric vector}
+    \item{\code{PRIMLANG}}{a numeric vector}
+    \item{\code{MD_LANG}}{a numeric vector}
+    \item{\code{HS_GRAD}}{a numeric vector}
+    \item{\code{MAR_STAT}}{a numeric vector}
+    \item{\code{A12B_REC}}{a numeric vector}
+    \item{\code{UNEMPLOY}}{a numeric vector}
+    \item{\code{ALONE6M}}{a numeric vector}
+    \item{\code{HOMELESS}}{a numeric vector}
+    \item{\code{JAIL_MOS}}{a numeric vector}
+    \item{\code{JAIL_5YR}}{a numeric vector}
+    \item{\code{GOV_SUPP}}{a numeric vector}
+    \item{\code{A18_REC1}}{a numeric vector}
+    \item{\code{A18_REC2}}{a numeric vector}
+    \item{\code{STD_EVER}}{a numeric vector}
+    \item{\code{STD_6M}}{a numeric vector}
+    \item{\code{CHR_SUM}}{a numeric vector}
+    \item{\code{CHR_EVER}}{a numeric vector}
+    \item{\code{EPI_SUM}}{a numeric vector}
+    \item{\code{EPI_6M}}{a numeric vector}
+    \item{\code{EPI_6M2B}}{a numeric vector}
+    \item{\code{SER_INJ}}{a numeric vector}
+    \item{\code{D3_REC}}{a numeric vector}
+    \item{\code{D4_REC}}{a numeric vector}
+    \item{\code{D5_REC}}{a numeric vector}
+    \item{\code{ANY_INS}}{a numeric vector}
+    \item{\code{FRML_SAT}}{a numeric vector}
+    \item{\code{E10B1_R}}{a numeric vector}
+    \item{\code{E10B2_R}}{a numeric vector}
+    \item{\code{ALT_TRT}}{a numeric vector}
+    \item{\code{ANY_UTIL}}{a numeric vector}
+    \item{\code{NUM_BARR}}{a numeric vector}
+    \item{\code{G1B_REC}}{a numeric vector}
+    \item{\code{G1D_REC}}{a numeric vector}
+    \item{\code{PRIMSUB2}}{a numeric vector}
+    \item{\code{ALCQ_30}}{a numeric vector}
+    \item{\code{H2_PRB}}{a numeric vector}
+    \item{\code{H3_PRB}}{a numeric vector}
+    \item{\code{H4_PRB}}{a numeric vector}
+    \item{\code{H5_PRB}}{a numeric vector}
+    \item{\code{H6_PRB}}{a numeric vector}
+    \item{\code{H7_PRB}}{a numeric vector}
+    \item{\code{H8_PRB}}{a numeric vector}
+    \item{\code{H9_PRB}}{a numeric vector}
+    \item{\code{H10_PRB}}{a numeric vector}
+    \item{\code{H11_PRB}}{a numeric vector}
+    \item{\code{H12_PRB}}{a numeric vector}
+    \item{\code{POLYSUB}}{a numeric vector}
+    \item{\code{SMOKER}}{a numeric vector}
+    \item{\code{O1B_REC}}{a numeric vector}
+    \item{\code{O1C_REC}}{a numeric vector}
+    \item{\code{O1D_REC}}{a numeric vector}
+    \item{\code{O2_REC}}{a numeric vector}
+    \item{\code{PHYABUSE}}{a numeric vector}
+    \item{\code{SEXABUSE}}{a numeric vector}
+    \item{\code{PHSXABUS}}{a numeric vector}
+    \item{\code{ABUSE2}}{a numeric vector}
+    \item{\code{ABUSE3}}{a numeric vector}
+    \item{\code{CURPHYAB}}{a numeric vector}
+    \item{\code{CURSEXAB}}{a numeric vector}
+    \item{\code{CURPHYSEXAB}}{a numeric vector}
+    \item{\code{FAMABUSE}}{a numeric vector}
+    \item{\code{STRABUSE}}{a numeric vector}
+    \item{\code{ABUSE}}{a numeric vector}
+    \item{\code{RAWPF}}{a numeric vector}
+    \item{\code{PF}}{a numeric vector}
+    \item{\code{RAWRP}}{a numeric vector}
+    \item{\code{RP}}{a numeric vector}
+    \item{\code{RAWBP}}{a numeric vector}
+    \item{\code{BP}}{a numeric vector}
+    \item{\code{RAWGH}}{a numeric vector}
+    \item{\code{GH}}{a numeric vector}
+    \item{\code{RAWVT}}{a numeric vector}
+    \item{\code{VT}}{a numeric vector}
+    \item{\code{RAWSF}}{a numeric vector}
+    \item{\code{SF}}{a numeric vector}
+    \item{\code{RAWRE}}{a numeric vector}
+    \item{\code{RE}}{a numeric vector}
+    \item{\code{RAWMH}}{a numeric vector}
+    \item{\code{MH}}{a numeric vector}
+    \item{\code{HT}}{a numeric vector}
+    \item{\code{PCS}}{a numeric vector}
+    \item{\code{MCS}}{a numeric vector}
+    \item{\code{CES_D}}{a numeric vector}
+    \item{\code{CESD_CUT}}{a numeric vector}
+    \item{\code{C_MS}}{a numeric vector}
+    \item{\code{C_AU}}{a numeric vector}
+    \item{\code{C_DU}}{a numeric vector}
+    \item{\code{CUAD_C}}{a numeric vector}
+    \item{\code{CUAD_H}}{a numeric vector}
+    \item{\code{RAW_RE}}{a numeric vector}
+    \item{\code{DEC_RE}}{a numeric vector}
+    \item{\code{RAW_AM}}{a numeric vector}
+    \item{\code{DEC_AM}}{a numeric vector}
+    \item{\code{RAW_TS}}{a numeric vector}
+    \item{\code{DEC_TS}}{a numeric vector}
+    \item{\code{RAW_ADS}}{a numeric vector}
+    \item{\code{PHYS}}{a numeric vector}
+    \item{\code{PHYS2}}{a numeric vector}
+    \item{\code{INTER}}{a numeric vector}
+    \item{\code{INTRA}}{a numeric vector}
+    \item{\code{IMPUL}}{a numeric vector}
+    \item{\code{IMPUL2}}{a numeric vector}
+    \item{\code{SR}}{a numeric vector}
+    \item{\code{CNTRL}}{a numeric vector}
+    \item{\code{INDTOT}}{a numeric vector}
+    \item{\code{INDTOT2}}{a numeric vector}
+    \item{\code{PSS_FR}}{a numeric vector}
+    \item{\code{PSS_FA}}{a numeric vector}
+    \item{\code{DRUGRISK}}{a numeric vector}
+    \item{\code{SEXRISK}}{a numeric vector}
+    \item{\code{TOTALRAB}}{a numeric vector}
+    \item{\code{RABSCALE}}{a numeric vector}
+    \item{\code{CHR_6M}}{a numeric vector}
+    \item{\code{RCT_LINK}}{a numeric vector}
+    \item{\code{REG_MD}}{a numeric vector}
+    \item{\code{ANY_VIS}}{a numeric vector}
+    \item{\code{ANY_VIS_CUMUL}}{a numeric vector}
+    \item{\code{PC_REC}}{a numeric vector}
+    \item{\code{PC_REC7}}{a numeric vector}
+    \item{\code{SATREAT}}{a numeric vector}
+    \item{\code{DRINKSTATUS}}{a numeric vector}
+    \item{\code{DAYSDRINK}}{a numeric vector}
+    \item{\code{ANYSUBSTATUS}}{a numeric vector}
+    \item{\code{DAYSANYSUB}}{a numeric vector}
+    \item{\code{LINKSTATUS}}{a numeric vector}
+    \item{\code{DAYSLINK}}{a numeric vector}
   }
 }
-
 \details{
 Eligible subjects were adults, who spoke Spanish or English, reported alcohol,
 heroin or cocaine as their first or second drug of choice, resided in proximity
@@ -61,27 +819,27 @@ years.  A variety of continuous, count, discrete, and survival time
 predictors and outcomes were collected at each of these five
 occasions.
 
-This dataset is a superset of the HELP data with 17 subjects with 
-partially observed data on some of the baseline variables.  This is
-a subset of the HELPfull data which includes 5 timepoints and many
-additional variables.
+This dataset is a superset of the HELPmiss and HELP datasets which include
+far fewer variables.
 }
 \source{
 \url{http://www.math.smith.edu/help}
 }
 \references{
-Samet JH, Larson MJ, Horton NJ, Doyle K, Winter M, and Saitz R.  Linking alcohol and 
-drug-dependent adults to primary medical care: 
-A randomized controlled trial of 
-a multi-disciplinary health intervention in a detoxification unit.  
+Samet JH, Larson MJ, Horton NJ, Doyle K, Winter M, and Saitz R.  Linking alcohol and
+drug-dependent adults to primary medical care:
+A randomized controlled trial of
+a multi-disciplinary health intervention in a detoxification unit.
 \emph{Addiction}, 2003; 98(4):509-516.
+
+}
+\examples{
+data(HELPfull)
+## maybe str(HELPfull) ; plot(HELPfull) ...
 }
 \seealso{
 \code{\link{HELP}}, and
-\code{\link{HELPmiss}}.
+\code{\link{HELPmiss}}. 
 }
 
-\examples{
-data(HELPfull)
-}
 \keyword{datasets}
