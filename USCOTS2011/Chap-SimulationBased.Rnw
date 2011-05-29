@@ -1137,7 +1137,7 @@ sd(resample.regressions)  # standard deviation of resampled regression statistic
 
 \begin{center}
 <<resample-mean-run,fig=true>>=
-histogram( ~ result, resample.means )
+histogram( ~ mean, resample.means )
 @
 \end{center}
 Sampling like this on Planet Sample, isn't quite the same as constructing 
