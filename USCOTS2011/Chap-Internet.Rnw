@@ -746,13 +746,18 @@ R.tweets <- Rtweets(n=5)    # short for searchTwitter("#rstats", n=5)
 sapply(R.tweets, printTweet)
 @
 
+\authNote{DTK: I get no hits on this search as of May 29.  Perhaps
+  tags time out or \texttt{searchTwitter} only looks at recent activity.}
+
 Finally, we can see who has been tweeting the most at USCOTS:
-<<twitteruscots>>=
+<<twitteruscots,eval=false>>=
 sort(table(sapply(searchTwitter("#uscots11"), function(x) x$getScreenName())), 
   decreasing=TRUE)
 @
 \InstructorNote{Support functions could be written to simplify this interface for 
 student use.  Just another thing for us to do in our spare time...}
+
+\author
 
 Further support for posting tweets requires use of the Twitter API (with appropriate 
 authentication).  More details are provided in the \pkg{twitteR} vignette file.

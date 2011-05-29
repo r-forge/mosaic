@@ -51,7 +51,7 @@ More about \R\ classes
 \item
 User-defined functions
 \item
-Control structures
+Control structures such as loops and conditionals.
 \end{itemize}
 
 \item ``Less volume, more creativity."  [Mike McCarthy, head coach, Green Bay Packers]
@@ -118,7 +118,12 @@ Quick computations
 Increased focus on concepts rather than calculations
 \end{itemize}
 Get your students to think that using the computer is just part of how statistics is
-done, rather than an add-on.  
+done, rather than an add-on.   
+
+\item Keep the message as simple as possible and keep the commands
+  accordingly simple.  Particularly when doing graphics, beware of distracting
+  students with the sometimes intricate details of beautifying for
+  publication.  If the default behavior is good enough, go with it.
 
 \item
 Anticipate computationally challenged students, but don't give in.
