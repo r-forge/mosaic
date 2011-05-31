@@ -236,7 +236,6 @@ panel.levelFun = function(expr,
 # =============================
     
 
-
 plotFun = function(expr, ..., add=FALSE,
   ylab=NULL, xlab=NULL, zlab=NULL, main=NULL, 
   xlim=NULL, ylim=NULL, npts=NULL,
