@@ -1,0 +1,13 @@
+Package: mosaicManip
+Type: Package
+Title: Project MOSAIC (mosaic-web.org) manipulate examples
+Version: 0.1-1
+Date: 2011-05-31
+Depends: lattice, grid, methods, Hmisc, mosaic
+Suggests: MASS 
+Author: Randall Pruim <rpruim@calvin.edu>, Daniel Kaplan <kaplan@macalester.edu>, Nicholas Horton <nhorton@smith.edu>
+Maintainer: Randall Pruim <rpruim@calvin.edu>
+Description: Project MOSAIC (mosaic-web.org) manipulate examples
+License: GPL
+LazyLoad: yes
+LazyData: yes
