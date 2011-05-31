@@ -1,8 +1,19 @@
-export TEXINPUTS := ./inputs//:${TEXINPUTS}
 export BIBINPUTS := ./inputs//:${BIBINPUTS}
 
 SWEAVEOPTS = -c=cache 
 SWEAVEOPTS = ""
+
+RFILES = \
+	  Chap-GettingStarted.R \
+	  Chap-Manipulate.R \
+	  Chap-SimulationBased.R \
+	  Chap-Core.R \
+	  Chap-Calculus.R \
+	  Chap-RIntro.R \
+	  Chap-MoreR.R \
+	  Chap-Internet.R \
+	  Chap-Multivariate.R \
+
 
 TEXFILES = \
 	  Master-TeachingStatsWithR.tex \
@@ -25,6 +36,8 @@ all: Master-TeachingStatsWithR.pdf
 
 tex: $(TEXFILES)
 
+R: $(RFILES)
+
 clean:
 	- \rm Chap-*.tex 
 	- \rm Chap-*.aux 
@@ -38,5 +51,10 @@ clean:
 	inputs/sfsect.sty inputs/USCOTS.bib
 	bin/sweave.sh -nc $(SWEAVEOPTS) $< 
 
+%.R: %.Rnw setup.R inputs/sfsect.sty inputs/USCOTS.bib
+	bin/sweave.sh -t $(SWEAVEOPTS) $< 
+
 Master-TeachingStatsWithR.pdf: $(TEXFILES) 
 	./bin/latexmk -f -pdf  Master-TeachingStatsWithR.tex
+
+
