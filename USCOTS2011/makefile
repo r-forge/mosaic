@@ -1,4 +1,5 @@
 export BIBINPUTS := ./inputs//:${BIBINPUTS}
+export TEXINPUTS := ./inputs//:${TEXINPUTS}
 
 SWEAVEOPTS = -c=cache 
 SWEAVEOPTS = ""
