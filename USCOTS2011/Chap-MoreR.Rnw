@@ -1249,7 +1249,7 @@ You can, of course, define your own favorite function to use with \function{summ
 The \function{favstats()} function in the \pkg{mosaic} package includes the 
 quartiles, mean, standard, deviation, sample size and number of missing observations.
 \FoodForThought{Notice the use of \code{::} to select 
-the \function{favstats{}} function from the \pkg{mosaic}
+the \function{favstats} function from the \pkg{mosaic}
 package rather than the one we just defined.}%
 <<>>=
 mosaic::favstats(rnorm(100))
