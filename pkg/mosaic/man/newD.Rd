@@ -10,14 +10,13 @@ functions.
 }
 \usage{
 newD(expr, ..., ..h.., numerical=FALSE, method=c("center","right"))
-newantiD(expr, ..., from=NULL, to=NULL ) 
+newAntiD(expr, ..., from=NULL, to=NULL ) 
 }
 \arguments{
-  \item{ff}{a formula. The right side specifies the variable(s) with which to 
+  \item{expr}{a formula. The right side specifies the variable(s) with which to 
   carry out the integration or differentiation.  On the left side should be 
   an expression or a function that returns a numerical vector 
-  of the same length as its argument.  The expression can contain unbound variables.
-}
+  of the same length as its argument.  The expression can contain unbound variables.}
   \item{..h..}{ horizontal distance between points used for secant slope
   calculation in \code{newD()}.  This is used only if a symbolic derivative is not possible or 
   if \code{numerical=TRUE}.  The odd name, \code{..h..}, is there to avoid conflicts with unbound variables in the formula f.
@@ -28,12 +27,12 @@ newantiD(expr, ..., from=NULL, to=NULL )
   \item{to}{Default value for the upper bound of the interval of integration.  This can be set at the time the integral function is invoked (and usually is). }
   \item{\dots}{Default values to be given to unbound variables in the expression \code{ff}.  See examples.  }
 }
-%\details{
+\details{
 \code{newD} attempts to find a symbolic derivative for simple expressions, but will provide a function that is a numerical derivative if the attempt at symbolic differentiation is unsuccessful.  The symbolic derivative can be of any order (although the expression may become unmanageably complex).  The numerical derivative is limited to first or second-order partial derivatives (including mixed partials).
 
 \code{newAntiD} always returns a numerical integral.  
-%}
-\value{For derivatives, the return value is a function of the variable(s) of differentiation, as well as any other symbols used in the expression.  Thus, \code{A*x^2 + B*y ~ x + y} will compute the mixed partial of $Ax^2 + By$ with respect to $x$ then $y$ (that is, $\partial y \partial x$).  The returned value will be a function of $x$ and $y$, as well as $A$ and $B$.  In evaluating the returned function, it's best to used the named form of arguments, to make sure that you have the order right. 
+}
+\value{For derivatives, the return value is a function of the variable(s) of differentiation, as well as any other symbols used in the expression.  Thus, \code{A*x^2 + B*y ~ x + y} will compute the mixed partial with respect to x then y (that is, d2f/dydx).  The returned value will be a function of x and y, as well as A and B.  In evaluating the returned function, it's best to used the named form of arguments, to make sure that you have the order right. 
 
 For integrals, the return value is a function NOT of the variable (only one!) of integration, but of \code{to} and \code{from}, the upper and lower bounds of the interval of integration.
 

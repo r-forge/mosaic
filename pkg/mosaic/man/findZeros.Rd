@@ -17,9 +17,9 @@ findZeros(f, ..., xlim=NULL, npts=1000 )
   \item{xlim}{The range of the dependent variable to search for zeros. \code{Inf} is a legitimate value, but is interpretted in the numerical sense.}
   \item{npts}{How many sub-intervals to divide the \code{xlim} into when looking for candidates for zeros.  If \code{Inf} is involved, the intervals are numerically spaced up to the largest finite floating point number.}
 }
-%\details{
+\details{
 Searches numerically using \code{uniroot}.
-%}
+}
 \value{
 A set of zero or more numerical values.  Plugging these into the expression on the left side of the formula should result in values near zero.
 }

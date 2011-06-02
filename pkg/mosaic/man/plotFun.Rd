@@ -27,9 +27,9 @@ plotFun(expr, ..., xlim=c(0,1), ylim=c(0,1), add=FALSE, ylab=NULL, xlab=NULL, zl
   \item{transparency}{When overlaying a contour plot, the transparency of the overfill}
   }
 }
-%\details{
+\details{
 \code{plotFun} provides a way to plot out mathematical expressions.  All variables and parameters contained in the expression must be given specific numerical values.  The variables being plotted can be given a range of values.
-%}
+}
 \value{
 A function that encapsulates the mathematical expression.
 }
