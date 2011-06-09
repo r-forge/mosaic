@@ -1,4 +1,4 @@
-showHypTest = function(doF=FALSE){
+manipHypTest = function(doF=FALSE){
   maxeffect=10
   resid = 10 # just to avoid a missing value.  It's reset by the controller.
   controls = list()

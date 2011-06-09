@@ -1,5 +1,5 @@
-\name{showHypTest}
-\alias{showHypTest}
+\name{manipHypTest}
+\alias{manipHypTest}
 \title{
 Interactive display for hypothesis testing concepts.
 }
@@ -7,7 +7,7 @@ Interactive display for hypothesis testing concepts.
 Displays a sampling distribution and calculates power.
 }
 \usage{
-showHypTest(doF=FALSE)
+manipHypTest(doF=FALSE)
 }
 \arguments{
   \item{doF}{Show the F distribution.  Default: a t-distribution for the sample statistic.}
@@ -18,13 +18,13 @@ Allows the user to set various parameters that govern the sampling distribution,
 significance, then calculates the power.  Displays all this graphically.
 }
 \value{
-A function.
+Just the graphics as a side effect.
 }
 \author{
 Daniel Kaplan (\email{kaplan@macalester.edu}) and 
 }
 
 \examples{
-showHypTest()
+manipHypTest()
 }
 \keyword{statistics}

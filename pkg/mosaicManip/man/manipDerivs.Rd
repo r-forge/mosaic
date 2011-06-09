@@ -14,12 +14,12 @@ manipDerivs(expr, xlim=c(0,10), ...)
 }
   \item{xlim}{ The range of the dependent variable.
   }
-  \item{\dots}{ additional arguments to \code{f}
+  \item{\dots}{ additional arguments to \code{expr}
   }
 }
-%\details{
-%%  ~~ If necessary, more details than the description above ~~
-%}
+\details{
+Displays a function (defined by \code{expr}, along with the derivative and integral of that function.  Allows the user to see how those three functions are related, visually.
+}
 \value{
 A function.
 }
