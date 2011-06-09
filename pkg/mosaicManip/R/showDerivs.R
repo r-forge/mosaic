@@ -61,15 +61,14 @@ myplot= function(xpos, from, der, anti, fixed){
     panel.lines(x=c(xpos, -9000000), y = c(f(xpos),f(xpos)), col=rgb(0,0,0,.3), lwd = 11)
     # commented line below gives slope and f position together.
      #grid.text(label=round(dfdx(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(f(xpos),"native")+unit(2,"mm"), gp = gpar(col = deriv.color, fontsize =10))
-    grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(1, "npc")-unit(20,"mm"), y = unit(1,"npc")-unit(3,"mm"), rot = atan(dfdx(xpos))*180/pi, gp = gpar(col = deriv.color, fontsize =10))
-    
+    grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(1, "npc")-unit(15,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = deriv.color, fontsize =10))
+    #rot = atan(dfdx(xpos))*180/pi,
      grid.text(label=round(f(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(f(xpos),"native"), gp = gpar(col = "black", fontsize =10))
    }
     
   antiFpanel = function(x, y){
    panel.xyplot(x, y, type="l", lwd = 2, col =integral.color, ...)
-
- tupac = data.frame(x,y,pos = positive(y))
+   tupac = data.frame(x,y,pos = positive(y))
     tupac = subset(tupac, pos == FALSE)
     panel.xyplot(tupac$x, tupac$y, type = "p", pch = ".", cex = 2, col = "purple")
     panel.points(xpos, antiF(xpos, from = from))
@@ -77,8 +76,7 @@ myplot= function(xpos, from, der, anti, fixed){
     yline = antiF(xpos, from = from)+ f(xpos)*(x - xpos)
     panel.lines(x, yline, col=rgb(0,0,0,.3), lwd = 10)
     panel.lines(x=c(xpos, -9000000), y = c(antiF(xpos,from = from),antiF(xpos, from=from)), col=rgb(0,0,1,.3), lwd = 11)
-    grid.text(label="Slope = ", x = unit(1, "npc")-unit(20,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = "black", fontsize =10))
-    grid.text(label=round(f(xpos), 3), x = unit(1, "npc")-unit(7,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = "black", fontsize =10))
+    grid.text(label=paste("Slope = ", signif(f(xpos), 3)), x = unit(1, "npc")-unit(15,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = "black", fontsize =10))
      grid.text(label=round(antiF(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(antiF(xpos, from = from),"native"), gp = gpar(col = integral.color, fontsize =10))
   }
   
