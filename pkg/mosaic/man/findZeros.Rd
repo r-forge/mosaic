@@ -7,10 +7,10 @@ Find the zeros of a function
 Compute numerically the zeros of a function.
 }
 \usage{
-findZeros(f, ..., xlim=NULL, npts=1000 )
+findZeros(expr, ..., xlim=NULL, npts=1000 )
 }
 \arguments{
-  \item{f}{A formula.  The right side names the variable with respect to which the zeros should be found.  The left side is an expression, e.g. \code{sin(x) ~ x}.  All variables named in the expression must be assigned values via \code{\ldots}
+  \item{expr}{A formula.  The right side names the variable with respect to which the zeros should be found.  The left side is an expression, e.g. \code{sin(x) ~ x}.  All variables named in the expression must be assigned values via \code{\ldots}
 }
   \item{\dots}{Specific numerical values for the unbound variables in the expression.}
 

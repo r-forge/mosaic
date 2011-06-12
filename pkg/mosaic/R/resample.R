@@ -121,7 +121,8 @@ sample.default <- function(x, size, replace=FALSE, prob=NULL, groups=NULL, orig.
 
 
 sample.data.frame <- function(x, size, replace = FALSE, prob = NULL, groups=NULL, 
-	orig.ids=TRUE, fixed=names(x), shuffled=c(), invisibly.return = nrow(x) > 50, ...) {
+      orig.ids=TRUE, fixed=names(x), shuffled=c(),
+      invisibly.return = (size > 50 && nrow(x) > 50), ...) {
 	shuffled <- intersect(shuffled, names(x))
 	fixed <- setdiff(intersect(fixed, names(x)), shuffled)
 	n <- nrow(x)

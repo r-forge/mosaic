@@ -1,5 +1,4 @@
-newAntiD = function(expr, from=NULL, to=NULL, input0=0, ...){
-  if( length(from) != 0 ) input0=from
+newAntiD = function(expr, from=0, to=NULL, ...){
   vals = list(...)
   sexpr = substitute(expr)
   # If it's an expression
@@ -11,10 +10,9 @@ newAntiD = function(expr, from=NULL, to=NULL, input0=0, ...){
     assign(foo$names[1], .x)
     return( eval(foo$sexpr))
   }
-  needed = list(sexpr=foo$sexpr, names=foo$names)
+  needed = list(sexpr=foo$sexpr, names=foo$names) # data passed to the function by arguments
   ..foutput = .antiD.x
   
-
   if( any( c("to","from") %in% c(foo$names,names(formals(foo$fun)))) )
     stop("Can't use a variable called 'to' or 'from' in a function being integrated.")
   starting.args = alist(to=)
@@ -30,9 +28,8 @@ newAntiD = function(expr, from=NULL, to=NULL, input0=0, ...){
          paste(tmp2, "=",collapse=",",sep=""),")")
      one = eval(parse(text=tmp))    
   }
-  fargs =c(fargs, one, list(from=input0))
+  fargs =c(fargs, one, list(from=from))
   
-  # fargs[all.vars(foo$sexpr)] = NA
   fargs[names(vals)] = vals
   fargs[foo$names] = NULL 
   # EXCEPTIONS for 
@@ -45,6 +42,7 @@ newAntiD = function(expr, from=NULL, to=NULL, input0=0, ...){
     
   environment(..foutput) = parent.frame()
   formals(..foutput) = fargs
+  attr(..foutput,"mosaicType") = "Numerical integration process"
   return(..foutput) 
 }
 # ===============================

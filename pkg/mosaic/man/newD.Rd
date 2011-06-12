@@ -10,7 +10,7 @@ functions.
 }
 \usage{
 newD(expr, ..., ..h.., numerical=FALSE, method=c("center","right"))
-newAntiD(expr, ..., from=NULL, to=NULL ) 
+newAntiD(expr, from=0, to=NULL, ... ) 
 }
 \arguments{
   \item{expr}{a formula. The right side specifies the variable(s) with which to 

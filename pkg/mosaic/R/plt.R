@@ -105,8 +105,8 @@
 #==========
 
 plotFun = function(expr, ..., add=FALSE,
-  ylab=NULL, xlab=NULL, zlab=NULL, main=NULL, 
   xlim=NULL,ylim=NULL,npts=NULL,
+  ylab=NULL, xlab=NULL, zlab=NULL, main=NULL, 
   lwd=1,col="black",filled=TRUE,nlevels=10,
   surface=FALSE,
   colorscheme=topo.colors,type="l",transparency=NULL ) { 

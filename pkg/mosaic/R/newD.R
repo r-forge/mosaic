@@ -68,6 +68,7 @@ newD = function(expr, ..., ..h..=NULL, numerical=FALSE, method=c("center","right
   
   formals(.df) = fargs #formals(fm$fun)
   environment(.df) = parent.frame()  # set the environment where the function will look for the expression
+  attr(.df,"mosaicType") = "Numerical finite-difference process"
   return(.df) 
 }
 # =====================

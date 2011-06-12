@@ -7,20 +7,19 @@ Plotting mathematical expressions (EXPERIMENTAL)
 Plots out mathematical functions of one or two variables.
 }
 \usage{
-plotFun(expr, ..., xlim=c(0,1), ylim=c(0,1), add=FALSE, ylab=NULL, xlab=NULL, zlab=NULL, main=NULL, xlim=NULL, ylim=NULL, npts=NULL, lwd=1, col="black",filled=TRUE,surface=FALSE, colorscheme=topo.colors,type="l",transparency=NULL)
+plotFun(expr, ..., add=FALSE, xlim=NULL, ylim=NULL, npts=NULL, ylab=NULL, xlab=NULL, zlab=NULL, main=NULL, lwd=1, col="black",filled=TRUE, nlevels=10, surface=FALSE, colorscheme=topo.colors,type="l",transparency=NULL)
 }
 \arguments{
   \item{expr}{A formula of the same sort used in \code{newD} and \code{newAntiD}.}
   \item{\dots}{Values for the variables and parameters contained in the expression.}
-  \item{xlim}{Limit of the x-axis}
-  \item{ylim}{Limit of the y-axis, when plotting out functions of two variables.}
   \item{add}{If \code{add=TRUE}, add the new plot over the existing plot.}
-  \item{ylab,xlab,zlab,main}{Labels for the axes and the plot itself.}
   \item{xlim,ylim}{Limits for the x- and y-axes (or set using the independent variables)}
   \item{npts}{Approximately granularity of the plot.}
+  \item{ylab,xlab,zlab,main}{Labels for the axes and the plot itself.}
   \item{lwd}{Line width for line plots}
   \item{col}{Color for line plots}
   \item{filled}{If \code{filled=TRUE}, then shade contour plots.}
+  \item{nlevels}{Number of contour levels for contour plots.}
   \item{surface}{For functions of two variables, do a surface rather than a contour plot.}
   \item{colorscheme}{How to shade surface plots}
   \item{type}{Plotting type, e.g. "l", "p", as in \code{plot}}
