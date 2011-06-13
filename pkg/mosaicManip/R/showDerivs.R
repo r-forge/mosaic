@@ -9,7 +9,7 @@ manipDerivs = function(expr, xlim=c(0,10), ...) {
   dfdx <<- newD(f(x)~x,...)  #make these globals to use in plotFun
   antiF <<- newAntiD(f(x)~x,...) # ditto
 #colors
-   deriv.color2 = rgb(1,0,0,.2)#"red"
+   deriv.color2 = rgb(1,0,0,.2)#red, transparent
   deriv.color = "red" 
   integral.color2 = "blue"
   integral.color= rgb(0,0,1,1)
@@ -72,9 +72,10 @@ myplot= function(xpos, from, der, anti, fixed){
     tupac = subset(tupac, pos == FALSE)
     panel.xyplot(tupac$x, tupac$y, type = "p", pch = ".", cex = 2, col = "purple")
     panel.points(xpos, antiF(xpos, from = from))
+    panel.points(from, antiF(from, from = from), col = "black")
     panel.abline(h=0, lty = "dotted")
-    yline = antiF(xpos, from = from)+ f(xpos)*(x - xpos)
-    panel.lines(x, yline, col=rgb(0,0,0,.3), lwd = 10)
+    yline2 = antiF(xpos, from = from)+ f(xpos)*(x - xpos)
+    panel.lines(x, yline2, col=rgb(0,0,0,.3), lwd = 10)
     panel.lines(x=c(xpos, -9000000), y = c(antiF(xpos,from = from),antiF(xpos, from=from)), col=rgb(0,0,1,.3), lwd = 11)
     grid.text(label=paste("Slope = ", signif(f(xpos), 3)), x = unit(1, "npc")-unit(15,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = "black", fontsize =10))
      grid.text(label=round(antiF(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(antiF(xpos, from = from),"native"), gp = gpar(col = integral.color, fontsize =10))
@@ -102,10 +103,10 @@ b = xyplot(f~x, data = dat, type = "l", xlab = NULL, scales = list(x = list(draw
 c = xyplot(antiF~x, data = dat, type = "l", ylab = "Antiderivative of f", panel = antiFpanel)  
 
   if(fixed == TRUE)
-  {
-    yparam = c(max(antiF(x, from = from)), min(antiF(x, from = from)))
+  { 
+    yparam = c(max(antiF(x, from = min(xlim))), min(antiF(x, min(xlim))))
     diff = diff(yparam)
-    yparam = c(min(antiF(x, from = from))-diff/3, max(antiF(x, from = from))+diff/3)
+    yparam = c((min(antiF(x, from = min(xlim))))-diff/3, (max(antiF(x, from = min(xlim))))+diff/3)
     c = xyplot(antiF~x, data = dat, type = "l", ylim = yparam, ylab = "Antiderivative of f", panel = antiFpanel)  
   }
   
