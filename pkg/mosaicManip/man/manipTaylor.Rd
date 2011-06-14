@@ -4,7 +4,7 @@
 Interactive App to Examine Taylor Approximations and Least Squares Approximations
 }
 \description{
-This applet displays a plot of a function, its Taylor Series, and a least squares approximation. 
+This applet displays a plot of a function, its Taylor series approximation, and a least squares approximation. 
 }
 \usage{
 manipTaylor(expr, xlim=c(-5, 5), ...) 
@@ -31,5 +31,6 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com})
 \examples{
 manipTaylor(exp(x)~x, xlim = range(-2, 2))
 manipTaylor(sin(x)~x, xlim = range(-4, 4))
+manipTaylor(sin(x^2)~x, xlim = range(-5,5))
 }
 \keyword{ calculus }
