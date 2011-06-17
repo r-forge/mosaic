@@ -11,64 +11,66 @@
 	return(result)
 }
 
+# basic simple stat functions, e.g., mean, IQR, sd, var, median
+.stat.fun.maker = function(fun,methodname){
+  function(x, data=NULL, ...) {
+    if( is.name( substitute(x) ) )
+      fun(eval( substitute(x), data, enclos=parent.frame()), ...)
+    else {
+      if( "formula" == class(x)  && length(x)==2 ) {
+         # It's a formula with no left-hand side
+         fun( eval( x[[2]], data, enclos=parent.frame()), ...)
+      }
+      else UseMethod(methodname)
+    }
+  }
+}
 
-mean <- function(x, ...) UseMethod('mean')
+mean   <- .stat.fun.maker( mean, "mean" )
+sd     <- .stat.fun.maker( stats::sd, "sd" )
+var    <- .stat.fun.maker( var, "var" )
+median <- .stat.fun.maker( median, "median" )
+IQR    <- .stat.fun.maker( IQR, "IQR" )
+prop   <- .stat.fun.maker( prop, "prop" )
+count  <- .stat.fun.maker( count, "count" )
 
-# do similar thing to other functions later
-# isolate reusable elements to make maintenance easier...
-
-mean.formula <- function( x, data=parent.frame(), na.rm=TRUE, ... ) {
-	result <- .mosaic_aggregate( x, data, FUN=base::mean, na.rm=na.rm, ... )
+.stat.fun.formula.maker <- function(FUN,resname) {
+  function( x, data=parent.frame(), na.rm=TRUE, ... ) {
+	result <- .mosaic_aggregate( x, data, FUN=FUN, na.rm=na.rm, ... )
 	class(result) <- c('aggregated.stat', class(result))
-	attr(result, 'stat.name') <- 'mean'
-	return(mean=result)
-}
-
-mean.default <- function( x, na.rm=TRUE, ... ) {
-	c(mean = base::mean.default(x, na.rm=na.rm, ...))
-}
-
-
-sd <- function(x, ...) UseMethod('sd')
-
-sd.default <- function(x, na.rm=TRUE, ... ) {
-	stats::sd(x, na.rm=na.rm)
-}
-
-sd.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- .mosaic_aggregate( x, data, FUN=stats::sd, na.rm=na.rm)
-	class(result) <- c('aggregated.stat', class(result))
-	attr(result, 'stat.name') <- 'sd'
+	attr(result, 'stat.name') <- resname
 	return(result)
+  }
 }
 
-var <- function(x, ...) UseMethod('var')
+mean.formula    <- .stat.fun.formula.maker( base::mean,    "mean" )
+sd.formula      <- .stat.fun.formula.maker( stats::sd,     "sd" )
+var.formula     <- .stat.fun.formula.maker( stats::var,    "var" )
+median.formula  <- .stat.fun.formula.maker( stats::median, "median" )
+IQR.formula     <- .stat.fun.formula.maker( stats::IQR,    "IQR" )
+count.formula   <- .stat.fun.formula.maker( count.default, "count" )
+prop.formula    <- .stat.fun.formula.maker( prop.default,  "prop" )
 
-var.default <- function(x, na.rm=TRUE, ...) {
-	stats::var(x, na.rm=na.rm)
+mean.default   <- function( x, na.rm=TRUE, ... ) c(mean = base::mean.default(x, na.rm=na.rm, ...))
+sd.default     <- function( x, na.rm=TRUE, ... ) stats::sd(x, na.rm=na.rm)
+var.default    <- function( x, na.rm=TRUE, ... ) stats::var(x, na.rm=na.rm)
+median.default <- function( x, na.rm=TRUE, ... ) stats::median.default(x, na.rm=na.rm)
+IQR.default    <- function( x, na.rm=TRUE, ... ) stats::IQR( x, ...)
+count.default  <- function( x, na.rm=TRUE, ... ) count.factor( as.factor(x), na.rm=na.rm, ...)
+prop.default   <- function( x, na.rm=TRUE, ... ) prop.factor( as.factor(x), ...)
+
+
+.stat.fun.factor.bogus.maker = function(statname) {
+  function( x, na.rm=TRUE, ...) {
+    stop( paste("Can't take",statname,"of a factor.  Use, e.g., count( ) or prop( ).") )
+  }
 }
+mean.factor   <- .stat.fun.factor.bogus.maker("mean")
+median.factor <- .stat.fun.factor.bogus.maker("median")
+sd.factor     <- .stat.fun.factor.bogus.maker("sd")
+var.factor    <- .stat.fun.factor.bogus.maker("var")
+IQR.factor    <- .stat.fun.factor.bogus.maker("IQR")
 
-var.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- .mosaic_aggregate( x, data, FUN=stats::var, na.rm=na.rm)
-	class(result) <- c('aggregated.stat', class(result))
-	attr(result, 'stat.name') <- 'var'
-	return(result)
-}
-
-median <- function(x, ...) UseMethod('median')
-
-median.default <- function(x, na.rm=TRUE, ...) {
-	stats::median.default(x, na.rm=na.rm)
-}
-
-median.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- .mosaic_aggregate( x, data, FUN=stats::median.default, na.rm=na.rm)
-	class(result) <- c('aggregated.stat', class(result))
-	attr(result, 'stat.name') <- 'median'
-	return(result)
-}
-
-count <- function(x, ...) { UseMethod('count') }
 
 count.logical <- function(x, level=TRUE, na.rm=TRUE, ...) 
 	count.factor( as.factor(x), level=level, na.rm=na.rm ) 
@@ -81,19 +83,6 @@ count.factor <- function(x, level=levels(x)[1], na.rm=TRUE, ...) {
 	names(result) <- paste('count', level, sep=".")
 	return(result)
 }
-
-count.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- .mosaic_aggregate( x, data, FUN=count, na.rm=na.rm)
-	class(result) <- c('aggregated.stat', class(result))
-	attr(result, 'stat.name') <- 'count'
-	return(result)
-}
-
-count.default <- function(x, na.rm=TRUE, ...) {
-	count.factor( as.factor(x), ...)
-}
-
-prop <- function(x, ...) { UseMethod('prop') }
 
 prop.logical <- function(x, level=TRUE, na.rm=TRUE, ...) 
 	prop.factor( as.factor(x), level=level, na.rm=na.rm )
@@ -109,13 +98,3 @@ prop.factor <- function(x, level=levels(x)[1], na.rm=TRUE, ...) {
 	return(result)
 }
 
-prop.formula <- function( x, data, na.rm=TRUE, ... ) {
-	result <- .mosaic_aggregate( x, data, FUN=prop, na.rm=na.rm)
-	class(result) <- c('aggregated.stat', class(result))
-	attr(result, 'stat.name') <- 'prop'
-	return(result)
-}
-
-prop.default <- function(x, na.rm=TRUE, ...) {
-	prop.factor( as.factor(x), ...)
-}

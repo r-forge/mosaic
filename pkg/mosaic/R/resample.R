@@ -6,7 +6,7 @@ deal    <- function(x, size, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FAL
 }
 
 resample <- function(x, size, replace=TRUE, prob=NULL, groups=NULL, orig.ids=FALSE, ...) {
-	sample(x, size, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids, ...)
+	sample(x, size=size, replace=replace, prob=prob, groups=groups, orig.ids=orig.ids, ...)
 }
 
 shuffle <- function(x, replace=FALSE, prob=NULL, groups=NULL, orig.ids=FALSE) 
@@ -122,7 +122,9 @@ sample.default <- function(x, size, replace=FALSE, prob=NULL, groups=NULL, orig.
 
 sample.data.frame <- function(x, size, replace = FALSE, prob = NULL, groups=NULL, 
       orig.ids=TRUE, fixed=names(x), shuffled=c(),
-      invisibly.return = (size > 50 && nrow(x) > 50), ...) {
+      invisibly.return = NULL, ...) {
+        if( missing(size) ) size = nrow(x)
+        if( is.null(invisibly.return) ) invisibly.return = size>50 
 	shuffled <- intersect(shuffled, names(x))
 	fixed <- setdiff(intersect(fixed, names(x)), shuffled)
 	n <- nrow(x)

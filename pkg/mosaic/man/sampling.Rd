@@ -25,7 +25,7 @@ sample(x, size, replace = FALSE, ...)
 
 \method{sample}{data.frame}(x, size, replace = FALSE, prob = NULL, groups = NULL,
                  orig.ids = TRUE, fixed = names(x), shuffled = c(),
-                 invisibly.return = (size > 50 && nrow(x) > 50), ...)
+                 invisibly.return = NULL, ...)
 
 \method{sample}{factor}(x, size, replace = FALSE, prob = NULL, 
 	groups = NULL, orig.ids = FALSE, drop.unused.levels=FALSE, ...)
