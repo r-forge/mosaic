@@ -73,14 +73,14 @@ IQR(x, data=NULL, ...)
 \method{IQR}{default}(x, na.rm=TRUE, ...)
 \method{IQR}{factor}(x, na.rm=TRUE, ...)
 
-min(x, data=NULL, ...)
+min(..., data=NULL, na.rm=TRUE)
 \method{min}{formula}(x, data, na.rm=TRUE, ...)
-\method{min}{default}(x, na.rm=TRUE, ...)
+\method{min}{default}(..., na.rm=TRUE)
 \method{min}{factor}(x, na.rm=TRUE, ...)
 
-max(x, data=NULL, ...)
+max(..., data=NULL, na.rm=TRUE)
 \method{max}{formula}(x, data, na.rm=TRUE, ...)
-\method{max}{default}(x, na.rm=TRUE, ...)
+\method{max}{default}(..., na.rm=TRUE)
 \method{max}{factor}(x, na.rm=TRUE, ...)
 
 prop(x, data=NULL, ...)
@@ -122,6 +122,9 @@ mean(~age, data=HELP)
 mean(HELP$age)
 mean(age ~ sex, data=HELP)
 mean( age ~ sex + treat, data=HELP)
+mean(age ~ sex, data=HELP, overall=TRUE )
+mosaic.par.set(aggregate.overall=TRUE)
+mean(age ~ sex, data=HELP)
 }
 \keyword{ ~kwd1 }
 \keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

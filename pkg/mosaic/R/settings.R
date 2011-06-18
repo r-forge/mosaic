@@ -7,8 +7,9 @@ updateList <- function(x, val)
 }
 
 .defaultMosaicOptions <- function()
-    list(na.rm=TRUE, 
-		 graphics='lattice'
+    list(na.rm=TRUE,
+         aggregate.overall=FALSE,
+	 graphics='lattice'
 		 )
 
 mosaic.options <- function (...) 

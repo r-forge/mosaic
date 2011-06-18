@@ -34,14 +34,12 @@ Daniel Kaplan (\email{kaplan@macalester.edu})
 }
 
 \examples{
-% Student users
 kids = fetchData("kidsfeet.csv")
 carbon = fetchData("CO2")
-% Instructors
 fetchData(add.to.path=TRUE)
 fetchData(add.to.path=TRUE,name="http://www.macalester.edu/~kaplan/ISM/datasets/")
 fetchData(drop.from.path=TRUE,name="http://www.macalester.edu/~kaplan/ISM/datasets/") 
 fetchData(drop.from.path=TRUE) 
-fetchData(add.to.library=TRUE,name="mydata.csv",var=data.frame(x=c(1,2,3), y=c(7,1,4))
+fetchData(add.to.library=TRUE,name="mydata.csv",var=data.frame(x=c(1,2,3), y=c(7,1,4)))
 }
 \keyword{ mosaic }

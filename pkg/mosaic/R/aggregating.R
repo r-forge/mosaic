@@ -1,5 +1,5 @@
  
-.mosaic_aggregate <- function(x, data, FUN, overall=TRUE, ...) {
+.mosaic_aggregate <- function(x, data, FUN, overall=mosaic.par.get("aggregate.overall"), ...) {
 	if (length(x) == 2 ) {
 		return( data.frame( FUN (eval( x[[2]], data) ) ) )
 	} else {
@@ -26,6 +26,23 @@
   }
 }
 
+# This version is needed when functions take ... as their first argument: min and max
+.stat.fun.maker2 = function(fun,methodname){
+  function(..., data=NULL, na.rm=TRUE) {
+    x = list(substitute(...))[[1]]
+    if( is.name( x ) ) {
+      fun(eval( x, data, enclos=parent.frame()))
+    }
+    else {
+      if( "formula" == class(x)  && length(x)==2 ) {
+         # It's a formula with no left-hand side
+         fun( eval( x[[2]], data, enclos=parent.frame()))
+      }
+      else UseMethod(methodname)
+    }
+  }
+}
+
 mean   <- .stat.fun.maker( mean, "mean" )
 sd     <- .stat.fun.maker( stats::sd, "sd" )
 var    <- .stat.fun.maker( var, "var" )
@@ -33,8 +50,8 @@ median <- .stat.fun.maker( median, "median" )
 IQR    <- .stat.fun.maker( IQR, "IQR" )
 prop   <- .stat.fun.maker( prop, "prop" )
 count  <- .stat.fun.maker( count, "count" )
-min    <- .stat.fun.maker( min, "min" )
-max    <- .stat.fun.maker( max, "max" )
+min    <- .stat.fun.maker2( min, "min" )
+max    <- .stat.fun.maker2( max, "max" )
 
 .stat.fun.formula.maker <- function(FUN,resname) {
   function( x, data=parent.frame(), na.rm=TRUE, ... ) {
@@ -62,8 +79,8 @@ median.default <- function( x, na.rm=TRUE, ... ) stats::median.default(x, na.rm=
 IQR.default    <- function( x, na.rm=TRUE, ... ) stats::IQR( x, na.rm=na.rm, ...)
 count.default  <- function( x, na.rm=TRUE, ... ) count.factor( as.factor(x), na.rm=na.rm, ...)
 prop.default   <- function( x, na.rm=TRUE, ... ) prop.factor( as.factor(x), ...)
-min.default    <- function( x, na.rm=TRUE, ... ) base::min( x, na.rm=na.rm, ...)
-max.default    <- function( x, na.rm=TRUE, ... ) base::max( x, na.rm=na.rm, ...)
+min.default    <- function( ..., na.rm=TRUE ) base::min( ..., na.rm=na.rm)
+max.default    <- function( ..., na.rm=TRUE ) base::max( ..., na.rm=na.rm)
 
 .stat.fun.factor.bogus.maker = function(statname) {
   function( x, na.rm=TRUE, ...) {

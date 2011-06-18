@@ -41,6 +41,7 @@ fetchData = function(name=NULL,
         if (exists("goo") ) .fetchData.storage(name=name,val=goo,library=TRUE,action="add") 
         else warning("Can't find file ", name)
       }
+      return(NULL)
   }
   # ==== Interface to the search path
   if (add.to.path) {
