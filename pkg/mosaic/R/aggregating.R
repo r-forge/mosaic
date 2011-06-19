@@ -11,14 +11,21 @@
 	return(result)
 }
 
+# implement test for formula with NULL, ., 1 or 0 on the right hand side
+.test.formula.simple.RHS = function(x){
+     "formula" == class(x)  &&
+         (length(x)==2 || is.null(x[[3]]) ||
+          (length(x[[3]])==1 &&
+          ((is.numeric(x[[3]]) && (x[[3]]==0 || x[[3]]==1)) ||  (all.names(x[[3]]) %in% c(".")))))
+}
+
 # basic simple stat functions, e.g., mean, IQR, sd, var, median
 .stat.fun.maker = function(fun,methodname){
   function(x, data=NULL, ...) {
     if( is.name( substitute(x) ) )
       fun(eval( substitute(x), data, enclos=parent.frame()), ...)
-    else {
-      if( "formula" == class(x)  && length(x)==2 ) {
-         # It's a formula with no left-hand side
+    else { if( .test.formula.simple.RHS(x) ) {
+         # It's a formula with no left-hand side or a simple right-hand side, e.g. NULL, 
          fun( eval( x[[2]], data, enclos=parent.frame()), ...)
       }
       else UseMethod(methodname)
@@ -34,7 +41,7 @@
       fun(eval( x, data, enclos=parent.frame()))
     }
     else {
-      if( "formula" == class(x)  && length(x)==2 ) {
+      if( .test.formula.simple.RHS(x) ) { #"formula" == class(x)  && length(x)==2 ) {
          # It's a formula with no left-hand side
          fun( eval( x[[2]], data, enclos=parent.frame()))
       }
