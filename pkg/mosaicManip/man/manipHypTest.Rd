@@ -12,7 +12,6 @@ manipHypTest(doF=FALSE)
 \arguments{
   \item{doF}{Show the F distribution.  Default: a t-distribution for the sample statistic.}
 }
-}
 \details{
 Allows the user to set various parameters that govern the sampling distribution, and the 
 significance, then calculates the power.  Displays all this graphically.
@@ -26,5 +25,6 @@ Daniel Kaplan (\email{kaplan@macalester.edu}) and
 
 \examples{
 manipHypTest()
+manipHypTest(doF=TRUE)
 }
 \keyword{statistics}
