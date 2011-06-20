@@ -1,6 +1,7 @@
-manipTaylor = function(expr, xlim = c(-5, 5), ...){
+mTaylor = function(expr, xlim = c(-5, 5), ...){
   #packages 
-  require("manipulate")
+  if(!require("manipulate"))
+  {stop("Must have manipulate package!")}
   require("mosaic")
 #functions
    vals = list(...)
@@ -36,7 +37,6 @@ for (k in 2:11) {
 myx = seq(a-xwid/2, a+xwid/2, length = 1000)
 A = outer(myx-a, 0:n, "^")
 coefs = qr.solve(A, f(myx))
-#lsq.func = coefs[[1]]
 lsq.func=0
 for(j in 0:n){
   lsq.func = lsq.func+(x-a)^(j)*coefs[[j+1]]
@@ -51,7 +51,10 @@ mypanel = function(x, y){
       ypos = pmax(f(x), ypts)
       yneg = pmin(f(x), ypts)
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.red)
-      TayRMS = sqrt(mean(ypts^2))*myx
+      
+      inds = x==myx
+      
+      TayRMS = abs(sqrt(mean(ypts^2))*myx)
    grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
                 y = unit(1,"npc")-unit(.5, "lines"),
@@ -64,7 +67,13 @@ mypanel = function(x, y){
       ypos = pmax(f(x), ypts)
       yneg = pmin(f(x), ypts)
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.blue)
-      lsRMS = sqrt(mean(ypts^2))*myx
+    ##########  BROKEN?
+      myY=0 
+      for(j in 0:n){
+      myY = myY+(myx-a)^(j)*coefs[[j+1]]
+      }
+   ############
+      lsRMS = abs(sqrt(mean(myY^2))*myx)
       grid.text(label = paste("Least Squares RMS error: ", signif(lsRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
                 y = unit(1,"npc")-unit(1.5, "lines"),
@@ -88,8 +97,25 @@ mypanel = function(x, y){
 }
 # ============
   errpanel = function(x,y){
-    if(TaylorBeTrue)
+    xpts = c(min(x),x,max(x))
+    if(TaylorBeTrue){
     panel.xyplot(x, (T[[as.numeric(n)+1]]-y), type = "l", col = line.red, lwd = 5)
+        if(err == TRUE)
+    {  
+   ypts = c(0,T[[as.numeric(n)+1]]-y,0)
+   ypos = pmax(0, ypts)
+   yneg = pmin(0, ypts)
+   panel.polygon(xpts,ypos,col=trans.red, border = FALSE)
+   panel.polygon(xpts,yneg,col=trans.red, border = FALSE) 
+   TayRMS = sqrt(mean(ypts^2))
+   grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
+                x = unit(0,"npc")+unit(1, "mm"), 
+                y = unit(1,"npc")-unit(.5, "lines"),
+                just ="left",
+                gp = gpar(col = "red", fontsize =10))
+            
+     }
+    }
     if(lsquares){
     panel.xyplot(x, (lsq.func-y), type = "l", col = line.blue, lwd = 5)
     panel.rect(xright=min(myx), 
@@ -97,39 +123,31 @@ mypanel = function(x, y){
                ybottom=-999999, 
                ytop = 999999, 
                col = rect.trans.blue)
-    }
-    panel.points(a, 0, cex = 2)
-    panel.abline(h=0, lty = "dotted")
-    if(err == TRUE)
-    {  xpts = c(min(x),x,max(x))
-   ypts = c(0,T[[as.numeric(n)+1]]-y,0)
-   ypos = pmax(0, ypts)
-   yneg = pmin(0, ypts)
-   panel.polygon(xpts,ypos,col=trans.red, border = FALSE)
-   panel.polygon(xpts,yneg,col=trans.red, border = FALSE) 
-     lsRMS = sqrt(mean(ypts^2))
-      grid.text(label = paste("Least Squares RMS error: ", signif(lsRMS,4)), 
-                x = unit(0,"npc")+unit(1, "mm"), 
-                y = unit(1,"npc")-unit(1.5, "lines"),
-                just ="left",
-                gp = gpar(col = "blue", fontsize =10)) 
-       
-   ypts = c(0,lsq.func-y,0)
+   if(err == TRUE){
+   ypts = c(lsq.func-y)
    ypos = pmax(0, ypts)
    yneg = pmin(0, ypts)
    panel.polygon(xpts,ypos,col=trans.blue, border = FALSE)
    panel.polygon(xpts,yneg,col=trans.blue, border = FALSE)
-   TayRMS = sqrt(mean(ypts^2))
-   grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
+       ##########  BROKEN?
+   myY=0 
+      for(j in 0:n){
+      myY = myY+(myx-a)^(j)*coefs[[j+1]]
+      }
+   ###################
+   lsRMS = sqrt(mean(myY^2))
+      grid.text(label = paste("Least Squares RMS error: ", signif(lsRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
-                y = unit(1,"npc")-unit(.5, "lines"),
+                y = unit(1,"npc")-unit(1.5, "lines"),
                 just ="left",
-                gp = gpar(col = "red", fontsize =10))
+                gp = gpar(col = "blue", fontsize =10))
    
-       
-     }
+            }
+    }
+    panel.points(a, 0, cex = 2)
+    panel.abline(h=0, lty = "dotted")
+
   }
-bigx = seq(2*min(xlim),2*max(xlim), length = 4000)
 x = seq(min(xlim),max(xlim), length = 1000)
 
 if(which.plot =="Plot Functions"){

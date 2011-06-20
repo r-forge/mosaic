@@ -1,5 +1,5 @@
-\name{manipDerivs}
-\alias{manipDerivs}
+\name{mDerivs}
+\alias{mDerivs}
 \title{
 Interactive App for Displaying Functions
 }
@@ -7,7 +7,7 @@ Interactive App for Displaying Functions
 This applet displays a plot of a function, its derivative, and its antiderviative. 
 }
 \usage{
-manipDerivs(expr, xlim=c(0,10), ...) 
+mDerivs(expr, xlim=c(0,10), ...) 
 }
 \arguments{
   \item{expr}{a mathematical expression. See mosaic \code{D}.
@@ -29,7 +29,7 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com})
 }
 
 \examples{
-manipDerivs((cos(x))~x, xlim = range(0, 10))
-manipDerivs(sin(exp(x))~x, xlim = range(-2, 3))
+mDerivs((cos(x))~x, xlim = range(0, 10))
+mDerivs(sin(exp(x))~x, xlim = range(-2, 3))
 }
 \keyword{ calculus }

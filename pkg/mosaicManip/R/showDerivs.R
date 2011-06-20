@@ -1,4 +1,4 @@
-manipDerivs = function(expr, xlim=c(0,10), ...) {
+mDerivs = function(expr, xlim=c(0,10), ...) {
 #packages 
   require("manipulate")
   require("mosaic")

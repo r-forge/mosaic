@@ -1,5 +1,5 @@
-\name{manipTaylor}
-\alias{manipTaylor}
+\name{mTaylor}
+\alias{mTaylor}
 \title{
 Interactive App to Examine Taylor Approximations and Least Squares Approximations
 }
@@ -7,7 +7,7 @@ Interactive App to Examine Taylor Approximations and Least Squares Approximation
 This applet displays a plot of a function, its Taylor series approximation, and a least squares approximation. 
 }
 \usage{
-manipTaylor(expr, xlim=c(-5, 5), ...) 
+mTaylor(expr, xlim=c(-5, 5), ...) 
 }
 \arguments{
   \item{expr}{a mathematical expression. See mosaic \code{D}.
@@ -29,8 +29,8 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com})
 }
 
 \examples{
-manipTaylor(exp(x)~x, xlim = range(-2, 2))
-manipTaylor(sin(x)~x, xlim = range(-4, 4))
-manipTaylor(sin(x^2)~x, xlim = range(-5,5))
+mTaylor(exp(x)~x, xlim = range(-2, 2))
+mTaylor(sin(x)~x, xlim = range(-4, 4))
+mTaylor(sin(x^2)~x, xlim = range(-5,5))
 }
 \keyword{ calculus }
