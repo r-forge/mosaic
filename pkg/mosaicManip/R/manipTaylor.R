@@ -51,10 +51,9 @@ mypanel = function(x, y){
       ypos = pmax(f(x), ypts)
       yneg = pmin(f(x), ypts)
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.red)
-      
-      inds = x==myx
-      
-      TayRMS = abs(sqrt(mean(ypts^2))*myx)
+      inds = which(x>min(myx)&x<max(myx))
+      myY=ypts[inds]
+      TayRMS = abs(sqrt(mean(myY^2))*myx)
    grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
                 y = unit(1,"npc")-unit(.5, "lines"),
@@ -67,12 +66,8 @@ mypanel = function(x, y){
       ypos = pmax(f(x), ypts)
       yneg = pmin(f(x), ypts)
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.blue)
-    ##########  BROKEN?
-      myY=0 
-      for(j in 0:n){
-      myY = myY+(myx-a)^(j)*coefs[[j+1]]
-      }
-   ############
+      inds = which(x>min(myx)&x<max(myx))
+      myY=ypts[inds]
       lsRMS = abs(sqrt(mean(myY^2))*myx)
       grid.text(label = paste("Least Squares RMS error: ", signif(lsRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
@@ -107,7 +102,9 @@ mypanel = function(x, y){
    yneg = pmin(0, ypts)
    panel.polygon(xpts,ypos,col=trans.red, border = FALSE)
    panel.polygon(xpts,yneg,col=trans.red, border = FALSE) 
-   TayRMS = sqrt(mean(ypts^2))
+    inds = which(x>min(myx)&x<max(myx))
+      myY=ypts[inds]
+   TayRMS = sqrt(mean(myY^2))
    grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
                 y = unit(1,"npc")-unit(.5, "lines"),
@@ -129,12 +126,8 @@ mypanel = function(x, y){
    yneg = pmin(0, ypts)
    panel.polygon(xpts,ypos,col=trans.blue, border = FALSE)
    panel.polygon(xpts,yneg,col=trans.blue, border = FALSE)
-       ##########  BROKEN?
-   myY=0 
-      for(j in 0:n){
-      myY = myY+(myx-a)^(j)*coefs[[j+1]]
-      }
-   ###################
+       inds = which(x>min(myx)&x<max(myx))
+      myY=ypts[inds]
    lsRMS = sqrt(mean(myY^2))
       grid.text(label = paste("Least Squares RMS error: ", signif(lsRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
