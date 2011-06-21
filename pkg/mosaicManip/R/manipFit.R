@@ -7,7 +7,7 @@ mFit = function(data, expr=NULL, ...){
    yvals = data[[yvar]]
 
    x = seq(min(xvals),max(xvals), length = 1000)
-   A = matrix(nrow=1000,ncol = 9)
+   A = matrix(nrow=length(xvals),ncol = 9)
    A[,1] = rep.int(1,length(x))
    A[,2] = x
    A[,3] = x^2
