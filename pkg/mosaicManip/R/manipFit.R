@@ -10,14 +10,18 @@ mFit = function(data, expr=NULL, ...){
   f[[8]] = function(x, P, ...) cos(2*pi*x/P)
   f[[9]] = function(x, mu, sd, ...) pnorm(q = x, mean = mu, sd = sd)
 
+  line.red = rgb(1,0,0,.6)
   
-   labels= c("Constant", "x", "x^2", "x^3", "log(x)", "exp(kx)", "sin(2Pi*x/P)", "cos(2Pi*x/P)", "pnorm")
+   labels=list("Constant", "x", "x^2", "x^3", "log(x)", "exp(kx)", "sin(2Pi*x/P)", "cos(2Pi*x/P)", "pnorm")
  #####  
-  myPlot = function(xvar, yvar, k, n, P, mu, sd, choice){
+  myPlot = function(xvar, yvar, k, n, P, mu, sd, a1, a2, a3, a4, a5, a6, a7, a8, a9){
+    
    xvals = data[[xvar]]
    yvals = data[[yvar]]
 
    x = seq(min(xvals),max(xvals), length = 1000)
+   
+   funchoice = c(a1, a2, a3, a4, a5, a6, a7, a8, a9)
   
    if( sum(funchoice)==0) {
      print("You must select at least one function to fit a curve!")
@@ -34,14 +38,13 @@ mFit = function(data, expr=NULL, ...){
      for (fun.k in which(funchoice)) {
        bigA[,fun.k] = f[[fun.k]](x,k=k,P=P,mu=mu,sd=sd)
      }
-       browser()
      bigy = bigA %*% coefs
    }
-   
   
+  bigx=x
     mypanel = function(x, y){
       panel.xyplot(x, y)
-      panel.xyplot(xvals, bigy, type = "l", col="red")
+      panel.xyplot(bigx, bigy, type = "l", col=line.red, lwd = 5)
       }
   #PLOTTING F'REAL
      xyplot(yvals~xvals, data, xlab = xvar, ylab = yvar, panel = mypanel)
@@ -50,13 +53,21 @@ mFit = function(data, expr=NULL, ...){
  #####
   
    
- funchoice = c(a1=TRUE,a2=FALSE,a4=FALSE,a5=FALSE,a6=FALSE,a7=FALSE,a8=FALSE,a9=FALSE)
-   manipulate(myPlot(xvar=xvar, yvar=yvar, k=k, n=n, P=P, mu=mu, sd=sd, choice = choice),
+   
+   manipulate(myPlot(xvar=xvar, yvar=yvar, k=k, n=n, P=P, mu=mu, sd=sd, a1, a2, a3, a4, a5, a6, a7, a8, a9),
             xvar = picker(as.list(names(data)), label = "X Variable"),
             yvar = picker(as.list(names(data)), label = "Y Variable"),
-            choice = checkbox(funchoice, labels),
-            k=slider(-2,2, step = .01, initial=0.1),
-            P=slider(-10,10, step = .1),
+            a1 = checkbox(TRUE, as.character(labels[1])),
+            a2 = checkbox(FALSE, as.character(labels[2])),
+            a3 = checkbox(FALSE, as.character(labels[3])),
+            a4 = checkbox(FALSE, as.character(labels[4])),
+            a5 = checkbox(FALSE, as.character(labels[5])),
+            a6 = checkbox(FALSE, as.character(labels[6])),
+            a7 = checkbox(FALSE, as.character(labels[7])),
+            a8 = checkbox(FALSE, as.character(labels[8])),
+            a9 = checkbox(FALSE, as.character(labels[9])),  
+            k=slider(-2,2, step = .05, initial=0.1),
+            P=slider(.01,10, step = .01),
             mu = slider(-20,20, step =.1, initial = 0),
             sd = slider(1, 20, step = .1, initial = 3)
             )
