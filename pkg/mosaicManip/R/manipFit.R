@@ -1,47 +1,63 @@
 mFit = function(data, expr=NULL, ...){
+  f = list()
+  f[[1]] = function(x,...) rep.int(1, length(x))
+  f[[2]] = function(x,...) x
+  f[[3]] = function(x,...) x^2
+  f[[4]] = function(x,...) x^3
+  f[[5]] = function(x,...) log(abs(x)+.000001)
+  f[[6]] = function(x, k, ...) exp(k*x)
+  f[[7]] = function(x, P, ...) sin(2*pi*x/P)
+  f[[8]] = function(x, P, ...) cos(2*pi*x/P)
+  f[[9]] = function(x, mu, sd, ...) pnorm(q = x, mean = mu, sd = sd)
 
-  f1 = function(x) rep.int(1, length(x))
-  f2 = function(x) x
-  f3 = function(x) x^2
-  f4 = function(x) x^3
-  f5 = function(x) log(x)
-  f6 = function(x, k) exp(k*x)
-  f7 = function(x, P) sin(2*pi*x/P)
-  f8 = function(x, P) cos(2*pi*x/P)
-  f9 = function(x, mu, sd) pnorm(q = x, mean = mu, sd = sd)
   
+   labels= c("Constant", "x", "x^2", "x^3", "log(x)", "exp(kx)", "sin(2Pi*x/P)", "cos(2Pi*x/P)", "pnorm")
  #####  
-  myPlot = function(xvar, yvar, k, n, P, mu, sd){
+  myPlot = function(xvar, yvar, k, n, P, mu, sd, choice){
    xvals = data[[xvar]]
    yvals = data[[yvar]]
 
    x = seq(min(xvals),max(xvals), length = 1000)
   
-   A = matrix(nrow=length(xvals),ncol = 9)
-   A[,1] = f1(xvals)
-   A[,2] = f2(xvals)
-   A[,3] = f3(xvals)
-   A[,4] = f4(xvals)
-   A[,5] = f5(xvals)
-   A[,6] = f6(x=xvals, k=k)
-   A[,7] = f7(x=xvals, P=P)
-   A[,8] = f8(x=xvals, P=P)
-   A[,9] = f9(x=xvals, mu=mu, sd=sd)
-   browser()   
-   coefs = qr.solve(A, yvals)
-
+   if( sum(funchoice)==0) {
+     print("You must select at least one function to fit a curve!")
+     bigy = 0*x
+   }
+   else{
+     A = matrix(nrow=length(xvals),ncol = sum(funchoice))
+     for (fun.k in which(funchoice)) {
+       A[,fun.k] = f[[fun.k]](xvals,k=k,P=P,mu=mu,sd=sd)
+     } 
+     coefs = qr.solve(A, yvals)
+  
+     bigA = matrix(nrow=length(x),ncol = sum(funchoice))
+     for (fun.k in which(funchoice)) {
+       bigA[,fun.k] = f[[fun.k]](x,k=k,P=P,mu=mu,sd=sd)
+     }
+       browser()
+     bigy = bigA %*% coefs
+   }
    
+  
+    mypanel = function(x, y){
+      panel.xyplot(x, y)
+      panel.xyplot(xvals, bigy, type = "l", col="red")
+      }
   #PLOTTING F'REAL
-     xyplot(xvals~yvals, data, xlab = xvar, ylab = yvar)
+     xyplot(yvals~xvals, data, xlab = xvar, ylab = yvar, panel = mypanel)
 
   }
  #####
- manipulate(myPlot(xvar=xvar, yvar=yvar, k=k, n=n, P=P, mu=mu, sd=sd),
+  
+   
+ funchoice = c(a1=TRUE,a2=FALSE,a4=FALSE,a5=FALSE,a6=FALSE,a7=FALSE,a8=FALSE,a9=FALSE)
+   manipulate(myPlot(xvar=xvar, yvar=yvar, k=k, n=n, P=P, mu=mu, sd=sd, choice = choice),
             xvar = picker(as.list(names(data)), label = "X Variable"),
             yvar = picker(as.list(names(data)), label = "Y Variable"),
-            k=slider(-10,10, step = .1),
+            choice = checkbox(funchoice, labels),
+            k=slider(-2,2, step = .01, initial=0.1),
             P=slider(-10,10, step = .1),
-            mu = slider(-100,100, step =.1, initial = 50),
+            mu = slider(-20,20, step =.1, initial = 0),
             sd = slider(1, 20, step = .1, initial = 3)
             )
 }
