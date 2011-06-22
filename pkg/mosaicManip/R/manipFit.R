@@ -18,6 +18,7 @@ mFit = function(data, expr=NULL, ...){
     
    xvals = data[[xvar]]
    yvals = data[[yvar]]
+   browser()
 
    x = seq(min(xvals),max(xvals), length = 1000)
    
@@ -29,14 +30,18 @@ mFit = function(data, expr=NULL, ...){
    }
    else{
      A = matrix(nrow=length(xvals),ncol = sum(funchoice))
+     col.count = 1
      for (fun.k in which(funchoice)) {
-       A[,fun.k] = f[[fun.k]](xvals,k=k,P=P,mu=mu,sd=sd)
+       A[,col.count] = f[[fun.k]](xvals,k=k,P=P,mu=mu,sd=sd)
+       col.count = col.count+1
      } 
      coefs = qr.solve(A, yvals)
   
      bigA = matrix(nrow=length(x),ncol = sum(funchoice))
+     col.count = 1
      for (fun.k in which(funchoice)) {
-       bigA[,fun.k] = f[[fun.k]](x,k=k,P=P,mu=mu,sd=sd)
+       bigA[,col.count] = f[[fun.k]](x,k=k,P=P,mu=mu,sd=sd)
+       col.count = col.count+1
      }
      bigy = bigA %*% coefs
    }
