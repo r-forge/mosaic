@@ -1,8 +1,6 @@
 \name{mDerivs}
 \alias{mDerivs}
-\title{
-Manipulate Applet for Displaying Functions
-}
+\title{Manipulate Applet for Displaying Functions}
 \description{
 This applet displays a plot of a function, its derivative, and its antiderviative. 
 }

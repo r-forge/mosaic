@@ -1,8 +1,6 @@
 \name{mFit}
 \alias{mFit}
-\title{
-Interactive display of term selection and nonlinear parameters for fitting. 
-}
+\title{Interactive app for term selection and nonlinear parameters for fitting.}
 \description{
 Displays data and a menu of modeling functions.  Finds a linear combination of the selected modeling functions, with the user setting nonlinear parameters manually.
 }

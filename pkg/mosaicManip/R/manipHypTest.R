@@ -1,4 +1,4 @@
-manipHypTest = function(doF=FALSE){
+mHypTest = function(doF=FALSE){
   if( !require(manipulate) ) stop("Must load manipulate package.")
   maxeffect=10
   resid = 10 # just to avoid a missing value.  It's reset by the controller.

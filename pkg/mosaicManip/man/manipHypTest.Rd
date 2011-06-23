@@ -1,5 +1,5 @@
-\name{manipHypTest}
-\alias{manipHypTest}
+\name{mHypTest}
+\alias{mHypTest}
 \title{
 Interactive display for hypothesis testing concepts.
 }
@@ -25,7 +25,7 @@ Daniel Kaplan (\email{kaplan@macalester.edu})
 
 \examples{
 \dontrun{
-manipHypTest()
-manipHypTest(doF=TRUE)}
+mHypTest()
+mHypTest(doF=TRUE)}
 }
 \keyword{statistics}
