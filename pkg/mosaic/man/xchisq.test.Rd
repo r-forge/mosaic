@@ -11,6 +11,7 @@ output.
 xchisq.test(...)
 
 }
+
 \arguments{Arguemnts passed directly to \code{\link{chisq.test}}.
 }
 
