@@ -1,7 +1,7 @@
 mDerivs = function(expr, xlim=c(0,10), ...) {
 #packages 
-  require("manipulate")
-  require("mosaic")
+  if (!require("manipulate")) stop("Must run in a manipulate compatible system, e.g. RStudio")
+  if (!require("mosaic")) stop("Must install mosaic package.")
 #functions
   vals = list(...)
   .f = mosaic:::.createMathFun( sexpr=substitute(expr), ...)

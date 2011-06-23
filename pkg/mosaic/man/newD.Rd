@@ -1,6 +1,6 @@
-\name{newD}
-\alias{newD}
-\alias{newAntiD}
+\name{D}
+\alias{D}
+\alias{antiD}
 \title{
 Derivative and Anti-derivative operators 
 }
@@ -9,8 +9,8 @@ Operators for computing derivatives and anti-derivatives as
 functions.
 }
 \usage{
-newD(expr, ..., ..h.., numerical=FALSE, method=c("center","right"))
-newAntiD(expr, from=0, to=NULL, ... ) 
+D(expr, ..., ..h.., numerical=FALSE, method=c("center","right"))
+antiD(expr, from=0, to=NULL, ... ) 
 }
 \arguments{
   \item{expr}{a formula. The right side specifies the variable(s) with which to 
@@ -18,7 +18,7 @@ newAntiD(expr, from=0, to=NULL, ... )
   an expression or a function that returns a numerical vector 
   of the same length as its argument.  The expression can contain unbound variables.}
   \item{..h..}{ horizontal distance between points used for secant slope
-  calculation in \code{newD()}.  This is used only if a symbolic derivative is not possible or 
+  calculation in \code{D()}.  This is used only if a symbolic derivative is not possible or 
   if \code{numerical=TRUE}.  The odd name, \code{..h..}, is there to avoid conflicts with unbound variables in the formula f.
   }
   \item{numerical}{flag to force a symbolic derivative}
@@ -28,9 +28,9 @@ newAntiD(expr, from=0, to=NULL, ... )
   \item{\dots}{Default values to be given to unbound variables in the expression \code{ff}.  See examples.  }
 }
 \details{
-\code{newD} attempts to find a symbolic derivative for simple expressions, but will provide a function that is a numerical derivative if the attempt at symbolic differentiation is unsuccessful.  The symbolic derivative can be of any order (although the expression may become unmanageably complex).  The numerical derivative is limited to first or second-order partial derivatives (including mixed partials).
+\code{D} attempts to find a symbolic derivative for simple expressions, but will provide a function that is a numerical derivative if the attempt at symbolic differentiation is unsuccessful.  The symbolic derivative can be of any order (although the expression may become unmanageably complex).  The numerical derivative is limited to first or second-order partial derivatives (including mixed partials).
 
-\code{newAntiD} always returns a numerical integral.  
+\code{antiD} always returns a numerical integral.  
 }
 \value{For derivatives, the return value is a function of the variable(s) of differentiation, as well as any other symbols used in the expression.  Thus, \code{A*x^2 + B*y ~ x + y} will compute the mixed partial with respect to x then y (that is, d2f/dydx).  The returned value will be a function of x and y, as well as A and B.  In evaluating the returned function, it's best to used the named form of arguments, to make sure that you have the order right. 
 
@@ -43,18 +43,18 @@ Daniel Kaplan (\email{kaplan@macalester.edu})
 }
 
 \examples{
-newD(sin(t) ~ t)
-newD(A*sin(t) ~ t )
-newD(A*sin(2*pi*t/P) ~ t, A=2, P=10) % default values for parameters.
-f = newD(A*x^3 ~ x + x, A=1) % 2nd order partial -- note, it's a function of x
+D(sin(t) ~ t)
+D(A*sin(t) ~ t )
+D(A*sin(2*pi*t/P) ~ t, A=2, P=10) % default values for parameters.
+f = D(A*x^3 ~ x + x, A=1) % 2nd order partial -- note, it's a function of x
 f(x=2)
 f(x=2,A=10) % override default value of parameter A
-g = newD(f(x=t,A=1)^2 ~ t)  % note: it's a function of t
+g = D(f(x=t,A=1)^2 ~ t)  % note: it's a function of t
 g(t=1) 
-gg= newD(f(x=t,A=B)^2 ~ t,B=10)  % note: it's a function of t and B
+gg= D(f(x=t,A=B)^2 ~ t,B=10)  % note: it's a function of t and B
 gg(t=1)
 gg(t=1,B=100)
-F = newAntiD( A*exp(-k*t^2 ) ~ t, A=1, k=0.1)
+F = antiD( A*exp(-k*t^2 ) ~ t, A=1, k=0.1)
 F(from=-Inf, to=0)
 F(from=-Inf,to=Inf)
 }

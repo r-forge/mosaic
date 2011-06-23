@@ -8,6 +8,8 @@ mFit = function(expr, data, instructor=rep(TRUE, 13), ...){
   xvals = data[[xvar]]
   yvals = data[[yvar]]
    
+  if (!require("manipulate")) stop("Must run in a manipulate compatible system, e.g. RStudio")
+  if (!require("mosaic")) stop("Must install mosaic package.")
   f = list()
   f[[1]] = function(x,...) rep.int(1, length(x))
   f[[2]] = function(x,...) x

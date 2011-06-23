@@ -1,8 +1,7 @@
 mTaylor = function(expr, xlim = c(-5, 5), ...){
-  #packages 
-  if(!require("manipulate"))
-  {stop("Must have manipulate package!")}
-  require("mosaic")
+  #packages
+  if (!require("manipulate")) stop("Must run in a manipulate compatible system, e.g. RStudio")
+  if (!require("mosaic")) stop("Must install mosaic package.")
 #functions
    vals = list(...)
    fm = mosaic:::.createMathFun( sexpr=substitute(expr), ...)

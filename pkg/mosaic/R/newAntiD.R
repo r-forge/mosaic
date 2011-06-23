@@ -1,4 +1,4 @@
-newAntiD = function(expr, from=0, to=NULL, ...){
+antiD = function(expr, from=0, to=NULL, ...){
   vals = list(...)
   sexpr = substitute(expr)
   # If it's an expression

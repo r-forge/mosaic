@@ -1,4 +1,4 @@
-newD = function(expr, ..., ..h..=NULL, numerical=FALSE, method=c("center","right")){
+D = function(expr, ..., ..h..=NULL, numerical=FALSE, method=c("center","right")){
   vals = list(...)
   sexpr = substitute(expr)
   fm = .createMathFun(sexpr=sexpr, ...)
