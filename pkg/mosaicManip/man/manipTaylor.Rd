@@ -29,8 +29,10 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com})
 }
 
 \examples{
+\dontrun{
 mTaylor(exp(x)~x, xlim = range(-2, 2))
 mTaylor(sin(x)~x, xlim = range(-4, 4))
 mTaylor(sin(x^2)~x, xlim = range(-5,5))
+}
 }
 \keyword{ calculus }

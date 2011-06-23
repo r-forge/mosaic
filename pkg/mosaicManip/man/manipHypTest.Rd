@@ -20,11 +20,12 @@ significance, then calculates the power.  Displays all this graphically.
 Just the graphics as a side effect.
 }
 \author{
-Daniel Kaplan (\email{kaplan@macalester.edu}) and 
+Daniel Kaplan (\email{kaplan@macalester.edu}) 
 }
 
 \examples{
+\dontrun{
 manipHypTest()
-manipHypTest(doF=TRUE)
+manipHypTest(doF=TRUE)}
 }
 \keyword{statistics}

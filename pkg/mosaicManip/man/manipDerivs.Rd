@@ -1,7 +1,7 @@
 \name{mDerivs}
 \alias{mDerivs}
 \title{
-Interactive App for Displaying Functions
+Manipulate Applet for Displaying Functions
 }
 \description{
 This applet displays a plot of a function, its derivative, and its antiderviative. 
@@ -29,7 +29,9 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com})
 }
 
 \examples{
+\dontrun{
 mDerivs((cos(x))~x, xlim = range(0, 10))
 mDerivs(sin(exp(x))~x, xlim = range(-2, 3))
+}
 }
 \keyword{ calculus }
