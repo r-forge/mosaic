@@ -13,14 +13,14 @@
 \tabular{ll}{
 Package: \tab mosaicManip\cr
 Type: \tab Package\cr
-Version: \tab 0.3\cr
+Version: \tab 0.1-3\cr
 Date: \tab 2011-06-23\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }
 }
 \author{
-Daniel Kaplan
+Daniel Kaplan, Andrew Rich
 
 Maintainer: Daniel Kaplan
 }
