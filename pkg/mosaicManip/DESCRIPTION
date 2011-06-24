@@ -2,7 +2,7 @@ Package: mosaicManip
 Type: Package
 Title: Project MOSAIC (mosaic-web.org) manipulate examples.  
 Description: These applets allow the user to change displays with sliders, checkboxes and other GUI elements.  There are applets for calculus, statistics, and epidemiology.
-Version: 0.1-2
+Version: 0.1-3
 Date: 2011-06-23
 Depends: lattice, grid, methods, Hmisc, mosaic
 Suggests: MASS 
