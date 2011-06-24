@@ -7,8 +7,8 @@ function(expr, xlim=c(0,10), ...) {
   vals = list(...)
   .f = mosaic:::.createMathFun( sexpr=substitute(expr), ...)
   f <<- .f$fun
-  dfdx <<- newD(f(x)~x,...)  #make these globals to use in plotFun
-  antiF <<- newAntiD(f(x)~x,...) # ditto
+  dfdx <<- D(f(x)~x,...)  #make these globals to use in plotFun
+  antiF <<- antiD(f(x)~x,...) # ditto
 #colors
    deriv.color2 = rgb(1,0,0,.2)#red, transparent
   deriv.color = "red" 
