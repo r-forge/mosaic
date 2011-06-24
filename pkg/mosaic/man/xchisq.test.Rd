@@ -12,7 +12,8 @@ xchisq.test(...)
 
 }
 
-\arguments{Arguemnts passed directly to \code{\link{chisq.test}}.
+\arguments{
+	\item{...}{Arguemnts passed directly to \code{\link{chisq.test}}.}
 }
 
 \author{

@@ -1,4 +1,4 @@
-
+ 
 .mosaic_aggregate <- function(x, data, FUN, overall=mosaic.par.get("aggregate.overall"), ...) {
 	if (length(x) == 2 ) {
 		return( data.frame( FUN (eval( x[[2]], data) ) ) )
@@ -12,7 +12,7 @@
 }
 
 # implement test for formula with NULL, ., 1 or 0 on the right hand side
-.test.formula.simple.RHS = function(x){
+.is.formula.with.simple.RHS <- function(x){
      "formula" == class(x)  &&
          (length(x)==2 || is.null(x[[3]]) ||
           (length(x[[3]])==1 &&
@@ -20,53 +20,73 @@
 }
 
 # basic simple stat functions, e.g., mean, IQR, sd, var, median
-.stat.fun.maker = function(fun,methodname){
-  function(x, data=NULL, ...) {
-    if( is.name( substitute(x) ) )
-      fun(eval( substitute(x), data, enclos=parent.frame()), ...)
-    else { if( .test.formula.simple.RHS(x) ) {
-         # It's a formula with no left-hand side or a simple right-hand side, e.g. NULL, 
-         fun( eval( x[[2]], data, enclos=parent.frame()), ...)
-      }
-      else UseMethod(methodname)
-    }
-  }
+.stat.fun.maker <- function(fun,methodname){
+	setGeneric(methodname)
+	setMethod(methodname,
+			  signature(x='ANY', data='data.frame'),
+			  function(x, data=NULL, ...) {
+				  if( is.name( substitute(x) ) ) {
+					  fun(eval( substitute(x), data, enclos=parent.frame()), ...)
+				  } else { 
+					  if( .is.formula.with.simple.RHS(x) ) {
+						  # It's a formula with no left-hand side or a simple right-hand side, e.g. NULL, 
+						  fun( eval( x[[2]], data, enclos=parent.frame()), ...)
+					  } else {
+						  UseMethod(methodname)
+					  }
+				  }
+			  }
+	)
 }
 
 # This version is needed when functions take ... as their first argument: min and max
-.stat.fun.maker2 = function(fun,methodname){
-  function(..., data=NULL, na.rm=TRUE) {
-    x = list(substitute(...))[[1]]
-    if( is.name( x ) ) {
-      fun(eval( x, data, enclos=parent.frame()))
-    }
-    else {
-      if( .test.formula.simple.RHS(x) ) { #"formula" == class(x)  && length(x)==2 ) {
-         # It's a formula with no left-hand side
-         fun( eval( x[[2]], data, enclos=parent.frame()))
-      }
-      else UseMethod(methodname)
-    }
-  }
+.stat.fun.maker2 <- function(fun,methodname){
+	setMethod(methodname, signature(),
+			  function(..., data=NULL, na.rm=TRUE) {
+				  x <- list(substitute(...))[[1]]
+				  if( is.name( x ) ) {
+					  fun(eval( x, data, enclos=parent.frame()))
+				  }
+				  else {
+					  if( .is.formula.with.simple.RHS(x) ) { #"formula" == class(x)  && length(x)==2 ) {
+						  # It's a formula with no left-hand side
+						  fun( eval( x[[2]], data, enclos=parent.frame()))
+					  }
+				  else UseMethod(methodname)
+				  }
+			  }
+	)
 }
 
-mean   <- .stat.fun.maker( mean, "mean" )
-sd     <- .stat.fun.maker( stats::sd, "sd" )
-var    <- .stat.fun.maker( var, "var" )
-median <- .stat.fun.maker( median, "median" )
-IQR    <- .stat.fun.maker( IQR, "IQR" )
-prop   <- .stat.fun.maker( prop, "prop" )
-count  <- .stat.fun.maker( count, "count" )
-min    <- .stat.fun.maker2( min, "min" )
-max    <- .stat.fun.maker2( max, "max" )
+#mean   <- 
+.stat.fun.maker( stats::mean, "mean" )
+#sd     <- 
+.stat.fun.maker( stats::sd, "sd" )
+#var    <- 
+	.stat.fun.maker( stats::var, "var" )
+#median <- 
+	.stat.fun.maker( stats::median, "median" )
+#IQR    <- 
+	.stat.fun.maker( stats::IQR, "IQR" )
+#prop   <- 
+	.stat.fun.maker( prop, "prop" )
+#count  <- 
+	.stat.fun.maker( count, "count" )
+#min    <- 
+	.stat.fun.maker2( min, "min" )
+#max    <- 
+	.stat.fun.maker2( max, "max" )
 
 .stat.fun.formula.maker <- function(FUN,resname) {
-  function( x, data=parent.frame(), na.rm=TRUE, ... ) {
-	result <- .mosaic_aggregate( x, data, FUN=FUN, na.rm=na.rm, ... )
-	class(result) <- c('aggregated.stat', class(result))
-	attr(result, 'stat.name') <- resname
-	return(result)
-  }
+	setMethod(resname, 
+			  signature(x='formula', data='data.frame'),
+			  function( x, data=parent.frame(), na.rm=TRUE, ... ) {
+				  result <- .mosaic_aggregate( x, data, FUN=FUN, na.rm=na.rm, ... )
+				  class(result) <- c('aggregated.stat', class(result))
+				  attr(result, 'stat.name') <- resname
+				  return(result)
+			  }
+			  )
 }
 
 mean.formula    <- .stat.fun.formula.maker( base::mean,    "mean" )
