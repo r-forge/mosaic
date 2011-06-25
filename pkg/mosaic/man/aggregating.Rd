@@ -1,12 +1,12 @@
 \name{aggregating}
 \alias{mean}
-\alias{mean.formula}
 \alias{mean.default}
 \alias{mean.factor}
+\alias{mean.formula}
 \alias{median}
-\alias{median.formula}
 \alias{median.default}
 \alias{median.factor}
+\alias{median.formula}
 \alias{sd}
 \alias{sd.formula}
 \alias{sd.default}
@@ -40,15 +40,15 @@ When given formulas, they call \code{\link{aggregate}} using the
 formula.
 }
 \usage{
-mean(x, data=NULL, ...)
-\method{mean}{formula}(x, data, na.rm=TRUE, ...)
-\method{mean}{default}(x, na.rm=TRUE, ...)
-\method{mean}{factor}(x, na.rm=TRUE, ...)
+mean(x, ..., na.rm=TRUE)
+\method{mean}{default}(x, ..., na.rm=TRUE)
+\method{mean}{formula}(x, data, ...,  na.rm=TRUE)
+\method{mean}{factor}(x,  ..., na.rm=TRUE)
 
-median(x, data=NULL, ...)
-\method{median}{formula}(x, data, na.rm=TRUE, ...)
-\method{median}{default}(x, na.rm=TRUE, ...)
-\method{median}{factor}(x, na.rm=TRUE, ...)
+median(x, ..., na.rm=TRUE)
+\method{median}{default}(x, ..., na.rm=TRUE)
+\method{median}{formula}(x, data, ...,  na.rm=TRUE)
+\method{median}{factor}(x, ..., na.rm=TRUE)
 
 sd(x, data=NULL, ...)
 \method{sd}{formula}(x, data, na.rm=TRUE, ...)
@@ -99,17 +99,17 @@ Randall Pruim (\email{rpruim@calvin.edu})
 \code{link{aggregate}}
 }
 \examples{
-mean(age, data=HELP)
-mean(~age, data=HELP)
-mean(age ~ ., data=HELP)
-mean(age ~ 1, data=HELP)
-mean(age ~ NULL, data=HELP)
-mean(HELP$age)
-mean(age ~ sex, data=HELP)
-mean( age ~ sex + treat, data=HELP)
-mean(age ~ sex, data=HELP, overall=TRUE )
+sd(age, data=HELP)
+sd(~age, data=HELP)
+sd(age ~ ., data=HELP)
+sd(age ~ 1, data=HELP)
+sd(age ~ NULL, data=HELP)
+sd(HELP$age)
+sd(age ~ sex, data=HELP)
+sd( age ~ sex + treat, data=HELP)
+sd(age ~ sex, data=HELP, overall=TRUE )
 mosaic.par.set(aggregate.overall=TRUE)
-mean(age ~ sex, data=HELP)
+sd(age ~ sex, data=HELP)
 }
 \keyword{ ~kwd1 }
 \keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

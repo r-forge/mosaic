@@ -50,10 +50,18 @@
   }
 }
 
-mean   <- .stat.fun.maker( mean, "mean" )
+mean <- function(x, ..., na.rm=TRUE) {
+	UseMethod("mean")
+}
+
+median <- function(x, ..., na.rm=TRUE) {
+	UseMethod("median")
+}
+
+#mean   <- .stat.fun.maker( mean, "mean" )
+#median <- .stat.fun.maker( stats::median, "median" )
 sd     <- .stat.fun.maker( stats::sd, "sd" )
-var    <- .stat.fun.maker( var, "var" )
-median <- .stat.fun.maker( median, "median" )
+var    <- .stat.fun.maker( stats::var, "var" )
 IQR    <- .stat.fun.maker( IQR, "IQR" )
 prop   <- .stat.fun.maker( prop, "prop" )
 count  <- .stat.fun.maker( count, "count" )
@@ -69,20 +77,32 @@ count  <- .stat.fun.maker( count, "count" )
   }
 }
 
-#mean.formula    <- .stat.fun.formula.maker( base::mean,    "mean" )
+mean.formula    <- function(x, data, ..., na.rm=TRUE){
+	result <- .mosaic_aggregate( x, data, FUN=mean, na.rm=na.rm, ... )
+	class(result) <- c('aggregated.stat', class(result))
+	attr(result, 'stat.name') <- resname
+	return(result)
+}
+
+median.formula    <- function(x, data, ..., na.rm=TRUE) {
+	result <- .mosaic_aggregate( x, data, FUN=mean, na.rm=na.rm, ... )
+	class(result) <- c('aggregated.stat', class(result))
+	attr(result, 'stat.name') <- resname
+	return(result)
+}
+
 sd.formula      <- .stat.fun.formula.maker( stats::sd,     "sd" )
 var.formula     <- .stat.fun.formula.maker( stats::var,    "var" )
-#median.formula  <- .stat.fun.formula.maker( stats::median, "median" )
 IQR.formula     <- .stat.fun.formula.maker( stats::IQR,    "IQR" )
 count.formula   <- .stat.fun.formula.maker( count.default, "count" )
 prop.formula    <- .stat.fun.formula.maker( prop.default,  "prop" )
 #min.formula     <- .stat.fun.formula.maker( base::min,     "min" )
 #max.formula     <- .stat.fun.formula.maker( base::max,     "max" )
 
-mean.default   <- function( x, na.rm=TRUE, ... ) c(mean = base::mean.default(x, na.rm=na.rm, ...))
+mean.default   <- function( x, ..., na.rm=TRUE) c(mean = base::mean.default(x, na.rm=na.rm, ...))
 sd.default     <- function( x, na.rm=TRUE, ... ) stats::sd(x, na.rm=na.rm)
 var.default    <- function( x, na.rm=TRUE, ... ) stats::var(x, na.rm=na.rm)
-median.default <- function( x, na.rm=TRUE, ... ) stats::median.default(x, na.rm=na.rm)
+median.default <- function( x, ..., na.rm=TRUE)  stats::median.default(x, na.rm=na.rm)
 IQR.default    <- function( x, na.rm=TRUE, ... ) stats::IQR( x, na.rm=na.rm, ...)
 count.default  <- function( x, na.rm=TRUE, ... ) count.factor( as.factor(x), na.rm=na.rm, ...)
 prop.default   <- function( x, na.rm=TRUE, ... ) prop.factor( as.factor(x), ...)
@@ -95,8 +115,13 @@ prop.default   <- function( x, na.rm=TRUE, ... ) prop.factor( as.factor(x), ...)
   }
 }
 
-#mean.factor   <- .stat.fun.factor.bogus.maker("mean")
-#median.factor <- .stat.fun.factor.bogus.maker("median")
+.stat.fun.factor.bogus.maker2 = function(statname) {
+  function( x, ..., na.rm=TRUE) {
+    stop( paste("Can't take",statname,"of a factor (categorical).  Use, e.g., count( ) or prop( ).") )
+  }
+}
+mean.factor   <- .stat.fun.factor.bogus.maker2("mean")
+median.factor <- .stat.fun.factor.bogus.maker2("median")
 sd.factor     <- .stat.fun.factor.bogus.maker("sd")
 var.factor    <- .stat.fun.factor.bogus.maker("var")
 IQR.factor    <- .stat.fun.factor.bogus.maker("IQR")
