@@ -1,4 +1,3 @@
-
 .mosaic_aggregate <- function(x, data, FUN, overall=mosaic.par.get("aggregate.overall"), ...) {
 	if (length(x) == 2 ) {
 		return( data.frame( FUN (eval( x[[2]], data) ) ) )
@@ -70,10 +69,10 @@ count  <- .stat.fun.maker( count, "count" )
   }
 }
 
-mean.formula    <- .stat.fun.formula.maker( base::mean,    "mean" )
+#mean.formula    <- .stat.fun.formula.maker( base::mean,    "mean" )
 sd.formula      <- .stat.fun.formula.maker( stats::sd,     "sd" )
 var.formula     <- .stat.fun.formula.maker( stats::var,    "var" )
-median.formula  <- .stat.fun.formula.maker( stats::median, "median" )
+#median.formula  <- .stat.fun.formula.maker( stats::median, "median" )
 IQR.formula     <- .stat.fun.formula.maker( stats::IQR,    "IQR" )
 count.formula   <- .stat.fun.formula.maker( count.default, "count" )
 prop.formula    <- .stat.fun.formula.maker( prop.default,  "prop" )
@@ -96,8 +95,8 @@ prop.default   <- function( x, na.rm=TRUE, ... ) prop.factor( as.factor(x), ...)
   }
 }
 
-mean.factor   <- .stat.fun.factor.bogus.maker("mean")
-median.factor <- .stat.fun.factor.bogus.maker("median")
+#mean.factor   <- .stat.fun.factor.bogus.maker("mean")
+#median.factor <- .stat.fun.factor.bogus.maker("median")
 sd.factor     <- .stat.fun.factor.bogus.maker("sd")
 var.factor    <- .stat.fun.factor.bogus.maker("var")
 IQR.factor    <- .stat.fun.factor.bogus.maker("IQR")

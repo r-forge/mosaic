@@ -1,3 +1,5 @@
+if (FALSE) {
+
 .mosaic.get.ci = function( vals, level, method ) {
     if( method == "stderr" ) res = mean(vals) + c(-1,1)*sd(vals)*qt(1-(1-level)/2, length(vals)-1)
     else res = qdata( c((1-level)/2, 1-(1-level)/2), vals )
@@ -32,4 +34,5 @@ confint.data.frame = function(object, parm, level=0.95, method=c("stderr", "quan
   return( res )
 }
     
-  
+ 
+}

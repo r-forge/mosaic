@@ -19,14 +19,6 @@
 \alias{IQR.formula}
 \alias{IQR.default}
 \alias{IQR.factor}
-\alias{min}
-\alias{min.formula}
-\alias{min.default}
-\alias{min.factor}
-\alias{max}
-\alias{max.formula}
-\alias{max.default}
-\alias{max.factor}
 \alias{prop}
 \alias{prop.logical}
 \alias{prop.factor}
@@ -72,16 +64,6 @@ IQR(x, data=NULL, ...)
 \method{IQR}{formula}(x, data, na.rm=TRUE, ...)
 \method{IQR}{default}(x, na.rm=TRUE, ...)
 \method{IQR}{factor}(x, na.rm=TRUE, ...)
-
-min(..., data=NULL, na.rm=TRUE)
-\method{min}{formula}(x, data, na.rm=TRUE, ...)
-\method{min}{default}(..., na.rm=TRUE)
-\method{min}{factor}(x, na.rm=TRUE, ...)
-
-max(..., data=NULL, na.rm=TRUE)
-\method{max}{formula}(x, data, na.rm=TRUE, ...)
-\method{max}{default}(..., na.rm=TRUE)
-\method{max}{factor}(x, na.rm=TRUE, ...)
 
 prop(x, data=NULL, ...)
 \method{prop}{logical}(x, level=TRUE, na.rm=TRUE, ...)
