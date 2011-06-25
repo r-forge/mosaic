@@ -43,6 +43,7 @@ myplot= function(xpos, from, der, anti, fixed){
      newx = x[x < max(xpos, from) & x>min(xpos,from)]
    xpts = c(min(xpos,from),newx,max(xpos,from))
    ypts = c(0,f(newx),0)
+     browser()
    ypos = pmax(0, ypts)
    yneg = pmin(0, ypts)
    if(xpos<from){

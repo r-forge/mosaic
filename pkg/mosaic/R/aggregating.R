@@ -22,7 +22,7 @@
 # basic simple stat functions, e.g., mean, IQR, sd, var, median
 .stat.fun.maker = function(fun,methodname){
   function(x, data=NULL, ...) {
-    if( is.name( substitute(x) ) )
+    if( is.name( substitute(x) ) && !is.null(data))
       fun(eval( substitute(x), data, enclos=parent.frame()), ...)
     else { if( .test.formula.simple.RHS(x) ) {
          # It's a formula with no left-hand side or a simple right-hand side, e.g. NULL, 
@@ -37,11 +37,12 @@
 .stat.fun.maker2 = function(fun,methodname){
   function(..., data=NULL, na.rm=TRUE) {
     x = list(substitute(...))[[1]]
-    if( is.name( x ) ) {
+    if( is.name( x ) && !is.null(data)) {
       fun(eval( x, data, enclos=parent.frame()))
     }
     else {
-      if( .test.formula.simple.RHS(x) ) { #"formula" == class(x)  && length(x)==2 ) {
+      # This won't work for simple formulas
+      if(.test.formula.simple.RHS(x) ) { #"formula" == class(x)  && length(x)==2 ) {
          # It's a formula with no left-hand side
          fun( eval( x[[2]], data, enclos=parent.frame()))
       }
