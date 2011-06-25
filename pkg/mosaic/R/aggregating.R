@@ -58,8 +58,8 @@ median <- .stat.fun.maker( median, "median" )
 IQR    <- .stat.fun.maker( IQR, "IQR" )
 prop   <- .stat.fun.maker( prop, "prop" )
 count  <- .stat.fun.maker( count, "count" )
-min    <- .stat.fun.maker2( min, "min" )
-max    <- .stat.fun.maker2( max, "max" )
+#min    <- .stat.fun.maker2( min, "min" )
+#max    <- .stat.fun.maker2( max, "max" )
 
 .stat.fun.formula.maker <- function(FUN,resname) {
   function( x, data=parent.frame(), na.rm=TRUE, ... ) {
@@ -77,8 +77,8 @@ median.formula  <- .stat.fun.formula.maker( stats::median, "median" )
 IQR.formula     <- .stat.fun.formula.maker( stats::IQR,    "IQR" )
 count.formula   <- .stat.fun.formula.maker( count.default, "count" )
 prop.formula    <- .stat.fun.formula.maker( prop.default,  "prop" )
-min.formula     <- .stat.fun.formula.maker( base::min,     "min" )
-max.formula     <- .stat.fun.formula.maker( base::max,     "max" )
+#min.formula     <- .stat.fun.formula.maker( base::min,     "min" )
+#max.formula     <- .stat.fun.formula.maker( base::max,     "max" )
 
 mean.default   <- function( x, na.rm=TRUE, ... ) c(mean = base::mean.default(x, na.rm=na.rm, ...))
 sd.default     <- function( x, na.rm=TRUE, ... ) stats::sd(x, na.rm=na.rm)
@@ -87,8 +87,8 @@ median.default <- function( x, na.rm=TRUE, ... ) stats::median.default(x, na.rm=
 IQR.default    <- function( x, na.rm=TRUE, ... ) stats::IQR( x, na.rm=na.rm, ...)
 count.default  <- function( x, na.rm=TRUE, ... ) count.factor( as.factor(x), na.rm=na.rm, ...)
 prop.default   <- function( x, na.rm=TRUE, ... ) prop.factor( as.factor(x), ...)
-min.default    <- function( ..., na.rm=TRUE ) base::min( ..., na.rm=na.rm)
-max.default    <- function( ..., na.rm=TRUE ) base::max( ..., na.rm=na.rm)
+#min.default    <- function( ..., na.rm=TRUE ) base::min( ..., na.rm=na.rm)
+#max.default    <- function( ..., na.rm=TRUE ) base::max( ..., na.rm=na.rm)
 
 .stat.fun.factor.bogus.maker = function(statname) {
   function( x, na.rm=TRUE, ...) {
@@ -101,8 +101,8 @@ median.factor <- .stat.fun.factor.bogus.maker("median")
 sd.factor     <- .stat.fun.factor.bogus.maker("sd")
 var.factor    <- .stat.fun.factor.bogus.maker("var")
 IQR.factor    <- .stat.fun.factor.bogus.maker("IQR")
-min.factor    <- .stat.fun.factor.bogus.maker("min")
-max.factor    <- .stat.fun.factor.bogus.maker("max")
+#min.factor    <- .stat.fun.factor.bogus.maker("min")
+#max.factor    <- .stat.fun.factor.bogus.maker("max")
 
 count.logical <- function(x, level=TRUE, na.rm=TRUE, ...) 
 	count.factor( as.factor(x), level=level, na.rm=na.rm ) 
