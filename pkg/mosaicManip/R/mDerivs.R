@@ -27,7 +27,12 @@ function(expr, xlim=c(0,10), ...) {
     vplayout = function(x,y){
     viewport(layout.pos.row = x, layout.pos.col = y)
     }
-  
+get.aspect.ratio = function() {
+   y = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="y",axisTo="y",valueOnly=TRUE)
+   x = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="x",axisTo="x",valueOnly=TRUE)
+   return(y/x)
+}
+# ====================
 myplot= function(xpos, from, der, anti, fixed){
 
   vals = list(...)
@@ -40,10 +45,9 @@ myplot= function(xpos, from, der, anti, fixed){
   }
   
   fpanel = function(x, y){
-     newx = x[x < max(xpos, from) & x>min(xpos,from)]
+   newx = x[x < max(xpos, from) & x>min(xpos,from)]
    xpts = c(min(xpos,from),newx,max(xpos,from))
    ypts = c(0,f(newx),0)
-     browser()
    ypos = pmax(0, ypts)
    yneg = pmin(0, ypts)
    if(xpos<from){
@@ -67,7 +71,8 @@ myplot= function(xpos, from, der, anti, fixed){
     panel.lines(x=c(xpos, -9000000), y = c(f(xpos),f(xpos)), col=rgb(0,0,0,.3), lwd = 11)
     #Below was old slope text:
     #grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(1, "npc")-unit(15,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = deriv.color, fontsize =10)) 
-     grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(xpos+halfwidth/2, "native"), y = unit(f(xpos)+dfdx(xpos)*halfwidth/2,"native"), rot = atan(dfdx(xpos))*180/pi, gp = gpar(col = deriv.color, fontsize =10))
+
+     grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(xpos+halfwidth/2, "native"), y = unit(f(xpos)+dfdx(xpos)*halfwidth/2,"native"), rot = atan(dfdx(xpos)*get.aspect.ratio())*180/pi, gp = gpar(col = deriv.color, fontsize =10))
      grid.text(label=round(f(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(f(xpos),"native"), gp = gpar(col = "black", fontsize =10))
    }
     
@@ -89,7 +94,8 @@ myplot= function(xpos, from, der, anti, fixed){
     panel.lines(x=c(xpos, -9000000), y = c(antiF(xpos,from = from),antiF(xpos, from=from)), col=rgb(0,0,1,.3), lwd = 11)
    #Original Slope Text:
     #grid.text(label=paste("Slope = ", signif(f(xpos), 3)), x = unit(1, "npc")-unit(15,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = "black", fontsize =10))
-     grid.text(label=paste("Slope = ", signif(f(xpos), 3)), x = unit(xpos+halfwidth/2, "native"), y = unit(antiF(xpos, from=from)+f(xpos)*halfwidth/2,"native"), rot = atan(f(xpos))*180/pi, gp = gpar(col = "black", fontsize =10))
+   
+     grid.text(label=paste("Slope = ", signif(f(xpos), 3)), x = unit(xpos+halfwidth/2, "native"), y = unit(antiF(xpos, from=from)+f(xpos)*halfwidth/2,"native"), rot = atan(f(xpos)*get.aspect.ratio())*180/pi, gp = gpar(col = "black", fontsize =10))
     grid.text(label=round(antiF(xpos, from = from), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(antiF(xpos, from = from),"native"), gp = gpar(col = integral.color, fontsize =10))
   }
   
@@ -130,7 +136,8 @@ print(a, position = c(0, 0.65, 1, 1), more = TRUE)
  
 # downViewport("B")
 # print(b, newpage = FALSE)
-print(b, position = c(0, 0.34, 1, 0.69), more = TRUE)
+print(b, position = c(0, 0.34, 1, 0.69), more = anti) 
+  # The more=anti handles the case when anti is FALSE, and we don't want to continue drawing
 # upViewport()
 if(anti == TRUE){
 #  downViewport("C")
