@@ -35,6 +35,7 @@ function(expr, xlim=c(0,10), ...) {
   neg.integral.color2 = "darkslateblue"
   neg.integral.color = rgb(.4,0,1,.3)
   neg.integral.line.color = rgb(.4,0,1,.3)
+  gray = rgb(0,0,0,.3)
   
 #Greater than 0 function
   positive=function(ha){
@@ -116,7 +117,7 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     segEndsX = xpos + halfwidth*c(-1,1)
     segEndsY = antiF(xpos, from = from) + f(xpos)*halfwidth*c(-1,1)
     # The following should be named "gray"  FIX FIX FIX FIX
-    panel.lines(segEndsX, segEndsY, col=rgb(0,0,0,.3), lwd = 10)
+    panel.lines(segEndsX, segEndsY, col=gray, lwd = 10)
     if(at.val < 0)
     panel.lines(x=c(xpos, -9000000), y = c(at.val, at.val), col=neg.integral.line.color, lwd = 11)
     else

@@ -1,6 +1,6 @@
-mFit <-
-function(expr, data, instructor=rep(TRUE, 13), ...){
+mFit = function(expr, data, instructor=rep(TRUE, 13), ...){
   if( !require(manipulate)) stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+  if (!require("mosaic")) stop("Must install mosaic package.")
   
   line.red = rgb(1,0,0,.6)
   
@@ -27,10 +27,7 @@ function(expr, data, instructor=rep(TRUE, 13), ...){
     for(j in 1:n) {res[,j] = cos(2*j*pi*x/P)}
     return(res)
   }
-#   mu = list()
-#   for(j in 1:npnorms)
-#   f[[8+j]] = function(x, mu, sd, ...) pnorm(q = x, mean = mu[j], sd = sd)
-
+  
   mu1=0; mu2=0;mu3=0; mu4=0; mu5=0;
   a1=FALSE; a2=FALSE; a3=FALSE; a4 = FALSE; a5 = FALSE; a6 = FALSE; a7 = FALSE; a8 = FALSE; 
   a9 = FALSE; a10 = FALSE; a11 = FALSE; a12=FALSE; a13 = FALSE; a14 = FALSE;
@@ -83,21 +80,23 @@ myPlot = function(k=k, n=n, P=P, mu1=mu1,mu2=mu2,mu3=mu3,mu4=mu4,mu5=mu5,
      bigy = bigA %*% coefs
      predict.y = A %*% coefs
      RMS = abs(sqrt(mean((predict.y-yvals)^2))*diff(range(xvals)))
+#      return(RMS)
    }
   
   bigx=x #Avoid conflicting variable names
     mypanel = function(x, y){
       panel.xyplot(x, y)
       panel.xyplot(bigx, bigy, type = "l", col=line.red, lwd = 5)
-      grid.text(paste("RMS Error: ", signif(RMS, 3)), 
-                x = unit(0, "npc")+unit(1, "mm"),
-                y = unit(1, "npc")-unit(2, "mm"),
-                just = "left",
-                gp = gpar(col = "red", fontsize =10))
+#       grid.text(paste("RMS Error: ", signif(RMS, 3)), 
+#                 x = unit(0, "npc")+unit(1, "mm"),
+#                 y = unit(1, "npc")-unit(2, "mm"),
+#                 just = "left",
+#                 gp = gpar(col = "red", fontsize =10))
       }
   #PLOTTING F'REAL
       
-     xyplot(yvals~xvals, data, xlab = xvar, ylab = yvar, panel = mypanel)
+     xyplot(yvals~xvals, data, xlab = xvar, ylab = yvar, panel = mypanel, 
+            main = paste("RMS Error:", signif(RMS, 3)))
 
   }
  #####
@@ -114,8 +113,8 @@ myPlot = function(k=k, n=n, P=P, mu1=mu1,mu2=mu2,mu3=mu3,mu4=mu4,mu5=mu5,
     if(instructor[6]) #exp
       controls$k=slider(-2,2, step = .05, initial=0.1)
     if(instructor[7]|instructor[8]){ #sin, cos
-      controls$P=slider(.1,10, step = .01, initial = 1) 
-      controls$n=slider(1,10, step = 1, initial = 1)} 
+      controls$P=slider(.1,10, step = .01, initial = 5) 
+      controls$n=slider(1,20, step = 1, initial = 1)} 
     for(b in 1:5){ #pnorms
         if(instructor[b+8])        
         controls[[paste("mu",b,sep="")]] = slider(min(xvals),max(xvals), step =.1, initial = min(xvals)+b*diff(range(xvals))/6)
@@ -130,4 +129,3 @@ myPlot = function(k=k, n=n, P=P, mu1=mu1,mu2=mu2,mu3=mu3,mu4=mu4,mu5=mu5,
             controls
             )
 }
-
