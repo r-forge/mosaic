@@ -10,13 +10,13 @@ function(expr, xlim=c(0,10), ...) {
   f <- .f$fun
   # Use the expression in the calculating the derivative so that 
   # it can be done symbolically, if possible
-  dfdx <- .doD( .f, ...)
+  dfdx <- mosaic:::.doD( .f, ...)
   # Try to do the second derivative symbolically, also
   .ff = .f
   .ff$RHS = c("+", .f$RHS, .f$RHS)
-  # That the next variable must be global, suggests that .doD should be changed
+  # That the next variable must be global, suggests that mosaic:::.doD should be changed
   # to include its own environment as an (formal) argument to the returned function.
-  d2fd2x <<- .doD( .ff, ...) # must be global to work with derivative evaluation prgm. That's a bug!
+  d2fd2x <<- mosaic:::.doD( .ff, ...) # must be global to work with derivative evaluation prgm. That's a bug!
   d3fd3x <- D(d2fd2x(x)~x, ...)
   antiF <- antiD(f(x)~x,...)
   fset = list(d3fd3x,d2fd2x,dfdx,f,antiF)
@@ -46,9 +46,11 @@ function(expr, xlim=c(0,10), ...) {
     viewport(layout.pos.row = x, layout.pos.col = y)
     }
 get.aspect.ratio = function() {
+  cat("getting into aspect ratio")
    y = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="y",axisTo="y",valueOnly=TRUE)
    x = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="x",axisTo="x",valueOnly=TRUE)
-   return(y/x)
+  cat("and out\n") 
+  return(y/x)
 }
 # ====================
 myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
@@ -187,4 +189,8 @@ if(anti == TRUE){
             )
 
 }
-
+#Border off on polygons
+ #Polygon logic, for antiderivs
+ #Red Parabola for antideriv - curvature - SHORT
+ #Make deriv labels bigger
+ #Slope labels, in bounds using aspect ratio function
