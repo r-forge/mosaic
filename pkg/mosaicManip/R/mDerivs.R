@@ -45,13 +45,50 @@ function(expr, xlim=c(0,10), ...) {
     vplayout = function(x,y){
     viewport(layout.pos.row = x, layout.pos.col = y)
     }
+#=============  
 get.aspect.ratio = function() {
-  cat("getting into aspect ratio")
    y = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="y",axisTo="y",valueOnly=TRUE)
-   x = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="x",axisTo="x",valueOnly=TRUE)
-  cat("and out\n") 
+   x = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="x",axisTo="x",valueOnly=TRUE) 
   return(y/x)
 }
+#======================
+#   get.text.pos = function(xc, yc, ang, max.dist = unit(.3, "npc")) {
+#     #xc yc coordinates of the tangent point of the line, ang is slope in radians, max.dist is in "npc"
+#    yc = convertY( unit(yc, "native"), "npc",valueOnly=TRUE)
+#    xc = convertX( unit(xc, "native"), "npc",valueOnly=TRUE)
+#    ang = convertY(unit(ang, "native"),unitTo="npc", valueOnly = TRUE)
+#    ang = atan(ang)
+#    cat(paste("initial", xc, yc, ang, "\n"))
+#    try.dist = seq(-max.dist, max.dist, by = .05)
+#    ind = which((0.05<yc+sin(ang)*try.dist)&(yc+sin(ang)*try.dist<.95)&(0.05<xc+cos(ang)*try.dist)&(xc+cos(ang)*try.dist<.95))
+#    cat("INDS", ind, "\n")
+#    xvals = try.dist[ind]
+#    dist = max(xvals)
+#    x = xc+cos(ang)*dist
+#    y = yc+sin(ang)*dist
+#    cat(paste("after", x, y, "\n"))
+#    return(list(x = unit(x, "npc"), y=unit(y, "npc")))
+#   }
+  
+  get.text.pos = function(xc, yc, slope, xrange=xlim, max.dist = diff(range(xlim))/4){
+    #xc yc the center tangent point of the line. slope is slope. max.dist is max dist from xc.
+    yrange = range(f(x))
+    ymin = min(yrange)+diff(yrange)/10
+    ymax = max(yrange)-diff(yrange)/10
+    xmin = min(xrange)+diff(xrange)/10
+    xmax = max(xrange)-diff(xrange)/10
+    slope = atan(slope)
+    cat(paste("Initial vals:", xc, yc, slope,"\n"))
+    try.dist = seq(-max.dist, max.dist, length = 10)
+    ind = which((ymin<yc+sin(slope)*try.dist)&(yc+sin(slope)*try.dist<ymax)&(xmin<xc+cos(slope)*try.dist)&(xc+cos(slope)*try.dist<xmax))
+    dist = try.dist[which.max(ind)]
+    x = xc+cos(slope)*dist
+    y = yc+sin(slope)*dist
+    cat(paste("after:",x,y,"\n"))
+    return(list(x=x, y=y))
+  }
+  
+  
 # ====================
 myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
   # choose the functions to display from the set
@@ -64,9 +101,9 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.points(xpos, dfdx(xpos))
     panel.abline(h=0, lty = "dotted")
     panel.lines(x=c(xpos, -9000000), y = c(dfdx(xpos),dfdx(xpos)), col=deriv.color2, lwd = 11)
-    grid.text(label=round(dfdx(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(dfdx(xpos),"native"), gp = gpar(col = deriv.color, fontsize =10))
+    grid.text(label=round(dfdx(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(dfdx(xpos),"native"), just = "right", gp = gpar(col = deriv.color, fontsize =10))
     grid.text(f.labels[[middleFun-1]], 
-              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left" )
+              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left", gp = gpar(cex = 1.7) )
   }
   # =============
   fpanel = function(x, y){
@@ -75,19 +112,23 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
    ypts = c(0,f(newx),0)
    ypos = pmax(0, ypts)
    yneg = pmin(0, ypts)
+   if(anti){
    if(xpos<from){
-     panel.polygon(xpts,ypos,col=neg.integral.color)
-     panel.polygon(xpts,yneg,col=integral.color.trans)
+     panel.polygon(xpts,ypos,col=neg.integral.color, border = FALSE)
+     panel.polygon(xpts,yneg,col=integral.color.trans, border = FALSE)
    }
    else{
-      panel.polygon(xpts,ypos,col=integral.color.trans)
-      panel.polygon(xpts,yneg,col=neg.integral.color)}
+      panel.polygon(xpts,ypos,col=integral.color.trans, border = FALSE)
+      panel.polygon(xpts,yneg,col=neg.integral.color, border = FALSE)
+      }
+    panel.points(from, f(from))
+   }
     panel.xyplot(x, y, type="l", col = "black", lwd = 2, ...)
     panel.points(xpos, f(xpos))
-    panel.points(from, f(from))
+    
     panel.abline(h=0, lty = "dotted") 
     grid.text(f.labels[[middleFun+0]], 
-              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left" )
+              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left", gp = gpar(cex = 1.7 ))
     
     yline = f(xpos)+ dfdx(xpos)*(x - xpos)
     halfwidth=diff(range(x))/3
@@ -95,12 +136,18 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     segEndsY = f(xpos) + dfdx(xpos)*halfwidth*c(-1,1)
     panel.lines(segEndsX, segEndsY, col=deriv.color2, lwd=10)
     #panel.lines(x, yline, col=deriv.color2, lwd = 10)
-    panel.lines(x=c(xpos, -9000000), y = c(f(xpos),f(xpos)), col=rgb(0,0,0,.3), lwd = 11)
+    panel.lines(x=c(xpos, -9000000), y = c(f(xpos),f(xpos)), col=gray, lwd = 11)
     #Below was old slope text:
     #grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(1, "npc")-unit(15,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = deriv.color, fontsize =10)) 
-
-     grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(xpos+halfwidth/2, "native"), y = unit(f(xpos)+dfdx(xpos)*halfwidth/2,"native"), rot = atan(dfdx(xpos)*get.aspect.ratio())*180/pi, gp = gpar(col = deriv.color, fontsize =10))
-     grid.text(label=round(f(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(f(xpos),"native"), gp = gpar(col = "black", fontsize =10))
+    y.text = unit(f(xpos)+dfdx(xpos)*halfwidth/2,"native")
+    x.text = unit(xpos+halfwidth/2, "native")
+    
+    ang.slope = atan(dfdx(xpos)*get.aspect.ratio())
+    slope = dfdx(xpos)
+ 
+    text.pos = get.text.pos(xpos, f(xpos), slope, max.dist = .3) 
+     grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = text.pos$x, y = text.pos$y, rot = ang.slope*180/pi, gp = gpar(col = deriv.color, fontsize =10))
+     grid.text(label=round(f(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(f(xpos),"native"), gp = gpar(col = "black", fontsize =10), just = "right",)
    }
   #======== end of Fpanel =============== 
   antiFpanel = function(x, y){
@@ -118,7 +165,6 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     # maybe going a little bit past FIX FIX FIX FIX
     segEndsX = xpos + halfwidth*c(-1,1)
     segEndsY = antiF(xpos, from = from) + f(xpos)*halfwidth*c(-1,1)
-    # The following should be named "gray"  FIX FIX FIX FIX
     panel.lines(segEndsX, segEndsY, col=gray, lwd = 10)
     if(at.val < 0)
     panel.lines(x=c(xpos, -9000000), y = c(at.val, at.val), col=neg.integral.line.color, lwd = 11)
@@ -126,14 +172,14 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.lines(x=c(xpos, -9000000), y = c(at.val, at.val), col=rgb(0,0,1,.3), lwd = 11)
    
     grid.text(f.labels[[middleFun+1]], 
-              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left" )
+              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left", gp = gpar(cex = 1.7 ))
     grid.text(label=paste("Slope = ", signif(f(xpos), 3)), x = unit(xpos+halfwidth/2, "native"), y = unit(at.val+f(xpos)*halfwidth/2,"native"), rot = atan(f(xpos)*get.aspect.ratio())*180/pi, gp = gpar(col = "black", fontsize =10))
     grid.text(label=round(at.val, 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(at.val,"native"), gp = gpar(col = integral.color, fontsize =10))
   }
   #========== end of antiFpanel =========== 
 
   ##create dataframe of plotting values:
-  x = seq(min(xlim), max(xlim),length=1000)
+  x = seq(min(xlim), max(xlim),length=1000)          
   dat = data.frame(x=x, 
                    f = f(x), 
                    dfdx = dfdx(x), 
@@ -167,14 +213,14 @@ if(fixed == TRUE)
   }
 
 if(der == TRUE){
-  print(top.plot, position = c(0.0, 0.65, 1, 1), more = TRUE)
+  print(top.plot, position = c(0.0, 0.66, 1, 1), more = TRUE)
 }
 # Always plot out the function itself                  
-print(middle.plot, position = c(0.0, 0.34, 1, 0.69), more = anti) 
+print(middle.plot, position = c(0.0, 0.345, 1, 0.68), more = anti) 
   # The more=anti handles the case when anti is FALSE, 
   # and we don't want to continue drawing
 if(anti == TRUE){
-  print(bottom.plot, position = c(0.0,0,1,0.40))
+  print(bottom.plot, position = c(0.0,0,1,0.38))
 }
 }
  #Making the plot
@@ -189,8 +235,9 @@ if(anti == TRUE){
             )
 
 }
-#Border off on polygons
- #Polygon logic, for antiderivs
+#Border off on polygons DONE
+ #Polygon logic, for antiderivs DONE
+ #Make deriv labels bigger DONE
  #Red Parabola for antideriv - curvature - SHORT
- #Make deriv labels bigger
  #Slope labels, in bounds using aspect ratio function
+ #Eventually (last step after all debugging) make der and anti checkboxes initial FALSE

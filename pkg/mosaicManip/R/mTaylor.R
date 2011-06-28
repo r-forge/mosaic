@@ -44,13 +44,33 @@ for(j in 0:n){
 
 #plotting
 mypanel = function(x, y){
-   if(err == TRUE){  
-     xpts = c(x)
-     if(TaylorBeTrue){
-      ypts = c(T[[as.numeric(n)+1]])
-      ypos = pmax(f(x), ypts)
-      yneg = pmin(f(x), ypts)
-      panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.red)
+  panel.points(a, f(a), cex = 2)
+  if(lsquares){
+    panel.xyplot(x, lsq.func, type = "l", col = line.blue, lwd = 5)
+    panel.rect(xright=min(myx), 
+               xleft=max(myx), 
+               ybottom=-999999, 
+               ytop = 999999, 
+               col = rect.trans.blue,
+               border = FALSE) 
+    ypts = lsq.func
+          #lSquares RMSE from myPanel
+      inds = which(x>min(myx)&x<max(myx))
+      .newY=c(0,y,0); .newYPts = c(0,ypts,0);
+      myY=.newYPts[inds]-.newY[inds]
+      lsRMS = abs(sqrt(mean(myY^2))*diff(range(myx)))
+      grid.text(label = paste("Least Squares RMS error: ", signif(lsRMS,4)), 
+                x = unit(0,"npc")+unit(1, "mm"), 
+                y = unit(1,"npc")-unit(1.5, "lines"),
+                just ="left",
+                gp = gpar(col = "blue", fontsize =font.size)) 
+  }
+
+  if(TaylorBeTrue){
+  panel.points(x, T[[as.numeric(n)+1]], type = "l", col = line.red, lwd = 5)
+  
+  ypts = c(T[[as.numeric(n)+1]])
+  #TAYLOR RMSE from myPanel
       inds = which(x>min(myx)&x<max(myx))
       .newY=c(0,y,0); .newYPts = c(0,ypts,0);
       myY=.newYPts[inds]-.newY[inds]
@@ -60,37 +80,23 @@ mypanel = function(x, y){
                 y = unit(1,"npc")-unit(.5, "lines"),
                 just ="left",
                 gp = gpar(col = "red", fontsize =font.size))
-      
-     }
+  }
+  
+  if(err == TRUE){  
+     xpts = c(x)
      if( lsquares ){
-      ypts = c(lsq.func)
       ypos = pmax(f(x), ypts)
       yneg = pmin(f(x), ypts)
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.blue)
-      inds = which(x>min(myx)&x<max(myx))
-      .newY=c(0,y,0); .newYPts = c(0,ypts,0);
-      myY=.newYPts[inds]-.newY[inds]
-      lsRMS = abs(sqrt(mean(myY^2))*diff(range(myx)))
-      grid.text(label = paste("Least Squares RMS error: ", signif(lsRMS,4)), 
-                x = unit(0,"npc")+unit(1, "mm"), 
-                y = unit(1,"npc")-unit(1.5, "lines"),
-                just ="left",
-                gp = gpar(col = "blue", fontsize =font.size))
+     }
+             
+     if(TaylorBeTrue){
+      ypos = pmax(f(x), ypts)
+      yneg = pmin(f(x), ypts)
+      panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.red)
      }
   }  
   panel.xyplot(x, y, type = "l", col = "black", lwd = 2)
-  if(lsquares){
-    panel.xyplot(x, lsq.func, type = "l", col = line.blue, lwd = 5)
-    panel.rect(xright=min(myx), 
-               xleft=max(myx), 
-               ybottom=-999999, 
-               ytop = 999999, 
-               col = rect.trans.blue) 
-  }
-  panel.points(a, f(a), cex = 2)
-  if(TaylorBeTrue){
-  panel.points(x, T[[as.numeric(n)+1]], type = "l", col = line.red, lwd = 5)
-  }
 }
 # ============
   errpanel = function(x,y){
@@ -98,14 +104,8 @@ mypanel = function(x, y){
     xpts = c(min(x),x,max(x))
     if(TaylorBeTrue)
       {
-        panel.xyplot(x, (T[[as.numeric(n)+1]]-y), type = "l", col = line.red, lwd = 5)
-        if(err == TRUE)
-        {  
-        ypts = c(0,T[[as.numeric(n)+1]]-y,0)
-        ypos = pmax(0, ypts)
-        yneg = pmin(0, ypts)
-        panel.polygon(xpts,ypos,col=trans.red, border = FALSE)
-        panel.polygon(xpts,yneg,col=trans.red, border = FALSE) 
+      ypts = c(0,T[[as.numeric(n)+1]]-y,0)
+      #TAYLOR RMSE from errPanel
         inds = which(x>min(myx)&x<max(myx))
         myY=ypts[inds]
         TayRMS = abs(sqrt(mean(myY^2))*diff(range(myx)))
@@ -114,31 +114,39 @@ mypanel = function(x, y){
                 y = unit(1,"npc")-unit(.5, "lines"),
                 just ="left",
                 gp = gpar(col = "red", fontsize =font.size))
-            
-          }
-        }
+      
+        panel.xyplot(x, (T[[as.numeric(n)+1]]-y), type = "l", col = line.red, lwd = 5)
+        if(err == TRUE)
+        {
+          ypos = pmax(0, ypts)
+          yneg = pmin(0, ypts)
+          panel.polygon(xpts,ypos,col=trans.red, border = FALSE)
+          panel.polygon(xpts,yneg,col=trans.red, border = FALSE) 
+         }
+      }
     if(lsquares){
     panel.xyplot(x, (lsq.func-y), type = "l", col = line.blue, lwd = 5)
     panel.rect(xright=min(myx), 
                xleft=max(myx), 
                ybottom=-999999, 
                ytop = 999999, 
-               col = rect.trans.blue)
-   if(err == TRUE){
-   ypts = c(0,lsq.func-y,0)
-   ypos = pmax(0, ypts)
-   yneg = pmin(0, ypts)
-   panel.polygon(xpts,ypos,col=trans.blue, border = FALSE)
-   panel.polygon(xpts,yneg,col=trans.blue, border = FALSE)
-   inds = which(x>min(myx)&x<max(myx))
-   myY=ypts[inds]
-   lsRMS = abs(sqrt(mean(myY^2))*diff(range(myx)))
+               col = rect.trans.blue,
+               border = FALSE)
+    ypts = c(0,lsq.func-y,0)           
+    #LSquares RMSE from errPlot
+    inds = which(x>min(myx)&x<max(myx))
+    myY=ypts[inds]
+    lsRMS = abs(sqrt(mean(myY^2))*diff(range(myx)))
       grid.text(label = paste("Least Squares RMS error: ", signif(lsRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
                 y = unit(1,"npc")-unit(1.5, "lines"),
                 just ="left",
                 gp = gpar(col = "blue", fontsize =font.size))
-   
+   if(err == TRUE){
+   ypos = pmax(0, ypts)
+   yneg = pmin(0, ypts)
+   panel.polygon(xpts,ypos,col=trans.blue, border = FALSE)
+   panel.polygon(xpts,yneg,col=trans.blue, border = FALSE)
             }
     }
     panel.points(a, 0, cex = 2)
