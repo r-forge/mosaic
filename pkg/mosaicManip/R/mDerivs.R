@@ -70,6 +70,9 @@ get.aspect.ratio = function() {
 #    return(list(x = unit(x, "npc"), y=unit(y, "npc")))
 #   }
   
+  #### The above commented function uses npc units, the one below attempts to use native units.
+  #### I abandoned npc because I'm not sure an npc can be negative, which is necessary for the slope.
+  
   get.text.pos = function(xc, yc, slope, xrange=xlim, max.dist = diff(range(xlim))/4){
     #xc yc the center tangent point of the line. slope is slope. max.dist is max dist from xc.
     yrange = range(f(x))
