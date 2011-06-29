@@ -81,7 +81,7 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.lines(x=c(xpos, -9000000), y = c(dfdx(xpos),dfdx(xpos)), col=deriv.color2, lwd = 11)
     grid.text(label=round(dfdx(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(dfdx(xpos),"native"), just = "right", gp = gpar(col = deriv.color, fontsize =10))
     grid.text(f.labels[[middleFun-1]], 
-              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left", gp = gpar(cex = 1.7) )
+              x=unit(0.075,"npc"), y=unit(0.9,"npc"), just="left", gp = gpar(cex = 1.7) )
   }
   # =============
   fpanel = function(x, y){
@@ -105,26 +105,25 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.points(xpos, f(xpos))
     
     panel.abline(h=0, lty = "dotted") 
-    grid.text(f.labels[[middleFun+0]], x=0.075, y=0.9, hjust="left", gp = gpar(cex = 1.4 ))
+    grid.text(f.labels[[middleFun+0]], x=0.075, y=0.9, just="left", gp = gpar(cex = 1.4 ))
     
     yline = f(xpos)+ dfdx(xpos)*(x - xpos)
     halfwidth=diff(range(x))/6
     segEndsX = xpos + halfwidth*c(-1,1)
     segEndsY = f(xpos) + dfdx(xpos)*halfwidth*c(-1,1)
-    panel.lines(segEndsX, segEndsY, col=deriv.color2, lwd=10)
-    #panel.lines(x, yline, col=deriv.color2, lwd = 10)
+ 
     panel.lines(x=c(xpos, -9000000), y = c(f(xpos),f(xpos)), col=gray, lwd = 11)
-    #Below was old slope text:
-    #grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(1, "npc")-unit(15,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = deriv.color, fontsize =10)) 
-    y.text = unit(f(xpos)+dfdx(xpos)*halfwidth/2,"native")
-    x.text = unit(xpos+halfwidth/2, "native")
-    slope = dfdx(xpos)
-    ang.slope = atan(slope*get.aspect.ratio())
-    text.pos = get.text.pos(xpos, f(xpos), ang.slope, max.dist = .2)
-    grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), 
+    # Sloping line
+    if( der ){
+     panel.lines(segEndsX, segEndsY, col=deriv.color2, lwd=10)
+     slope = dfdx(xpos)
+     ang.slope = atan(slope*get.aspect.ratio())
+     text.pos = get.text.pos(xpos, f(xpos), ang.slope, max.dist = .2)
+     grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), 
               x = text.pos$x, y = text.pos$y, 
               rot = ang.slope*180/pi, just=text.pos$just,
               gp = gpar(col = deriv.color, fontsize =10))
+   }
     grid.text(label=round(f(xpos), 3), 
               x = unit(0, "npc")+unit(10,"mm"), y = unit(f(xpos),"native"), 
               gp = gpar(col = "black", fontsize =10), just = "right",)
@@ -153,17 +152,34 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
    
     grid.text(f.labels[[middleFun+1]], 
               x=unit(0.075,"npc"), y=unit(0.9,"npc"), 
-              hjust="left", gp = gpar(cex = 1.7 ))
+              just="left", gp = gpar(cex = 1.7 ))
     slope = f(xpos)
     ang.slope = atan(slope*get.aspect.ratio())
-    text.pos = get.text.pos(xpos, antiF(xpos), ang.slope, max.dist = .2)
+    text.pos = get.text.pos(xpos, antiF(xpos,from=from), ang.slope, max.dist = .2)
     grid.text(label=paste("Slope = ", signif(f(xpos), 3)), 
               x = text.pos$x, 
               y = text.pos$y, 
               rot = ang.slope*180/pi, just=text.pos$just,
               gp = gpar(col = "black", fontsize =10))
     grid.text(label=round(at.val, 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(at.val,"native"), gp = gpar(col = integral.color, fontsize =10))
-  }
+    # parabola to give second derivative
+    if( der ){
+      curve.xvals = seq(segEndsX[1],segEndsX[2],length=100)
+      curve.yvals = antiF(xpos,from=from) + (curve.xvals-xpos)*(f(xpos) + 0.5*dfdx(xpos)*(curve.xvals-xpos))
+      panel.lines(curve.xvals, curve.yvals, col=deriv.color2, lwd=11)
+      # Figure out where to put the label.
+      # Endpoint
+      xlabel = ifelse( max(segEndsX) < max(xlim),  max(segEndsX), min(segEndsX) )
+      ind = which( xlabel==curve.xvals)
+      ylabel = curve.yvals[ind]
+      slope = f(xpos) + (xlabel-xpos)*dfdx(xpos)
+      ang.slope = atan(slope*get.aspect.ratio())
+      grid.text(label=paste("2nd deriv = ", signif(dfdx(xpos), 3)), 
+              x = unit(xlabel,"native"), y = unit(ylabel,"native"), 
+              rot = ang.slope*180/pi, just="center",
+              gp = gpar(col = deriv.color, fontsize =10))
+    }
+ }
   #========== end of antiFpanel =========== 
 
   ##create dataframe of plotting values:
@@ -194,7 +210,7 @@ bottom.plot = xyplot(antiF~x, data = dat, type = "l",
 
 if(fixed == TRUE)
   { 
-    yparam = c(max(antiF(x, from = min(xlim))), min(antiF(x, min(xlim))))
+    yparam = c(max(antiF(x, from = min(xlim))), min(antiF(x, from=min(xlim))))
     diff = diff(range(yparam))
     yparam = c((min(antiF(x, from = min(xlim))))-diff/3, (max(antiF(x, from = min(xlim))))+diff/3)
     cc = xyplot(antiF~x, data = dat, type = "l", ylim = yparam, ylab = "Antiderivative of f", panel = antiFpanel)  
