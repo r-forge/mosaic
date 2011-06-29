@@ -6,17 +6,16 @@ function(expr, xlim=c(0,10), ...) {
 #functions
   vals = list(...)
   .f = mosaic:::.createMathFun( sexpr=substitute(expr), from=0, ...)
-
   f <- .f$fun
   # Use the expression in the calculating the derivative so that 
   # it can be done symbolically, if possible
-  dfdx <- mosaic:::.doD( .f, ...)
+  dfdx <- mosaic:::.doD( .f, from=0,...)
   # Try to do the second derivative symbolically, also
   .ff = .f
   .ff$RHS = c("+", .f$RHS, .f$RHS)
   # That the next variable must be global, suggests that mosaic:::.doD should be changed
   # to include its own environment as an (formal) argument to the returned function.
-  d2fd2x <<- mosaic:::.doD( .ff, ...) # must be global to work with derivative evaluation prgm. That's a bug!
+  d2fd2x <<- mosaic:::.doD( .ff, from=0,...) # must be global to work with derivative evaluation prgm. That's a bug!
   d3fd3x <- D(d2fd2x(x)~x, ...)
   antiF <- antiD(f(x)~x,...)
   fset = list(d3fd3x,d2fd2x,dfdx,f,antiF)
@@ -79,7 +78,7 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.points(xpos, dfdx(xpos))
     panel.abline(h=0, lty = "dotted")
     panel.lines(x=c(xpos, -9000000), y = c(dfdx(xpos),dfdx(xpos)), col=deriv.color2, lwd = 11)
-    grid.text(label=round(dfdx(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(dfdx(xpos),"native"), just = "right", gp = gpar(col = deriv.color, fontsize =10))
+    grid.text(label=signif(dfdx(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(dfdx(xpos),"native"), just = "right", gp = gpar(col = deriv.color, fontsize =10))
     grid.text(f.labels[[middleFun-1]], 
               x=unit(0.075,"npc"), y=unit(0.9,"npc"), just="left", gp = gpar(cex = 1.7) )
   }
@@ -100,6 +99,12 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
       panel.polygon(xpts,yneg,col=neg.integral.color, border = FALSE)
       }
     panel.points(from, f(from))
+    place.x = mean(c(xpos,from))
+    val = f(place.x)
+    grid.text(paste("Area =",signif(antiF(xpos,from=from),3)),
+              x=unit(place.x,"native"), y=unit(val/2,"native"), just="center",
+              gp = gpar(
+                col= integral.color, fontsize=10))
    }
     panel.xyplot(x, y, type="l", col = "black", lwd = 2, ...)
     panel.points(xpos, f(xpos))
@@ -233,8 +238,8 @@ if(anti == TRUE){
                    initial="Given Function",label="Display in middle"),
     xpos=slider(min(xlim),max(xlim),initial=mean(xlim),step=diff(xlim)/100),
     from = slider(min(xlim),max(xlim), initial = min(xlim), step = diff(xlim)/100),
-    der = checkbox(TRUE, "Display Derivative"),
-    anti = checkbox(TRUE, "Display Antiderivative"),
+    der = checkbox(FALSE, "Display Derivative"),
+    anti = checkbox(FALSE, "Display Antiderivative"),
     fixed = checkbox(FALSE, "Fix Antiderivative y axis")
             )
 
