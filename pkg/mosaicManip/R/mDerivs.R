@@ -37,10 +37,6 @@ function(expr, xlim=c(0,10), ...) {
   neg.integral.line.color = rgb(.4,0,1,.3)
   gray = rgb(0,0,0,.3)
   
-#Greater than 0 function
-  positive=function(ha){
-    ha>=0
-  }
 #vplayout for easier layout movement
     vplayout = function(x,y){
     viewport(layout.pos.row = x, layout.pos.col = y)
@@ -52,45 +48,24 @@ get.aspect.ratio = function() {
   return(y/x)
 }
 #======================
-#   get.text.pos = function(xc, yc, ang, max.dist = unit(.3, "npc")) {
-#     #xc yc coordinates of the tangent point of the line, ang is slope in radians, max.dist is in "npc"
-#    yc = convertY( unit(yc, "native"), "npc",valueOnly=TRUE)
-#    xc = convertX( unit(xc, "native"), "npc",valueOnly=TRUE)
-#    ang = convertY(unit(ang, "native"),unitTo="npc", valueOnly = TRUE)
-#    ang = atan(ang)
-#    cat(paste("initial", xc, yc, ang, "\n"))
-#    try.dist = seq(-max.dist, max.dist, by = .05)
-#    ind = which((0.05<yc+sin(ang)*try.dist)&(yc+sin(ang)*try.dist<.95)&(0.05<xc+cos(ang)*try.dist)&(xc+cos(ang)*try.dist<.95))
-#    cat("INDS", ind, "\n")
-#    xvals = try.dist[ind]
-#    dist = max(xvals)
-#    x = xc+cos(ang)*dist
-#    y = yc+sin(ang)*dist
-#    cat(paste("after", x, y, "\n"))
-#    return(list(x = unit(x, "npc"), y=unit(y, "npc")))
-#   }
-  
-  #### The above commented function uses npc units, the one below attempts to use native units.
-  #### I abandoned npc because I'm not sure an npc can be negative, which is necessary for the slope.
-  
-  get.text.pos = function(xc, yc, slope, xrange=xlim, max.dist = diff(range(xlim))/4){
-    #xc yc the center tangent point of the line. slope is slope. max.dist is max dist from xc.
-    yrange = range(f(x))
-    ymin = min(yrange)+diff(yrange)/10
-    ymax = max(yrange)-diff(yrange)/10
-    xmin = min(xrange)+diff(xrange)/10
-    xmax = max(xrange)-diff(xrange)/10
-    slope = atan(slope)
-    cat(paste("Initial vals:", xc, yc, slope,"\n"))
-    try.dist = seq(-max.dist, max.dist, length = 10)
-    ind = which((ymin<yc+sin(slope)*try.dist)&(yc+sin(slope)*try.dist<ymax)&(xmin<xc+cos(slope)*try.dist)&(xc+cos(slope)*try.dist<xmax))
-    dist = try.dist[which.max(ind)]
-    x = xc+cos(slope)*dist
-    y = yc+sin(slope)*dist
-    cat(paste("after:",x,y,"\n"))
-    return(list(x=x, y=y))
+get.text.pos = function(xc, yc, ang, max.dist = unit(.3, "npc")) {
+    #xc yc coordinates of the tangent point of the line, ang is slope in radians, max.dist is in "npc"
+   yc = convertY( unit(yc, "native"), "npc", valueOnly=TRUE)
+   xc = convertX( unit(xc, "native"), "npc", valueOnly=TRUE)
+   try.dist = seq(-max.dist, max.dist, by = .05)
+   x.to.y = convertUnit( unit(1,"npc"),"npc",typeFrom="dimension", axisFrom="x",axisTo="y",valueOnly=TRUE)
+   try.y = yc + sin(ang)*try.dist*x.to.y
+   try.x = xc + cos(ang)*try.dist
+   inds = which((0.05<try.y)&(try.y<.95)&(0.05<try.x)&(try.x<.95))
+   xvals = try.dist[inds]
+   dist = xvals[which.max(abs(xvals))] # pick the one furthest away
+   x = xc+cos(ang)*dist
+   y = yc+sin(ang)*dist*x.to.y
+   just = ifelse( dist>0,"right","left")
+   return( list(x=x,y=y,just=just))
+   #return(list(x = convertX(unit(x,"native"),"npc", valueOnly=TRUE), 
+   #              y = convertY(unit(y,"native"),"npc", valueOnly=TRUE)))
   }
-  
   
 # ====================
 myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
@@ -130,11 +105,10 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.points(xpos, f(xpos))
     
     panel.abline(h=0, lty = "dotted") 
-    grid.text(f.labels[[middleFun+0]], 
-              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left", gp = gpar(cex = 1.7 ))
+    grid.text(f.labels[[middleFun+0]], x=0.075, y=0.9, hjust="left", gp = gpar(cex = 1.4 ))
     
     yline = f(xpos)+ dfdx(xpos)*(x - xpos)
-    halfwidth=diff(range(x))/3
+    halfwidth=diff(range(x))/6
     segEndsX = xpos + halfwidth*c(-1,1)
     segEndsY = f(xpos) + dfdx(xpos)*halfwidth*c(-1,1)
     panel.lines(segEndsX, segEndsY, col=deriv.color2, lwd=10)
@@ -144,18 +118,21 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     #grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = unit(1, "npc")-unit(15,"mm"), y = unit(1,"npc")-unit(3,"mm"), gp = gpar(col = deriv.color, fontsize =10)) 
     y.text = unit(f(xpos)+dfdx(xpos)*halfwidth/2,"native")
     x.text = unit(xpos+halfwidth/2, "native")
-    
-    ang.slope = atan(dfdx(xpos)*get.aspect.ratio())
     slope = dfdx(xpos)
- 
-    text.pos = get.text.pos(xpos, f(xpos), slope, max.dist = .3) 
-     grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), x = text.pos$x, y = text.pos$y, rot = ang.slope*180/pi, gp = gpar(col = deriv.color, fontsize =10))
-     grid.text(label=round(f(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(f(xpos),"native"), gp = gpar(col = "black", fontsize =10), just = "right",)
+    ang.slope = atan(slope*get.aspect.ratio())
+    text.pos = get.text.pos(xpos, f(xpos), ang.slope, max.dist = .2)
+    grid.text(label=paste("Slope = ", signif(dfdx(xpos), 3)), 
+              x = text.pos$x, y = text.pos$y, 
+              rot = ang.slope*180/pi, just=text.pos$just,
+              gp = gpar(col = deriv.color, fontsize =10))
+    grid.text(label=round(f(xpos), 3), 
+              x = unit(0, "npc")+unit(10,"mm"), y = unit(f(xpos),"native"), 
+              gp = gpar(col = "black", fontsize =10), just = "right",)
    }
   #======== end of Fpanel =============== 
   antiFpanel = function(x, y){
     panel.xyplot(x, y, type="l", lwd = 2, col =integral.color, ...)
-    tupac = subset(data.frame(x,y,pos = positive(y)),pos==FALSE)
+    tupac = subset(data.frame(x,y,pos = y>0), pos==FALSE)
     #tupac = subset(tupac, pos == FALSE)
     panel.xyplot(tupac$x, tupac$y, type = "p", pch = ".", cex = 2, col = "purple")
     at.val = antiF(xpos, from=from)
@@ -163,7 +140,7 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.points(xpos, antiF(xpos, from = from))
     panel.points(from, antiF(from, from = from), col = "black")
     panel.abline(h=0, lty = "dotted")
-    halfwidth=diff(range(x))/10
+    halfwidth=diff(range(x))/6
     # Change this to draw the line over the whole y-scale, 
     # maybe going a little bit past FIX FIX FIX FIX
     segEndsX = xpos + halfwidth*c(-1,1)
@@ -175,8 +152,16 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.lines(x=c(xpos, -9000000), y = c(at.val, at.val), col=rgb(0,0,1,.3), lwd = 11)
    
     grid.text(f.labels[[middleFun+1]], 
-              x=unit(0.075,"npc"), y=unit(0.9,"npc"), hjust="left", gp = gpar(cex = 1.7 ))
-    grid.text(label=paste("Slope = ", signif(f(xpos), 3)), x = unit(xpos+halfwidth/2, "native"), y = unit(at.val+f(xpos)*halfwidth/2,"native"), rot = atan(f(xpos)*get.aspect.ratio())*180/pi, gp = gpar(col = "black", fontsize =10))
+              x=unit(0.075,"npc"), y=unit(0.9,"npc"), 
+              hjust="left", gp = gpar(cex = 1.7 ))
+    slope = f(xpos)
+    ang.slope = atan(slope*get.aspect.ratio())
+    text.pos = get.text.pos(xpos, antiF(xpos), ang.slope, max.dist = .2)
+    grid.text(label=paste("Slope = ", signif(f(xpos), 3)), 
+              x = text.pos$x, 
+              y = text.pos$y, 
+              rot = ang.slope*180/pi, just=text.pos$just,
+              gp = gpar(col = "black", fontsize =10))
     grid.text(label=round(at.val, 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(at.val,"native"), gp = gpar(col = integral.color, fontsize =10))
   }
   #========== end of antiFpanel =========== 
