@@ -2,7 +2,7 @@ mBayes=function(dat, ...){
   if( !require(manipulate)) stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   if (!require("mosaic")) stop("Must install mosaic package.")
   
-  nthetapts=1000  #Resolution in theta for nthetapts
+  nthetapts=1000  #Resolution in theta for thetapts
 
   #Log Likelihood function:
   LL = function(theta,ns,Ntrials){
@@ -14,6 +14,7 @@ mBayes=function(dat, ...){
   
   myFun = function(min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis){
     theta.pts = seq(0, 1, length = nthetapts)
+    if(min>max) {cat("Don't cross the streams!")}
     prior = function(theta){dunif(theta, min = min, max=max)}
     prior.pts = prior(theta.pts)
     #Replicate data so you can sample more than exists! 
@@ -59,7 +60,7 @@ mBayes=function(dat, ...){
   }
   
   manipulate(myFun(min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis),
-             min = slider(0, 1, initial = .3, label = "Min"),
+             min = slider(0, 1, initial = .3, label = "Min"), #don't cross the streams!
              max = slider(0, 1, initial = .8, label = "Max"),
              samp.size = slider(1, 2*length(dat), label = "Sample Size", initial=.4*length(dat)),
              log.yaxis = checkbox(FALSE, label = "Logarithmic y-axis")

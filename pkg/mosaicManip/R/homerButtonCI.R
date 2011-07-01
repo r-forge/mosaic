@@ -31,7 +31,7 @@ mypanel=function(x,y){
     panel.abline(v=p, col = "red")
     lsegments(0, k, 1, k)
     lsegments(x0=lower.bound,y0=k,x1=upper.bound,y1=k, lwd=5)
-   # ltext(c(lower.bound, upper.bound), c(k,k), c("(",")"))    OPTIONAL PARENTHENSES ARROWS
+    ltext(c(lower.bound, upper.bound), c(k,k), c("(",")"))    #OPTIONAL PARENTHENSES ARROWS
     lpoints(p.hat, k, pch = 16)
     if(p<lower.bound|p>upper.bound){
       lpoints(1.02, k, pch = 11, col = "chocolate1", cex = 1.5)
