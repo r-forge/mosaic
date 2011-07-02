@@ -11,19 +11,19 @@ ciButton = function(){
   }
   Agresti= function(p.hat, n, conf.level){
     sd=sqrt(p.hat*(1-p.hat))
-    ntilde = n+qnorm(.5+conf.level/2)
-    lower = p.hat-qnorm(.5+conf.level/2)*sqrt(sd/ntilde)
-    upper = p.hat+qnorm(.5+conf.level/2)*sqrt(sd/ntilde)
-    return(list(lower, upper))
+    z = qnorm(.5+conf.level/2)
+    ntilde = n+z^2
+    ptilde = (p.hat*n + (z^2)/2)/ntilde
+    error = z*sqrt(ptilde*(1-ptilde)/ntilde)
+    return(list(lower=p.hat-error, upper=p.hat+error))
   }
 
-myFun=function(n=n, conf.level=0.95,p=p,ntrials=10,seed=125, int.type=Agresti){
+ myFun=function(n=n, conf.level=0.95,p=p,ntrials=10,seed=125, int.type=Wald){
   set.seed(seed)
-
-
-mypanel=function(x,y){
-  outside = 0
-  for (k in (ntrials:1) ) {
+  # === start of panel function
+  mypanel=function(x,y){
+   outside = 0
+   for (k in (ntrials:1) ) {
     p.hat <- rbinom(1,size=n,prob=p)/n
     int <- int.type(p.hat=p.hat,n=n,conf.level=conf.level)
     lower.bound <- int[1]
@@ -45,30 +45,19 @@ mypanel=function(x,y){
             y=unit(.98, "npc"),
             just = "center",
             gp = gpar(fontsize=15, col="chocolate1"))
-}
-
-
-xyplot(0:1 ~ 0:1, panel = mypanel, type="n",
+ }
+ # === end of panel function
+ xyplot(0:1 ~ 0:1, panel = mypanel, type="n",
        ylim=rev(c(0,max(ntrials+1,20))),
        xlim=c(-.1, 1.1),
        ylab="Trial Number",
        xlab="Probability")
 
-
-
-# plot(0:1,0:1,axes=FALSE,ann=FALSE,type="n")
-# segments(0,0.5,1,0.5)
-# segments(x0=int[1],y0=0.5,x1=int[2],y1=0.5,lwd=3)
-# text(0,0.4,0)
-# text(1,0.4,1)
-# text(c(lower.bound,upper.bound),rep(0.5,times=2),
-#   c("(",")"))
-# points(p.hat,0.5,pch=20)
-# segments(p,0.3,p,0.7)
-# text(p,0.2,"p")
 }
+
+
 #==========
-manipulate(myFun(n=n, conf.level=conf.level,p=p, ntrials=ntrials, seed=seed, int.type=Agresti),
+manipulate(myFun(n=n, conf.level=conf.level,p=p, ntrials=ntrials, seed=seed, int.type=int.type),
            n = slider(5, 500, step = 1, initial=100),
            conf.level = slider(.01, 1.00, step = .01, initial=0.95),
            p = slider(0,1, step = .01, initial=0.8),
