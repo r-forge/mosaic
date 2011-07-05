@@ -68,18 +68,17 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       minsmall = min(newvals)      
       startparam = min(1,max(0,bigstart+ (bigend-bigstart)*(minsmall-minbig)/(maxbig-minbig)))
       endparam = max(0,min(1,bigend - (bigend-bigstart)*(maxbig-maxsmall)/(maxbig-minbig)))
-      print(c(minsmall, maxsmall))
-      print(c(minbig,maxbig))
-      print( c(startparam, endparam))
-      RMS = sqrt(mean((newvals-zvals)^2)*pi*radius^2
+      RMS = sqrt(mean((newvals-zvals)^2)*pi*radius^2)
       mylevels = pretty(range(.zset),nlevels)
       
       
-      image( .xset, .yset, .zset, col=color.scheme(npts, alpha=0.8, start=bigstart, end=bigend),add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
-      contour(.xset, .yset, .zset, col=rgb(0,0,0,.4),lwd=3,add=TRUE, labcex=1.2, levels=mylevels)
+      image( .xset, .yset, .zset, col=color.scheme(npts, alpha=0.8, start=bigstart, end=bigend),
+             add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
+      contour(.xset, .yset, .zset, col=rgb(0,0,0,.4),lwd=3,add=TRUE, labcex=1.2, 
+              levels=mylevels, method="edge")
       image( .xset, .yset, zNew, col=color.scheme(npts, start=startparam, end = endparam,alpha = myalpha),add=TRUE, xlab=xlab,ylab=ylab,main=NULL )
       contour(.xset, .yset, zNew, col="black",lwd=5, labcex=1.5, add=TRUE, 
-              levels=mylevels)
+              levels=mylevels,method="flattest")
       title(main = paste("RMS Error:", signif(RMS, 3)))
     }
     #=========================
