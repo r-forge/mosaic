@@ -80,7 +80,6 @@ myPlot = function(k=k, n=n, P=P, mu1=mu1,mu2=mu2,mu3=mu3,mu4=mu4,mu5=mu5,
      bigy = bigA %*% coefs
      predict.y = A %*% coefs
      RMS = abs(sqrt(mean((predict.y-yvals)^2))*diff(range(xvals)))
-#      return(RMS)
    }
   
   bigx=x #Avoid conflicting variable names
@@ -99,7 +98,7 @@ myPlot = function(k=k, n=n, P=P, mu1=mu1,mu2=mu2,mu3=mu3,mu4=mu4,mu5=mu5,
             main = paste("RMS Error:", signif(RMS, 3)))
 
   }
- #####
+ #####=============================
    
    labels=list("Constant", "x", "x^2", "x^3", "log(x)", "exp(kx)", 
                "pnorm1(mu1, sd)", "pnorm2(mu2, sd)",
