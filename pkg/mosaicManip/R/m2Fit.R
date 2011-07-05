@@ -19,7 +19,8 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
          
   #=======================       
     myFun = function(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes=yyes, xyyes=xyyes,
-                     xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels = nlevels, npts=npts){
+                     xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels = nlevels, npts=npts,
+                     color.scheme=rainbow){
       .xset = seq(min(xlim2),max(xlim2),length=npts)
       .yset = seq(min(ylim2),max(ylim2),length=npts)
       .zset = outer(.xset, .yset, fun$fun ) #.zset is a npts x npts matrix
@@ -61,25 +62,30 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       zNew[in.Circle] = newvals
       zNew[!in.Circle] = NA
       
+      bigstart=.1; bigend=.9
+      
       maxsmall = max(newvals)
       minsmall = min(newvals)      
-      startparam = (minsmall-minbig)/(maxbig-minbig)
-      endparam = (maxbig-maxsmall)/(maxbig-minbig)
-      
-      RMS = sqrt(mean(newvals-zvals)^2)*pi*radius^2
+      startparam = min(1,max(0,bigstart+ (bigend-bigstart)*(minsmall-minbig)/(maxbig-minbig)))
+      endparam = max(0,min(1,bigend - (bigend-bigstart)*(maxbig-maxsmall)/(maxbig-minbig)))
+      print(c(minsmall, maxsmall))
+      print(c(minbig,maxbig))
+      print( c(startparam, endparam))
+      RMS = sqrt(mean((newvals-zvals)^2)*pi*radius^2
       mylevels = pretty(range(.zset),nlevels)
       
       
-      image( .xset, .yset, .zset, col=rainbow(npts, alpha = .8, start = .1, end = .9),add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
+      image( .xset, .yset, .zset, col=color.scheme(npts, alpha=0.8, start=bigstart, end=bigend),add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
       contour(.xset, .yset, .zset, col=rgb(0,0,0,.4),lwd=3,add=TRUE, labcex=1.2, levels=mylevels)
-      image( .xset, .yset, zNew, col=rainbow(npts, start=startparam, end = endparam,alpha = myalpha),add=TRUE, xlab=xlab,ylab=ylab,main=NULL )
+      image( .xset, .yset, zNew, col=color.scheme(npts, start=startparam, end = endparam,alpha = myalpha),add=TRUE, xlab=xlab,ylab=ylab,main=NULL )
       contour(.xset, .yset, zNew, col="black",lwd=5, labcex=1.5, add=TRUE, 
               levels=mylevels)
       title(main = paste("RMS Error:", signif(RMS, 3)))
     }
     #=========================
 manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes=yyes, xyyes=xyyes, 
-                 xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels=nlevels, npts = npts),
+                 xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels=nlevels, npts = npts, 
+                color.scheme=col.scheme),
            xpt = slider(min(xlim2),max(xlim2), initial = mean(xlim2), label = "Circle center: x"),
            ypt = slider(min(ylim2),max(ylim2), initial = mean(ylim2), label = "Circle center: y"),
            radius = slider(.01, (min(max(xlim2),max(ylim2))), initial = .5*mean(xlim2)),
@@ -91,7 +97,9 @@ manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes
            ysqyes = checkbox(FALSE, label = "y^2"),
            myalpha = slider(0,1, initial = .5, label = "Circle Transparency"),
            npts = slider(20, 200, initial = 100, label = "Number of pixels"),
-           nlevels = slider(5, 50, initial = 20, label = "Approx. number of contour lines")
+           nlevels = slider(5, 50, initial = 20, label = "Approx. number of contour lines"),
+           col.scheme = picker( Rainbow=rainbow,Heat=heat.colors,Terrain=terrain.colors,Topo=topo.colors,CM=cm.colors,initial="Rainbow")
+
            )
   
 }
