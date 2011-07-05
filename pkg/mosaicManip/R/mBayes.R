@@ -8,7 +8,7 @@ mBayes=function(dat, ...){
   LL = function(theta,ns,Ntrials){
     ns*log(theta)+(Ntrials-ns)*log(1-theta)
   }
-  posterior.poly = rgb(1,.5,0, .2)
+  posterior.poly = rgb(1,.5,0,.2)
   posterior.text = rgb(1,.5,0,1)
   
   
