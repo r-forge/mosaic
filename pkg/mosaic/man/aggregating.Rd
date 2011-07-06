@@ -2,24 +2,28 @@
 \docType{methods}
 \alias{mean}
 \alias{mean-methods}
+\alias{mean,any-method}
 \alias{mean,data.frame-method}
 \alias{mean,formula-method}
 \alias{mean,numeric-method}
 
 \alias{median}
 \alias{median-methods}
+\alias{median,any-method}
 \alias{median,data.frame-method}
 \alias{median,formula-method}
 \alias{median,numeric-method}
 
 \alias{sd}
 \alias{sd-methods}
+\alias{sd,any-method}
 \alias{sd,data.frame-method}
 \alias{sd,formula-method}
 \alias{sd,numeric-method}
 
 \alias{var}
 \alias{var-methods}
+\alias{var,ANY,ANY,ANY,ANY,ANY-method}
 \alias{var,data.frame,ANY,ANY,ANY,ANY-method}
 \alias{var,matrix,ANY,ANY,ANY,ANY-method}
 \alias{var,formula,data.frame,ANY,ANY,missing-method}
@@ -29,18 +33,21 @@
 
 \alias{max}
 \alias{max-methods}
+\alias{max,any-method}
 \alias{max,data.frame-method}
 \alias{max,formula-method}
 \alias{max,numeric-method}
 
 \alias{min}
 \alias{min-methods}
+\alias{min,any-method}
 \alias{min,data.frame-method}
 \alias{min,formula-method}
 \alias{min,numeric-method}
 
 \alias{prop}
 \alias{prop-methods}
+\alias{prop,any-method}
 \alias{prop,data.frame-method}
 \alias{prop,formula-method}
 \alias{prop,logical-method}
@@ -48,6 +55,7 @@
 
 \alias{count}
 \alias{count-methods}
+\alias{count,any-method}
 \alias{count,data.frame-method}
 \alias{count,formula-method}
 \alias{count,logical-method}
@@ -139,9 +147,6 @@ mean(age ~ NULL, data=HELP)
 mean(HELP$age)
 mean(age ~ sex, data=HELP)
 mean( age ~ sex + treat, data=HELP)
-#mean(age ~ sex, data=HELP, overall=TRUE )
-#mosaic.par.set(aggregate.overall=TRUE)
-#mean(age ~ sex, data=HELP)
 
 median(age, data=HELP)
 median(~age, data=HELP)
@@ -151,9 +156,6 @@ median(age ~ NULL, data=HELP)
 median(HELP$age)
 median(age ~ sex, data=HELP)
 median( age ~ sex + treat, data=HELP)
-#median(age ~ sex, data=HELP, overall=TRUE )
-#mosaic.par.set(aggregate.overall=TRUE)
-#median(age ~ sex, data=HELP)
 
 max(age, data=HELP)
 max(~age, data=HELP)
@@ -163,9 +165,6 @@ max(age ~ NULL, data=HELP)
 max(HELP$age)
 max(age ~ sex, data=HELP)
 max( age ~ sex + treat, data=HELP)
-#max(age ~ sex, data=HELP, overall=TRUE )
-#mosaic.par.set(aggregate.overall=TRUE)
-#max(age ~ sex, data=HELP)
 
 sd(age, data=HELP)
 sd(~age, data=HELP)
@@ -175,9 +174,6 @@ sd(age ~ NULL, data=HELP)
 sd(HELP$age)
 sd(age ~ sex, data=HELP)
 sd( age ~ sex + treat, data=HELP)
-#sd(age ~ sex, data=HELP, overall=TRUE )
-#mosaic.par.set(aggregate.overall=TRUE)
-#sd(age ~ sex, data=HELP)
 
 var(age, data=HELP)
 var(~age, data=HELP)
@@ -187,8 +183,21 @@ var(age ~ NULL, data=HELP)
 var(HELP$age)
 var(age ~ sex, data=HELP)
 var( age ~ sex + treat, data=HELP)
-#var(age ~ sex, data=HELP, overall=TRUE )
-#mosaic.par.set(aggregate.overall=TRUE)
-#var(age ~ sex, data=HELP)
+
+count(age>40, data=HELP)
+count(~age>40, data=HELP)
+count(sex, data=HELP)
+count(sex, data=HELP, level='male')
+count(sex ~ substance, data=HELP)
+count(HELP$sex)
+count( sex ~ substance + homeless, data=HELP)
+
+prop(age>40, data=HELP)
+prop(~age>40, data=HELP)
+prop(sex, data=HELP)
+prop(sex, data=HELP, level='male')
+prop(sex ~ substance, data=HELP)
+prop(HELP$sex)
+prop( sex ~ substance + homeless, data=HELP)
 }
 \keyword{ methods }

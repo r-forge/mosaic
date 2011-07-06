@@ -54,6 +54,14 @@ setGeneric(
 
 setMethod(
 	'mean',
+	'ANY',
+	function(x, ..., na.rm=TRUE, trim=0) 
+		c( mean=base::mean( .flatten(c(x,list(...))), na.rm=na.rm, trim=trim ) )
+	
+)
+
+setMethod(
+	'mean',
 	'numeric',
 	function(x, ..., na.rm=TRUE, trim=0) 
 		c( mean=base::mean( c(x,.flatten(list(...))), na.rm=na.rm, trim=trim ) )
@@ -98,6 +106,14 @@ setGeneric(
 
 setMethod(
 	'median',
+	'ANY',
+	function(x, ..., na.rm=TRUE) 
+		c( median=stats::median( .flatten(c(x,list(...))), na.rm=na.rm ) )
+	
+)
+
+setMethod(
+	'median',
 	'numeric',
 	function(x, ..., na.rm=TRUE) 
 		c( median=stats::median( c(x,.flatten(list(...))), na.rm=na.rm) )
@@ -135,6 +151,13 @@ setGeneric(
 		}
 		standardGeneric('sd')
 	}
+)
+
+setMethod(
+	'sd',
+	'ANY',
+	function(x, ..., na.rm=TRUE) 
+		c( sd=stats::sd( .flatten(c(x,list(...))), na.rm=na.rm) )
 )
 
 setMethod(
@@ -231,6 +254,13 @@ setGeneric(
 
 setMethod(
 	'.Max',
+	'ANY',
+	function(x, ..., na.rm=TRUE) 
+		c( max=base::max( x,..., na.rm=na.rm) )
+)
+
+setMethod(
+	'.Max',
 	'numeric',
 	function(x, ..., na.rm=TRUE) {
 		base::max(x, ..., na.rm=na.rm) 
@@ -272,6 +302,13 @@ setGeneric(
 		}
 		standardGeneric('.Min')
 	}
+)
+
+setMethod(
+	'.Min',
+	'ANY',
+	function(x, ..., na.rm=TRUE) 
+		c( max=base::min(x ,..., na.rm=na.rm) )
 )
 
 setMethod(
@@ -325,6 +362,14 @@ setGeneric(
 		}
 		standardGeneric('var')
 	}
+)
+
+
+setMethod(
+	'var',
+	c('ANY','ANY'),
+	function(x, y, na.rm=TRUE, use=use, data=data) 
+		stats::var( x, y, na.rm=na.rm, use=use) 
 )
 
 setMethod(
@@ -385,14 +430,29 @@ max <- .Max
 
 ##########################################################################################
 setGeneric('count',
-	function(x, ..., level=TRUE, na.rm=TRUE)
+	function(x, ..., level=TRUE, na.rm=TRUE) {
+		dots <- list(...)
+		if ( is.name(substitute(x)) ) {
+			if ( length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+				data <- dots[[1]]
+				return(count(eval( substitute(x), data),  ..., level=level, na.rm=na.rm))
+			}
+		}
 		standardGeneric('count')
+	}
+)
+
+setMethod(
+	'count',
+	'ANY',
+	function(x, ..., level=level, na.rm=TRUE) 
+		c( count=callNextMethod( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm) )
 )
 
 setMethod('count',
 	signature = c('logical'),
 	function(x, ..., level=TRUE, na.rm=TRUE) 
-		calllNextMethod( as.factor(x), ..., level=level, na.rm=na.rm ) 
+		callNextMethod( as.factor(x), ..., level=level, na.rm=na.rm ) 
 )
 
 setMethod('count',
@@ -411,7 +471,7 @@ setMethod(
 	"count", 
 	signature=c("data.frame"),
 	function(x, ..., level=TRUE, na.rm=TRUE) 
-		sapply(x, prop, level=level, na.rm=na.rm)
+		sapply(x, sum, level=level, na.rm=na.rm)
 )
 
 setMethod( 
@@ -430,14 +490,29 @@ setMethod(
 ##########################################################################
 
 setGeneric('prop',
-	function(x, ..., level=TRUE, na.rm=TRUE)
+	function(x, ..., level=TRUE, na.rm=TRUE) {
+		dots <- list(...)
+		if ( is.name(substitute(x)) ) {
+			if ( length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+				data <- dots[[1]]
+				return(prop(eval( substitute(x), data),  ..., level=level, na.rm=na.rm))
+			}
+		}
 		standardGeneric('prop')
+	}
+)
+
+setMethod(
+	'prop',
+	'ANY',
+	function(x, ..., level=level, na.rm=TRUE) 
+		c( prop=callNextMethod( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm) )
 )
 
 setMethod('prop',
 	signature = c('logical'),
 	function(x, ..., level=TRUE, na.rm=TRUE) 
-		calllNextMethod( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm ) 
+		callNextMethod( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm ) 
 )
 
 setMethod('prop',
@@ -446,7 +521,7 @@ setMethod('prop',
 		if (! level %in% levels(x) ) {
 			level = levels(x) [as.numeric(level)]
 		}
-		result <- mean( x == level, na.rm=na.rm ) 
+		result <- base::mean( x == level, na.rm=na.rm ) 
 		names(result) <- paste('prop', level, sep=".")
 		return(result)
 	}
