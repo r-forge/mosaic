@@ -30,7 +30,7 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       yMat = outer(.yset, rep(1, npts), "*")
       xMat = outer(rep(1, npts), .xset, "*")
       
-      dist = (yMat-ypt)^2+(xMat-xpt)^2
+      dist = (yMat-xpt)^2+(xMat-ypt)^2
       in.Circle = dist<radius^2
       xvals = xMat[in.Circle]
       yvals = yMat[in.Circle]
@@ -62,7 +62,7 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       zNew[in.Circle] = newvals
       zNew[!in.Circle] = NA
       
-      bigstart=.1; bigend=.9
+      bigstart=.05; bigend=.95
       
       maxsmall = max(newvals)
       minsmall = min(newvals)      
@@ -91,7 +91,7 @@ manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes
            const = checkbox(TRUE, label = "Constant"),
            xyes = checkbox(TRUE, label = "x"),
            yyes = checkbox(FALSE, label = "y"),
-           xyyes = checkbox(TRUE, label = "xy"),
+           xyyes = checkbox(FALSE, label = "xy"),
            xsqyes = checkbox(FALSE, label = "x^2"),
            ysqyes = checkbox(FALSE, label = "y^2"),
            myalpha = slider(0,1, initial = .5, label = "Circle Transparency"),
