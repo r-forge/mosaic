@@ -1,7 +1,7 @@
 m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
   if(!require(manipulate)) stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   if (!require("mosaic")) stop("Must install mosaic package.")
-#   fillcolors = colorscheme(20,alpha=transparency)  
+
   vals = list(...) 
   fun = mosaic:::.createMathFun(sexpr = substitute(expr), ...)
   ylab = fun$names[2]
@@ -14,8 +14,6 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
   if( fun$names[2] %in% names(vals) ) {
     ylim2 = vals[[fun$names[2]]]
       }
-  
-  #image( .xset, .yset, .zset, col=rainbow(npts),add=FALSE,xlab=xlab,ylab=ylab,main=NULL )
          
   #=======================       
     myFun = function(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes=yyes, xyyes=xyyes,
@@ -27,16 +25,16 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       minbig = min(.zset)
       maxbig = max(.zset) #THESE LINES NEED TO GO IN myFun if npts is a slider
       
-      yMat = outer(.yset, rep(1, npts), "*")
+      yMat = outer(.yset, rep(1, npts), "*") #2 matrices of xpts and ypts
       xMat = outer(rep(1, npts), .xset, "*")
       
-      dist = (yMat-xpt)^2+(xMat-ypt)^2
+      dist = (yMat-xpt)^2+(xMat-ypt)^2 #xpt corresponds to yMat and vice versa.
       in.Circle = dist<radius^2
-      xvals = xMat[in.Circle]
+      xvals = xMat[in.Circle]          #creating a circle subset
       yvals = yMat[in.Circle]
       zvals = .zset[in.Circle]
       
-      A = c()
+      A = c()                          #creating the matrix to calculate coefs
       if(const){
         A=cbind(A, rep(1, length(zvals)))
       }
@@ -62,16 +60,16 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       zNew[in.Circle] = newvals
       zNew[!in.Circle] = NA
       
-      bigstart=.05; bigend=.95
+      bigstart=.05; bigend=.95 #Not using full color spectrum to allow the fit to exceed the zrange
       
       maxsmall = max(newvals)
-      minsmall = min(newvals)      
+      minsmall = min(newvals)      #Making the colors from circle and background correspond to same values
       startparam = min(1,max(0,bigstart+ (bigend-bigstart)*(minsmall-minbig)/(maxbig-minbig)))
       endparam = max(0,min(1,bigend - (bigend-bigstart)*(maxbig-maxsmall)/(maxbig-minbig)))
       RMS = sqrt(mean((newvals-zvals)^2)*pi*radius^2)
-      mylevels = pretty(range(.zset),nlevels)
+      mylevels = pretty(range(.zset),nlevels)   #number of contours
       
-      
+      #Plotting!
       image( .xset, .yset, .zset, col=color.scheme(npts, alpha=0.8, start=bigstart, end=bigend),
              add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
       contour(.xset, .yset, .zset, col=rgb(0,0,0,.4),lwd=3,add=TRUE, labcex=1.2, 
@@ -98,19 +96,7 @@ manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes
            npts = slider(20, 200, initial = 100, label = "Number of pixels"),
            nlevels = slider(5, 50, initial = 20, label = "Approx. number of contour lines"),
            col.scheme = picker( Rainbow=rainbow,Heat=heat.colors,Terrain=terrain.colors,Topo=topo.colors,CM=cm.colors,initial="Rainbow")
-
+           #We'll probably get rid of col.scheme soon unless there's a good way to make other color schemes match
            )
   
 }
-
-#         for(j in 1:npts){
-#       for(k in 1:npts){
-#         if(in.Circle[j,k]==FALSE){
-#           yMat[j,k] = NA
-#           xMat[j,k] = NA
-#         }
-#       }
-#     }
-    
-#     coefsy = qr.solve(yMat, zvals)
-#     coefsx = qr.solve(xMat, zvals)
