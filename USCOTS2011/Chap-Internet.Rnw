@@ -687,27 +687,28 @@ census$getFollowersCount()
 @
 That's a lot of followers (but then again, the census is a big job).  
 Detailed reports of the last set of twitter status updates can be returned.
+Let's take a look at what William Shatner has been up to.
 <<twitter2>>=
-census.tweets <- userTimeline(census, n=5)
+shatner.tweets <- userTimeline("williamshatner", n=5)
 @
 By default, the tweets don't print very nicely.  So let's define our 
 own function to extract the text from a tweet and format it more
 nicely.
 <<>>=
 printTweet <- function(x) paste( strwrap(x$getText())) 
-printTweet(census.tweets[[1]])
+printTweet(shatner.tweets[[1]])
 @
 Detailed information can be found for individual tweets.
 
 <<twitter2b>>=
-census.tweets[[1]]$getCreated()
-census.tweets[[1]]$getId()
+shatner.tweets[[1]]$getCreated()
+shatner.tweets[[1]]$getId()
 @
 \DiggingDeeper{Section \ref{sec:datastruct} provides details on accessing lists.}
 
 Using \function{sapply()}, we can inspect all of the tweets at once.
 <<>>=
-sapply(census.tweets, printTweet)
+sapply(shatner.tweets, printTweet)
 @
 \DiggingDeeper{the \function{sapply()} applies a function to each element of a list
 or vector.  It is one of several ``apply'' functions in \R, including
@@ -721,7 +722,10 @@ The \pkg{mosaic} package even include
 Alternatively, we can download information about how active Census Bureau followers are 
 in terms of posting their own status updates.
 
-<<twitter2c>>=
+<<twitter2c, eval=FALSE>>=
+userFollowers = function(user) {
+	return(user$getUserFollowers())
+}
 census.followers <- userFollowers(census)
 followers.ntweets <- sapply(census.followers, function(x) x$getStatusesCount())
 favstats(followers.ntweets)
@@ -729,13 +733,13 @@ census.followers[[which.max(followers.ntweets)]]
 @
 That's probably a bit much for students to swallow.  Let's write a function to hide 
 some of the gory details from the students.
-<<>>=
+<<eval=FALSE>>=
 CountTweets <- function ( users ) {
 	return( sapply( users,  function(x) x$getStatusesCount()) )
 }
 @
 Now we can count tweets like this.
-<<>>=
+<<eval=FALSE>>=
 sort(CountTweets(census.followers))
 @
 
