@@ -55,5 +55,5 @@ Returns an integer representing the Apple Xgrid job identifier.
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{xgrid} and \code{xgridattr}
+\code{\link{xgrid}}
 }

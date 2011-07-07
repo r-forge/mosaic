@@ -85,6 +85,14 @@ Larger values of \code{sleeptime} may lead to longer job latency upon completion
 provide less of a load on the network.
 }
 
+\seealso{
+\code{\link{xgridsubmit}},
+\code{\link{xgridattr}},
+\code{\link{xgridresults}} and
+\code{\link{xgriddelete}}
+
+
+
 
 \examples{
 }

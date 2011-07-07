@@ -49,25 +49,5 @@ Nicholas Horton (\email{nhorton@smith.edu})
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{xgrid}
+\code{\link{xgrid}}
 }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function(grid, auth, jobnum, outdir, verbose=FALSE) {
-   command = paste("xgrid -h ",grid," -auth ",auth, 
-      " -job results -so job.out -se job.err -out ", outdir," -id ", 
-      jobnum, sep="")
-   if (verbose==TRUE) {
-      cat(command, "\n")
-   }
-   retval = system(command, intern=TRUE)
-  }
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

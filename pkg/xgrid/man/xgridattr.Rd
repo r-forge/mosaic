@@ -46,5 +46,5 @@ Nicholas Horton (\email{nhorton@smith.edu})
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{xgrid}
+\code{\link{xgrid}}
 }
