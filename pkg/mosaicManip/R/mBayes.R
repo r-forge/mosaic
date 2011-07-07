@@ -12,11 +12,17 @@ mBayes=function(dat, ...){
   posterior.text = rgb(1,.5,0,1)
   
   
-  myFun = function(min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis){
+  myFun = function(pick.prior=pick.prior, min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis){
     theta.pts = seq(0, 1, length = nthetapts)
-    if(min>max) {cat("Don't cross the streams!")}
-    prior = function(theta){dunif(theta, min = min, max=max)}
-    prior.pts = prior(theta.pts)
+    uniform =function(theta){
+      if(min>max) {cat("Don't cross the streams!")}
+      dunif(theta, min = min, max=max)}
+    beta = function(theta){
+      min = min*10; max=max*10;
+      dbeta(theta, min, max)
+    }
+    prior=list(uniform, beta)
+    prior.pts = prior[[pick.prior]](theta.pts)
     #Replicate data so you can sample more than exists! 
     dat = rep(dat, times = 2)
     nsuccesses=sum(dat[1:samp.size])
@@ -36,13 +42,19 @@ mBayes=function(dat, ...){
             label= paste("theta =", signif(x.like.max, 3),
                          "\nProb =", signif( max(likeli.pts), 3)),
             col = "red")
-      #Prior Text: 
+      #Prior Text:
       succex = which(prior.pts != 0)
       succex = x[succex]
-      x.prior = succex[5]
-      ltext(x= x.prior, y = .9*prior(x.prior), col = "blue",
+      if(pick.prior==1){
+        x.prior = succex[10]
+        ltext(x= x.prior, y = .9*prior[[pick.prior]](x.prior), col = "blue",
             label="Prior", pos = 4)
-      #length(succex)/20
+       }
+      if(pick.prior==2){
+        x.prior=x[which(prior.pts==max(prior.pts))]
+        ltext(x=x.prior, y = .9*prior[[pick.prior]](x.prior), col = "blue",
+            label="Prior")
+      }
       #Posterior Text:
       x.post.max = x[which(posterior.pts ==max(posterior.pts))]
       y.post.max = posterior.pts[which(posterior.pts ==max(posterior.pts))]
@@ -54,14 +66,15 @@ mBayes=function(dat, ...){
     
     xyplot(prior.pts~theta.pts, panel = mypanel, ylim = c(0,1.1*max(posterior.pts)), 
            xlab = expression(theta),ylab = "Probability Density",
-           scales = list(x = list(log = FALSE), y=list(log=log.yaxis)))
+           scales = list(x = list(log = FALSE), log=log.yaxis))
     #The scales argument should accept a list, and x and y can be separate lists.
     #On the internet I see many instances of y=list(log=TRUE) being the correct syntax. Not sure what's up.
   }
   
-  manipulate(myFun(min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis),
-             min = slider(0, 1, initial = .3, label = "Min"), #don't cross the streams!
-             max = slider(0, 1, initial = .8, label = "Max"),
+  manipulate(myFun(pick.prior=pick.prior, min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis),
+             pick.prior= picker("Uniform" = 1, "Beta"=2, label = "Prior Distribution", initial = "Beta"),
+             min = slider(0.1, 1, initial = .3, label = "Parameter 1"), #don't cross the streams!
+             max = slider(0.1, 1, initial = .8, label = "Parameter 2"),
              samp.size = slider(1, 2*length(dat), label = "Sample Size", initial=.4*length(dat)),
              log.yaxis = checkbox(FALSE, label = "Logarithmic y-axis")
              )

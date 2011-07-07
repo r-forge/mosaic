@@ -17,18 +17,17 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
          
   #=======================       
     myFun = function(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes=yyes, xyyes=xyyes,
-                     xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels = nlevels, npts=npts,
-                     color.scheme=rainbow){
+                     xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels = nlevels, npts=npts){
       .xset = seq(min(xlim2),max(xlim2),length=npts)
       .yset = seq(min(ylim2),max(ylim2),length=npts)
-      .zset = outer(.xset, .yset, fun$fun ) #.zset is a npts x npts matrix
+      .zset = (outer(.xset, .yset, fun$fun )) #.zset is a npts x npts matrix
       minbig = min(.zset)
       maxbig = max(.zset) #THESE LINES NEED TO GO IN myFun if npts is a slider
       
-      yMat = outer(.yset, rep(1, npts), "*") #2 matrices of xpts and ypts
-      xMat = outer(rep(1, npts), .xset, "*")
+      yMat = outer(rep(1, npts), .yset, "*") #2 matrices of xpts and ypts
+      xMat = outer(.xset, rep(1, npts), "*")
       
-      dist = (yMat-xpt)^2+(xMat-ypt)^2 #xpt corresponds to yMat and vice versa.
+      dist = (yMat-ypt)^2+(xMat-xpt)^2
       in.Circle = dist<radius^2
       xvals = xMat[in.Circle]          #creating a circle subset
       yvals = yMat[in.Circle]
@@ -70,21 +69,20 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       mylevels = pretty(range(.zset),nlevels)   #number of contours
       
       #Plotting!
-      image( .xset, .yset, .zset, col=color.scheme(npts, alpha=0.8, start=bigstart, end=bigend),
+      image( .xset, .yset, .zset, col=rainbow(npts, alpha=0.8, start=bigstart, end=bigend),
              add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
       contour(.xset, .yset, .zset, col=rgb(0,0,0,.4),lwd=3,add=TRUE, labcex=1.2, 
               levels=mylevels, method="edge")
-      image( .xset, .yset, zNew, col=color.scheme(npts, start=startparam, end = endparam,alpha = myalpha),add=TRUE, xlab=xlab,ylab=ylab,main=NULL )
+      image( .xset, .yset, zNew, col=rainbow(npts, start=startparam, end = endparam,alpha = myalpha),add=TRUE, xlab=xlab,ylab=ylab,main=NULL )
       contour(.xset, .yset, zNew, col="black",lwd=5, labcex=1.5, add=TRUE, 
               levels=mylevels,method="flattest")
       title(main = paste("RMS Error:", signif(RMS, 3)))
     }
     #=========================
 manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes=yyes, xyyes=xyyes, 
-                 xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels=nlevels, npts = npts, 
-                color.scheme=col.scheme),
-           xpt = slider(min(xlim2),max(xlim2), initial = mean(xlim2), label = "Circle center: x"),
-           ypt = slider(min(ylim2),max(ylim2), initial = mean(ylim2), label = "Circle center: y"),
+                 xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels=nlevels, npts = npts),
+           xpt = slider(min(xlim2),max(xlim2), initial = mean(xlim2), label = "Circle center: x", step=.01),
+           ypt = slider(min(ylim2),max(ylim2), initial = mean(ylim2), label = "Circle center: y", step=.01),
            radius = slider(.01, (min(max(xlim2),max(ylim2))), initial = .5*mean(xlim2)),
            const = checkbox(TRUE, label = "Constant"),
            xyes = checkbox(TRUE, label = "x"),
@@ -94,9 +92,9 @@ manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes
            ysqyes = checkbox(FALSE, label = "y^2"),
            myalpha = slider(0,1, initial = .5, label = "Circle Transparency"),
            npts = slider(20, 200, initial = 100, label = "Number of pixels"),
-           nlevels = slider(5, 50, initial = 20, label = "Approx. number of contour lines"),
-           col.scheme = picker( Rainbow=rainbow,Heat=heat.colors,Terrain=terrain.colors,Topo=topo.colors,CM=cm.colors,initial="Rainbow")
-           #We'll probably get rid of col.scheme soon unless there's a good way to make other color schemes match
+           nlevels = slider(5, 50, initial = 20, label = "Approx. number of contour lines")
            )
-  
 }
+
+#Take out col.scheme
+#x and y axis reversed

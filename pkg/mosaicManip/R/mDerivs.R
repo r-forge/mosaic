@@ -244,9 +244,6 @@ if(anti == TRUE){
             )
 
 }
-#Border off on polygons DONE
- #Polygon logic, for antiderivs DONE
- #Make deriv labels bigger DONE
  #Red Parabola for antideriv - curvature - SHORT
  #Slope labels, in bounds using aspect ratio function
  #Eventually (last step after all debugging) make der and anti checkboxes initial FALSE

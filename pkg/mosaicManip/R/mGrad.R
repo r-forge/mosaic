@@ -58,11 +58,12 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
     
     bigstart = .05; bigend = .95  #rainbow colors are clearer when it goes from one extreme to the other, not red to red
     mylevels = pretty(range(.zset),nlevels)   #number of contours
-    levelplot( .xset, .yset, .zset, col=rainbow(npts, alpha=0.8, start=bigstart, end=bigend),
+    image( .xset, .yset, .zset, col=rainbow(npts, alpha=0.8, start=bigstart, end=bigend),
              add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
-    contourplot(.xset, .yset, .zset, col=rgb(0,0,0,.5),lwd=3,add=TRUE, labcex=1.2, 
+    contour(.xset, .yset, .zset, col=rgb(0,0,0,.5),lwd=3,add=TRUE, labcex=1.2, 
               levels=mylevels, method="edge")
-           
+    
+    
     arrows(x0=xpts, y0=ypts, x1=xpts+xvecs, y1=ypts+yvecs, lwd = 3)
   #  arrows(x0=c.xpt, y0=c.ypt, x1=c.xpt+c.xvec, y1=c.ypt+c.yvec, lwd=3)
     get.aspect.ratio()
@@ -89,7 +90,3 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
             )
 }
             
-#Make one central arrow DONE
-#for 5 or 9 around it x and y components    DONE
-#Make sure arrows can go in negative space    DONE
-#Fix aspect ratio so arrows are always perpendicular
