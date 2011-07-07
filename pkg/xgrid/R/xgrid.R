@@ -1,26 +1,37 @@
 # functions to help start, track, and grab results from an Xgrid using R
 # Nicholas Horton, nhorton@smith.edu
-# $Id: xgrid.R,v 1.8 2011/07/06 11:12:47 nhorton Exp $
+# $Id: xgrid.R,v 1.11 2011/07/07 19:17:20 nhorton Exp $
 
 xgrid = function(grid="mathgrid0.smith.edu", numsim=20, ntask=1, 
-   outdir="output", param=1, Rcmd="runjob.R", auth="Kerberos", outfile="RESULTS.rda", 
-   suffix="RESULT", throttle=20, sleeptime=15, verbose=FALSE) {
+   outdir="output", param=1, Rcmd="runjob.R", auth="Kerberos", 
+   outfile="RESULTS.rda", suffix="RESULT", throttle=20, sleeptime=5, 
+   verbose=FALSE) {
    # submit a group of jobs to the Xgrid, letting the grid deal with 
    # scheduling and load balancing
    # numsim is the total number of simulations to run
-   # ntask is the maximum number of repetitions (tasks) per job
-   offset = 101  # needs to be 3 digits to keep formatting clean
-   alljobs = floor(numsim/ntask)
+   # ntask is the maximum number of repetitions (tasks) each job will run
+   # outdir is the directory to put output files
+   # param is an optional parameter provided to the agent
+   # Rcmd is the name of the R command to run on the agent
+   # auth is the type of authorization ("Kerberos", "Password" or "None")
+   # outfile is the filename to store results once collated
+   # suffix is the suffix to prepend to the individual job results
+   # throttle is the maximum number of jobs to queue at any time
+   # sleeptime is the number of seconds to wait between status requests
+   # verbose controls whether to display xgrid commands
+
+   numberofjobs = floor(numsim/ntask)    
+
    if (verbose==TRUE) {
-      cat("numsim=",numsim," ntask=",ntask,"alljobs=",alljobs, "\n")
+      cat("numsim=", numsim, " ntask=", ntask, "numberofjobs=", 
+         numberofjobs, "\n")
    }
-   if (alljobs != ceiling(numsim/ntask)) {
+   if (numberofjobs != ceiling(numsim/ntask)) {
       stop("numsim divided by ntask should be an integer!")
    }
-   if (ceiling(numsim/ntask)<2) {
+   if (ceiling(numsim/ntask) < 2) {
       stop("must have at least 2 jobs!")
    }
-
    if (file.access(outdir, 0) == -1) {
       if (system(paste("mkdir ", outdir, sep="")) != 0) {
          stop(paste("The directory '", outdir, "' can't be created!\n", sep=""))
@@ -28,42 +39,74 @@ xgrid = function(grid="mathgrid0.smith.edu", numsim=20, ntask=1,
    } else if (file_test("-d", outdir) != TRUE) {
       stop(paste("The directory '", outdir, "' is not a directory!\n", sep=""))
    }
-
-   # process the jobs
-   jobs = numeric(alljobs)
-   jobidentifier = 1:alljobs+9999
-   for (i in 1:length(jobs)) {
-      jobs[i] = xgridsubmit(grid, auth, Rcmd, ntask, param,
-         paste(suffix, "-", jobidentifier[i], sep=""), verbose)
+   
+   # process the jobs (w/ throttle)
+   jobidentifier = 1:numberofjobs + 9999  # a vector indicating file numbering for results
+   pendingjobs = jobidentifier   	# a vector that we can modify as jobs are queued
+   activejobs = c()    			# a vector of active Apple grid job numbers
+   whichjob = 1 			# the current job whose status is to be ascertained
+   
+   # first start to load up the grid
+   while (length(activejobs) < throttle & length(pendingjobs) > 0) {
+      activejobs = c(activejobs, xgridsubmit(grid, auth, Rcmd, 
+         ntask, param, paste(suffix, "-", pendingjobs[1], sep=""), 
+         verbose))
+      pendingjobs = pendingjobs[-1]
    }
-   if (verbose==TRUE) {
-      cat("jobs=",jobs,"\n")
-   }
-   whichjob = 1
-   while (length(jobs)>0) {
-      if (verbose==TRUE) {
-         cat("length of jobs=", length(jobs)," whichjob=", whichjob, "\n", sep="")
+                                             
+   while (length(pendingjobs) > 0) {    # still more to queue up
+      statusline = xgridattr(grid, auth, activejobs[whichjob], verbose)
+      if (grepl('Failed', statusline)==TRUE) {
+         stop("Ack: a job failed! Seek help immediately.")
+         status = "Failed"
       }
-      returnlist = checkonjob(whichjob, jobs, grid, outdir, auth, sleeptime, verbose)
-      jobs = returnlist$jobs
-      whichjob = returnlist$whichjob
+      if (grepl('Finished', statusline)==TRUE) {
+         xgridresults(grid, auth, activejobs[whichjob], outdir, verbose)
+         xgriddelete(grid, auth, activejobs[whichjob], verbose)
+         activejobs = activejobs[-whichjob]
+         activejobs = c(activejobs, xgridsubmit(grid, auth, Rcmd, 
+            ntask, param, paste(suffix, "-", pendingjobs[1], sep=""), 
+            verbose))  
+         pendingjobs = pendingjobs[-1]
+      } else {
+         whichjob = ifelse(whichjob==length(activejobs), 1, whichjob + 1)
+         Sys.sleep(sleeptime) 
+      }
    }
-   return(collateresults(jobidentifier, ntask, outdir, outfile, suffix, verbose))
-}
 
-collateresults = function(jobidentifier, ntask, outdir, outfile, suffix, verbose) {
-  # open up a file to figure out what we have to work with
-  if (verbose==TRUE) {
-    cat("should have ", ntask, "*", length(jobidentifier)," entries.\n")
-  }
-  load(paste(outdir,"/",suffix,"-",jobidentifier[1],sep=""))
-  res = res0
-  for (i in 2:length(jobidentifier)) {
-     load(paste(outdir,"/",suffix,"-",jobidentifier[i],sep=""))
+   # waiting for everything to finish up
+   while (length(activejobs) > 0) {
+      statusline = xgridattr(grid, auth, activejobs[whichjob], verbose)
+      if (grepl('Failed', statusline)==TRUE) {
+         stop("Ack: a job failed! Seek help immediately.")
+         status = "Failed"
+      }
+      if (grepl('Finished', statusline)==TRUE) {
+         xgridresults(grid, auth, activejobs[whichjob], outdir, verbose)
+         xgriddelete(grid, auth, activejobs[whichjob], verbose)
+         activejobs = activejobs[-whichjob]
+         whichjob = ifelse(whichjob >= length(activejobs), 1, whichjob + 1)
+
+      } else {
+         whichjob = ifelse(whichjob==length(activejobs), 1, whichjob + 1)
+         Sys.sleep(sleeptime) 
+      }
+   }
+      
+   # start to collate results
+   if (verbose==TRUE) {
+      cat("should have ", ntask, "*", length(jobidentifier)," entries.\n")
+   }
+   # load first file, then rename it
+   load(paste(outdir, "/", suffix, "-", jobidentifier[1], sep=""))
+   res = res0
+   # now load up the rest of the files
+   for (i in 2:length(jobidentifier)) {
+     load(paste(outdir, "/", suffix, "-", jobidentifier[i], sep=""))
      res[((i-1)*ntask+1):(((i-1)*ntask+1)+ntask-1),] = res0
-  }
-  save(res, file=outfile)
-  return(res)
+   }
+   save(res, file=outfile)
+   return(res)
 }
 
 xgriddelete = function(grid, auth, jobnum, verbose=FALSE) {
@@ -77,7 +120,8 @@ xgriddelete = function(grid, auth, jobnum, verbose=FALSE) {
 
 xgridresults = function(grid, auth, jobnum, outdir, verbose=FALSE) {
    command = paste("xgrid -h ",grid," -auth ",auth, 
-      " -job results -so job.out -se job.err -out ", outdir," -id ", jobnum, sep="")
+      " -job results -so job.out -se job.err -out ", outdir," -id ", 
+      jobnum, sep="")
    if (verbose==TRUE) {
       cat(command, "\n")
    }
@@ -85,7 +129,8 @@ xgridresults = function(grid, auth, jobnum, outdir, verbose=FALSE) {
 }
 	
 xgridattr = function(grid, auth, jobnum, verbose=FALSE) {
-   command = paste("xgrid -h ",grid," -auth ",auth, " -job attributes -id ", jobnum, sep="")
+   command = paste("xgrid -h ", grid," -auth ", auth, " -job attributes -id ", 
+      jobnum, sep="")
    if (verbose==TRUE) {
       cat(command,"\n")
    }
@@ -93,16 +138,16 @@ xgridattr = function(grid, auth, jobnum, verbose=FALSE) {
    return(statusline = retval[grep('jobStatus', retval)])
 }
 
-xgridsubmit = function(grid, auth, Rcmd, ntask, param, resfile, verbose=FALSE) {
+xgridsubmit = function(grid, auth, Rcmd, ntask, param, 
+   resfile, verbose=FALSE) {
    # submit a single job to the Xgrid, 
-   # with arguments "num" (numbering of results) and "ntask" (number of simulations)
-   # the function calls the command "myscript" in the input directory, 
    # with three arguments (ntask, param and resfile)
-   command = paste("xgrid -h ",grid," -auth ",auth,
-      " -job submit -in input /usr/bin/R64 CMD BATCH --no-save --no-restore '--args ",
-      ntask, " ", param, " ", resfile, "' ", Rcmd, " ", Rcmd, resfile, ".Rout", sep="")   # arguments must be in quotes!
+   command = paste("xgrid -h ",grid," -auth ",auth, " -job submit -in input ", 
+      "/usr/bin/R64 CMD BATCH --no-save --no-restore '--args ",
+      ntask, " ", param, " ", resfile, "' ", Rcmd, " ", Rcmd, resfile, 
+      ".Rout", sep="")   # arguments must be in single quotes!
    if (verbose==TRUE) {
-     cat(command, "\n") 
+      cat(command, "\n") 
    }
    retval = system(command, intern=TRUE)
    jobnum = chartr('{}jobIdentifr=;','               ', retval[2])
@@ -110,28 +155,3 @@ xgridsubmit = function(grid, auth, Rcmd, ntask, param, resfile, verbose=FALSE) {
    if (is.na(jobval)) { stop("error getting jobnumber")}
    else return(jobval)
 }
-
-   
-checkonjob = function(whichjob, jobs, grid, outdir, auth, sleeptime, verbose=FALSE) {
-   # command to check the status on a bunch of queued jobs
-   # get the results from a previously completed and submitted job
-   jobnum = jobs[whichjob]
-   statusline = xgridattr(grid, auth, jobnum, verbose)
-   if (grepl('Failed', statusline)==TRUE) {
-       stop("Ack: a job failed! Seek help immediately.")
-   }
-   if (grepl('Finished', statusline)==TRUE) {
-      # get the results from a previously completed and submitted job (and clean up afterwards)
-      xgridresults(grid, auth, jobnum, outdir, verbose)
-      xgriddelete(grid, auth, jobnum, verbose)
-      nextjob = ifelse(whichjob==length(jobs), 1, whichjob)
-      if (runif(1)<.1) nextjob=1	 # sometimes jump back to the beginning
-      jobs = jobs[-whichjob]
-   } else {
-      Sys.sleep(sleeptime)
-      nextjob = ifelse(whichjob==length(jobs), 1, whichjob+1)
-   }
-   return(list(jobs=jobs, whichjob=nextjob))
-}
-
-
