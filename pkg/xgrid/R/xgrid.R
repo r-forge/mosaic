@@ -2,8 +2,8 @@
 # Nicholas Horton, nhorton@smith.edu
 # $Id: xgrid.R,v 1.11 2011/07/07 19:17:20 nhorton Exp $
 
-xgrid = function(grid="mathgrid0.smith.edu", numsim=20, ntask=1, 
-   outdir="output", param=1, Rcmd="runjob.R", auth="Kerberos", 
+xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1, 
+   outdir="output", param=1, Rcmd="runjob.R", auth="None", 
    outfile="RESULTS.rda", suffix="RESULT", throttle=20, sleeptime=5, 
    verbose=FALSE) {
    # submit a group of jobs to the Xgrid, letting the grid deal with 
@@ -97,7 +97,7 @@ xgrid = function(grid="mathgrid0.smith.edu", numsim=20, ntask=1,
    if (verbose==TRUE) {
       cat("should have ", ntask, "*", length(jobidentifier)," entries.\n")
    }
-   # load first file, then rename it
+   # load first file (which consists of a data frame called "res0"), then rename it
    load(paste(outdir, "/", suffix, "-", jobidentifier[1], sep=""))
    res = res0
    # now load up the rest of the files

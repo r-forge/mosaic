@@ -8,7 +8,10 @@ submit a set of jobs to an Apple Xgrid
 submit a set of jobs to an Apple Xgrid, letting the grid deal with scheduling and load balancing
 }
 \usage{
-xgrid(grid = "mygrid.myschool.edu", numsim = 20, ntask = 1, outdir = "output", param = 1, Rcmd = "runjob.R", auth = "None", outfile = "RESULTS.rda", suffix = "RESULT", throttle = 20, sleeptime = 5, verbose = FALSE)
+xgrid(grid = "mygrid.myschool.edu", numsim = 20, ntask = 1, 
+  outdir = "output", param = 1, Rcmd = "runjob.R", auth = "None", 
+  outfile = "RESULTS.rda", suffix = "RESULT", throttle = 20, 
+  sleeptime = 5, verbose = FALSE)
 }
 
 \arguments{
@@ -52,7 +55,10 @@ verbose output (default = FALSE)
 \details{
 The function is used to generate a series of commands to execute using the Apple command line program \code{xgrid} which
 stuff jobs on a grid, monitor their progress, and return results when completed.  The function assumes that
-the function \code{Rcmd} exists in the \code{input} directory.
+the function \code{Rcmd} exists in the \code{input} directory, and that
+the return value for this function is stored in the object \code{res0} 
+that will be returned separately for each job and collated into 
+a single dataframe.
 
 The number of jobs run simultaneously can be controlled using the \code{throttle} option (otherwise, all jobs are queued and the 
 Xgrid controller determines which are run).
@@ -90,9 +96,7 @@ provide less of a load on the network.
 \code{\link{xgridattr}},
 \code{\link{xgridresults}} and
 \code{\link{xgriddelete}}
-
-
-
-
-\examples{
 }
+
+
+
