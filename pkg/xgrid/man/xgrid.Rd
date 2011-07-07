@@ -2,134 +2,89 @@
 \alias{xgrid}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+submit a set of jobs to an Apple Xgrid
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+submit a set of jobs to an Apple Xgrid, letting the grid deal with scheduling and load balancing
 }
 \usage{
-xgrid(grid = "mathgrid0.smith.edu", numsim = 20, ntask = 1, outdir = "output", param = 1, Rcmd = "runjob.R", auth = "Kerberos", outfile = "RESULTS.rda", suffix = "RESULT", throttle = 20, sleeptime = 15, verbose = FALSE)
+xgrid(grid = "mygrid.myschool.edu", numsim = 20, ntask = 1, outdir = "output", param = 1, Rcmd = "runjob.R", auth = "None", outfile = "RESULTS.rda", suffix = "RESULT", throttle = 20, sleeptime = 5, verbose = FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{grid}{
-%%     ~~Describe \code{grid} here~~
+domain name of the grid controller
 }
   \item{numsim}{
-%%     ~~Describe \code{numsim} here~~
+number of simulations (individual tasks) to run 
 }
   \item{ntask}{
-%%     ~~Describe \code{ntask} here~~
+number of tasks to be run by each job
 }
   \item{outdir}{
-%%     ~~Describe \code{outdir} here~~
+output directory to be used to store results returned from the controller
 }
   \item{param}{
-%%     ~~Describe \code{param} here~~
+an optional parameter to be provided to the remote job
 }
   \item{Rcmd}{
-%%     ~~Describe \code{Rcmd} here~~
+R script file within the \code{input} directory to be run by the remote agent
 }
   \item{auth}{
-%%     ~~Describe \code{auth} here~~
+authorization to use to access the grid: options are "None" (default), "Kerberos" or "Password"
 }
   \item{outfile}{
-%%     ~~Describe \code{outfile} here~~
+directory to return output created by the remote job
 }
   \item{suffix}{
-%%     ~~Describe \code{suffix} here~~
+file suffix to use to name individual job results files
 }
   \item{throttle}{
-%%     ~~Describe \code{throttle} here~~
+maximum number of jobs to run at one time (default = 20)
 }
   \item{sleeptime}{
-%%     ~~Describe \code{sleeptime} here~~
+number of seconds to sleep after checking for completion of a remote job (default = 1 second)
 }
   \item{verbose}{
-%%     ~~Describe \code{verbose} here~~
+verbose output (default = FALSE)
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+The function is used to generate a series of commands to execute using the Apple command line program \code{xgrid} which
+stuff jobs on a grid, monitor their progress, and return results when completed.  The function assumes that
+the function \code{Rcmd} exists in the \code{input} directory.
+
+The number of jobs run simultaneously can be controlled using the \code{throttle} option (otherwise, all jobs are queued and the 
+Xgrid controller determines which are run).
 }
+
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+Returns
+a dataframe with number of rows equal to the number of
+simulations (tasks) calculated as given by the \code{numsim} option.  
+The specific contents of
+the dataframe are specified by the code run by the user.
 }
+
 \references{
-%% ~put references to the literature/web site here ~
+Mac OS X Server: Xgrid Administration and
+High Performance Computing Version 10.6 Snow
+Leopard (2009). Apple Inc.
 }
+
 \author{
-%%  ~~who you are~~
+Nicholas Horton (\email{nhorton@smith.edu})
 }
+
 \note{
-%%  ~~further notes~~
+It is possible to utilize add-on packages on the remote agent, even if no direct access to the machine
+is provided.  This requires that packages are installed into the \code{input} directory, then accessed with the
+\code{lib.loc} option to \code{library} by the remote job.
+
+Larger values of \code{sleeptime} may lead to longer job latency upon completion, but will 
+provide less of a load on the network.
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function(grid="mathgrid0.smith.edu", numsim=20, ntask=1, 
-   outdir="output", param=1, Rcmd="runjob.R", auth="Kerberos", outfile="RESULTS.rda", 
-   suffix="RESULT", throttle=20, sleeptime=15, verbose=FALSE) {
-   # submit a group of jobs to the Xgrid, letting the grid deal with 
-   # scheduling and load balancing
-   # numsim is the total number of simulations to run
-   # ntask is the maximum number of repetitions (tasks) per job
-   offset = 101  # needs to be 3 digits to keep formatting clean
-   alljobs = floor(numsim/ntask)
-   if (verbose==TRUE) {
-      cat("numsim=",numsim," ntask=",ntask,"alljobs=",alljobs, "\n")
-   }
-   if (alljobs != ceiling(numsim/ntask)) {
-      stop("numsim divided by ntask should be an integer!")
-   }
-   if (ceiling(numsim/ntask)<2) {
-      stop("must have at least 2 jobs!")
-   }
-
-   if (file.access(outdir, 0) == -1) {
-      if (system(paste("mkdir ", outdir, sep="")) != 0) {
-         stop(paste("The directory '", outdir, "' can't be created!\n", sep=""))
-      }
-   } else if (file_test("-d", outdir) != TRUE) {
-      stop(paste("The directory '", outdir, "' is not a directory!\n", sep=""))
-   }
-
-   # process the jobs
-   jobs = numeric(alljobs)
-   jobidentifier = 1:alljobs+9999
-   for (i in 1:length(jobs)) {
-      jobs[i] = xgridsubmit(grid, auth, Rcmd, ntask, param,
-         paste(suffix, "-", jobidentifier[i], sep=""), verbose)
-   }
-   if (verbose==TRUE) {
-      cat("jobs=",jobs,"\n")
-   }
-   whichjob = 1
-   while (length(jobs)>0) {
-      if (verbose==TRUE) {
-         cat("length of jobs=", length(jobs)," whichjob=", whichjob, "\n", sep="")
-      }
-      returnlist = checkonjob(whichjob, jobs, grid, outdir, auth, sleeptime, verbose)
-      jobs = returnlist$jobs
-      whichjob = returnlist$whichjob
-   }
-   return(collateresults(jobidentifier, ntask, outdir, outfile, suffix, verbose))
-  }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
