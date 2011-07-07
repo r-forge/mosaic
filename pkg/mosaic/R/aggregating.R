@@ -14,7 +14,7 @@
 
 # check for formula with no left-hand side or a simple right-hand side, e.g. NULL, ., 1, or 0
 .is.simple.formula <-  function(x){
-     "formula" == class(x)  &&
+     inherits(x, "formula") &&
          (length(x)==2 || is.null(x[[3]]) ||
           (length(x[[3]])==1 &&
           ((is.numeric(x[[3]]) && (x[[3]]==0 || x[[3]]==1)) ||  (all.names(x[[3]]) %in% c(".")))))
@@ -42,11 +42,9 @@ setGeneric(
 	"mean", 
 	function(x, ..., na.rm=TRUE, trim=0)  {
 		dots <- list(...)
-		if ( is.name(substitute(x)) ) {
-			if ( length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
-				data <- dots[[1]]
-				return(base::mean(eval( substitute(x), data),  ..., na.rm=na.rm, trim=trim))
-			}
+		if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+			data <- dots[[1]]
+			return( base::mean( eval(substitute(x), data), na.rm=na.rm, trim=trim) )
 		}
 		standardGeneric('mean')
 	}
@@ -432,12 +430,10 @@ max <- .Max
 setGeneric('count',
 	function(x, ..., level=TRUE, na.rm=TRUE) {
 		dots <- list(...)
-		if ( is.name(substitute(x)) ) {
-			if ( length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+			if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
 				data <- dots[[1]]
-				return(count(eval( substitute(x), data),  ..., level=level, na.rm=na.rm))
+				return( callGeneric(eval( substitute(x), data), level=level, na.rm=na.rm) ) 
 			}
-		}
 		standardGeneric('count')
 	}
 )
@@ -446,13 +442,13 @@ setMethod(
 	'count',
 	'ANY',
 	function(x, ..., level=level, na.rm=TRUE) 
-		c( count=callNextMethod( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm) )
+		c( count=callGeneric( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm) )
 )
 
 setMethod('count',
 	signature = c('logical'),
 	function(x, ..., level=TRUE, na.rm=TRUE) 
-		callNextMethod( as.factor(x), ..., level=level, na.rm=na.rm ) 
+		callGeneric( as.factor(.flatten(c(x, list(...)))), level=level, na.rm=na.rm ) 
 )
 
 setMethod('count',
@@ -479,8 +475,13 @@ setMethod(
 	signature=c("formula"),
 	function(x, data=parent.frame(), ..., level=level, na.rm=TRUE) {
 		if( .is.simple.formula(x) ) {
-			return( count( eval( .simple.part(x), data, enclos=parent.frame()), 
-							   ..., level=level, na.rm=na.rm ) )
+			x <-  eval(.simple.part(x), data) 
+			if (! level %in% levels(x) ) {
+				level = levels(x) [as.numeric(level)]
+			}
+			result <- sum( x == level, na.rm=na.rm ) 
+			names(result) <- paste('count', level, sep=".")
+			return(result)
 		} else {
 			return( .mosaic_aggregate( x, data, FUN=count, ..., level=level, na.rm=na.rm ) )
 		} 
@@ -492,11 +493,9 @@ setMethod(
 setGeneric('prop',
 	function(x, ..., level=TRUE, na.rm=TRUE) {
 		dots <- list(...)
-		if ( is.name(substitute(x)) ) {
-			if ( length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
-				data <- dots[[1]]
-				return(prop(eval( substitute(x), data),  ..., level=level, na.rm=na.rm))
-			}
+		if ( length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+			data <- dots[[1]]
+			return(prop(eval( substitute(x), data), level=level, na.rm=na.rm))
 		}
 		standardGeneric('prop')
 	}
@@ -506,13 +505,13 @@ setMethod(
 	'prop',
 	'ANY',
 	function(x, ..., level=level, na.rm=TRUE) 
-		c( prop=callNextMethod( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm) )
+		c( prop=callGeneric( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm) )
 )
 
 setMethod('prop',
 	signature = c('logical'),
 	function(x, ..., level=TRUE, na.rm=TRUE) 
-		callNextMethod( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm ) 
+		callGeneric( as.factor( .flatten(c(x,list(...))) ), level=level, na.rm=na.rm ) 
 )
 
 setMethod('prop',
@@ -546,3 +545,4 @@ setMethod(
 		} 
 	}
 )
+
