@@ -1,8 +1,8 @@
 Package: xgrid
 Type: Package
 Title: Access Apple Xgrid using R
-Version: 0.1-2
-Date: 2011-07-07
+Version: 0.1-3
+Date: 2011-07-08
 Depends: 
 Suggests: 
 Author: Nicholas Horton <nhorton@smith.edu>
