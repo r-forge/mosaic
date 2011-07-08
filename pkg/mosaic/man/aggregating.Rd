@@ -186,14 +186,10 @@ var( age ~ sex + treat, data=HELP)
 
 count(sex, data=HELP)
 count(sex, data=HELP, level='male')
-count(sex ~ substance, data=HELP)
 count(HELP$sex)
-count( sex ~ substance + homeless, data=HELP)
 
 prop(sex, data=HELP)
 prop(sex, data=HELP, level='male')
-prop(sex ~ substance, data=HELP)
 prop(HELP$sex)
-prop( sex ~ substance + homeless, data=HELP)
 }
 \keyword{ methods }

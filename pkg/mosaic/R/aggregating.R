@@ -1,6 +1,5 @@
- 
-	#overall=mosaic.par.get("aggregate.overall"), ...) {
-.mosaic_aggregate <- function(x, data, FUN, overall=TRUE, ...) {
+
+.mosaic_aggregate <- function(x, data, FUN, overall=mosaic.par.get("aggregate.overall"), ...) {
 	if (length(x) == 2 ) {
 		return( data.frame( FUN (eval( x[[2]], data, enclose=parent.frame()) ) ) )
 	} else {
@@ -11,6 +10,10 @@
 	result <- as.data.frame(oldUnclass(result))
 	return(result)
 }
+
+# returns TRUE for a formula, FALSE otherwise, even if evaluation throws an error
+.is.formula <- function(x)  
+	tryCatch( inherits(x, 'formula'), error = function(e) {FALSE} )
 
 # check for formula with no left-hand side or a simple right-hand side, e.g. NULL, ., 1, or 0
 .is.simple.formula <-  function(x){
@@ -42,7 +45,7 @@ setGeneric(
 	"mean", 
 	function(x, ..., na.rm=TRUE, trim=0)  {
 		dots <- list(...)
-		if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+		if ( ! .is.formula(x) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
 			data <- dots[[1]]
 			return( base::mean( eval(substitute(x), data), na.rm=na.rm, trim=trim) )
 		}
@@ -94,7 +97,7 @@ setGeneric(
 	"median", 
 	function(x, ..., na.rm=TRUE)  {
 		dots <- list(...)
-		if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+		if ( ! .is.formula(x) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
 			data <- dots[[1]]
 			return(stats::median(eval( substitute(x), data),  na.rm=na.rm))
 		}
@@ -143,7 +146,7 @@ setGeneric(
 	"sd", 
 	function(x, ..., na.rm=TRUE)  {
 		dots <- list(...)
-		if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+		if ( ! .is.formula(x) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
 			data <- dots[[1]]
 			return(stats::sd(eval( substitute(x), data),  na.rm=na.rm))
 		}
@@ -192,7 +195,7 @@ setMethod(
 		NAME, 
 		function(x, ..., na.rm=TRUE)  {
 			dots <- list(...)
-			if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+			if ( ! .is.formula(x) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
 				data <- dots[[1]]
 				return(FUN(eval( substitute(x), data),  na.rm=na.rm))
 			}
@@ -242,7 +245,7 @@ setGeneric(
 	'.Max', 
 	function(x, ..., na.rm=TRUE)  {
 		dots <- list(...)
-		if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+		if ( ! .is.formula(x) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
 			data <- dots[[1]]
 			return(base::max(eval( substitute(x), data),  na.rm=na.rm))
 		}
@@ -294,7 +297,7 @@ setGeneric(
 	'.Min', 
 	function(x, ..., na.rm=TRUE)  {
 		dots <- list(...)
-		if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+		if ( ! .is.formula(x) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
 			data <- dots[[1]]
 			return(base::min(eval( substitute(x), data),  na.rm=na.rm))
 		}
@@ -430,7 +433,7 @@ max <- .Max
 setGeneric('count',
 	function(x, ..., level=TRUE, na.rm=TRUE) {
 		dots <- list(...)
-			if ( is.name(substitute(x)) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
+			if ( ! .is.formula(x) && length(dots) > 0 && is.data.frame( dots[[1]] ) ) {
 				data <- dots[[1]]
 				return( callGeneric(eval( substitute(x), data), level=level, na.rm=na.rm) ) 
 			}
