@@ -81,9 +81,9 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
     #=========================
 manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes=yyes, xyyes=xyyes, 
                  xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels=nlevels, npts = npts),
-           xpt = slider(min(xlim2),max(xlim2), initial = mean(xlim2), label = "Circle center: x", step=.01),
-           ypt = slider(min(ylim2),max(ylim2), initial = mean(ylim2), label = "Circle center: y", step=.01),
-           radius = slider(.01, (min(max(xlim2),max(ylim2))), initial = .5*mean(xlim2)),
+           xpt = slider(min(xlim2),max(xlim2), initial = mean(xlim2), label = paste("Circle center:", xlab), step=.01),
+           ypt = slider(min(ylim2),max(ylim2), initial = mean(ylim2), label = paste("Circle center:", ylab), step=.01),
+           radius = slider(.01, (min(max(xlim2),max(ylim2))), initial = .5*mean(min(max(xlim2),max(ylim2)))),
            const = checkbox(TRUE, label = "Constant"),
            xyes = checkbox(TRUE, label = "x"),
            yyes = checkbox(FALSE, label = "y"),
