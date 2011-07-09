@@ -4,7 +4,7 @@
 
 xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1, 
    outdir="output", param=1, Rcmd="runjob.R", auth="None", 
-   outfile="RESULTS.rda", suffix="RESULT", throttle=20, sleeptime=5, 
+   outfile="RESULTS.rda", suffix="RESULT", throttle=20, sleeptime=1, 
    verbose=FALSE) {
    # submit a group of jobs to the Xgrid, letting the grid deal with 
    # scheduling and load balancing
@@ -40,11 +40,16 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
       stop(paste("The directory '", outdir, "' is not a directory!\n", sep=""))
    }
    
-   # process the jobs (w/ throttle)
-   jobidentifier = 1:numberofjobs + 9999  # a vector indicating file numbering for results
-   pendingjobs = jobidentifier   	# a vector that we can modify as jobs are queued
-   activejobs = c()    			# a vector of active Apple grid job numbers
-   whichjob = 1 			# the current job whose status is to be ascertained
+   # start to process the jobs (w/ throttle)
+
+   # a vector indicating file numbering for results
+   jobidentifier = 1:numberofjobs + 9999  
+
+   # a vector that we can modify as jobs are queued
+   pendingjobs = jobidentifier   	
+
+   activejobs = c() # a vector of active Apple grid job numbers
+   whichjob = 1     # the current job whose status is to be ascertained
    
    # first start to load up the grid
    while (length(activejobs) < throttle & length(pendingjobs) > 0) {
@@ -97,7 +102,8 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
    if (verbose==TRUE) {
       cat("should have ", ntask, "*", length(jobidentifier)," entries.\n")
    }
-   # load first file (which consists of a data frame called "res0"), then rename it
+   # load first file (which consists of a data frame called "res0") 
+   # then rename it
    load(paste(outdir, "/", suffix, "-", jobidentifier[1], sep=""))
    res = res0
    # now load up the rest of the files
@@ -110,7 +116,7 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
 }
 
 xgriddelete = function(grid, auth, jobnum, verbose=FALSE) {
-   command = paste("xgrid -h ",grid," -auth ",auth, 
+   command = paste("xgrid -h ", grid, " -auth ",auth, 
       " -job delete -id ", jobnum, sep="")
    if (verbose==TRUE) {
       cat(command, "\n")
@@ -119,7 +125,7 @@ xgriddelete = function(grid, auth, jobnum, verbose=FALSE) {
 }
 
 xgridresults = function(grid, auth, jobnum, outdir, verbose=FALSE) {
-   command = paste("xgrid -h ",grid," -auth ",auth, 
+   command = paste("xgrid -h ", grid, " -auth ",auth, 
       " -job results -so job.out -se job.err -out ", outdir," -id ", 
       jobnum, sep="")
    if (verbose==TRUE) {
@@ -129,10 +135,10 @@ xgridresults = function(grid, auth, jobnum, outdir, verbose=FALSE) {
 }
 	
 xgridattr = function(grid, auth, jobnum, verbose=FALSE) {
-   command = paste("xgrid -h ", grid," -auth ", auth, " -job attributes -id ", 
-      jobnum, sep="")
+   command = paste("xgrid -h ", grid, " -auth ", auth, 
+      " -job attributes -id ", jobnum, sep="")
    if (verbose==TRUE) {
-      cat(command,"\n")
+      cat(command, "\n")
    }
    retval = system(command, intern=TRUE)
    return(statusline = retval[grep('jobStatus', retval)])
