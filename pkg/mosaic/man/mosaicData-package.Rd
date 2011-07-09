@@ -10,8 +10,8 @@
   \tabular{ll}{
 	Package: \tab mosaicData\cr
 	Type: \tab Package\cr
-	Version: \tab 0.1-46\cr
-	Date: \tab 2011-7-08\cr
+	Version: \tab 0.1-47\cr
+	Date: \tab 2011-7-09\cr
 	License: \tab GPL\cr
 	LazyLoad: \tab yes\cr
 	LazyData: \tab yes\cr

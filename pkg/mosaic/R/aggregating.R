@@ -486,6 +486,7 @@ setMethod(
 			names(result) <- paste('count', level, sep=".")
 			return(result)
 		} else {
+			stop('Invalid formula type.  Perhaps you should try xtabs().')
 			return( .mosaic_aggregate( x, data, FUN=count, ..., level=level, na.rm=na.rm ) )
 		} 
 	}
@@ -544,6 +545,7 @@ setMethod(
 			return( prop( eval( .simple.part(x), data, enclos=parent.frame()), 
 							   ..., level=level, na.rm=na.rm ) )
 		} else {
+			stop('Invalid formula type.  Perhaps you should try xtabs().')
 			return( .mosaic_aggregate( x, data, FUN=prop, ..., level=level, na.rm=na.rm ) )
 		} 
 	}
