@@ -21,22 +21,27 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
  funy = fun                 #Partial with respect to the second
  funy$RHS = funy$RHS[3]
  dy = mosaic:::.doD(funy, ..h..=NULL, numerical=FALSE, method="center",...)
- 
+ #============
  get.aspect.ratio = function() {
-    y = convertY( unit(1,"native"),unitTo= "cm", valueOnly=TRUE)
-    x = convertX( unit(1,"native"),unitTo= "cm",valueOnly=TRUE) 
-#    y = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="y",axisTo="y",valueOnly=TRUE)
-#    x = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="x",axisTo="x",valueOnly=TRUE)
-   print(x)
-   print(y)
-   print(y/x)
-   return(y/x)
-   
+  a = par("din")
+  b = par("mai")
+  xwid=a[1] - (b[2]+b[4])
+  ywid=a[2] - (b[1]+b[3])
+  return(ywid/xwid  )   
 }
+ #==============
+ make.arrows=function(x, y, xvec, yvec, col="black", wid=3, length=.2){
+   if(xvec==0&&yvec==0){
+     points(x, y)
+   }
+   else{
+     arrows(x0=x, y0=y, x1=x+xvec, y1=y+yvec, lwd = wid, col=col, length=length)
+   }
+ }
  
 #=============================== 
-  myFun = function(npts=npts, narrows = narrows, scale=scale, nlevels = nlevels, 
-                   components=components){
+  myFun = function(npts=npts, delta = delta, scale=scale, nlevels = nlevels, 
+                   disp=disp){
     .xset = seq(min(xlim2),max(xlim2),length=npts) #x, y, z
     .yset = seq(min(ylim2),max(ylim2),length=npts)
     .zset = outer(.xset, .yset, fun$fun )          #z is a function of x and y
@@ -44,49 +49,61 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
     c.xpt = mean(xlim2)  #center point and vectors
     c.ypt = mean(ylim2)
     
-    xpts = seq(min(xlim2),max(xlim2), length = narrows+1)  #Create grid of evenly spaced points
-    xpts = rep(xpts, times = narrows+1)
-    ypts = seq(min(ylim2),max(ylim2), length = narrows+1)
-    ypts = rep(ypts, each = narrows+1)
-
-    xpts=c(xpts,as.numeric(c.xpt)) 
-    ypts=c(ypts,as.numeric(c.ypt))
+    xpts = seq(c.xpt, max(xlim2), by = delta)  #xpts/ypts are the grid of arrows
+    xpts = c(xpts, seq(c.xpt, min(xlim2), by = -delta))
+    xpts = rep(xpts, times = length(xpts))
+    ypts = seq(c.ypt, max(ylim2), by = delta)
+    ypts = c(ypts, seq(c.ypt, min(ylim2), by = -delta))
+    ypts = rep(ypts, each = length(ypts))
+    
+    aspect=get.aspect.ratio()
+    aspect=aspect/(diff(range(ylim2))/diff(range(xlim2)))
+    
     xvecs = dx(x=xpts, y=ypts)    #Derivatives for the gradient
     yvecs = dy(x=xpts, y=ypts)
-    xvecs = scale*xvecs           #For large gradients, scaling down with manipulate is nicer
-    yvecs = scale*yvecs
+    xvecs = scale*xvecs*aspect           #For large gradients, scaling down with manipulate is nicer
+    yvecs = (scale*yvecs)/aspect
     
-    bigstart = .05; bigend = .95  #rainbow colors are clearer when it goes from one extreme to the other, not red to red
+    bigstart = .80; bigend = .20  #rainbow colors are clearer when it goes from one extreme to the other, not red to red
     mylevels = pretty(range(.zset),nlevels)   #number of contours
     image( .xset, .yset, .zset, col=rainbow(npts, alpha=0.8, start=bigstart, end=bigend),
              add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
     contour(.xset, .yset, .zset, col=rgb(0,0,0,.5),lwd=3,add=TRUE, labcex=1.2, 
               levels=mylevels, method="edge")
     
-    
-    arrows(x0=xpts, y0=ypts, x1=xpts+xvecs, y1=ypts+yvecs, lwd = 3)
-  #  arrows(x0=c.xpt, y0=c.ypt, x1=c.xpt+c.xvec, y1=c.ypt+c.yvec, lwd=3)
-    get.aspect.ratio()
-    if(components){
-      close = which(xpts>(diff(range(xlim2))/4+min(xlim2))&xpts<(3*diff(range(xlim2))/4+min(xlim2))
+    if(disp== "Gradients"){
+        make.arrows(x=xpts, y=ypts, xvec=xvecs, yvec=yvecs, wid = 3, col="black")
+      }
+      if(disp == "Components"){
+        close.xpts=xpts
+        close.ypts=ypts
+        close.xvecs=xvecs
+        close.yvecs=yvecs
+        make.arrows(x=close.xpts, y=close.ypts, xvec=close.xvecs, yvec=0, wid = 2, col="red", length=.1)
+        make.arrows(x=close.xpts, y=close.ypts, xvec=0, yvec=close.yvecs, wid = 2, col="blue", length=.1)
+      }
+      if(disp == "Both"){
+        make.arrows(x=xpts, y=ypts, xvec=xvecs, yvec=yvecs, wid = 3, col="black")
+        close = which(xpts>(diff(range(xlim2))/4+min(xlim2))&xpts<(3*diff(range(xlim2))/4+min(xlim2))
                     &(ypts>(diff(range(ylim2))/4+min(ylim2)))&(ypts<3*(diff(range(ylim2))/4)+min(ylim2)))
-      
-      close.xpts=xpts[close]
-      close.ypts=ypts[close]
-      close.xvecs=xvecs[close]
-      close.yvecs=yvecs[close]
-      arrows(x0=close.xpts, x1=close.xpts+close.xvecs, y0=close.ypts, y1=close.ypts, lwd=2, col="red", length = .1)
-      arrows(x0=close.xpts, x1=close.xpts, y0=close.ypts, y1=close.ypts+close.yvecs, lwd=2, col="red", length = .1)
-    }       
+        close.xpts=xpts[close]
+        close.ypts=ypts[close]
+        close.xvecs=xvecs[close]
+        close.yvecs=yvecs[close]
+        make.arrows(x=close.xpts, y=close.ypts, xvec=close.xvecs, yvec=0, wid = 2, col="red", length=.1)
+        make.arrows(x=close.xpts, y=close.ypts, xvec=0, yvec=close.yvecs, wid = 2, col="blue", length=.1)
+      }
+    
+           
   }
 #=====================================      
- manipulate(myFun(npts=npts, narrows = narrows, scale=scale, nlevels = nlevels, 
-                  components=components),
+  manipulate(myFun(npts=npts, delta = delta, scale=scale, nlevels = nlevels, disp=disp),
             npts = slider(20,200,initial=140,label = "Number of pixels"),
-            narrows = slider(0,10, initial = 5, step = 1, label = "Number of arrows per row"),
-            scale = slider(.01, 1, step = .01, initial = .5, label="% Arrow scale"),
+            delta = slider(0,10, initial = 1, step = .01, label = "Space between arrows"),
+            scale = slider(.01, 1, step = .01, initial = .25, label="% Arrow scale"),
             nlevels = slider(5, 50, initial = 20, step = 1, label = "Approx. number of contour lines"),
-            components = checkbox(FALSE, label = "Display components of gradient")
+            disp = picker("Gradients","Components", "Both", label = "Display")
+             
             )
 }
             

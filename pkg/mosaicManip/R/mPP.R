@@ -19,7 +19,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     t = seq(soln$tlim[1], soln$tlim[2], length=n )
     one = soln[[1]](t)
     two = soln[[2]](t)
-    lines(one, two, ...) # replace with lattice equivalent
+    llines(one, two, ...) # replace with lattice equivalent
   }
   # ========
   doPlot = function(xstart,ystart,Ntraj,tdur,tback,
@@ -76,7 +76,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
         if( !is.null(TS[[k]]$back) ) 
           plotTraj( TS[[k]]$back, col=TcolorsBack[k])
         goo = TS[[k]]$init
-        points( goo[1], goo[2], col=Tcolors[k],pch=20)
+        lpoints( goo[1], goo[2], col=Tcolors[k],pch=20)
       }
     }
   }

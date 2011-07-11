@@ -23,14 +23,7 @@ LmGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
  dy = mosaic:::.doD(funy, ..h..=NULL, numerical=FALSE, method="center",...)
  
  get.aspect.ratio = function() {
-    y = convertY( unit(1,"native"),unitTo= "cm", valueOnly=TRUE)
-    x = convertX( unit(1,"native"),unitTo= "cm",valueOnly=TRUE) 
-#    y = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="y",axisTo="y",valueOnly=TRUE)
-#    x = convertUnit( unit(1,"native"),"cm",typeFrom="dimension", axisFrom="x",axisTo="x",valueOnly=TRUE)
-   print(x)
-   print(y)
-   print(y/x)
-   return(y/x)
+
 }
  #==============================
  make.arrows=function(x, y, xvec, yvec, col="black", wid=3, length=.2){
@@ -45,7 +38,7 @@ LmGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
 #=============================== 
   myFun = function(npts=npts, delta = delta, scale=scale, nlevels = nlevels, 
                    disp=disp){
-    .xset = seq(min(xlim2),max(xlim2),length=npts) #x, y, z
+    .xset = seq(min(xlim2),max(xlim2),length=npts) #x, y, z to plot the contours
     .yset = seq(min(ylim2),max(ylim2),length=npts)
     .zset = outer(.xset, .yset, fun$fun )          #z is a function of x and y
     #EXPAND.GRID method:
@@ -56,33 +49,31 @@ LmGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
     c.xpt = mean(xlim2)  #center point and vectors
     c.ypt = mean(ylim2)
     
-    xpts = seq(c.xpt, max(xlim2), by = delta)
+    xpts = seq(c.xpt, max(xlim2), by = delta)  #xpts/ypts are the grid of arrows
     xpts = c(xpts, seq(c.xpt, min(xlim2), by = -delta))
     xpts = rep(xpts, times = length(xpts))
     ypts = seq(c.ypt, max(ylim2), by = delta)
     ypts = c(ypts, seq(c.ypt, min(ylim2), by = -delta))
     ypts = rep(ypts, each = length(ypts))
 
-    xpts=c(xpts,as.numeric(c.xpt)) 
-    ypts=c(ypts,as.numeric(c.ypt))
+#     xpts=c(xpts,as.numeric(c.xpt)) 
+#     ypts=c(ypts,as.numeric(c.ypt))
     xvecs = dx(x=xpts, y=ypts)    #Derivatives for the gradient
     yvecs = dy(x=xpts, y=ypts)
     xvecs = scale*xvecs           #For large gradients, scaling down with manipulate is nicer
     yvecs = scale*yvecs
+    
     dat = data.frame(x=.xset, y = .yset, z=.zset)
     
     mypanel= function(x,y,z,...){
       
       panel.levelplot(x, y, z, contour=TRUE, ...)
-      #panel.contourplot(x,y,z, , ...)
+      #panel.contourplot(x,y,z, ...)
       
       if(disp== "Gradients"){
         make.arrows(x=xpts, y=ypts, xvec=xvecs, yvec=yvecs, wid = 3, col="black")
       }
       if(disp == "Components"){
-#         close = which(xpts>(diff(range(xlim2))/4+min(xlim2))&xpts<(3*diff(range(xlim2))/4+min(xlim2))
-#                     &(ypts>(diff(range(ylim2))/4+min(ylim2)))&(ypts<3*(diff(range(ylim2))/4)+min(ylim2)))
-      
         close.xpts=xpts
         close.ypts=ypts
         close.xvecs=xvecs
@@ -105,7 +96,6 @@ LmGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
 
     bigstart = .05; bigend = .95  #rainbow colors are clearer when it goes from one extreme to the other, not red to red
 #     mylevels = pretty(range(.zset),nlevels)   #number of contours
-    #print(contourplot(z~x*y,data=g))
     print(levelplot(z~x*y, data=g, panel = mypanel))
     get.aspect.ratio()
 
@@ -130,3 +120,4 @@ LmGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
 #Draw Arrows function to stop all these warnings, make the zero vectors just points.DONE
 #Draw x component in blue, y in red.DONE
 #Picker for components, grad, or both DONE
+

@@ -147,7 +147,7 @@ traj.plot = function(soln, n=1001, col="red") {
   flow.plot( soln$dynfun,
             xlim=range(one, na.rm=TRUE),
             ylim=range(two, na.rm=TRUE) )
-  lines( one, two, col=col )
+  llines( one, two, col=col )
 }
 # =====================================
 # plots out one or more solutions.
@@ -192,7 +192,7 @@ flow.plot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
     ylim = hoo[3:4]
   }
   else{
-    plot( 1, xlim=xlim, ylim=ylim, type="n",
+    panel.xyplot(1, xlim=xlim, ylim=ylim,
        xlab=arg.names[1], ylab=arg.names[2] )
   }
   x <- matrix(seq(xlim[1],xlim[2], length=resol), byrow=TRUE, resol,resol);
@@ -211,17 +211,17 @@ flow.plot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
   lens <- sqrt(z1^2 + z2^2);
   lens2 <- lens/max(lens); 
   if( both ){
-    arrows(c(x), c(y),
+    larrows(c(x), c(y),
            c(x+dt*z1/((lens2)+.1)), c(y+dt*z2/((lens2)+.1)),
            length=.04, col=col);
   }
   if( !is.null(NS) ) {
-    arrows(c(x), c(y),
+    larrows(c(x), c(y),
            c(x), c(y+dt*z2/((lens2)+.1)),
            length=.04, col=NS);
   }
   if( !is.null(EW) ){
-    arrows(c(x), c(y),
+    larrows(c(x), c(y),
            c(x+dt*z1/((lens2)+.1)), c(y),
            length=.04, col=EW);
   }
