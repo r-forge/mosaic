@@ -1,7 +1,7 @@
 # Phase-Plane Software
 # revise should be a push-button
 mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
-  if (!require(manipulate)) stop("Must have manipulate package.")
+  if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
   # Storage for the trajectories.  Starts out empty
   Tcolors = c("red","green","blue", "steelblue","springgreen","pink")
   TcolorsBack = c("deeppink","darkgreen", "darkblue","darkseagreen","darkslategray","fuschia")
