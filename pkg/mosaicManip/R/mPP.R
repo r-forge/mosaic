@@ -23,9 +23,6 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   }
   #========
   plotPort = function(soln, var=x, n=1001, ...){
-    t = seq(soln$tlim[1], soln$tlim[2], length = n)
-    x = soln[[1]](t)
-    y = soln[[2]](t)
     xport=xyplot(x~t, ylab=stateNames[1], xlab=NULL, type = "l", lwd=3, scales=list(x=list(draw=FALSE)))
     yport=xyplot(y~t, ylab=stateNames[2], xlab="t", type = "l", lwd=3)
     return(list(xport,yport))
@@ -93,8 +90,11 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     if( reviseWhatState != reviseWhat ) {
       # state changed, so do something
       reviseWhatState <<- reviseWhat
-      if( reviseWhat == 0) {
-        DE <<- edit(DE) #ALL
+      if(!is.null(TS[[Ntraj]]$system)){
+        DE <<- TS[[Ntraj]]$system
+      }
+      if( reviseWhat >= 0) {
+        DE <<- edit(DE) 
       }
       
     }
@@ -121,12 +121,27 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       TS[[Ntraj]]$forward <<- TS[[1]]$forward
       TS[[Ntraj]]$back <<- TS[[1]]$back
     }
-      port=plotPort(TS[[1]]$forward)
+    
+    
+    
+
+      TSfull=data.frame()
+      for(k in 1:Ntraj){
+        if(!is.null(TS[[k]]$forward)){
+          
+          TSfull[[paste("x",k, sep = "")]] = TS[[k]]$forward[[1]](.t)
+          TSfull[[paste("y",k, sep = "")]] = TS[[k]]$forward[[2]](.t)
+          
+        }
+      }
+      
+      port=plotPort(TSfull$forward)
+      
 
     #=============
     myPanel=function(x,y, ...){
       # Plot out the flow field
-      flow.plot( DE, xlim=xlim, ylim=ylim)
+      flow.plot( TS[[flowWhat]]$system, xlim=xlim, ylim=ylim)
       # Plot out the nullclines
       if( nullclines ) show.nullclines()
       # plot out the trajectories
@@ -135,9 +150,9 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       for( k in 1:length(TS)) {
         if( !is.null(TS[[k]]$system)) {
           if( !is.null(TS[[k]]$forward) )
-            plotTraj( TS[[k]]$forward, col=Tcolors[k])
+            plotTraj( TS[[k]]$forward, col=Tcolors[k+1])
           if( !is.null(TS[[k]]$back) ) 
-            plotTraj( TS[[k]]$back, col=TcolorsBack[k])
+            plotTraj( TS[[k]]$back, col=TcolorsBack[k+1])
           goo = TS[[k]]$init
           lpoints( goo[1], goo[2], col=Tcolors[k],pch=20)
         }
@@ -161,7 +176,8 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
               nullclines = checkbox(initial=FALSE, label="Show Nullclines"),
               reviseWhat = picker( "None"=-1, "All" = 0, "One"=1, "Two"=2, "Three" = 3,
                                    "Four"=4, "Five"=5, label="Revise DE for", initial = "None"),
-              flowWhat= picker("One"=1, "Two"=2, "Three" = 3, "Four"=4, "Five" = 5, initial = ),
+              flowWhat= picker("One"=1, "Two"=2, "Three" = 3, "Four"=4, "Five" = 5, 
+                               initial = "One", label="What flow to plot?"),
               param1 = slider(.1,10,init=1,label="Parameter 1"),
               param2 = slider(.1,10,init=1,label="Parameter 2")
               )
