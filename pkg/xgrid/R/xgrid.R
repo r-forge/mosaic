@@ -90,7 +90,7 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
          xgridresults(grid, auth, activejobs[whichjob], outdir, verbose)
          xgriddelete(grid, auth, activejobs[whichjob], verbose)
          activejobs = activejobs[-whichjob]
-         whichjob = ifelse(whichjob >= length(activejobs), 1, whichjob + 1)
+         whichjob = ifelse(whichjob >= length(activejobs), 1, whichjob)
 
       } else {
          whichjob = ifelse(whichjob==length(activejobs), 1, whichjob + 1)
