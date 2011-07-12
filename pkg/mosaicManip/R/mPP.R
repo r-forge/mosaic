@@ -19,14 +19,75 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     t = seq(soln$tlim[1], soln$tlim[2], length=n )
     one = soln[[1]](t)
     two = soln[[2]](t)
-    llines(one, two, ...) # replace with lattice equivalent
+    llines(one, two, ...)
   }
+  #========
+  plotPort = function(soln, var=x, n=1001, ...){
+    t = seq(soln$tlim[1], soln$tlim[2], length = n)
+    x = soln[[1]](t)
+    y = soln[[2]](t)
+    xport=xyplot(x~t, ylab="x", xlab="t", type = "l", lwd=3)
+    yport=xyplot(y~t, ylab="y", xlab="t", type = "l", lwd=3)
+    return(list(xport,yport))
+  }
+  #=========
+  flow.plot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
+  add=FALSE,EW=NULL,NS=NULL,both=TRUE) {
+  current.dyn.system <<- fun
+  arg.names = names(formals(fun) )
+  if (length( arg.names ) != 2 )
+    stop("Must give dynamical function with two arguments.")
+  if (add) {
+    hoo = par("usr")
+    xlim = hoo[1:2]
+    ylim = hoo[3:4]
+  }
+  else{
+    panel.xyplot(x=0, y=0, xlim=xlim, ylim=ylim,
+       xlab=arg.names[1], ylab=arg.names[2] )
+  }
+   
+  x <- matrix(seq(xlim[1],xlim[2], length=resol), byrow=TRUE, resol,resol);
+  y <- matrix(seq(ylim[1],ylim[2], length=resol),byrow=FALSE, resol, resol);
+  npts <- resol*resol;
+  xspace <- abs(diff(xlim))/(resol*5);
+  yspace <- abs(diff(ylim))/(resol*5);
+  x <- x + matrix(runif(npts, -xspace, xspace),resol,resol);
+  y <- y + matrix(runif(npts, -yspace, yspace),resol,resol);
+  z <- fun(x,y);
+  z1 <- matrix(z[1:npts], resol, resol);
+  z2 <- matrix(z[(npts+1):(2*npts)], resol, resol);
+  maxx <- max(abs(z1));
+  maxy <- max(abs(z2));
+  dt <- min( abs(diff(xlim))/maxx, abs(diff(ylim))/maxy)/resol;
+  lens <- sqrt(z1^2 + z2^2);
+  lens2 <- lens/max(lens); 
+  if( both ){
+    larrows(c(x), c(y),
+           c(x+dt*z1/((lens2)+.1)), c(y+dt*z2/((lens2)+.1)),
+           length=.04, col=col);
+  }
+  if( !is.null(NS) ) {
+    larrows(c(x), c(y),
+           c(x), c(y+dt*z2/((lens2)+.1)),
+           length=.04, col=NS);
+  }
+  if( !is.null(EW) ){
+    larrows(c(x), c(y),
+           c(x+dt*z1/((lens2)+.1)), c(y),
+           length=.04, col=EW);
+  }
+    
+    
+}
+  
   # ========
   doPlot = function(xstart,ystart,Ntraj,tdur,tback,
                     nullclines=FALSE,doWhat,param1,param2) {
     # set initial condition
     initCond[1] <<- xstart
     initCond[2] <<- ystart
+    arg.names = names(formals(fun) )
     # Handle editing of the system, setting initial condition here
     # Need to set state manually to avoid lockup
     if( doWhatState != doWhat ) {
@@ -40,7 +101,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       }
     }
     # ... system editing code here
-
+          
 # Store the results in the currently selected trajectory in "scratch" index 1
     TS[[1]]$init <<- initCond
     TS[[1]]$system <<- DE
@@ -62,23 +123,32 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       TS[[Ntraj]]$forward <<- TS[[1]]$forward
       TS[[Ntraj]]$back <<- TS[[1]]$back
     }
-    # Plot out the flow field
-    flow.plot( DE, xlim=xlim, ylim=ylim)
-    # Plot out the nullclines
-    if( nullclines ) show.nullclines()
-    # plot out the trajectories
-    # NEED TO DO BOTH FORWARD AND BACKWARD, maybe alpha different for backward, or darken a bit
-    # here is the forward one
-    for( k in 1:length(TS)) {
-      if( !is.null(TS[[k]]$system)) {
-        if( !is.null(TS[[k]]$forward) )
-          plotTraj( TS[[k]]$forward, col=Tcolors[k])
-        if( !is.null(TS[[k]]$back) ) 
-          plotTraj( TS[[k]]$back, col=TcolorsBack[k])
-        goo = TS[[k]]$init
-        lpoints( goo[1], goo[2], col=Tcolors[k],pch=20)
+      port=plotPort(TS[[1]]$forward)
+
+    #=============
+    myPanel=function(x,y, ...){
+      # Plot out the flow field
+      flow.plot( DE, xlim=xlim, ylim=ylim)
+      # Plot out the nullclines
+      if( nullclines ) show.nullclines()
+      # plot out the trajectories
+      # NEED TO DO BOTH FORWARD AND BACKWARD, maybe alpha different for backward, or darken a bit
+      # here is the forward one
+      for( k in 1:length(TS)) {
+        if( !is.null(TS[[k]]$system)) {
+          if( !is.null(TS[[k]]$forward) )
+            plotTraj( TS[[k]]$forward, col=Tcolors[k])
+          if( !is.null(TS[[k]]$back) ) 
+            plotTraj( TS[[k]]$back, col=TcolorsBack[k])
+          goo = TS[[k]]$init
+          lpoints( goo[1], goo[2], col=Tcolors[k],pch=20)
+        }
       }
     }
+    PP=xyplot(ylim~xlim, panel=myPanel, xlab=stateNames[1], ylab=stateNames[2])
+    print(PP, position=c(0,.5,1,1), more=TRUE)
+    print(port[[1]], position=c(0, .25, 1, .5), more=TRUE)
+    print(port[[2]], position=c(0, 0, 1, .25), more=FALSE)
   }
   # =======
   manipulate( doPlot(xstart=xstart, ystart=ystart, 
