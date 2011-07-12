@@ -12,7 +12,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   initCond = c(mean(xlim),mean(ylim))
   stateNames = names(formals(DE))
   names(initCond) = stateNames # needed so that solveDE will work
-  doWhatState="initializing"
+  reviseWhatState="initializing"
   storeWhatState="Working"
   # ========
   plotTraj = function(soln, n=1001, ...) {
@@ -26,8 +26,8 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     t = seq(soln$tlim[1], soln$tlim[2], length = n)
     x = soln[[1]](t)
     y = soln[[2]](t)
-    xport=xyplot(x~t, ylab="x", xlab="t", type = "l", lwd=3)
-    yport=xyplot(y~t, ylab="y", xlab="t", type = "l", lwd=3)
+    xport=xyplot(x~t, ylab=stateNames[1], xlab=NULL, type = "l", lwd=3, scales=list(x=list(draw=FALSE)))
+    yport=xyplot(y~t, ylab=stateNames[2], xlab="t", type = "l", lwd=3)
     return(list(xport,yport))
   }
   #=========
@@ -43,8 +43,8 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     ylim = hoo[3:4]
   }
   else{
-    panel.xyplot(x=0, y=0, xlim=xlim, ylim=ylim,
-       xlab=arg.names[1], ylab=arg.names[2] )
+    #panel.xyplot(x=0, y=0, xlim=xlim, ylim=ylim,
+    #   xlab=arg.names[1], ylab=arg.names[2] )
   }
    
   x <- matrix(seq(xlim[1],xlim[2], length=resol), byrow=TRUE, resol,resol);
@@ -83,22 +83,20 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   
   # ========
   doPlot = function(xstart,ystart,Ntraj,tdur,tback,
-                    nullclines=FALSE,doWhat,param1,param2) {
+                    nullclines=FALSE,reviseWhat,flowWhat,param1,param2) {
     # set initial condition
     initCond[1] <<- xstart
     initCond[2] <<- ystart
     arg.names = names(formals(DE) )
     # Handle editing of the system, setting initial condition here
     # Need to set state manually to avoid lockup
-    if( doWhatState != doWhat ) {
+    if( reviseWhatState != reviseWhat ) {
       # state changed, so do something
-      doWhatState <<- doWhat
-      if( doWhat == "revise") DE <<- edit(DE)
-      if( doWhat == "initial") {
-        # Get the initial condition via locator () ## CHANGE FOR LATTICE
-        # foo = locator(1) # DOESNT WORK WITH MANIPULATE
-       
+      reviseWhatState <<- reviseWhat
+      if( reviseWhat == 0) {
+        DE <<- edit(DE) #ALL
       }
+      
     }
     # ... system editing code here
           
@@ -145,22 +143,25 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
         }
       }
     }
-    PP=xyplot(ylim~xlim, panel=myPanel, xlab=stateNames[1], ylab=stateNames[2])
-    print(PP, position=c(0,.5,1,1), more=TRUE)
+    PP=xyplot(ylim~xlim, panel=myPanel, xlab=NULL, ylab=stateNames[2], scales=list())
+    print(PP, position=c(0.1,.43,.9,1), more=TRUE)
     print(port[[1]], position=c(0, .25, 1, .5), more=TRUE)
-    print(port[[2]], position=c(0, 0, 1, .25), more=FALSE)
+    print(port[[2]], position=c(0, 0, 1, .33), more=FALSE)
   }
   # =======
   manipulate( doPlot(xstart=xstart, ystart=ystart, 
                      Ntraj=Ntraj,tdur=tdur,tback=tback,
-                     nullclines=nullclines,doWhat=doWhat,param1=param1,param2=param2),
+                     nullclines=nullclines,reviseWhat=reviseWhat,
+                     flowWhat=flowWhat, param1=param1,param2=param2),
               xstart = slider(xlim[1],xlim[2],init=mean(xlim),label=paste(stateNames[1], "Start")),
               ystart = slider(ylim[1],ylim[2],init=mean(ylim),label=paste(stateNames[2], "Start")),
               Ntraj = picker( One=2,Two=3,Three=4,Four=5,Five=6, initial="One",label="Trajectory"),
               tdur = slider(0,100,init=10,label="Trajectory Duration"),
               tback = slider(-100,0,init=0, label="Go back in time"),
               nullclines = checkbox(initial=FALSE, label="Show Nullclines"),
-              doWhat = picker( ShowTraj="show", SetInitialCond="initial", ReviseSystem="revise",initial="ShowTraj",label="Do ..."),
+              reviseWhat = picker( "None"=-1, "All" = 0, "One"=1, "Two"=2, "Three" = 3,
+                                   "Four"=4, "Five"=5, label="Revise DE for", initial = "None"),
+              flowWhat= picker("One"=1, "Two"=2, "Three" = 3, "Four"=4, "Five" = 5, initial = ),
               param1 = slider(.1,10,init=1,label="Parameter 1"),
               param2 = slider(.1,10,init=1,label="Parameter 2")
               )

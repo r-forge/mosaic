@@ -103,20 +103,19 @@ show.traj = function(tdur=1, col="red",add=TRUE,x=NULL,y=NULL) {
   invisible(soln$funs)
 }
 # =====================================
-show.nullclines = function(NS="blue", EW="red",levels=c(0),resol=51,lwd=2) {
+show.nullclines = function(NS="blue", EW="red",levels=c(0),resol=201,lwd=2) {
   fun = current.dyn.system
-  foo = current.panel.limits()
-  xlim=foo$xlim; ylim=foo$ylim
+  foo = par("usr") # get coordinates of current phase plane
+  xlim=foo[1:2]; ylim=foo[3:4]
   x = matrix(seq(xlim[1],xlim[2], length=resol), byrow=FALSE, resol,resol);
   y = matrix(seq(ylim[1],ylim[2], length=resol),byrow=TRUE, resol, resol);
   npts = resol*resol;
   z = fun(x,y);
   z1 = matrix(z[1:npts], resol, resol);
   z2 = matrix(z[(npts+1):(2*npts)], resol, resol);
-  # Change this to an image with two clear for positive, transluscent for neg.  ## Polygon? 
-  panel.levelplot(x,y,z1, subscripts = TRUE, at=c(-Inf,0), col.regions=rgb(0,0,0,.2));
-  # Similarly change this.
-  panel.levelplot(x,y,z2, subscripts = TRUE, at=c(-Inf,0), col.regions=rgb(1,0,0,.2));
+
+  panel.levelplot(x,y,z1, subscripts = TRUE, at=c(-Inf, 0), col=rgb(1,0,0,.1));
+  panel.levelplot(x,y,z2, subscripts = TRUE, at=c(-Inf, 0), col=rgb(0,0,1,.1));
 }
 
 # =====================================
