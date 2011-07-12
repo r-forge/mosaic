@@ -111,13 +111,13 @@ show.nullclines = function(NS="blue", EW="red",levels=c(0),resol=201,lwd=2) {
   y = matrix(seq(ylim[1],ylim[2], length=resol),byrow=TRUE, resol, resol);
   npts = resol*resol;
   z = fun(x,y);
-  browser()
   z1 = matrix(z[1:npts], resol, resol);
   z2 = matrix(z[(npts+1):(2*npts)], resol, resol);
   # Change this to an image with two clear for positive, transluscent for neg.  ## Polygon? 
-  panel.levelplot(x[,1],y[1,],z1,levels=c(0), add=TRUE, col=EW,lwd=lwd);
+  browser()
+  panel.levelplot(x[,1],y[1,],z1, subscripts = TRUE, at=c(0), col=c(rgb(0,0,0,0),rgb(1,0,0,.1)));
   # Similarly change this.
-  panel.levelplot(x[,1],y[1,],z2,levels=c(0), add=TRUE, col=NS,lwd=lwd);
+  panel.levelplot(x[,1],y[1,],z2, subscripts = TRUE, at=c(0), col=c(rgb(0,0,0,0),rgb(0,0,1,.1)));
 }
 
 # =====================================

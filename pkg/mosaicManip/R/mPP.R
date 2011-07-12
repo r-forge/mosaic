@@ -87,7 +87,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     # set initial condition
     initCond[1] <<- xstart
     initCond[2] <<- ystart
-    arg.names = names(formals(fun) )
+    arg.names = names(formals(DE) )
     # Handle editing of the system, setting initial condition here
     # Need to set state manually to avoid lockup
     if( doWhatState != doWhat ) {
