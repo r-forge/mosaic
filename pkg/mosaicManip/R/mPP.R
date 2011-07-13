@@ -22,9 +22,15 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     llines(one, two, ...)
   }
   #========
-  plotPort = function(soln, var=x, n=1001, ...){
-    xport=xyplot(x~t, ylab=stateNames[1], xlab=NULL, type = "l", lwd=3, scales=list(x=list(draw=FALSE)))
-    yport=xyplot(y~t, ylab=stateNames[2], xlab="t", type = "l", lwd=3)
+  plotPort = function(data, names,...){
+   
+    xportPanel = function(x,y,...){
+      for(k in 1:Ntraj)
+      panel.xyplot(data[[paste(x,k,sep="")]]~data[[paste(t,k,sep="")]], col=)
+    }
+    
+    xport=xyplot(x~t, ylab=names[1], xlab=NULL, type = "l", lwd=3, scales=list(x=list(draw=FALSE)))
+    yport=xyplot(y~t, ylab=names[2], xlab="t", type = "l", lwd=3)
     return(list(xport,yport))
   }
   #=========
@@ -35,9 +41,9 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   if (length( arg.names ) != 2 )
     stop("Must give dynamical function with two arguments.")
   if (add) {
-    hoo = par("usr")
-    xlim = hoo[1:2]
-    ylim = hoo[3:4]
+    hoo = current.panel.limits()
+    xlim = hoo$xlim
+    ylim = hoo$ylim
   }
   else{
     #panel.xyplot(x=0, y=0, xlim=xlim, ylim=ylim,
@@ -121,21 +127,18 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       TS[[Ntraj]]$forward <<- TS[[1]]$forward
       TS[[Ntraj]]$back <<- TS[[1]]$back
     }
-    
-    
-    
 
-      TSfull=data.frame()
+    
+    TSfull=data.frame(index=seq(1,1000, length=1000))
       for(k in 1:Ntraj){
         if(!is.null(TS[[k]]$forward)){
-          
-          TSfull[[paste("x",k, sep = "")]] = TS[[k]]$forward[[1]](.t)
-          TSfull[[paste("y",k, sep = "")]] = TS[[k]]$forward[[2]](.t)
-          
+          TSfull[[paste("t",k, sep = "")]] = seq(TS[[k]]$forward$tlim[1], TS[[k]]$forward$tlim[2], length=1000)
+          TSfull[[paste("x",k, sep = "")]] = TS[[k]]$forward[[1]](TSfull[[paste("t",k, sep = "")]])
+          TSfull[[paste("y",k, sep = "")]] = TS[[k]]$forward[[2]](TSfull[[paste("t",k, sep = "")]])
         }
       }
-      
-      port=plotPort(TSfull$forward)
+        browser()
+      port=plotPort(TSfull, names=stateNames)
       
 
     #=============
