@@ -22,15 +22,35 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     llines(one, two, ...)
   }
   #========
-  plotPort = function(data, names,...){
+  plotPort = function(data, names, Ntraj=Ntraj, ...){
    
     xportPanel = function(x,y,...){
       for(k in 1:Ntraj)
-      panel.xyplot(data[[paste(x,k,sep="")]]~data[[paste(t,k,sep="")]], col=)
+        panel.xyplot(data[[paste("t",k,sep="")]], data[[paste("x",k,sep="")]], type = "l", col=Tcolors[[k]])
     }
     
-    xport=xyplot(x~t, ylab=names[1], xlab=NULL, type = "l", lwd=3, scales=list(x=list(draw=FALSE)))
-    yport=xyplot(y~t, ylab=names[2], xlab="t", type = "l", lwd=3)
+    yportPanel = function(x,y,...){
+      for(j in 1:Ntraj)
+        panel.xyplot(data[[paste("t",j,sep="")]], data[[paste("y",j,sep="")]], type = "l", col=Tcolors[[j]])
+    }
+    browser()
+    xmin=0; xmax=0; ymin=0; ymax=0; tmin=0; tmax=0;
+    for(g in 1:Ntraj){
+      
+      ##REDO with different data accessing? data[[x1]] currently not going through. Weird. Try calling data[[2]] for t1? Talk to DTK
+      xmin = min(data[[paste("x",g,sep="")]], xmin)
+      xmax = max(data[[paste("x",g,sep="")]], xmax)
+      ymin = min(data[[paste("x",g,sep="")]], ymin)
+      ymax = max(data[[paste("x",g,sep="")]], ymax)
+      tmin = min(data[[paste("x",g,sep="")]], tmin)
+      tmax = max(data[[paste("x",g,sep="")]], tmax)
+    }
+    xlims=c(xmin, xmax)
+    ylims=c(ymin, ymax)
+    tlims=c(tmin, tmax)
+    
+    xport=xyplot(xlims~tlims, panel=xportPanel, ylab=names[1], xlab=NULL, type = "l", lwd=3, scales=list(x=list(draw=FALSE)))
+    yport=xyplot(ylims~tlims, panel=yportPanel, ylab=names[2], xlab="t", type = "l", lwd=3)
     return(list(xport,yport))
   }
   #=========
@@ -80,8 +100,6 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
            c(x+dt*z1/((lens2)+.1)), c(y),
            length=.04, col=EW);
   }
-    
-    
 }
   
   # ========
@@ -137,8 +155,8 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
           TSfull[[paste("y",k, sep = "")]] = TS[[k]]$forward[[2]](TSfull[[paste("t",k, sep = "")]])
         }
       }
-        browser()
-      port=plotPort(TSfull, names=stateNames)
+        
+      port=plotPort(TSfull, names=stateNames, Ntraj)
       
 
     #=============
@@ -153,18 +171,18 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       for( k in 1:length(TS)) {
         if( !is.null(TS[[k]]$system)) {
           if( !is.null(TS[[k]]$forward) )
-            plotTraj( TS[[k]]$forward, col=Tcolors[k+1])
+            plotTraj( TS[[k]]$forward, col=Tcolors[k])
           if( !is.null(TS[[k]]$back) ) 
-            plotTraj( TS[[k]]$back, col=TcolorsBack[k+1])
+            plotTraj( TS[[k]]$back, col=TcolorsBack[k])
           goo = TS[[k]]$init
           lpoints( goo[1], goo[2], col=Tcolors[k],pch=20)
         }
       }
     }
     PP=xyplot(ylim~xlim, panel=myPanel, xlab=NULL, ylab=stateNames[2], scales=list())
-    print(PP, position=c(0.1,.43,.9,1), more=TRUE)
-    print(port[[1]], position=c(0, .25, 1, .5), more=TRUE)
-    print(port[[2]], position=c(0, 0, 1, .33), more=FALSE)
+    print(PP, position=c(0.1,.48,.9,1), more=TRUE)
+    print(port[[1]], position=c(0, .27, 1, .5), more=TRUE)
+    print(port[[2]], position=c(0, 0, 1, .29), more=FALSE)
   }
   # =======
   manipulate( doPlot(xstart=xstart, ystart=ystart, 
