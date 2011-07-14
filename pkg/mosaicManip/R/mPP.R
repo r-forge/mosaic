@@ -2,6 +2,7 @@
 # revise should be a push-button
 mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
+  on.exit()
   # Storage for the trajectories.  Starts out empty
   Tcolors = c("red","green","blue", "steelblue","springgreen","pink")
   TcolorsBack = c("deeppink","darkgreen", "darkblue","darkseagreen","darkslategray","fuschia")
@@ -22,28 +23,38 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     llines(one, two, ...)
   }
   #========
-  plotPort = function(data, names, Ntraj=Ntraj, ...){
-   
+  plotPort = function(data, names, Ntraj=notNull, ...){
     xportPanel = function(x,y,...){
-      for(k in 1:Ntraj)
-        panel.xyplot(data[[paste("t",k,sep="")]], data[[paste("x",k,sep="")]], type = "l", col=Tcolors[[k]])
+      for(k in 2:Ntraj){
+        if(k==Ntraj){
+          panel.xyplot(data[[paste("t",k,sep="")]], data[[paste("x",k,sep="")]], type = "l", col=Tcolors[[k]], lwd=2)
+        }
+        else{
+          panel.xyplot(data[[paste("t",k,sep="")]], data[[paste("x",k,sep="")]], type = "l", col=Tcolors[[k]])
+        }
+      }
     }
     
     yportPanel = function(x,y,...){
-      for(j in 1:Ntraj)
-        panel.xyplot(data[[paste("t",j,sep="")]], data[[paste("y",j,sep="")]], type = "l", col=Tcolors[[j]])
+      for(j in 2:Ntraj){
+        if(j==Ntraj){
+          panel.xyplot(data[[paste("t",j,sep="")]], data[[paste("y",j,sep="")]], type = "l", col=Tcolors[[j]], lwd=2)
+        }
+        else{
+          panel.xyplot(data[[paste("t",j,sep="")]], data[[paste("y",j,sep="")]], type = "l", col=Tcolors[[j]])
+        }
+      }
     }
-    browser()
     xmin=0; xmax=0; ymin=0; ymax=0; tmin=0; tmax=0;
-    for(g in 1:Ntraj){
-      
+    
+    for(g in 2:Ntraj){  
       ##REDO with different data accessing? data[[x1]] currently not going through. Weird. Try calling data[[2]] for t1? Talk to DTK
-      xmin = min(data[[paste("x",g,sep="")]], xmin)
-      xmax = max(data[[paste("x",g,sep="")]], xmax)
-      ymin = min(data[[paste("x",g,sep="")]], ymin)
-      ymax = max(data[[paste("x",g,sep="")]], ymax)
-      tmin = min(data[[paste("x",g,sep="")]], tmin)
-      tmax = max(data[[paste("x",g,sep="")]], tmax)
+      xmin = min(data[[paste("x",g,sep="")]], xmin, na.rm=TRUE)
+      xmax = max(data[[paste("x",g,sep="")]], xmax, na.rm=TRUE)
+      ymin = min(data[[paste("y",g,sep="")]], ymin, na.rm=TRUE)
+      ymax = max(data[[paste("y",g,sep="")]], ymax, na.rm=TRUE)
+      tmin = min(data[[paste("t",g,sep="")]], tmin, na.rm=TRUE)
+      tmax = max(data[[paste("t",g,sep="")]], tmax, na.rm=TRUE)
     }
     xlims=c(xmin, xmax)
     ylims=c(ymin, ymax)
@@ -52,6 +63,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     xport=xyplot(xlims~tlims, panel=xportPanel, ylab=names[1], xlab=NULL, type = "l", lwd=3, scales=list(x=list(draw=FALSE)))
     yport=xyplot(ylims~tlims, panel=yportPanel, ylab=names[2], xlab="t", type = "l", lwd=3)
     return(list(xport,yport))
+
   }
   #=========
   flow.plot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
@@ -118,7 +130,11 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
         DE <<- TS[[Ntraj]]$system
       }
       if( reviseWhat >= 0) {
-        DE <<- edit(DE) 
+        if(reviseWhat ==0){
+          TS[[1:6]]$system <<- edit(DE)
+        }
+        else
+          TS[[reviseWhat+1]]$system <<- edit(DE) 
       }
       
     }
@@ -136,19 +152,18 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       TS[[1]]$back <<- solve.DE( DE, init=initCond, tlim=c(0,tback) )
     else TS[[1]]$back <<- NULL
       
-    if( storeWhatState != Ntraj ){
-      storeWhatState <<- Ntraj
+    TS[[Ntraj]]$init <<- TS[[1]]$init
+    TS[[Ntraj]]$system <<- TS[[1]]$system
+    TS[[Ntraj]]$forward <<- TS[[1]]$forward
+    TS[[Ntraj]]$back <<- TS[[1]]$back
     
-      # Store the results in the currently selected trajectory
-      TS[[Ntraj]]$init <<- TS[[1]]$init
-      TS[[Ntraj]]$system <<- TS[[1]]$system
-      TS[[Ntraj]]$forward <<- TS[[1]]$forward
-      TS[[Ntraj]]$back <<- TS[[1]]$back
+    notNull=0
+    for(m in 2:6){
+      if(!is.null(TS[[m]]$system))
+        notNull=notNull+1
     }
-
-    
     TSfull=data.frame(index=seq(1,1000, length=1000))
-      for(k in 1:Ntraj){
+      for(k in 2:Ntraj){
         if(!is.null(TS[[k]]$forward)){
           TSfull[[paste("t",k, sep = "")]] = seq(TS[[k]]$forward$tlim[1], TS[[k]]$forward$tlim[2], length=1000)
           TSfull[[paste("x",k, sep = "")]] = TS[[k]]$forward[[1]](TSfull[[paste("t",k, sep = "")]])
@@ -156,7 +171,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
         }
       }
         
-      port=plotPort(TSfull, names=stateNames, Ntraj)
+      port=plotPort(TSfull, names=stateNames, notNull)
       
 
     #=============
@@ -168,18 +183,32 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       # plot out the trajectories
       # NEED TO DO BOTH FORWARD AND BACKWARD, maybe alpha different for backward, or darken a bit
       # here is the forward one
-      for( k in 1:length(TS)) {
+      for( k in 2:length(TS)) {
         if( !is.null(TS[[k]]$system)) {
-          if( !is.null(TS[[k]]$forward) )
-            plotTraj( TS[[k]]$forward, col=Tcolors[k])
-          if( !is.null(TS[[k]]$back) ) 
-            plotTraj( TS[[k]]$back, col=TcolorsBack[k])
+          if( !is.null(TS[[k]]$forward) ){
+            if(k==Ntraj){
+              plotTraj( TS[[k]]$forward, col=Tcolors[k], lwd=2)
+            }
+            else{
+              plotTraj( TS[[k]]$forward, col=Tcolors[k])
+            }
+          }  
+          if( !is.null(TS[[k]]$back) ) {
+            if(k==Ntraj){
+              plotTraj( TS[[k]]$back, col=TcolorsBack[k], lwd=2)
+            }
+            else{
+              plotTraj( TS[[k]]$back, col=TcolorsBack[k])
+            }
+          }
           goo = TS[[k]]$init
           lpoints( goo[1], goo[2], col=Tcolors[k],pch=20)
+          
+          
         }
       }
     }
-    PP=xyplot(ylim~xlim, panel=myPanel, xlab=NULL, ylab=stateNames[2], scales=list())
+    PP=xyplot(ylim~xlim, panel=myPanel, xlab=NULL, ylab=stateNames[2], main=list(paste(stateNames[1]), cex=.85), scales=list())
     print(PP, position=c(0.1,.48,.9,1), more=TRUE)
     print(port[[1]], position=c(0, .27, 1, .5), more=TRUE)
     print(port[[2]], position=c(0, 0, 1, .29), more=FALSE)
