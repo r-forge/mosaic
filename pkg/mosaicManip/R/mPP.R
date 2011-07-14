@@ -4,8 +4,8 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
   on.exit()
   # Storage for the trajectories.  Starts out empty
-  Tcolors = c("red","green","blue", "steelblue","springgreen","pink")
-  TcolorsBack = c("deeppink","darkgreen", "darkblue","darkseagreen","darkslategray","fuschia")
+  Tcolors = c("red","brown1","cornflowerblue", "darkolivegreen3","gold","magenta")
+  TcolorsBack = c("deeppink","brown", "blue","darkolivegreen","gold3","magenta4")
   TS = list()
   for (k in 1:length(Tcolors)) 
     TS[[k]] = list(foward=NULL, back=NULL, system=NULL, init=NULL)
@@ -23,38 +23,50 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     llines(one, two, ...)
   }
   #========
-  plotPort = function(data, names, Ntraj=notNull, ...){
+  plotPort = function(data, names, Ntraj, notNull, ...){
     xportPanel = function(x,y,...){
-      for(k in 2:Ntraj){
+      
+      for(k in notNull){
+        
         if(k==Ntraj){
-          panel.xyplot(data[[paste("t",k,sep="")]], data[[paste("x",k,sep="")]], type = "l", col=Tcolors[[k]], lwd=2)
+          panel.xyplot(data[[paste("tf",k,sep="")]], data[[paste("xf",k,sep="")]], type = "l", col=Tcolors[[k]], lwd=2)
+          panel.xyplot(data[[paste("tb",k,sep="")]], data[[paste("xb",k,sep="")]], type = "l", col=TcolorsBack[[k]], lwd=2)
         }
         else{
-          panel.xyplot(data[[paste("t",k,sep="")]], data[[paste("x",k,sep="")]], type = "l", col=Tcolors[[k]])
-        }
+          panel.xyplot(data[[paste("tf",k,sep="")]], data[[paste("xf",k,sep="")]], type = "l", col=Tcolors[[k]])
+          panel.xyplot(data[[paste("tb",k,sep="")]], data[[paste("xb",k,sep="")]], type = "l", col=TcolorsBack[[k]])
+          }
       }
     }
     
     yportPanel = function(x,y,...){
-      for(j in 2:Ntraj){
+      for(j in notNull){
         if(j==Ntraj){
-          panel.xyplot(data[[paste("t",j,sep="")]], data[[paste("y",j,sep="")]], type = "l", col=Tcolors[[j]], lwd=2)
+          panel.xyplot(data[[paste("tf",j,sep="")]], data[[paste("yf",j,sep="")]], type = "l", col=Tcolors[[j]], lwd=2)
+          panel.xyplot(data[[paste("tb",j,sep="")]], data[[paste("yb",j,sep="")]], type = "l", col=TcolorsBack[[j]], lwd=2)
         }
         else{
-          panel.xyplot(data[[paste("t",j,sep="")]], data[[paste("y",j,sep="")]], type = "l", col=Tcolors[[j]])
+          panel.xyplot(data[[paste("tf",j,sep="")]], data[[paste("yf",j,sep="")]], type = "l", col=Tcolors[[j]])
+          panel.xyplot(data[[paste("tb",j,sep="")]], data[[paste("yb",j,sep="")]], type = "l", col=TcolorsBack[[j]])  
         }
       }
     }
-    xmin=0; xmax=0; ymin=0; ymax=0; tmin=0; tmax=0;
+    xmin=Inf; xmax=0; ymin=Inf; ymax=0; tmin=0; tmax=0;
     
-    for(g in 2:Ntraj){  
+    for(g in notNull){  
       ##REDO with different data accessing? data[[x1]] currently not going through. Weird. Try calling data[[2]] for t1? Talk to DTK
-      xmin = min(data[[paste("x",g,sep="")]], xmin, na.rm=TRUE)
-      xmax = max(data[[paste("x",g,sep="")]], xmax, na.rm=TRUE)
-      ymin = min(data[[paste("y",g,sep="")]], ymin, na.rm=TRUE)
-      ymax = max(data[[paste("y",g,sep="")]], ymax, na.rm=TRUE)
-      tmin = min(data[[paste("t",g,sep="")]], tmin, na.rm=TRUE)
-      tmax = max(data[[paste("t",g,sep="")]], tmax, na.rm=TRUE)
+      xmin = min(data[[paste("xf",g,sep="")]], 
+                 data[[paste("xb",g,sep="")]], xmin, na.rm=TRUE)
+      xmax = max(data[[paste("xf",g,sep="")]],
+                 data[[paste("xb",g,sep="")]], xmax, na.rm=TRUE)
+      ymin = min(data[[paste("yf",g,sep="")]],
+                 data[[paste("yb",g,sep="")]], ymin, na.rm=TRUE)
+      ymax = max(data[[paste("yf",g,sep="")]],
+                 data[[paste("yb",g,sep="")]], ymax, na.rm=TRUE)
+      tmin = min(data[[paste("tf",g,sep="")]],
+                 data[[paste("tb",g,sep="")]], tmin, na.rm=TRUE)
+      tmax = max(data[[paste("tf",g,sep="")]],
+                 data[[paste("tb",g,sep="")]], tmax, na.rm=TRUE)      
     }
     xlims=c(xmin, xmax)
     ylims=c(ymin, ymax)
@@ -113,10 +125,22 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
            length=.04, col=EW);
   }
 }
-  
+    #================
+  jacobian <- function(fun=NULL,x=NULL, y=NULL,h=0.000001){
+    if (is.null(fun) )  fun = current.dyn.system
+    foo <- fun(x,y);
+    foox <- fun(x+h,y);
+    fooy <- fun(x,y+h);
+    A <- (foox[1] - foo[1])/h;
+    B <- (fooy[1] - foo[1])/h;
+    C <- (foox[2] - foo[2])/h;
+    D <- (fooy[2] - foo[2])/h;
+    return(matrix( c(A,B,C,D ), 2,2, byrow=T))
+    }
+    
   # ========
   doPlot = function(xstart,ystart,Ntraj,tdur,tback,
-                    nullclines=FALSE,reviseWhat,flowWhat,param1,param2) {
+                    nullclines=FALSE,reviseWhat,flowWhat,param1,param2,doJacob) {
     # set initial condition
     initCond[1] <<- xstart
     initCond[2] <<- ystart
@@ -157,21 +181,46 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     TS[[Ntraj]]$forward <<- TS[[1]]$forward
     TS[[Ntraj]]$back <<- TS[[1]]$back
     
-    notNull=0
+    notNull=NULL
     for(m in 2:6){
       if(!is.null(TS[[m]]$system))
-        notNull=notNull+1
+        notNull=c(notNull, m)
     }
+
     TSfull=data.frame(index=seq(1,1000, length=1000))
-      for(k in 2:Ntraj){
+      for(k in notNull){
         if(!is.null(TS[[k]]$forward)){
-          TSfull[[paste("t",k, sep = "")]] = seq(TS[[k]]$forward$tlim[1], TS[[k]]$forward$tlim[2], length=1000)
-          TSfull[[paste("x",k, sep = "")]] = TS[[k]]$forward[[1]](TSfull[[paste("t",k, sep = "")]])
-          TSfull[[paste("y",k, sep = "")]] = TS[[k]]$forward[[2]](TSfull[[paste("t",k, sep = "")]])
+          TSfull[[paste("tf",k, sep = "")]] = seq(TS[[k]]$forward$tlim[1], TS[[k]]$forward$tlim[2], length=1000)
+          TSfull[[paste("xf",k, sep = "")]] = TS[[k]]$forward[[1]](TSfull[[paste("tf",k, sep = "")]])
+          TSfull[[paste("yf",k, sep = "")]] = TS[[k]]$forward[[2]](TSfull[[paste("tf",k, sep = "")]])
         }
       }
-        
-      port=plotPort(TSfull, names=stateNames, notNull)
+         
+      for(k in notNull){
+        if(!is.null(TS[[k]]$back)){
+          TSfull[[paste("tb",k, sep = "")]] = seq(TS[[k]]$back$tlim[1], TS[[k]]$back$tlim[2], length=1000)
+          TSfull[[paste("xb",k, sep = "")]] = TS[[k]]$back[[1]](TSfull[[paste("tb",k, sep = "")]])
+          TSfull[[paste("yb",k, sep = "")]] = TS[[k]]$back[[2]](TSfull[[paste("tb",k, sep = "")]])
+        }
+      }
+       #JACOBIAN
+      .tmax=max(TS[[Ntraj]]$forward$tlim, 0, rm.na=TRUE)
+      .tmin=min(TS[[Ntraj]]$back$tlim, 0, rm.na=TRUE)
+      if(doJacob>0){
+        if(doJacob==1) 
+          jake = jacobian(fun=TS[[Ntraj]]$forward$dynfun, x=xstart, y=ystart)
+        if(doJacob==2)
+          jake = jacobian(fun=TS[[Ntraj]]$forward$dynfun, x=.tmax, y=TS[[Ntraj]]$forward(.tmax))
+        if(doJacob==3)
+          jake = jacobian(fun=TS[[Ntraj]]$back$dynfun, x=.tmin, y=TS[[Ntraj]]$back(.tmin))
+        eig=eigen(jake)
+        print("Jacobian Matrix")
+        print(jake)
+        print("Eigenvalues")
+        print(eig[1])
+      }
+      #Portrait Plots  
+      port=plotPort(TSfull, names=stateNames, notNull=notNull, Ntraj=Ntraj)
       
 
     #=============
@@ -217,7 +266,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   manipulate( doPlot(xstart=xstart, ystart=ystart, 
                      Ntraj=Ntraj,tdur=tdur,tback=tback,
                      nullclines=nullclines,reviseWhat=reviseWhat,
-                     flowWhat=flowWhat, param1=param1,param2=param2),
+                     flowWhat=flowWhat, param1=param1,param2=param2, doJacob=doJacob),
               xstart = slider(xlim[1],xlim[2],init=mean(xlim),label=paste(stateNames[1], "Start")),
               ystart = slider(ylim[1],ylim[2],init=mean(ylim),label=paste(stateNames[2], "Start")),
               Ntraj = picker( One=2,Two=3,Three=4,Four=5,Five=6, initial="One",label="Trajectory"),
@@ -228,6 +277,8 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
                                    "Four"=4, "Five"=5, label="Revise DE for", initial = "None"),
               flowWhat= picker("One"=1, "Two"=2, "Three" = 3, "Four"=4, "Five" = 5, 
                                initial = "One", label="What flow to plot?"),
+              doJacob= picker("None"=0, "At Start"=1, "At Backward Limit"=2, "At Forward Limit"=3,
+                              label="Jacobian", initial="None"),
               param1 = slider(.1,10,init=1,label="Parameter 1"),
               param2 = slider(.1,10,init=1,label="Parameter 2")
               )
