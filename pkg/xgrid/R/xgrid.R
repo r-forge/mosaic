@@ -4,7 +4,7 @@
 
 xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1, 
    outdir="output", param=1, Rcmd="runjob.R", auth="None", 
-   outfile="RESULTS.rda", suffix="RESULT", throttle=20, sleeptime=1, 
+   outfile="RESULTS.rda", suffix="RESULT", throttle=20, sleeptime=5, 
    verbose=FALSE) {
    # submit a group of jobs to the Xgrid, letting the grid deal with 
    # scheduling and load balancing
