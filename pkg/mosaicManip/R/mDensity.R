@@ -13,10 +13,9 @@ mDensity=function(data=NULL){
     else
        x=data
     trans.x=trans(x)
-    densityplot(trans.x, xlab= "Observations", bw=bandwidth)
-#                 panel=function(x,...){
-#                   panel.densityplot(x)
-#                 })
+    densityplot(trans.x, xlab= "Values", bw=bandwidth,
+                scales = list(x=list(cex=1.5)))
+
   }
   #===================
   controls=list(bandwidth=slider(.01, 5, initial=1, step=.01, label="Bandwidth"),

@@ -1,7 +1,7 @@
 mHist=function(data=NULL){
   if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
   newCol=rgb(0,.2,.8,.6)
-  oldCol=rgb(.9,.9,0,.2)
+  oldCol=rgb(.9,.9,0,.3)
   .iter=0
   if(.iter==0)
     oldBreaks<<-NULL
@@ -12,15 +12,17 @@ mHist=function(data=NULL){
     x=data
   #===============
   myFun=function(nBands, cBreak, seed){
-    set.seed(seed)
+  if(is.null(data))  set.seed(seed)
     .iter<<-.iter+1
     
+    
     rng=diff(range(x))
+    myby=rng/(nBands)
     c.rng = diff(c(min(x),cBreak))
     minratio= c.rng/rng
     maxratio= 1-minratio
-    myBreaks = seq(cBreak, diff(range(x))/8+max(x), by=)
-    myBreaks = c(seq(min(x)-diff(range(x))/8, cBreak, length=nBands*minratio), myBreaks)
+    myBreaks = seq(cBreak, (max(x)+rng/5), by=myby)
+    myBreaks = c(seq(cBreak, (min(x)-rng/5), by=-myby), myBreaks)
     
     myPan=function(x,...){
        panel.histogram(x, breaks=myBreaks, col=newCol)
@@ -29,14 +31,19 @@ mHist=function(data=NULL){
         }
       }
     
-    newHist=histogram(x, panel=myPan, type = "density")
+    newHist=histogram(x, panel=myPan, type = "density",
+                      scales = list(x=list(cex=1.7)))
     print(newHist)
        
     oldBreaks<<-myBreaks
   }
+  
+  
        controls = list(nBands=slider(1, 50, step=1, initial=10, label="Number of histogram bins"),
-             cBreak=slider(mean(x)-3,mean(x)+3, step=.01, initial=mean(x), label="Center Break"),
-             seed=slider(1,100,step=1, initial=1, label="Random seed"))
+             cBreak=slider(mean(x)-3,mean(x)+3, step=.01, initial=mean(x), label="Center Break")
+             )
+      if(is.null(data))
+        controls$seed=slider(1,100,step=1, initial=1, label="Random seed")
 
  #========================
   manipulate(myFun(nBands=nBands, cBreak=cBreak, seed=seed),
@@ -46,5 +53,5 @@ mHist=function(data=NULL){
   
 }
 #Alpha slider for the overlay
-#do by rather than length for myBreaks
 #if data not null, kill seed
+#pretty up the slider for center break
