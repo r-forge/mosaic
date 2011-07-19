@@ -8,7 +8,7 @@ submit a job
 submit a job to an Apple Xgrid
 }
 \usage{
-xgridsubmit(grid, auth, Rcmd, ntask, param, resfile, verbose = FALSE)
+xgridsubmit(grid, auth, indir, Rcmd, ntask, param, resfile, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,8 +18,11 @@ domain name of the grid controller
   \item{auth}{
 authorization to use to access the grid: options are "None" (default), "Kerberos" or "Password"
 }
+  \item{indir}{
+directory to be copied to the remote agent
+}
   \item{Rcmd}{
-R script file within the \code{input} directory to be run by the remote agent
+R script file within the \code{indir} directory to be run by the remote agent
 }
   \item{ntask}{
 number of tasks to be run by each job

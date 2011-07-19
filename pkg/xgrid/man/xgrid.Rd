@@ -8,10 +8,10 @@ submit a set of jobs to an Apple Xgrid
 submit a set of jobs to an Apple Xgrid, letting the grid deal with scheduling and load balancing
 }
 \usage{
-xgrid(grid = "mygrid.myschool.edu", numsim = 20, ntask = 1, 
-  outdir = "output", param = 1, Rcmd = "runjob.R", auth = "None", 
-  outfile = "RESULTS.rda", suffix = "RESULT", throttle = 20, 
-  sleeptime = 5, verbose = FALSE)
+xgrid(grid = "localhost", numsim = 20, ntask = 1, 
+  indir = "input", outdir = "output", param = 1, 
+  Rcmd = "runjob.R", auth = "None", outfile = "RESULTS.rda", 
+  suffix = "RESULT", throttle = 20, sleeptime = 5, verbose = FALSE)
 }
 
 \arguments{
@@ -24,8 +24,11 @@ number of simulations (individual tasks) to run
   \item{ntask}{
 number of tasks to be run by each job
 }
+  \item{indir}{
+input directory (contents copied from the client to the agent by the controller)
+}
   \item{outdir}{
-output directory to be used to store results returned from the controller
+output directory to be used to store results returned from the agent by the controller
 }
   \item{param}{
 an optional parameter to be provided to the remote job

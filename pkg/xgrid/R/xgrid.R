@@ -2,8 +2,8 @@
 # Nicholas Horton, nhorton@smith.edu
 # $Id: xgrid.R,v 1.11 2011/07/07 19:17:20 nhorton Exp $
 
-xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1, 
-   outdir="output", param=1, Rcmd="runjob.R", auth="None", 
+xgrid = function(grid="localhost", numsim=20, ntask=1, 
+   indir="input", outdir="output", param=1, Rcmd="runjob.R", auth="None", 
    outfile="RESULTS.rda", suffix="RESULT", throttle=20, sleeptime=5, 
    verbose=FALSE) {
    # submit a group of jobs to the Xgrid, letting the grid deal with 
@@ -32,6 +32,9 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
    if (ceiling(numsim/ntask) < 2) {
       stop("must have at least 2 jobs!")
    }
+   if (file_test("-d", indir) != TRUE) {
+	  stop(paste("The directory '", indir, "' is not a directory!\n", sep=""))
+   }
    if (file.access(outdir, 0) == -1) {
       if (system(paste("mkdir ", outdir, sep="")) != 0) {
          stop(paste("The directory '", outdir, "' can't be created!\n", sep=""))
@@ -40,7 +43,6 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
       stop(paste("The directory '", outdir, "' is not a directory!\n", sep=""))
    }
    
-   # start to process the jobs (w/ throttle)
 
    # a vector indicating file numbering for results
    jobidentifier = 1:numberofjobs + 9999  
@@ -53,7 +55,7 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
    
    # first start to load up the grid
    while (length(activejobs) < throttle & length(pendingjobs) > 0) {
-      activejobs = c(activejobs, xgridsubmit(grid, auth, Rcmd, 
+      activejobs = c(activejobs, xgridsubmit(grid, auth, indir, Rcmd, 
          ntask, param, paste(suffix, "-", pendingjobs[1], sep=""), 
          verbose))
       pendingjobs = pendingjobs[-1]
@@ -69,7 +71,7 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
          xgridresults(grid, auth, activejobs[whichjob], outdir, verbose)
          xgriddelete(grid, auth, activejobs[whichjob], verbose)
          activejobs = activejobs[-whichjob]
-         activejobs = c(activejobs, xgridsubmit(grid, auth, Rcmd, 
+         activejobs = c(activejobs, xgridsubmit(grid, auth, indir, Rcmd, 
             ntask, param, paste(suffix, "-", pendingjobs[1], sep=""), 
             verbose))  
          pendingjobs = pendingjobs[-1]
@@ -79,7 +81,7 @@ xgrid = function(grid="mygrid.myschool.edu", numsim=20, ntask=1,
       }
    }
 
-   # waiting for everything to finish up
+   # wait for everything to finish up
    while (length(activejobs) > 0) {
       statusline = xgridattr(grid, auth, activejobs[whichjob], verbose)
       if (grepl('Failed', statusline)==TRUE) {
@@ -144,12 +146,12 @@ xgridattr = function(grid, auth, jobnum, verbose=FALSE) {
    return(statusline = retval[grep('jobStatus', retval)])
 }
 
-xgridsubmit = function(grid, auth, Rcmd, ntask, param, 
+xgridsubmit = function(grid, auth, indir, Rcmd, ntask, param, 
    resfile, verbose=FALSE) {
    # submit a single job to the Xgrid, 
    # with three arguments (ntask, param and resfile)
-   command = paste("xgrid -h ",grid," -auth ",auth, " -job submit -in input ", 
-      "/usr/bin/R64 CMD BATCH --no-save --no-restore '--args ",
+   command = paste("xgrid -h ",grid," -auth ",auth, " -job submit -in ", indir, 
+      " /usr/bin/R64 CMD BATCH --no-save --no-restore '--args ",
       ntask, " ", param, " ", resfile, "' ", Rcmd, " ", Rcmd, resfile, 
       ".Rout", sep="")   # arguments must be in single quotes!
    if (verbose==TRUE) {
