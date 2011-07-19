@@ -1,7 +1,7 @@
 #Dists to do:
 #Unif, t, F, CHI^2, normal, exponential, beta? MY CHOICE, random.
 
-mDistGame=function(){
+mSDGame=function(){
   if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
   dist.col = rgb(1,0,0,1) #red
   guess.col=rgb(0,0,1,1) #blue
@@ -11,7 +11,7 @@ mDistGame=function(){
   trans.actual.col=rgb(0,1,0,.2)
   
   iter<<-sample(1:100000, 1)
-  x=seq(-7,7, length=1000)
+  x=seq(-10,10, length=1000)
 #========================  
   myFun=function(guess.sd, myDist, nxt){
     set.seed(iter)
@@ -23,10 +23,10 @@ mDistGame=function(){
     if(myDist==0){#mychoice, random
       myDist=sample(1:4, 1)
     }
-    if(myDist==1){
+    if(myDist==1){  #normal
       dist=dnorm(x, sd=act.sd)
     }
-    if(myDist==2){
+    if(myDist==2){ #Uniform
       rng=3.464102*act.sd
       dist=dunif(x, min=-rng/2, max=rng/2)
     }
@@ -45,9 +45,10 @@ mDistGame=function(){
 #         dfree=abs(dfree)
       dist=dt(x, df=dfree)
     }
-    if(myDist==5){        #t3 dist
-      dist =dt(x*sqrt(3)/(act.sd), df=3)
+    if(myDist==5){        #t3 dist. ## THIS MAY NEED TO BE FIXED
       act.sd=sqrt(3)
+      dist =dt(x*sqrt(3)/(act.sd), df=3)
+      
     }
     if(myDist==6){    #F dist
       df1=runif(1, 1, 20)
@@ -57,8 +58,8 @@ mDistGame=function(){
       guess.mean=act.mean
       dist=df(x, df1=df1, df2=df2)
     }
-    if(myDist==7){    #Chi Squared
-      df=act.sd^2/2
+    if(myDist==7){    #Chi Squared  ## May need to have scale adjusted, currently SD values of >4 
+      df=act.sd^2/2   #             ## have a mean around 7 and it cuts off around the peak of the hump
       act.mean=df
       guess.mean=df
       dist=dchisq(x, df=df)
@@ -131,4 +132,4 @@ mDistGame=function(){
              
   
   #Extra checkbox for just arrows, no guess curve
-  #Tomorrow, fix the xlims so it isn't so screwed up for large x sizes. 
+  #fix the xlims so it isn't so screwed up for large x sizes. 
