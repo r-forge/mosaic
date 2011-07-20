@@ -5,41 +5,35 @@ mInfluence=function(expr, data){
    
   terms=terms(expr)
   nterms=length(terms)
-
-  for(a in all.vars(expr)[-1]){
-    #temp=as.character(terms[a])
+  for(a in all.vars(expr)[-1]){  #Name the levels of xvar, filled with char string
     xvar[[a]]=a
   }
-  maxsd=0
-  for(b in 1:(nterms-1)){
-    maxsd=max(maxsd, sd(data[[xvar[[b]]]]), na.rm=TRUE) #HERE categorical variables return In var(as.vector(x), na.rm = na.rm) : NAs introduced by coercion
-  }
-
   #====================
-  myFun=function(xpick, whereX, whereY, newPoint){    
-    newRow=data.frame()
-    colnames(newRow)=colnames(data)
-browser()
-    newRow[[1,xvar[[xpick]]]]=whereX
-    newRow[[1,yvar]]=whereY
-    modData=rbind(data, newRow)
-    browser()
+  myFun=function(xpick, multX, multY, newPoint){
+    xdat=data[[xvar[[xpick]]]]
+    ydat=data[[yvar]]
+    newRow=data[1,]
+    for(b in 1:length(newRow)){
+      if(is.numeric(newRow[1,b]))     #At the moment just leaving the categorical variables as is
+        newRow[1,b]=median(data[,b])  #That is, what they were from data[1,], first row of data
+    }
+    newRow[[1,xvar[[xpick]]]]=multX*sd(xdat)+mean(xdat) #This needs to be adjusted to allow categorical 
+    newRow[[1,yvar]]=multY*sd(ydat)+mean(ydat)          #variables to work. mean(factor) doesn't work
+    modData=rbind(newRow, data)
     if(newPoint)
       data=modData
     
     mod=lm(expr, data)
-    coefs=coef(mod)
     influ=influence.measures(mod)
     influpts=which(apply(influ$is.inf, 1, any))
     influpts=data[influpts,]
 
     myPanel=function(x,y,...){
-      panel.xyplot(x,y, ...)
+      panel.xyplot(x,y,  ...)
       lpoints(influpts[[xvar[[xpick]]]], influpts[[yvar]], col="red")
-      panel.abline(mod)
+      panel.xyplot(x,mod$fitted, pch=18, cex=1, col="black")
       if(newPoint){
-        lpoints(modData[dim(modData)[1],], col="orange", cex=2)
-        print(modData[dim(modData)[1],])
+        lpoints(modData[[1,xvar[[xpick]]]], modData[[1,yvar]], col="orange", cex=2, lwd=3)
       }
     }
     
@@ -52,12 +46,10 @@ browser()
   #==================
   controls=list(xpick=picker(xvar, label="Dep. Variable to plot"),
                 newPoint=checkbox(FALSE, label="Add new point"),
-                whereX=slider(-5*maxsd, 5*maxsd, 
-                              initial=1*maxsd, label="New x"),
-                whereY=slider(-5*maxsd, 5*maxsd, 
-                              initial=1*maxsd, label="New y"),
+                multX=slider(-5, 5, initial=1, label="New x"),
+                multY=slider(-5, 5, initial=1, label="New y"),
                 influPick=picker(cooks.distance="Cook's Distance", label="Type of Influence")
                 )
-  manipulate(myFun(xpick=xpick, whereX=whereX, whereY=whereY, newPoint=newPoint), 
+  manipulate(myFun(xpick=xpick, multY=multY, multX=multX, newPoint=newPoint), 
              controls)
 }
