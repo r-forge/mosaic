@@ -17,12 +17,23 @@ mInfluence=function(expr, data){
       if(is.numeric(newRow[1,b]))     #At the moment just leaving the categorical variables as is
         newRow[1,b]=median(data[,b])  #That is, what they were from data[1,], first row of data
     }
-    newRow[[1,xvar[[xpick]]]]=multX*sd(xdat)+mean(xdat) #This needs to be adjusted to allow categorical 
-    newRow[[1,yvar]]=multY*sd(ydat)+mean(ydat)          #variables to work. mean(factor) doesn't work
+
+    if(is.numeric(newRow[[xvar[[xpick]]]])){
+      newRow[[1,xvar[[xpick]]]]=multX*sd(xdat)+mean(xdat) #This needs to be adjusted to allow categorical 
+      }                                                   #variables to work. mean(factor) doesn't work
+    if(is.numeric(newRow[[1,yvar]])){
+      newRow[[1,yvar]]=multY*sd(ydat)+mean(ydat)
+      }
+    if(is.numeric(xdat))
+      maxxlim=c(-5*sd(xdat)+mean(xdat), 5*sd(xdat)+mean(xdat))
+    maxylim=c(-5*sd(ydat)+mean(ydat), 5*sd(ydat)+mean(ydat))
     modData=rbind(newRow, data)
     if(newPoint)
       data=modData
-    
+    if(is.factor(data[[xvar[[xpick]]]])){
+      xlevels=levels(xdat)
+      data[[xvar[[xpick]]]]=jitter(as.numeric(data[[xvar[[xpick]]]]))
+    }
     mod=lm(expr, data)
     influ=influence.measures(mod)
     influpts=which(apply(influ$is.inf, 1, any))
@@ -33,15 +44,18 @@ mInfluence=function(expr, data){
       lpoints(influpts[[xvar[[xpick]]]], influpts[[yvar]], col="red")
       panel.xyplot(x,mod$fitted, pch=18, cex=1, col="black")
       if(newPoint){
-        lpoints(modData[[1,xvar[[xpick]]]], modData[[1,yvar]], col="orange", cex=2, lwd=3)
+        lpoints(data[[1,xvar[[xpick]]]], modData[[1,yvar]], col="orange", cex=2, lwd=3)
       }
     }
     
-#     if(is.factor(data[[yvar]]))
-#       data[[yvar]]=jitter(data[[yvar]])
-
-    xyplot(data[[yvar]]~data[[xvar[[xpick]]]], ylab=yvar, xlab=xvar[[xpick]],
-           panel=myPanel)
+    if(is.factor(xdat)){
+      xyplot(data[[yvar]]~data[[xvar[[xpick]]]], ylab=yvar, 
+             xlab=xvar[[xpick]],panel=myPanel, ylim=maxylim,
+             scales=list(x=list(labels=xlevels,at=seq(1,length(xlevels),by=1))))
+    }
+    else
+      xyplot(data[[yvar]]~data[[xvar[[xpick]]]], ylab=yvar, xlab=xvar[[xpick]],
+             xlim=maxxlim, ylim=maxylim, panel=myPanel)
   }
   #==================
   controls=list(xpick=picker(xvar, label="Dep. Variable to plot"),
