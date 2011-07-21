@@ -95,7 +95,7 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
                                  Terrain = terrain.colors(25, alpha=0.8),
                                  Topo = topo.colors(25,alpha=0.8),
                                  CM = cm.colors(25, alpha=0.8), label="Color Palette"),
-            nlevels = slider(5, 50, initial = 20, step = 1, label = "Approx. number of contour lines"),
+            nlevels = slider(5, 50, initial = 10, step = 1, label = "Approx. number of contour lines"),
             npts = slider(20,200,initial=140,label = "Color background smoothness")
             )
 }
