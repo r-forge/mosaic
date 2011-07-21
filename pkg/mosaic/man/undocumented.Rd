@@ -3,7 +3,6 @@
 \alias{panel.dotPlot}
 \alias{surround}
 \alias{adapt_seq}
-\alias{SAT1}
 \alias{latlon2xyz}
 \alias{xyz2latlon}
 \alias{rad2deg}
