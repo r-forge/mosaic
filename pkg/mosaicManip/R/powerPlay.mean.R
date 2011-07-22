@@ -1,12 +1,10 @@
 powerPlay.mean <- function()  {
   data=NULL
+  #=================
   myFun=function(mu=mu, sigma=sigma, n=n)
-  { 
-    if(is.null(data)){
-      #set.seed(seed)
-      samp <- rnorm(n,mean=mu,sd=sigma)
-      mu0 <-5
-    }
+  { #set.seed(seed)
+    samp <- rnorm(n,mean=mu,sd=sigma)
+    mu0 <-5
     x.bar <- mean(samp)
     margin <- qt(0.975,df=n-1)*sd(samp)/sqrt(n)
     low <- x.bar-margin
@@ -28,13 +26,13 @@ powerPlay.mean <- function()  {
           grid.text(label=expression(mu[0]==5), x=unit(mu0,"native"), y=unit(.03, "npc"))
         })
     }
+#=====================
   controls=list( mu=slider(5,7,step=0.10,initial=6, label="Mu"),
                  sigma=slider(0,4,step=0.1,initial=2, label="Sigma"),
                  n=slider(5,305,step=5,initial=50, label="N sample points")
                   )
-#controls$seed=slider(1,100, step=1, initial=1)
-  
-    
+  #controls$seed=slider(1,100, step=1, initial=1)
+                 
   manipulate(myFun(mu=mu, sigma=sigma, n=n),
              controls
              )

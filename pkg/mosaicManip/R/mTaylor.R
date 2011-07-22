@@ -75,7 +75,7 @@ mypanel = function(x, y){
       .newY=c(0,y,0); .newYPts = c(0,ypts,0);
       myY=.newYPts[inds]-.newY[inds]
       TayRMS = abs(sqrt(mean(myY^2))*diff(range(myx)))
-   grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
+      grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
                 y = unit(1,"npc")-unit(.5, "lines"),
                 just ="left",
@@ -85,14 +85,14 @@ mypanel = function(x, y){
   if(err == TRUE){  
      xpts = c(x)
      if( lsquares ){
-      ypos = pmax(f(x), ypts)
-      yneg = pmin(f(x), ypts)
+      ypos = pmax(f(x), lsq.func)
+      yneg = pmin(f(x), lsq.func)
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.blue)
      }
              
      if(TaylorBeTrue){
-      ypos = pmax(f(x), ypts)
-      yneg = pmin(f(x), ypts)
+      ypos = pmax(f(x), c(T[[as.numeric(n)+1]]))
+      yneg = pmin(f(x), c(T[[as.numeric(n)+1]]))
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.red)
      }
   }  
