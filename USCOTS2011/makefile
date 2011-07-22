@@ -52,10 +52,18 @@ clean:
 	inputs/sfsect.sty inputs/USCOTS.bib
 	bin/sweave.sh -nc $(SWEAVEOPTS) $< 
 
-%.R: %.Rnw setup.R inputs/sfsect.sty inputs/USCOTS.bib
+%.R: %.Rnw inputs/sfsect.sty inputs/USCOTS.bib
 	bin/sweave.sh -t $(SWEAVEOPTS) $< 
 
 Master-TeachingStatsWithR.pdf: $(TEXFILES) 
 	./bin/latexmk -f -pdf  Master-TeachingStatsWithR.tex
 
+Dierker.tex: Dierker.Rnw
+	bin/sweave.sh -nc $(SWEAVEOPTS) Dierker.Rnw
+
+Chap-GettingStartedshort.tex: Chap-GettingStartedshort.Rnw
+	bin/sweave.sh -nc $(SWEAVEOPTS) Chap-GettingStartedshort.Rnw
+
+Dierker.pdf: Dierker.tex Chap-GettingStartedshort.tex Chap-Core.tex
+	./bin/latexmk -f -pdf  Dierker.tex
 

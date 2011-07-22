@@ -156,7 +156,7 @@ The \function{dotPlot()} function is used to create a dotplot (a la Fathom).
 
 \begin{center}
 <<cesd-dot,fig=TRUE,height=1.8>>=
-dotPlot(~ cesd, data=female)
+dotPlot(~ cesd, nint=20, data=female)
 @
 \end{center}
 
