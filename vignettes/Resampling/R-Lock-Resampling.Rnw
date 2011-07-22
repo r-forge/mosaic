@@ -61,13 +61,13 @@ The instructions for the breakout session did not give any details
 about how to access the data.  So that you may follow these examples
 from any session of R, here are the commands to read the files from a
 public web site.
-<<eval=false>>=
+<<eval=TRUE>>=
 mustangs = read.csv(
  "http://www.mosaic-web.org/MustangPrice.csv")
 sleep = read.csv(
  "http://www.mosaic-web.org/SleepCaffeine.csv")
 @ 
-<<echo=false>>=
+<<eval=FALSE>>=
 mustangs = read.csv( "MustangPrice.csv")
 sleep = read.csv( "SleepCaffeine.csv" )
 @ 
@@ -106,17 +106,17 @@ trials = do(1000) *
 This creates a new set of data with the result from each of the 1000 trials.
 
 Plots of distributions are straightforward, e.g.:
-<<hist,fig=true,include=false,pdf=true,height=4,width=4>>=
-histogram( trials$result )
+<<hist,fig=true,include=TRUE,pdf=true,height=4,width=4>>=
+histogram( trials$mean )
 @ 
 
-\begin{center}
-  \includegraphics[width=2in]{Figures/bakeoff-hist.pdf}
-\end{center}
+%\begin{center}
+  %\includegraphics[width=2in]{Figures/bakeoff-hist.pdf}
+%\end{center}
 
 Calculation of the 90\% confidence interval can be done directly 
 <<>>=
-qdata( c(.05, .95), trials$result )
+qdata( c(.05, .95), trials$mean )
 @ 
 
 If you're into using the standard error to estimate the 90\% margin of
@@ -128,8 +128,8 @@ zstar = qnorm(.95)
 @ 
 And the margin of error will be
 <<>>=
-tstar * sd( trials$result )
-zstar * sd( trials$result )
+tstar * sd( trials$mean )
+zstar * sd( trials$mean )
 @ 
 
 
