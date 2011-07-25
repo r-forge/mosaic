@@ -1,29 +1,28 @@
 mEcon=function(xlim=c(0,20)){
   if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
   x=seq(min(xlim), max(xlim), length=1000)
-  myFun=function(sInt, sSlope, dInt, dSlope){
-    Supply=sInt+sSlope*x
-    Demand=dInt+dSlope*x
-    func=function(x){sInt+sSlope*x-dInt-dSlope*x}
-
-    
-    equil=which(Supply==Demand)
-    xEquil=x[equil]
-    sEquil=Supply[equil]
-
+  myFun=function(sup1, sup2, dem1, dem2){
+    supFun=splinefun(c(0,10,20), y=c(0, sup1, sup2)) 
+    demFun=splinefun(c(0,10,20), y=c(50, dem1, dem2))
+    func=function(x){supFun(x)-demFun(x)}
+    equil=uniroot(func, interval=c(0,20)) #Solve for equil qty.
+    xEquil=equil$root
+    yEquil=supFun(xEquil)
+    Supply=supFun(x)          #making my life easy with auto.key
+    Demand=demFun(x)
     panel=function(x,y,...){
       panel.xyplot(x,y,...)
-      llines(x=c(xEquil, -Inf), y=c(sEquil, sEquil), lty=2)
-      llines(x=c(xEquil, xEquil), y=c(sEquil, -Inf), lty=2)
+      llines(x=c(xEquil, -999999), y=c(yEquil, yEquil), lty=2, col="black")
+      llines(x=c(xEquil, xEquil), y=c(yEquil, -999999), lty=2, col="black")
       
     }
     xyplot(Supply+Demand~x, auto.key=TRUE, xlab="Quantity", ylab="Price",
            type="l", lwd=3, panel=panel)
   }
-  manipulate(myFun(sInt=sInt, sSlope=sSlope, dInt=dInt, dSlope=dSlope),
-             sInt=slider(-50,50, step=.01, initial=0, label="Supply Intercept"),
-             sSlope=slider(0,5, step=.01, initial=1, label="Supply slope"),
-             dInt=slider(0, 100, step=.01, initial=50, label="Demand Intercept"),
-             dSlope=slider(-5, 0, step=.01, initial=-1, label="Demand Slope")
+  manipulate(myFun(sup1=sup1, sup2=sup2, dem1=dem1, dem2=dem2),
+             sup1=slider(1,40, step=.01, initial=25, label="Supply pt 1"),
+             sup2=slider(1,60, step=.01, initial=50, label="Supply pt 2"),
+             dem1=slider(20, 60, step=.01, initial=25, label="Demand pt 1"),
+             dem2=slider(0, 40, step=.01, initial=5, label="Demand pt 2")
              )
 }

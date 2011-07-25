@@ -62,8 +62,6 @@ get.text.pos = function(xc, yc, ang, max.dist = unit(.3, "npc")) {
    y = yc+sin(ang)*dist*x.to.y
    just = ifelse( dist>0,"right","left")
    return( list(x=x,y=y,just=just))
-   #return(list(x = convertX(unit(x,"native"),"npc", valueOnly=TRUE), 
-   #              y = convertY(unit(y,"native"),"npc", valueOnly=TRUE)))
   }
   
 # ====================

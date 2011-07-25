@@ -18,33 +18,39 @@ mInfluence=function(expr, data){
         newRow[1,b]=median(data[,b])  #That is, what they were from data[1,], first row of data
     }
 
-    if(is.numeric(newRow[[xvar[[xpick]]]])){
-      newRow[[1,xvar[[xpick]]]]=multX*sd(xdat)+mean(xdat) #This needs to be adjusted to allow categorical 
+    if(is.numeric(newRow[[xpick]])){
+      newRow[[1,xpick]]=multX*sd(xdat)+mean(xdat) #This needs to be adjusted to allow categorical 
       }                                                   #variables to work. mean(factor) doesn't work
+    if(is.factor(newRow[[xpick]])){
+      newRow[[1,xpick]]=levels(xdat)[floor(length(levels(xdat))*(multX+5)/10.001)+1]
+    }
     if(is.numeric(newRow[[1,yvar]])){
       newRow[[1,yvar]]=multY*sd(ydat)+mean(ydat)
       }
-    if(is.numeric(xdat))
-      maxxlim=c(-5*sd(xdat)+mean(xdat), 5*sd(xdat)+mean(xdat))
-    maxylim=c(-5*sd(ydat)+mean(ydat), 5*sd(ydat)+mean(ydat))
-    modData=rbind(newRow, data)
+     if(is.numeric(xdat))
+       maxxlim=c(-5.2*sd(xdat)+mean(xdat), 5.2*sd(xdat)+mean(xdat))  #manipulate control params
+     maxylim=c(-5.2*sd(ydat)+mean(ydat), 5.2*sd(ydat)+mean(ydat))
+    modData=rbind(data, newRow)
     if(newPoint)
       data=modData
     if(is.factor(data[[xvar[[xpick]]]])){
       xlevels=levels(xdat)
-      data[[xvar[[xpick]]]]=jitter(as.numeric(data[[xvar[[xpick]]]]))
     }
     mod=lm(expr, data)
     influ=influence.measures(mod)
     influpts=which(apply(influ$is.inf, 1, any))
-    influpts=data[influpts,]
+#     influpts=data[influpts,]
 
     myPanel=function(x,y,...){
-      panel.xyplot(x,y,  ...)
-      lpoints(influpts[[xvar[[xpick]]]], influpts[[yvar]], col="red")
-      panel.xyplot(x,mod$fitted, pch=18, cex=1, col="black")
+      if(is.factor(x)) {
+        set.seed(73241)
+        x=jitter(as.numeric(x))
+      }
+      panel.xyplot(x,y,  ...)  #Data
+      lpoints(x[influpts], y[influpts], col="red") #Influential Data overplotted
+      panel.xyplot(x,fitted(mod), pch=18, cex=1, col="black")          #Fitted data points
       if(newPoint){
-        lpoints(data[[1,xvar[[xpick]]]], modData[[1,yvar]], col="orange", cex=2, lwd=3)
+        lpoints(x[length(x)], y[length(y)], col="orange", cex=2, lwd=3)  #last point is newpoint
       }
     }
     

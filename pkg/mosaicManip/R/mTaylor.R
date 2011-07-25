@@ -173,7 +173,7 @@ manipulate(myplot(a, TaylorBeTrue, lsquares, xwid, n, err, which.plot),
   n = picker(0,1,2,3,4,5,6,7,8,9,10, label = "Order of the Polynomial"),
   TaylorBeTrue = checkbox(FALSE, "Activate Taylor Series"),
   lsquares = checkbox(FALSE, "Activate least squares"),
-  xwid = slider(0, diff(range(xlim)), initial = mean(diff(range(xlim)))/2, 
+  xwid = slider(0.1, diff(range(xlim)), initial = mean(diff(range(xlim)))/2, 
                 step = diff(xlim/100), label = "Least Squares width"),
   err = checkbox(FALSE, "View error area")
   
