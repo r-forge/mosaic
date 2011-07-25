@@ -49,7 +49,7 @@ Returns an integer representing the Apple Xgrid job identifier.
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Nicholas Horton (\email{nhorton@smith.edu})
 }
 \note{
 %%  ~~further notes~~
