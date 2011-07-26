@@ -8,12 +8,21 @@ mEcon=function(xlim=c(0,20)){
     equil=uniroot(func, interval=c(0,20)) #Solve for equil qty.
     xEquil=equil$root
     yEquil=supFun(xEquil)
-    Supply=supFun(x)          #making my life easy with auto.key
+    Supply=supFun(x)          #making my life easy with auto.key by naming vars Supply and Demand
     Demand=demFun(x)
     panel=function(x,y,...){
       panel.xyplot(x,y,...)
       llines(x=c(xEquil, -999999), y=c(yEquil, yEquil), lty=2, col="black")
       llines(x=c(xEquil, xEquil), y=c(yEquil, -999999), lty=2, col="black")
+      leftx=x[x<=xEquil]
+      ySup=c(supFun(leftx), rep(yEquil, length(leftx)))
+      xpts=c(min(leftx),leftx,max(leftx))
+      lpolygon(x=c(leftx, rev(leftx), min(leftx)), y=c(rep(yEquil, length(leftx)), rev(supFun(leftx)), yEquil ), 
+               col=rgb(0,0,.8,.2), border=TRUE)
+      yDem=c(demFun(leftx), rep(yEquil, length(leftx)))
+      lpolygon(x=c(min(leftx), leftx, max(leftx)), y=c(yEquil, demFun(leftx), yEquil), 
+               col=rgb(.8,0,0,.2), border=TRUE)
+
       
     }
     xyplot(Supply+Demand~x, auto.key=TRUE, xlab="Quantity", ylab="Price",
