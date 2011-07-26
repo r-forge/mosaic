@@ -10,18 +10,19 @@ mEcon=function(xlim=c(0,20)){
     yEquil=supFun(xEquil)
     Supply=supFun(x)          #making my life easy with auto.key by naming vars Supply and Demand
     Demand=demFun(x)
+    xx=x     #To avoid duplication in the polygons in the panel function
     panel=function(x,y,...){
       panel.xyplot(x,y,...)
       llines(x=c(xEquil, -999999), y=c(yEquil, yEquil), lty=2, col="black")
       llines(x=c(xEquil, xEquil), y=c(yEquil, -999999), lty=2, col="black")
-      leftx=x[x<=xEquil]
+      leftx=xx[xx<=xEquil]
       ySup=c(supFun(leftx), rep(yEquil, length(leftx)))
       xpts=c(min(leftx),leftx,max(leftx))
-      lpolygon(x=c(leftx, rev(leftx), min(leftx)), y=c(rep(yEquil, length(leftx)), rev(supFun(leftx)), yEquil ), 
-               col=rgb(0,0,.8,.2), border=TRUE)
+      lpolygon(x=c(leftx, rev(leftx), min(leftx)), y=c(rep(yEquil, length(leftx)), supFun(rev(leftx)), yEquil ), 
+               col=rgb(0,0,.8,.2), border=FALSE)
       yDem=c(demFun(leftx), rep(yEquil, length(leftx)))
       lpolygon(x=c(min(leftx), leftx, max(leftx)), y=c(yEquil, demFun(leftx), yEquil), 
-               col=rgb(.8,0,0,.2), border=TRUE)
+               col=rgb(.8,0,0,.2), border=FALSE)
 
       
     }
@@ -33,5 +34,5 @@ mEcon=function(xlim=c(0,20)){
              sup2=slider(1,60, step=.01, initial=50, label="Supply pt 2"),
              dem1=slider(20, 60, step=.01, initial=25, label="Demand pt 1"),
              dem2=slider(0, 40, step=.01, initial=5, label="Demand pt 2")
-             )
+             ) 
 }
