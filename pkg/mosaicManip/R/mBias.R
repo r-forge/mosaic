@@ -1,18 +1,70 @@
 mBias=function(expr, data){
-#expr is real model
-#bigMod is lm(yvar~., data)
-#make a new population based on model to sample from
-#newdata is dataset with box1, box2 box3 box4... for each term and if it should be included in the newdata
-  #construct CIs based on new data using all terms. 
-  #Plot all terms coefs on number lines, 0 if not in the new model/old model.
+  if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
   
+  A1=FALSE; A2=FALSE; A3=FALSE; A4=FALSE; A5=FALSE; A6=FALSE; A7=FALSE; 
+           A8=FALSE; A9=FALSE; A10=FALSE; A11=FALSE; A12=FALSE; A13=FALSE; A14=FALSE;
+           A15=FALSE; A16=FALSE; A17=FALSE; A18=FALSE; A19=FALSE; A20=FALSE
+  checks=c(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14,
+                 A15, A16, A17, A18, A19, A20)
+  origMod=lm(expr, data)
+  origCoefs=coef(origMod)
+  yvar=as.character(expr[2])
+  xvars.mod=attr(origMod$terms, "term.labels")   #xvars from original model
   
-  
-  
-  
-  
-  
-  n=slider(5, 500, step=1, label="n points to sample")
-  seed=slider(#later)
-  
+  xvars.data=names(data)
+  xvars.data=xvars.data[which(xvars.data!=yvar)]  #all other variables not y in data
+  #=============================myFun Starts!
+  myFun=function(n, seed, checks){
+    set.seed(seed)
+    newData=data[which(checks==TRUE)]
+    newData[[yvar]]=predict(origMod)
+    newMod=lm(newData[[yvar]]~., data=newData)    #newMod from newData with only selected terms
+#actually we never use this right?    newCoefs=coef(newMod)
+    newCIs=confint(newMod)
+    limCIs=c(min(newCIs), max(newCIs))
+    limCIs=c(min(newCIs)-.1*diff(range(limCIs)), max(newCIs)+.1*diff(range(limCIs)))
+    levelNames=rownames(newCIs)
+    print(levelNames)
+    indexedCI=matrix(ncol=2, nrow=length(xvars.data))
+    row.names(indexedCI)=names(xvars.data)
+    plot( 1:2, type="n", ylim=.5+c(0,nrow(newCIs)),xlim=c(0,1),xaxt="n",yaxt="n",
+         ylab="",xlab="",bty="n")
+    
+    #=====================Begin draw.CI.axis function
+    draw.CI.axis = function( true, low, high,k,name ){
+      left = min(true,low) - 0.66*abs(high-low)
+      right = max(true,high) + 0.66*abs(high-low)
+      ticks = signif(pretty( c(left,right), n=5),5)
+      axis( side=1,pos=k,at=seq(0,1,length=length(ticks)),
+          labels=paste(ticks))
+      # convert the units
+      axis.left = min(ticks)
+      axis.right = max(ticks)
+      do.convert = function(val,left,right){ (val - left)/abs(right-left)}
+      true = do.convert(true, axis.left, axis.right)
+      low = do.convert(low, axis.left, axis.right)
+      high = do.convert(high, axis.left, axis.right)
+      lines(c(true,true),k+c(-.2,.2),lty=3,col="black")
+      points(mean(c(low,high)),k, pch=20,col="red",cex=2)
+      text( c(low,high),c(k,k),c("(",")"),col="red")
+      lines( c(low,high),c(k,k),lwd=3,col=rgb(1,0,0,.5))
+      text( 0, k, name, pos=3)
+    }
+    #=====================End draw.CI.axis function
+    for(b in 1:nrow(newCIs)){
+      draw.CI.axis( 0, newCIs[b,1], newCIs[b,2], b, levelNames[b] )
+    }
+  }
+  #=========================myFun ends noooooo
+  controls=list(n=slider(5, 500, step=1, initial=100, label="n points to sample"),
+                seed=slider(1,100,step=1, initial=sample(100,1), label="Random seed")
+                )
+  for(a in 1:length(xvars.data)){
+    controls[[paste("A", a, sep="")]]=checkbox(FALSE, label=xvars.data[a])
+  }
+  manipulate(myFun(n=n, seed=seed, checks=c(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14,
+                 A15, A16, A17, A18, A19, A20)),
+             controls)
+#Fix levelNames. It might be something with checks
+#Fix newData so it works with the sampling for n pts.   
 }

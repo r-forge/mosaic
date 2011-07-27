@@ -1,6 +1,6 @@
 mInfluence=function(expr, data){
   if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
-  xvar = list(); chars=list()
+  xvar = list();
   yvar = all.vars(expr)[1]
    
   terms=terms(expr)
