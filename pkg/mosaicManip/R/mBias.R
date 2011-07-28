@@ -1,5 +1,5 @@
 mBias=function(expr, data){
-  if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
+  if (!require(manipulate) | !require(lattice) | !require(grid)| !require(mosaic)) stop("Must have manipulate package.")
   
   A1=FALSE; A2=FALSE; A3=FALSE; A4=FALSE; A5=FALSE; A6=FALSE; A7=FALSE; 
            A8=FALSE; A9=FALSE; A10=FALSE; A11=FALSE; A12=FALSE; A13=FALSE; A14=FALSE;
@@ -16,17 +16,32 @@ mBias=function(expr, data){
   #=============================myFun Starts!
   myFun=function(n, seed, checks){
     set.seed(seed)
-    newData=data[which(checks==TRUE)]
-    newData[[yvar]]=predict(origMod)
+    browser()
+    newData=resample(data, n)
+    newResids=resample(resid(origMod), n)
+    newData=newData[which(checks)+1]
+    newData[[yvar]]=predict(origMod, newdata=newData)
+    newData[[yvar]]=newData[[yvar]]+newResids
     newMod=lm(newData[[yvar]]~., data=newData)    #newMod from newData with only selected terms
-#actually we never use this right?    newCoefs=coef(newMod)
     newCIs=confint(newMod)
     limCIs=c(min(newCIs), max(newCIs))
     limCIs=c(min(newCIs)-.1*diff(range(limCIs)), max(newCIs)+.1*diff(range(limCIs)))
     levelNames=rownames(newCIs)
-    print(levelNames)
-    indexedCI=matrix(ncol=2, nrow=length(xvars.data))
-    row.names(indexedCI)=names(xvars.data)
+
+    coefs=c(rep(0, length(levelNames)))
+    coefs[which(levelNames==names(origCoefs))]=origCoefs[which(levelNames==names(origCoefs))]
+    
+#    coefs[which(levelNames!=names(origCoefs))]=0
+#     for(z in 1:length(levelNames)){      #coefs is a vector of origCoefs with indices same as newData
+#       if(levelNames[z]==names(origCoefs)){
+#         coefs[z]=origCoefs[which(levelNames[z]==names(origCoefs))]
+#       }
+#       else
+#         coefs[z]=0
+#     }
+#     coefs[[names(newData)]]=0
+#     coefs[[names(origCoefs)]]=origCoefs[[names(origCoefs)]]
+    browser()
     plot( 1:2, type="n", ylim=.5+c(0,nrow(newCIs)),xlim=c(0,1),xaxt="n",yaxt="n",
          ylab="",xlab="",bty="n")
     
@@ -48,12 +63,13 @@ mBias=function(expr, data){
       points(mean(c(low,high)),k, pch=20,col="red",cex=2)
       text( c(low,high),c(k,k),c("(",")"),col="red")
       lines( c(low,high),c(k,k),lwd=3,col=rgb(1,0,0,.5))
-      text( 0, k, name, pos=3)
+      text( 0.05, k, name, pos=3)
     }
     #=====================End draw.CI.axis function
     for(b in 1:nrow(newCIs)){
-      draw.CI.axis( 0, newCIs[b,1], newCIs[b,2], b, levelNames[b] )
+      draw.CI.axis( coefs[b], newCIs[b,1], newCIs[b,2], b, levelNames[b] )
     }
+
   }
   #=========================myFun ends noooooo
   controls=list(n=slider(5, 500, step=1, initial=100, label="n points to sample"),
