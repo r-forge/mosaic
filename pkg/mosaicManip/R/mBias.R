@@ -16,20 +16,19 @@ mBias=function(expr, data){
   #=============================myFun Starts!
   myFun=function(n, seed, checks){
     set.seed(seed)
-    browser()
     newData=resample(data, n)
+    newData[[yvar]]=NULL
     newResids=resample(resid(origMod), n)
-    newData=newData[which(checks)+1]
-    newData[[yvar]]=predict(origMod, newdata=newData)
-    newData[[yvar]]=newData[[yvar]]+newResids
-    newMod=lm(newData[[yvar]]~., data=newData)    #newMod from newData with only selected terms
+    foo=predict(origMod, newdata=newData)+newResids
+    newData=newData[which(checks)]
+    newData[["newname"]]=foo
+    newMod=lm(newname ~., data=newData)    #newMod from newData with only selected terms
     newCIs=confint(newMod)
     limCIs=c(min(newCIs), max(newCIs))
     limCIs=c(min(newCIs)-.1*diff(range(limCIs)), max(newCIs)+.1*diff(range(limCIs)))
     levelNames=rownames(newCIs)
-
     coefs=c(rep(0, length(levelNames)))
-    coefs[which(levelNames==names(origCoefs))]=origCoefs[which(levelNames==names(origCoefs))]
+    coefs[which(levelNames %in% names(origCoefs))]=origCoefs[which(levelNames %in% names(origCoefs))]
     
 #    coefs[which(levelNames!=names(origCoefs))]=0
 #     for(z in 1:length(levelNames)){      #coefs is a vector of origCoefs with indices same as newData
@@ -41,7 +40,7 @@ mBias=function(expr, data){
 #     }
 #     coefs[[names(newData)]]=0
 #     coefs[[names(origCoefs)]]=origCoefs[[names(origCoefs)]]
-    browser()
+
     plot( 1:2, type="n", ylim=.5+c(0,nrow(newCIs)),xlim=c(0,1),xaxt="n",yaxt="n",
          ylab="",xlab="",bty="n")
     
@@ -50,9 +49,11 @@ mBias=function(expr, data){
       left = min(true,low) - 0.66*abs(high-low)
       right = max(true,high) + 0.66*abs(high-low)
       ticks = signif(pretty( c(left,right), n=5),5)
+      print(ticks)
       axis( side=1,pos=k,at=seq(0,1,length=length(ticks)),
           labels=paste(ticks))
       # convert the units
+      browser()
       axis.left = min(ticks)
       axis.right = max(ticks)
       do.convert = function(val,left,right){ (val - left)/abs(right-left)}
@@ -72,7 +73,10 @@ mBias=function(expr, data){
 
   }
   #=========================myFun ends noooooo
-  controls=list(n=slider(5, 500, step=1, initial=100, label="n points to sample"),
+  first.val = ncol(data)*3+20 # heuristic to get enough degrees of freedom
+  step.size = round( max(1,nrow(data)/200)) # heuristic to get a nice number of steps
+  first.val = first.val - ((first.val + ncol(data)) %% step.size)
+  controls=list(n=slider(first.val, 5*nrow(data), step=step.size, initial=nrow(data), label="n points to sample"),
                 seed=slider(1,100,step=1, initial=sample(100,1), label="Random seed")
                 )
   for(a in 1:length(xvars.data)){
