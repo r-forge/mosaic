@@ -15,6 +15,15 @@ histogram = function(...){print(lattice::histogram(...))}
 
 \SweaveOpts{prefix.string=Figures/bakeoff,keep.source=TRUE}
 
+Is this appropriate as the
+2 sample t-test equiv?  
+\begin{verbatim}
+( do(10) * lm( cesd~shuffle(sex), data=HELP ) ) $sexmale
+  [1]  1.06088272  1.34230998  0.20436497 -0.17495003 -0.02811842   
+2.28447950
+  [7]  1.12206256  0.11871320 -0.40743342  0.03306142
+\end{verbatim}
+
 
 \begin{document}
 
