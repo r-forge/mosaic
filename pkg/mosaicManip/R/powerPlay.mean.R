@@ -1,4 +1,4 @@
-powerPlay.mean <- function()  {
+mPower <- function()  {
   data=NULL
   #=================
   myFun=function(mu=mu, sigma=sigma, n=n)

@@ -40,19 +40,12 @@ mBias=function(expr, data){
     limCIs=c(min(newCIs)-.1*diff(range(limCIs)), max(newCIs)+.1*diff(range(limCIs)))
     levelNames=rownames(newCIs)
     coefs=c(rep(0, length(levelNames)))
-    coefs[which(levelNames %in% names(origCoefs))]=origCoefs[which(levelNames %in% names(origCoefs))]
+    for(nm in names(origCoefs)){
+      if(nm %in% levelNames){
+        coefs[levelNames==nm]=origCoefs[names(origCoefs)==nm]
+      }
+    }
     
-#    coefs[which(levelNames!=names(origCoefs))]=0
-#     for(z in 1:length(levelNames)){      #coefs is a vector of origCoefs with indices same as newData
-#       if(levelNames[z]==names(origCoefs)){
-#         coefs[z]=origCoefs[which(levelNames[z]==names(origCoefs))]
-#       }
-#       else
-#         coefs[z]=0
-#     }
-#     coefs[[names(newData)]]=0
-#     coefs[[names(origCoefs)]]=origCoefs[[names(origCoefs)]]
-
     plot( 1:2, type="n", ylim=.5+c(0,nrow(newCIs)),xlim=c(0,1),xaxt="n",yaxt="n",
          ylab="",xlab="",bty="n")
     

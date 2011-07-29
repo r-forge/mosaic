@@ -111,11 +111,11 @@ mSDGame=function(){
     if(nxt==TRUE){
       iter<<-iter+1
       xyplot(dist~x, type = "l", panel=solPanel,
-             scales = list(x=list(cex=1.7)), 
+             scales = list(x=list(cex=1.7)), ylab="Probability",
              main=perc.text)
     }  
     else{
-    xyplot(dist~x, type = "l", panel=myPanel,
+    xyplot(dist~x, type = "l", panel=myPanel, ylab="Probability",
            scales = list(x=list(cex=1.7)))
     }
     
