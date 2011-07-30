@@ -205,6 +205,36 @@ xpnorm(1.96, 0, 1)
 @
 \end{center}
 
+\subsection{Inference for a single sample}
+
+We can calculate a 95\% confindence interval for the mean CESD 
+score for females by using a t-test:
+<<tinterval>>=
+t.test(female$cesd)
+@
+
+But it's also straightforward to calculate this using a bootstrap.
+The statistic that we want to resample is the mean.  
+<<calculuatemean>>=
+with( female, mean(cesd) )
+@
+
+One resampling trial can be carried out with
+<<resamplemean>>=
+with( resample(female), mean(cesd) )
+@
+Even though a single trial is of little use, it's a nice idea to have
+students do the calculation to show that they are getting a different
+(usually!) result than without resampling.
+
+Now conduct 1000 resampling trials, saving the results in an object
+called \texttt{trials}:
+<<bootint>>=
+trials = do(1000) *
+  with( resample(female), mean(cesd) )
+quantile(trials$mean, c(.025, .975))
+@
+
 \section{One Categorical Variable}
 
 \subsection{Numerical Summaries}
@@ -580,8 +610,13 @@ The \function{aggregate()} function can be used to calculate the mean CESD score
 for each of the two groups 
 <<aggregate>>=
 aggregate(cesd ~ sex, data=HELP, FUN=mean)
-aggregate(cesd ~ sex, data=HELP, FUN=favstats)
 @
+
+The \function{summary()} function can provide more statistics by group.
+<<summary>>=
+summary(cesd ~ sex, data=HELP, fun=favstats)
+@
+
 
 Boxplots are a particularly helpful graphical display to compare distributions.
 The \function{bwplot()} function can be used to display the boxplots for the

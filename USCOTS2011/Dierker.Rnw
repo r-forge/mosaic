@@ -322,7 +322,7 @@ source('setup.R')
 
 %\include{Chap-RIntro}
 
-%\include{Chap-Manipulate}
+\include{Chap-Manipulate}
 
 %\include{Chap-Multivariate}
 
