@@ -2,21 +2,21 @@
 \docType{methods}
 \alias{mean}
 \alias{mean-methods}
-\alias{mean,any-method}
+\alias{mean,ANY-method}
 \alias{mean,data.frame-method}
 \alias{mean,formula-method}
 \alias{mean,numeric-method}
 
 \alias{median}
 \alias{median-methods}
-\alias{median,any-method}
+\alias{median,ANY-method}
 \alias{median,data.frame-method}
 \alias{median,formula-method}
 \alias{median,numeric-method}
 
 \alias{sd}
 \alias{sd-methods}
-\alias{sd,any-method}
+\alias{sd,ANY-method}
 \alias{sd,data.frame-method}
 \alias{sd,formula-method}
 \alias{sd,numeric-method}
@@ -33,21 +33,21 @@
 
 \alias{max}
 \alias{max-methods}
-\alias{max,any-method}
+\alias{max,ANY-method}
 \alias{max,data.frame-method}
 \alias{max,formula-method}
 \alias{max,numeric-method}
 
 \alias{min}
 \alias{min-methods}
-\alias{min,any-method}
+\alias{min,ANY-method}
 \alias{min,data.frame-method}
 \alias{min,formula-method}
 \alias{min,numeric-method}
 
 \alias{prop}
 \alias{prop-methods}
-\alias{prop,any-method}
+\alias{prop,ANY-method}
 \alias{prop,data.frame-method}
 \alias{prop,formula-method}
 \alias{prop,logical-method}
@@ -55,7 +55,7 @@
 
 \alias{count}
 \alias{count-methods}
-\alias{count,any-method}
+\alias{count,ANY-method}
 \alias{count,data.frame-method}
 \alias{count,formula-method}
 \alias{count,logical-method}

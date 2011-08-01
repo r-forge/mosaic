@@ -1,7 +1,4 @@
 \name{undocumented}
-\alias{dotPlot}
-\alias{panel.dotPlot}
-\alias{surround}
 \alias{adapt_seq}
 \alias{latlon2xyz}
 \alias{xyz2latlon}
@@ -12,7 +9,6 @@
 \alias{mosaic.options} 
 \alias{mosaic.par.get} 
 \alias{mosaic.par.set}
-\alias{updateList}
 
 \title{Undocumented Objects}
 
