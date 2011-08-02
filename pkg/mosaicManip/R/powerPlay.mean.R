@@ -34,6 +34,5 @@ mPower <- function()  {
   #controls$seed=slider(1,100, step=1, initial=1)
                  
   manipulate(myFun(mu=mu, sigma=sigma, n=n),
-             controls
-             )
+             controls)
 }
