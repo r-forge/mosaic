@@ -2,7 +2,7 @@
 \alias{mDensity}
 \title{Interactive applet to explore density plots}
 \description{
-An applet which lets the user manipulate the bandwidth of a density plot and apply different transformations to 
+An applet which lets the user manipulate the bandwidth of a density plot and apply different transformations to examine how density plots reflect smoothed data. 
 }
 \usage{
 mDensity(data=NULL)
