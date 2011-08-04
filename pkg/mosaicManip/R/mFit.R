@@ -111,11 +111,11 @@ myPlot = function(k=k, n=n, P=P, mu1=mu1,mu2=mu2,mu3=mu3,mu4=mu4,mu5=mu5,
             }
     if(instructor[6]) #exp
       controls$k=slider(-2,2, step = .05, initial=0.1)
-    if(instructor[7]|instructor[8]){ #sin, cos
-      controls$P=slider(.1,10, step = .01, initial = 5) 
+    if(instructor[12]|instructor[13]){ #sin, cos
+      controls$P=slider(.1,50, step = .01, initial = 5) 
       controls$n=slider(1,20, step = 1, initial = 1)} 
     for(b in 1:5){ #pnorms
-        if(instructor[b+8])        
+        if(instructor[b+6])        
         controls[[paste("mu",b,sep="")]] = slider(min(xvals),max(xvals), step =.1, initial = min(xvals)+b*diff(range(xvals))/6)
     }
            if(instructor[9]) controls$sd = slider(0.1, diff(range(xvals))/2, step = .1, initial = diff(range(xvals))/4)
