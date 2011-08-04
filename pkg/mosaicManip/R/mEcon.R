@@ -13,8 +13,10 @@ mEcon=function(xlim=c(0,20)){
     xx=x     #To avoid duplication in the polygons in the panel function
     panel=function(x,y,...){
       panel.xyplot(x,y,...)
-      llines(x=c(xEquil, -999999), y=c(yEquil, yEquil), lty=2, col="black")
-      llines(x=c(xEquil, xEquil), y=c(yEquil, -999999), lty=2, col="black")
+      llines(x=c(xEquil, -999999), y=c(yEquil, yEquil), lty=1.5, col="black")
+      llines(x=c(xEquil, xEquil), y=c(yEquil, -999999), lty=1.5, col="black")
+      lpoints(x=c(10, 20), y=c(sup1, sup2), col="blue", cex=1.5)
+      lpoints(x=c(10, 20), y=c(dem1, dem2), col="red", cex=1.5)
       leftx=xx[xx<=xEquil]
       ySup=c(supFun(leftx), rep(yEquil, length(leftx)))
       xpts=c(min(leftx),leftx,max(leftx))
