@@ -2,10 +2,10 @@ mEcon=function(xlim=c(0,20)){
   if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
   x=seq(min(xlim), max(xlim), length=1000)
   myFun=function(sup1, sup2, dem1, dem2){
-    supFun=splinefun(c(0,10,20), y=c(0, sup1, sup2)) 
-    demFun=splinefun(c(0,10,20), y=c(50, dem1, dem2))
+    supFun=splinefun(c(0,mean(x),max(x)), y=c(0, sup1, sup2)) 
+    demFun=splinefun(c(0,mean(x),max(x)), y=c(50, dem1, dem2))
     func=function(x){supFun(x)-demFun(x)}
-    equil=uniroot(func, interval=c(0,20)) #Solve for equil qty.
+    equil=uniroot(func, interval=xlim) #Solve for equil qty.
     xEquil=equil$root
     yEquil=supFun(xEquil)
     Supply=supFun(x)          #making my life easy with auto.key by naming vars Supply and Demand
@@ -13,10 +13,10 @@ mEcon=function(xlim=c(0,20)){
     xx=x     #To avoid duplication in the polygons in the panel function
     panel=function(x,y,...){
       panel.xyplot(x,y,...)
-      llines(x=c(xEquil, -999999), y=c(yEquil, yEquil), lty=1.5, col="black")
-      llines(x=c(xEquil, xEquil), y=c(yEquil, -999999), lty=1.5, col="black")
-      lpoints(x=c(10, 20), y=c(sup1, sup2), col="blue", cex=1.5)
-      lpoints(x=c(10, 20), y=c(dem1, dem2), col="red", cex=1.5)
+      llines(x=c(xEquil, -999999), y=c(yEquil, yEquil), lty=2, col="black")
+      llines(x=c(xEquil, xEquil), y=c(yEquil, -999999), lty=2, col="black")
+      lpoints(x=c(mean(x), max(x)), y=c(sup1, sup2), col="blue", cex=1.5)
+      lpoints(x=c(mean(x), max(x)), y=c(dem1, dem2), col="red", cex=1.5)
       leftx=xx[xx<=xEquil]
       ySup=c(supFun(leftx), rep(yEquil, length(leftx)))
       xpts=c(min(leftx),leftx,max(leftx))

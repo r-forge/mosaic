@@ -86,11 +86,6 @@ myPlot = function(k=k, n=n, P=P, mu1=mu1,mu2=mu2,mu3=mu3,mu4=mu4,mu5=mu5,
     mypanel = function(x, y){
       panel.xyplot(x, y, pch = 16)
       panel.xyplot(bigx, bigy, type = "l", col=line.red, lwd = 5)
-#       grid.text(paste("RMS Error: ", signif(RMS, 3)), 
-#                 x = unit(0, "npc")+unit(1, "mm"),
-#                 y = unit(1, "npc")-unit(2, "mm"),
-#                 just = "left",
-#                 gp = gpar(col = "red", fontsize =10))
       }
   #PLOTTING F'REAL
       

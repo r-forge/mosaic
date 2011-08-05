@@ -5,9 +5,10 @@
 An applet applying integrals to the economic concepts of supply and demand. 
 }
 \usage{
-mEcon()
+mEcon(xlim=c(0,20))
 }
 \arguments{
+  \item{xlim}{The range of points to plot on the Quantity axis. By default, it       is set to be c(0,20).}
 }
 \details{
 Two splines are created from the sliders. The first points of the spline are anchored at x=0, y=0 for the supply spline, and x=0, y=50 for the demand spline. The sliders allow the user to manipulate the y points which determine the splines at x=10 and x=20. The area between the equilibrium point and the splines is shaded. In perfect competition, the area above the supply spline and below the equilibrium point is the producer surplus, and the area below the demand spline and above the equilibrium point is the consumer surplus.
