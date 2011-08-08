@@ -26,6 +26,7 @@ mFit(expr, data, instructor=rep(TRUE, 13), ...)
   12. sin(x)
   13. cos(x)
   }
+  \item{...}{Extra arguments to be passed to the functions described in \code{instructor}. Mostly these will not be evaluated.}
 }
 \details{
 This function attempts to fit a linear combination of the selected terms to the data plotted. Terms are selected by clicking the corresponding checkbox. There are sliders only for nonlinear parameters.  Linear coefficients are found automatically.  Only a function of one variable is supported at present. By checking each checkbox, the term is added to the fitted function, and the linear fit of the selected terms is updated. The instructor argument allows an instructor to hide certain terms such that a lesson may be geared towards specific subjects without distraction. \code{mFitSines}, \code{mFitSigmoidal}, and \code{mFitPoly} are premade wrappers that select only the constant, x, and sines and cosines terms, the pnorm terms, and the polynomial terms, respectively. 

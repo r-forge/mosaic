@@ -12,7 +12,8 @@ mBayes=function(dat, ...){
   posterior.text = rgb(1,.5,0,1)
   
   
-  myFun = function(pick.prior=pick.prior, min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis){
+  myFun = function(pick.prior=pick.prior, min=min, max=max, 
+                   samp.size=samp.size, log.yaxis=log.yaxis){
     theta.pts = seq(0, 1, length = nthetapts)
     uniform =function(theta){
       if(min>max) {cat("Don't cross the streams!")}
@@ -37,7 +38,8 @@ mBayes=function(dat, ...){
       llines(x, scaled.likeli, col = "red", lwd = 2)
       #Likelihood text
       x.like.max = x[which(scaled.likeli==max(scaled.likeli))]
-      grid.text(x= unit(x.like.max,"native"), y = unit(max(scaled.likeli)*0.7,"native"), label = "Likelihood", rot = 270, gp = gpar(col = "red"))
+      grid.text(x= unit(x.like.max,"native"), y = unit(max(scaled.likeli)*0.7,"native"), 
+                label = "Likelihood", rot = 270, gp = gpar(col = "red"))
       ltext(x=x.like.max, y = max(scaled.likeli)*1.2, 
             label= paste("theta =", signif(x.like.max, 3),
                          "\nProb =", signif( max(likeli.pts), 3)),
@@ -58,13 +60,13 @@ mBayes=function(dat, ...){
       #Posterior Text:
       x.post.max = x[which(posterior.pts ==max(posterior.pts))]
       y.post.max = posterior.pts[which(posterior.pts ==max(posterior.pts))]
-      ltext(x=x.post.max, y = 1*y.post.max, col = posterior.text, label = paste("Posterior:\n",
-                                                                       expression(theta),"=",signif(x.post.max,3),
-                                                                       "\nProb =", signif(y.post.max,3)))
+      ltext(x=x.post.max, y = 1*y.post.max, col = posterior.text, 
+            label = paste("Posterior:\n",expression(theta),"=",signif(x.post.max,3),
+                          "\nProb =", signif(y.post.max,3)))
       
     }
     
-    xyplot(prior.pts~theta.pts, panel = mypanel, ylim = c(0,1.1*max(posterior.pts)), 
+    xyplot(prior.pts~theta.pts, panel = mypanel, ylim = c(0,1.1*max(posterior.pts, )), 
            xlab = expression(theta),ylab = "Probability Density",
            scales = list(x = list(log = FALSE), log=log.yaxis))
     #The scales argument should accept a list, and x and y can be separate lists.
@@ -72,7 +74,7 @@ mBayes=function(dat, ...){
   }
   
   manipulate(myFun(pick.prior=pick.prior, min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis),
-             pick.prior= picker("Uniform" = 1, "Beta"=2, label = "Prior Distribution", initial = "Beta"),
+             pick.prior= picker("Beta"=2, "Uniform" = 1, label = "Prior Distribution", initial = "Beta"),
              min = slider(0.1, 1, initial = .3, label = "Parameter 1"), #don't cross the streams!
              max = slider(0.1, 1, initial = .8, label = "Parameter 2"),
              samp.size = slider(1, 2*length(dat), label = "Sample Size", initial=.4*length(dat)),

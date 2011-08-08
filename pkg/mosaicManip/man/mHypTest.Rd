@@ -7,7 +7,7 @@ Interactive display for hypothesis testing concepts.
 Displays a sampling distribution and calculates power.
 }
 \usage{
-manipHypTest(doF=FALSE)
+mHypTest(doF=FALSE)
 }
 \arguments{
   \item{doF}{Show the F distribution.  Default: a t-distribution for the sample statistic.}

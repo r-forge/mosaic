@@ -9,9 +9,9 @@ m2Fit(expr, ..., xlim = c(0,1), ylim = c(0,1))
 }
 \arguments{
   \item{expr}{A mathematical formula of two variables of the form f(x,y)~x&y)
+  \item{\dots}{Extra arguments to be passed with \code{expr} as part of the mathematical function. Generally these are not evaluated.}
   \item{xlim}{The limits of the x axis.}
   \item{ylim}{The limits of the y axis.}
-  \item{...}{Extra arguments to be passed with \code{expr} as part of the mathematical function. Generally these are not evaluated.}
 }
 \details{
 The x and y sliders change where in the plane the circle is centered, and the radius slider adjusts how large the circle of fitted values is. Each checkbox adds the indicated term to the fitted function. The circle transparency slider controls the transparency of the circle, where 1 is opaque and 0 is invisible - it is an alpha transparency. Number of pixels controls how many points are in the square grid upon which the function is calculated. m2Fit may run slower at higher pixel counts. Approximate number of contour lines is a slider that controls the number of contour lines through the \code{pretty} algorithm such that they are evenly spaced at nice intervals.
