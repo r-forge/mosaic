@@ -1,6 +1,6 @@
 # Phase-Plane Software
 # revise should be a push-button
-mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
+mPP = function( DE=.predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
   on.exit()
   # Storage for the trajectories.  Starts out empty
@@ -169,11 +169,11 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     TS[[1]]$system <<- DE
     # Find the forward trajectory
     if( tdur > 0 )
-      TS[[1]]$forward <<- solve.DE( DE, init=initCond, tlim=c(0,tdur) )
+      TS[[1]]$forward <<- .solve.DE( DE, init=initCond, tlim=c(0,tdur) )
     else TS[[1]]$forward <<- NULL
     # Solve the trajectory backward here.  (Does solve.DE do this?  Add a backward flag!)
     if (tback < 0 )
-      TS[[1]]$back <<- solve.DE( DE, init=initCond, tlim=c(0,tback) )
+      TS[[1]]$back <<- .solve.DE( DE, init=initCond, tlim=c(0,tback) )
     else TS[[1]]$back <<- NULL
       
     TS[[Ntraj]]$init <<- TS[[1]]$init
@@ -228,7 +228,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       # Plot out the flow field
       flow.plot( TS[[flowWhat]]$system, xlim=xlim, ylim=ylim)
       # Plot out the nullclines
-      if( nullclines ) show.nullclines()
+      if( nullclines ) .show.nullclines()
       # plot out the trajectories
       # NEED TO DO BOTH FORWARD AND BACKWARD, maybe alpha different for backward, or darken a bit
       # here is the forward one

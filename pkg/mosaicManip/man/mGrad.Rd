@@ -8,7 +8,7 @@ Displays the level plot, contour plot, and gradient field of a given two-dimensi
 mGrad(expr, ..., xlim = c(0,10), ylim = c(0,10))
 }
 \arguments{
-  \item{expr}{A mathematical formula of two variables of the form f(x,y)~x&y)
+  \item{expr}{A mathematical formula of two variables of the form f(x,y)~x&y)}
   \item{\dots}{Extra arguments to be passed with \code{expr} as part of the mathematical function. Generally these are not evaluated.}
   \item{xlim}{The limits of the x axis.}
   \item{ylim}{The limits of the y axis.}

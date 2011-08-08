@@ -66,9 +66,9 @@ mBayes=function(dat, ...){
       
     }
     
-    xyplot(prior.pts~theta.pts, panel = mypanel, ylim = c(0,1.1*max(posterior.pts, )), 
+    xyplot(prior.pts~theta.pts, panel = mypanel, ylim = c(0,1.1*max(posterior.pts, prior.pts)), 
            xlab = expression(theta),ylab = "Probability Density",
-           scales = list(x = list(log = FALSE), log=log.yaxis))
+           scales = list(y=list(log=log.yaxis)))
     #The scales argument should accept a list, and x and y can be separate lists.
     #On the internet I see many instances of y=list(log=TRUE) being the correct syntax. Not sure what's up.
   }

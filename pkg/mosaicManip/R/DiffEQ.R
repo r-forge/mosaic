@@ -1,41 +1,41 @@
 ### Written in Dec. 2010 by DTK ###
 
-reset.dyn.functions = function() {
+.reset.dyn.functions = function() {
  fhn <<-  function(voltage,recovery){
   d.voltage = -voltage*(voltage-0.3)*(voltage-1) - recovery;
   d.recovery = 1*(voltage - 2.5*recovery);
   return( c(d.voltage, d.recovery) );
  }
- predator.prey <<- function(pred=0,prey=0){
+ .predator.prey <<- function(pred=0,prey=0){
    dpred = (1 - 0.001*prey)*pred;
    dprey = (-1 + 0.001*pred)*prey;
    return( c(dpred=dpred, dprey=dprey))
  }
- competition <<-  function(x,y){
+ .competition <<-  function(x,y){
     dx = 2*(1-(x+y)/1000)*x;
     dy = 2*(1-(x+y)/500)*y;
     return( c(dx, dy) );
   }
- newton.cooling <<- function(obj,env){
+ .newton.cooling <<- function(obj,env){
   d.env = 1*(env-obj);
   d.obj = 1*(obj-env)/Inf;
   return( c(d.env, d.obj) );
  }
- SIR <<- function(suscept,infective){
+ .SIR <<- function(suscept,infective){
   dsuscept = 1-2*suscept*infective;
   dinfective = 2*suscept*infective - 1*infective;
   return( c(dsuscept, dinfective) );
  }
- RJ <<- function(Romeo, Juliet){
+ .RJ <<- function(Romeo, Juliet){
   dRomeo <- 1*Romeo + 2*Juliet
   dJuliet <- 2*Romeo + 1*Juliet
   return( c(dRomeo, dJuliet) );
  }
 }
 
-reset.dyn.functions() 
+.reset.dyn.functions() 
 
-make.predator.prey <- function(lambda=1, epsilon=.001,delta=1, eta=.001){
+.make.predator.prey <- function(lambda=1, epsilon=.001,delta=1, eta=.001){
 function(prey=0,pred=0){
    dprey <- (lambda - epsilon*pred)*prey;
    dpred <- (-delta + eta*prey)*pred;
@@ -43,7 +43,7 @@ function(prey=0,pred=0){
  }
 }
 # =====================================
-make.competition <- function(mu=2, lambda=2, Kx=1000, Ky=500) {
+.make.competition <- function(mu=2, lambda=2, Kx=1000, Ky=500) {
   function(x,y){
     dx <- mu*(1-(x+y)/Kx)*x;
     dy <- lambda*(1-(x+y)/Ky)*y;
@@ -51,7 +51,7 @@ make.competition <- function(mu=2, lambda=2, Kx=1000, Ky=500) {
   }
 }
 # =====================================
-make.fhn <- function(gamma=2.5, epsilon=1, a=0.3) {
+.make.fhn <- function(gamma=2.5, epsilon=1, a=0.3) {
  function(voltage,recovery){
   d.voltage <- -voltage*(voltage-a)*(voltage-1) - recovery;
   d.recovery <- epsilon*(voltage - gamma*recovery);
@@ -63,7 +63,7 @@ make.fhn <- function(gamma=2.5, epsilon=1, a=0.3) {
 # =====================================
 # a1 and a2 are inverse heat capacities
 # env.size is the size of the environment relative to the object
-make.newtoncooling <- function(a1=1,a2=1,env.size=Inf) {
+.make.newtoncooling <- function(a1=1,a2=1,env.size=Inf) {
 function(obj,env){
   d.env <- a1*(env-obj);
   d.obj <- a2*(obj-env)/env.size;
@@ -71,7 +71,7 @@ function(obj,env){
 }
 }
 # =====================================
-make.SIR <- function(b=1,mu=1,C=2){
+.make.SIR <- function(b=1,mu=1,C=2){
 function(suscept,infective){
   dsuscept <- b-C*suscept*infective;
   dinfective <- C*suscept*infective - mu*infective;
@@ -79,7 +79,7 @@ function(suscept,infective){
 }
 }
 # =====================================
-make.RJ <- function(a,b,c,d) {
+.make.RJ <- function(a,b,c,d) {
 function(Romeo, Juliet){
   dRomeo <- a*Romeo + b*Juliet
   dJuliet <- c*Romeo + d*Juliet
@@ -87,7 +87,7 @@ function(Romeo, Juliet){
 }
 }
 # =====================================
-show.traj = function(tdur=1, col="red",add=TRUE,x=NULL,y=NULL) {
+.show.traj = function(tdur=1, col="red",add=TRUE,x=NULL,y=NULL) {
   fun = current.dyn.system
   if( is.null(x) | is.null(y) ){
     cat("Click on the initial condition.\n")
@@ -103,7 +103,7 @@ show.traj = function(tdur=1, col="red",add=TRUE,x=NULL,y=NULL) {
   invisible(soln$funs)
 }
 # =====================================
-show.nullclines = function(levels=c(0),resol=51,lwd=2) {
+.show.nullclines = function(levels=c(0),resol=51,lwd=2) {
   fun = current.dyn.system
   foo = current.panel.limits()
   xlim=foo$xlim; ylim=foo$ylim
@@ -119,7 +119,7 @@ show.nullclines = function(levels=c(0),resol=51,lwd=2) {
 
 # =====================================
 # Jacobian at a point.
-jacobianAtPoint <- function(fun=NULL,x=NULL, y=NULL,h=0.000001){
+.jacobianAtPoint <- function(fun=NULL,x=NULL, y=NULL,h=0.000001){
 if (is.null(fun) )  fun = current.dyn.system
 if (is.null(x) | is.null(y)) {
   x0 <- locator(n=1);
@@ -138,7 +138,7 @@ if (is.null(x) | is.null(y)) {
 
 
 # =====================================
-traj.plot = function(soln, n=1001, col="red") {
+.traj.plot = function(soln, n=1001, col="red") {
   t = seq( soln$tlim[1], soln$tlim[2], length=n )
   one = soln[[1]](t)
   two = soln[[2]](t)
@@ -150,7 +150,7 @@ traj.plot = function(soln, n=1001, col="red") {
 # =====================================
 # plots out one or more solutions.
 # The ... argument is the set of solutions to plot.
-soln.plot = function(..., colfun=rainbow) {
+.soln.plot = function(..., colfun=rainbow) {
   layout(rbind(1,2))
   solns = list(...)
   
@@ -178,7 +178,7 @@ soln.plot = function(..., colfun=rainbow) {
   layout(1)
 }
 # =====================================
-flow.plot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
+.flow.plot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
   add=FALSE,EW=NULL,NS=NULL,both=TRUE) {
   current.dyn.system <<- fun
   arg.names = names(formals(fun) )
@@ -229,7 +229,7 @@ flow.plot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
 
 # =====================================
 # integrate a DE
-solve.DE = function(fun, init=NULL, tlim=c(0,1), dataframe=FALSE ) {
+.solve.DE = function(fun, init=NULL, tlim=c(0,1), dataframe=FALSE ) {
   if( is.null( init ) )
     stop("Must provide initial condition.")
 
@@ -267,7 +267,7 @@ solve.DE = function(fun, init=NULL, tlim=c(0,1), dataframe=FALSE ) {
   if( "t" %in% dyn.args ) {
     if (dyn.init["t"] == 0) dyn.init["t"] = min(tlim)
   }  
-  foo = rk( fcall, dyn.init, tstart=tlim[1],tend=tlim[2] )
+  foo = .rk( fcall, dyn.init, tstart=tlim[1],tend=tlim[2] )
   # return interpolating functions
   res = list()
   for (k in 1:length(dyn.init) ) res[[k]] = approxfun( foo$t, foo$x[,k])
@@ -288,7 +288,7 @@ solve.DE = function(fun, init=NULL, tlim=c(0,1), dataframe=FALSE ) {
 }
 # ========================
 # Runge-Kutta integration
-rk <- function(fun,x0,tstart=0,tend=1) {
+.rk <- function(fun,x0,tstart=0,tend=1) {
   dt <- if( tend > 0 ) min(.01, (tend - tstart)/100)
         else max(-.01, (tend-tstart)/100)
   nsteps <- round( .5+(tend-tstart)/dt);

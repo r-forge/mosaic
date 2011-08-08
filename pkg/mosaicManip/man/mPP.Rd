@@ -5,7 +5,7 @@
 Displays a phase plane of two variables and their phase portraits against \code{t}
   }
 \usage{
-mPP(DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000))
+mPP(DE=.predator.prey, xlim=c(-10,2000),ylim=c(-10,2000))
 }
 \arguments{
   \item{DE}{A function object containing the differential equation to be solved.}

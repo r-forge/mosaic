@@ -8,7 +8,7 @@ Displays a shaded level and contour plot. A circle in which z values are fitted 
 m2Fit(expr, ..., xlim = c(0,1), ylim = c(0,1))
 }
 \arguments{
-  \item{expr}{A mathematical formula of two variables of the form f(x,y)~x&y)
+  \item{expr}{A mathematical formula of two variables of the form f(x,y)~x&y)}
   \item{\dots}{Extra arguments to be passed with \code{expr} as part of the mathematical function. Generally these are not evaluated.}
   \item{xlim}{The limits of the x axis.}
   \item{ylim}{The limits of the y axis.}
