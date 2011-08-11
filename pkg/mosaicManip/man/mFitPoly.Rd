@@ -15,7 +15,7 @@ mFitPoly(expr, data, ...)
   }
 }
 \details{
-A premade wrapper for \code{mFit} such that only the constant, $x, x^2, x^3, \log{x}$, and $\exp{kx}$terms are displayed. See \code{mFit} for more details. 
+A premade wrapper for \code{mFit} such that only the constant, x, x^2, x^3, log(x), and e^(kx) terms are displayed. See \code{mFit} for more details. 
 }
 \value{
 A function that implements the current state of the parameters and terms selected.
