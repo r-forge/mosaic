@@ -77,7 +77,7 @@ mBayes=function(dat, ...){
              pick.prior= picker("Beta"=2, "Uniform" = 1, label = "Prior Distribution", initial = "Beta"),
              min = slider(0.1, 1, initial = .3, label = "Parameter 1"), #don't cross the streams!
              max = slider(0.1, 1, initial = .8, label = "Parameter 2"),
-             samp.size = slider(1, 2*length(dat), label = "Sample Size", initial=.4*length(dat)),
+             samp.size = slider(1, min(2*length(dat), 1000), label = "Sample Size", initial=.4*length(dat)),
              log.yaxis = checkbox(FALSE, label = "Logarithmic y-axis")
              )
 }

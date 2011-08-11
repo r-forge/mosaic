@@ -10,7 +10,7 @@ mSDGame=function(){
   trans.guess.col=rgb(0,0,1,.2)
   trans.actual.col=rgb(0,1,0,.2)
   
-  iter<<-sample(1:100000, 1)
+  iter<<-sample(1:100000, 1) #replace with manipulatorGetState
   x=seq(-10,10, length=1000)
 #========================  
   myFun=function(guess.sd, myDist, nxt){

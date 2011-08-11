@@ -1,6 +1,6 @@
 # Phase-Plane Software
 # revise should be a push-button
-mPP = function( DE=.predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
+mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
   on.exit()
   # Storage for the trajectories.  Starts out empty
@@ -210,9 +210,9 @@ mPP = function( DE=.predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
         if(doJacob==1) 
           jake = jacobian(fun=TS[[Ntraj]]$forward$dynfun, x=xstart, y=ystart)
         if(doJacob==2)
-          jake = jacobian(fun=TS[[Ntraj]]$forward$dynfun, x=.tmax, y=TS[[Ntraj]]$forward(.tmax))
+          jake = jacobian(fun=TS[[Ntraj]]$forward$dynfun, x=.tmax, y=(.tmax))
         if(doJacob==3)
-          jake = jacobian(fun=TS[[Ntraj]]$back$dynfun, x=.tmin, y=TS[[Ntraj]]$back(.tmin))
+          jake = jacobian(fun=TS[[Ntraj]]$back$dynfun, x=.tmin, y=(.tmin))
         eig=eigen(jake)
         print("Jacobian Matrix")
         print(jake)
