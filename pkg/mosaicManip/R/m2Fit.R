@@ -67,7 +67,6 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       endparam = max(0,min(1,bigend - (bigend-bigstart)*(maxbig-maxsmall)/(maxbig-minbig)))
       RMS = sqrt(mean((newvals-zvals)^2)*pi*radius^2)
       mylevels = pretty(range(.zset),nlevels)   #number of contours
-      browser()
       #Plotting!
       image( .xset, .yset, .zset, col=rainbow(npts, alpha=0.8, start=bigstart, end=bigend),
              add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
@@ -95,6 +94,3 @@ manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes
            nlevels = slider(5, 50, initial = 20, label = "Approx. number of contour lines")
            )
 }
-
-#Take out col.scheme
-#x and y axis reversed

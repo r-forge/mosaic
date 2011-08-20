@@ -66,9 +66,11 @@ mInfluence=function(expr, data){
   #==================
   controls=list(xpick=picker(xvar, label="Dep. Variable to plot"),
                 newPoint=checkbox(FALSE, label="Add new point"),
-                multX=slider(-5, 5, initial=1, label="New x"),
-                multY=slider(-5, 5, initial=1, label="New y"),
-                influPick=picker(cooks.distance="Cook's Distance", label="Type of Influence")
+                multX=slider(-5, 5, initial=1, label="New x (measured in SDs)"),
+                multY=slider(-5, 5, initial=1, label="New y (measured in SDs)")
+            ##    influPick=picker(cooks.distance="Cook's Distance", label="Type of Influence")
+            ## Influence picker never implemented, Influence calculated by
+            ## influence.measures is.inf    
                 )
   manipulate(myFun(xpick=xpick, multY=multY, multX=multX, newPoint=newPoint), 
              controls)
