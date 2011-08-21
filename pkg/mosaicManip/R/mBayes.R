@@ -31,6 +31,11 @@ mBayes=function(dat, ...){
     likeli.pts = exp(LL.pts)
     posterior.pts = prior.pts*likeli.pts
     posterior.pts = posterior.pts/mean(posterior.pts)
+    if(log.yaxis){
+      prior.pts= log(prior.pts) 
+      posterior.pts= log(posterior.pts)
+     # likeli.pts=LL.pts
+    } 
     mypanel = function(x,y){
       lpolygon(c(0,x,1),y=c(0,y,0), col=rgb(0,0,1,.1), border = FALSE)
       lpolygon(c(0,x,1), c(0,posterior.pts,0), col = posterior.poly, border=FALSE)  
@@ -67,8 +72,8 @@ mBayes=function(dat, ...){
     }
     
     xyplot(prior.pts~theta.pts, panel = mypanel, ylim = c(0,1.1*max(posterior.pts, prior.pts)), 
-           xlab = expression(theta),ylab = "Probability Density",
-           scales = list(y=list(log=log.yaxis)))
+           xlab = expression(theta),ylab = "Probability Density")
+        ##   scales = list(y=list(log=log.yaxis)))
     #The scales argument should accept a list, and x and y can be separate lists.
     #On the internet I see many instances of y=list(log=TRUE) being the correct syntax. Not sure what's up.
   }
