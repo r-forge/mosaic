@@ -69,8 +69,9 @@ fetchData = function(name=NULL,
     # If not found on the web search path or in the local library, try packages.
     # This is just for convenience.  Strip .csv from the end of the string if it's there
     foo = gsub(".csv$|.CSV$","",name)
+    browser()
     suppressWarnings( data(list=c(foo)) )
-    if (exists(foo)) return(foo) 
+    if (exists(foo)) return(get(foo)) 
     if (is.null(res) | class(res) == "try-error" )
       stop("Can't locate file ",name )
   }
