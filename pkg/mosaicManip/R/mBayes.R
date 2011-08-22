@@ -13,7 +13,7 @@ mBayes=function(dat, ...){
   
   
   myFun = function(pick.prior=pick.prior, min=min, max=max, 
-                   samp.size=samp.size, log.yaxis=log.yaxis){
+                   samp.size=samp.size){
     theta.pts = seq(0, 1, length = nthetapts)
     uniform =function(theta){
       if(min>max) {cat("Don't cross the streams!")}
@@ -31,11 +31,11 @@ mBayes=function(dat, ...){
     likeli.pts = exp(LL.pts)
     posterior.pts = prior.pts*likeli.pts
     posterior.pts = posterior.pts/mean(posterior.pts)
-    if(log.yaxis){
-      prior.pts= log(prior.pts) 
-      posterior.pts= log(posterior.pts)
-     # likeli.pts=LL.pts
-    } 
+#     if(log.yaxis){
+#       prior.pts= log(prior.pts) 
+#       posterior.pts= log(posterior.pts)
+#      # likeli.pts=LL.pts
+#    } 
     mypanel = function(x,y){
       lpolygon(c(0,x,1),y=c(0,y,0), col=rgb(0,0,1,.1), border = FALSE)
       lpolygon(c(0,x,1), c(0,posterior.pts,0), col = posterior.poly, border=FALSE)  
@@ -78,11 +78,12 @@ mBayes=function(dat, ...){
     #On the internet I see many instances of y=list(log=TRUE) being the correct syntax. Not sure what's up.
   }
   
-  manipulate(myFun(pick.prior=pick.prior, min=min, max=max, samp.size=samp.size, log.yaxis=log.yaxis),
+  manipulate(myFun(pick.prior=pick.prior, min=min, max=max, samp.size=samp.size),
              pick.prior= picker("Beta"=2, "Uniform" = 1, label = "Prior Distribution", initial = "Beta"),
              min = slider(0.1, 1, initial = .3, label = "Parameter 1"), #don't cross the streams!
              max = slider(0.1, 1, initial = .8, label = "Parameter 2"),
-             samp.size = slider(1, min(2*length(dat), 1000), label = "Sample Size", initial=.4*length(dat)),
-             log.yaxis = checkbox(FALSE, label = "Logarithmic y-axis")
+             samp.size = slider(1, min(2*length(dat), 1000), 
+                                label = "Sample Size", initial=.4*length(dat))
+            # log.yaxis = checkbox(FALSE, label = "Logarithmic y-axis")
              )
 }
