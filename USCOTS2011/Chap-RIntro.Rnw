@@ -209,10 +209,6 @@ install.packages('mosaic')               # note the quotation marks
 Once these are installed, you can load them by checking the box in the 
 \tab{Packages} tab or by using \verb!require()! (or \verb!library()!)
 
-\authNote{R': Can't move \verb!findData()! into \verb!mosaic! since it is only for finding data in 
-\verb!abd! and is designed for use with a text book to help figures out data frame names to match
-examples and problems.}%
-
 <<require>>=
 require(lattice)         # could also use library(lattice)
 require(Hmisc)           # do this one before mosaic
@@ -503,15 +499,15 @@ The \verb!abd! package contains data sets from \textit{The Analysis of Biologica
 Kevin Middleton and Randall Pruim contacted the authors and obtained permission to 
 build and disseminate this package.
 
-The \verb!findData()! function in \verb!abd! makes it easy to map examples and exercises in that book to 
+The \verb!abdData()! function in \verb!abd! makes it easy to map examples and exercises in that book to 
 data frame names in the \verb!abd! package.
 
 <<findData-human>>=
-findData('human')         # all data sets with 'human' in the name
+abdData('human')         # all data sets with 'human' in the name
 @
 
 <<findData-2>>=
-findData(2)               # all data sets in chapter 2
+abdData(2)               # all data sets in chapter 2
 @
 
 For information on how to create such packages, consult the \textit{Writing R Extensions} manual
