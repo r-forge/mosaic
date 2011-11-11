@@ -1,13 +1,13 @@
 Package: xgrid
 Type: Package
 Title: Access Apple Xgrid using R
-Version: 0.1-15
-Date: 2011-07-29
+Version: 0.1-16
+Date: 2011-11-09
 Depends: 
 Suggests: 
-Author: Nicholas Horton <nhorton@smith.edu>
+Author: Nicholas Horton <nhorton@smith.edu>, Sarah Anoke <sanoke527@gmail.com>
 Maintainer: Nicholas Horton <nhorton@smith.edu>
-Description: Functions to distribute and collate results from simulation studies and other computationally expensive tasks to Apple Xgrid clusters from within R 
+Description: Functions to distribute and collate results from simulation studies and other computationally expensive tasks run on Apple Xgrid clusters
 License: GPL
 LazyLoad: yes
 LazyData: yes
