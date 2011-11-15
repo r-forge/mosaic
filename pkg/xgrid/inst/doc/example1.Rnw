@@ -1,0 +1,9 @@
+%\VignetteIndexEntry{Assessing the Robustness of the One-Sample t-test}
+%\VignettePackage{xgrid}
+%\VignetteKeywords{grid, xgrid, simulations}
+
+\documentclass{article}
+\usepackage{pdfpages}
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{example1-source.pdf}
+\end{document}
