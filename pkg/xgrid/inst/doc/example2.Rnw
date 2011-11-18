@@ -1,0 +1,10 @@
+% \VignetteIndexEntry{Fitting Latent Class Models Using Add-on Packages}
+% \VignettePackage{xgrid}
+% \VignetteDepends{poLCA}
+% \VignetteKeywords{grid, xgrid, simulations}
+
+\documentclass{article}
+\usepackage{pdfpages}
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{example2-source.pdf}
+\end{document}
