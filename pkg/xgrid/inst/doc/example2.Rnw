@@ -1,6 +1,5 @@
 % \VignetteIndexEntry{Fitting Latent Class Models Using Add-on Packages}
 % \VignettePackage{xgrid}
-% \VignetteDepends{poLCA}
 % \VignetteKeywords{grid, xgrid, simulations}
 
 \documentclass{article}
