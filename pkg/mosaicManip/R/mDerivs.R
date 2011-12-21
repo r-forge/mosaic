@@ -5,17 +5,17 @@ function(expr, xlim=c(0,10), ...) {
   if (!require("mosaic")) stop("Must install mosaic package.")
 #functions
   vals = list(...)
-  .f = mosaic:::.createMathFun( sexpr=substitute(expr), from=0, ...)
+  .f = .createMathFun( sexpr=substitute(expr), from=0, ...)
   f <- .f$fun
   # Use the expression in the calculating the derivative so that 
   # it can be done symbolically, if possible
-  dfdx <- mosaic:::.doD( .f, from=0,...)
+  dfdx <- .doD( .f, from=0,...)
   # Try to do the second derivative symbolically, also
   .ff = .f
   .ff$RHS = c("+", .f$RHS, .f$RHS)
   # That the next variable must be global, suggests that mosaic:::.doD should be changed
   # to include its own environment as an (formal) argument to the returned function.
-  d2fd2x <<- mosaic:::.doD( .ff, from=0,...) # must be global to work with derivative evaluation prgm. That's a bug!
+  d2fd2x <<- .doD( .ff, from=0,...) # must be global to work with derivative evaluation prgm. That's a bug!
   d3fd3x <- D(d2fd2x(x)~x, ...)
   antiF <- antiD(f(x)~x,...)
   fset = list(d3fd3x,d2fd2x,dfdx,f,antiF)
@@ -62,6 +62,8 @@ get.text.pos = function(xc, yc, ang, max.dist = unit(.3, "npc")) {
    y = yc+sin(ang)*dist*x.to.y
    just = ifelse( dist>0,"right","left")
    return( list(x=x,y=y,just=just))
+   #return(list(x = convertX(unit(x,"native"),"npc", valueOnly=TRUE), 
+   #              y = convertY(unit(y,"native"),"npc", valueOnly=TRUE)))
   }
   
 # ====================
@@ -75,18 +77,10 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     panel.xyplot(x, y, type="l", lwd = 2, col = deriv.color, ...)
     panel.points(xpos, dfdx(xpos))
     panel.abline(h=0, lty = "dotted")
-    panel.lines(x=c(xpos, -9000000), 
-                y = c(dfdx(xpos),dfdx(xpos)), 
-                col=deriv.color2, lwd = 11)
-    grid.text(label=signif(dfdx(xpos), 3), 
-              x = unit(0, "npc")+unit(10,"mm"), 
-              y = unit(dfdx(xpos),"native"), just = "right", 
-              gp = gpar(col = deriv.color, fontsize =10))
+    panel.lines(x=c(xpos, -9000000), y = c(dfdx(xpos),dfdx(xpos)), col=deriv.color2, lwd = 11)
+    grid.text(label=signif(dfdx(xpos), 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(dfdx(xpos),"native"), just = "right", gp = gpar(col = deriv.color, fontsize =10))
     grid.text(f.labels[[middleFun-1]], 
-              x=unit(0.075,"npc"), 
-              y=unit(0.9,"npc"), 
-              just="left", 
-              gp = gpar(cex = 1.7) )
+              x=unit(0.075,"npc"), y=unit(0.9,"npc"), just="left", gp = gpar(cex = 1.7) )
   }
   # =============
   fpanel = function(x, y){
@@ -109,7 +103,8 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
     val = f(place.x)
     grid.text(paste("Area =",signif(antiF(xpos,from=from),3)),
               x=unit(place.x,"native"), y=unit(val/2,"native"), just="center",
-              gp = gpar(col= integral.color, fontsize=10))
+              gp = gpar(
+                col= integral.color, fontsize=10))
    }
     panel.xyplot(x, y, type="l", col = "black", lwd = 2, ...)
     panel.points(xpos, f(xpos))
@@ -142,6 +137,7 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
   antiFpanel = function(x, y){
     panel.xyplot(x, y, type="l", lwd = 2, col =integral.color, ...)
     tupac = subset(data.frame(x,y,pos = y>0), pos==FALSE)
+    #tupac = subset(tupac, pos == FALSE)
     panel.xyplot(tupac$x, tupac$y, type = "p", pch = ".", cex = 2, col = "purple")
     at.val = antiF(xpos, from=from)
     from.val = antiF( from, from=from)
@@ -170,10 +166,7 @@ myplot= function(xpos, from, der, anti, fixed, middleFun=NULL){
               y = text.pos$y, 
               rot = ang.slope*180/pi, just=text.pos$just,
               gp = gpar(col = "black", fontsize =10))
-    grid.text(label=round(at.val, 3), 
-              x = unit(0, "npc")+unit(10,"mm"), 
-              y = unit(at.val,"native"), 
-              gp = gpar(col = integral.color, fontsize =10))
+    grid.text(label=round(at.val, 3), x = unit(0, "npc")+unit(10,"mm"), y = unit(at.val,"native"), gp = gpar(col = integral.color, fontsize =10))
     # parabola to give second derivative
     if( der ){
       curve.xvals = seq(segEndsX[1],segEndsX[2],length=100)
@@ -220,12 +213,12 @@ bottom.plot = xyplot(antiF~x, data = dat, type = "l",
                      ylab = NULL,  # see indiv. panel functions
                      panel = antiFpanel)  
 
-if(fixed)
+if(fixed == TRUE)
   { 
     yparam = c(max(antiF(x, from = min(xlim))), min(antiF(x, from=min(xlim))))
     diff = diff(range(yparam))
     yparam = c((min(antiF(x, from = min(xlim))))-diff/3, (max(antiF(x, from = min(xlim))))+diff/3)
-    bottom.plot = xyplot(antiF~x, data = dat, type = "l", ylim = yparam, ylab = "Antiderivative of f", panel = antiFpanel)  
+    cc = xyplot(antiF~x, data = dat, type = "l", ylim = yparam, ylab = "Antiderivative of f", panel = antiFpanel)  
   }
 
 if(der == TRUE){
@@ -249,4 +242,8 @@ if(anti == TRUE){
     anti = checkbox(FALSE, "Display Antiderivative"),
     fixed = checkbox(FALSE, "Fix Antiderivative y axis")
             )
+
 }
+ #Red Parabola for antideriv - curvature - SHORT
+ #Slope labels, in bounds using aspect ratio function
+ #Eventually (last step after all debugging) make der and anti checkboxes initial FALSE

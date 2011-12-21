@@ -67,6 +67,7 @@ m2Fit = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
       endparam = max(0,min(1,bigend - (bigend-bigstart)*(maxbig-maxsmall)/(maxbig-minbig)))
       RMS = sqrt(mean((newvals-zvals)^2)*pi*radius^2)
       mylevels = pretty(range(.zset),nlevels)   #number of contours
+      
       #Plotting!
       image( .xset, .yset, .zset, col=rainbow(npts, alpha=0.8, start=bigstart, end=bigend),
              add=FALSE, xlab=xlab,ylab=ylab,main=NULL )
@@ -82,7 +83,7 @@ manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes
                  xsqyes=xsqyes, ysqyes=ysqyes, myalpha=myalpha, nlevels=nlevels, npts = npts),
            xpt = slider(min(xlim2),max(xlim2), initial = mean(xlim2), label = paste("Circle center:", xlab), step=.01),
            ypt = slider(min(ylim2),max(ylim2), initial = mean(ylim2), label = paste("Circle center:", ylab), step=.01),
-           radius = slider(.01, abs(min(max(xlim2),max(ylim2))), initial = .5*mean(min(abs(max(xlim2)),abs(max(ylim2))))),
+           radius = slider(.01, (min(max(xlim2),max(ylim2))), initial = .5*mean(min(max(xlim2),max(ylim2)))),
            const = checkbox(TRUE, label = "Constant"),
            xyes = checkbox(TRUE, label = "x"),
            yyes = checkbox(FALSE, label = "y"),
@@ -94,3 +95,6 @@ manipulate(myFun(xpt=xpt, ypt=ypt, radius = radius, const=const, xyes=xyes, yyes
            nlevels = slider(5, 50, initial = 20, label = "Approx. number of contour lines")
            )
 }
+
+#Take out col.scheme
+#x and y axis reversed

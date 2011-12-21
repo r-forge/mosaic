@@ -75,7 +75,7 @@ mypanel = function(x, y){
       .newY=c(0,y,0); .newYPts = c(0,ypts,0);
       myY=.newYPts[inds]-.newY[inds]
       TayRMS = abs(sqrt(mean(myY^2))*diff(range(myx)))
-      grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
+   grid.text(label = paste("Taylor Series RMS error: ", signif(TayRMS,4)), 
                 x = unit(0,"npc")+unit(1, "mm"), 
                 y = unit(1,"npc")-unit(.5, "lines"),
                 just ="left",
@@ -85,14 +85,14 @@ mypanel = function(x, y){
   if(err == TRUE){  
      xpts = c(x)
      if( lsquares ){
-      ypos = pmax(f(x), lsq.func)
-      yneg = pmin(f(x), lsq.func)
+      ypos = pmax(f(x), ypts)
+      yneg = pmin(f(x), ypts)
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.blue)
      }
              
      if(TaylorBeTrue){
-      ypos = pmax(f(x), c(T[[as.numeric(n)+1]]))
-      yneg = pmin(f(x), c(T[[as.numeric(n)+1]]))
+      ypos = pmax(f(x), ypts)
+      yneg = pmin(f(x), ypts)
       panel.polygon(c(xpts,rev(xpts)),c(ypos,rev(yneg)),col=trans.red)
      }
   }  
@@ -173,7 +173,7 @@ manipulate(myplot(a, TaylorBeTrue, lsquares, xwid, n, err, which.plot),
   n = picker(0,1,2,3,4,5,6,7,8,9,10, label = "Order of the Polynomial"),
   TaylorBeTrue = checkbox(FALSE, "Activate Taylor Series"),
   lsquares = checkbox(FALSE, "Activate least squares"),
-  xwid = slider(0.1, diff(range(xlim)), initial = mean(diff(range(xlim)))/2, 
+  xwid = slider(0, diff(range(xlim)), initial = mean(diff(range(xlim)))/2, 
                 step = diff(xlim/100), label = "Least Squares width"),
   err = checkbox(FALSE, "View error area")
   

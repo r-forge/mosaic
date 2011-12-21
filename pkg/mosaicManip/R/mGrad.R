@@ -17,10 +17,11 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
                             # Take partial with respect to the first var
  funx = fun
  funx$RHS = funx$RHS[2]     #"make it just the first variable"
- dx = mosaic:::.doD(funx, ..h..=NULL, numerical=FALSE, method="center",...)
+ # These two should be mosaic:::.doD
+ dx = .doD(funx, ..h..=NULL, numerical=FALSE, method="center",...)
  funy = fun                 #Partial with respect to the second
  funy$RHS = funy$RHS[3]
- dy = mosaic:::.doD(funy, ..h..=NULL, numerical=FALSE, method="center",...)
+ dy = .doD(funy, ..h..=NULL, numerical=FALSE, method="center",...)
  #============
  get.aspect.ratio = function() {
   a = par("din")
@@ -61,7 +62,7 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
     aspect=aspect/(diff(range(ylim2))/diff(range(xlim2)))
     
     xvecs = dx(xpts, ypts)    #Derivatives for the gradient
-    yvecs = dy(xpts, ypts)
+    yvecs = dy(ypts, xpts)    # Because the order is reversed in the deriv w.r.t. the second variable.
     xvecs = scale*xvecs*aspect           #For large gradients, scaling down with manipulate is nicer
     yvecs = (scale*yvecs)/aspect
     
@@ -95,7 +96,7 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
                                  Terrain = terrain.colors(25, alpha=0.8),
                                  Topo = topo.colors(25,alpha=0.8),
                                  CM = cm.colors(25, alpha=0.8), label="Color Palette"),
-            nlevels = slider(5, 50, initial = 10, step = 1, label = "Approx. number of contour lines"),
+            nlevels = slider(5, 50, initial = 20, step = 1, label = "Approx. number of contour lines"),
             npts = slider(20,200,initial=140,label = "Color background smoothness")
             )
 }

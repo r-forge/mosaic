@@ -4,11 +4,12 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
   on.exit()
   # Storage for the trajectories.  Starts out empty
-  Tcolors = c("red","brown1","cornflowerblue", "darkolivegreen3","gold","magenta")
-  TcolorsBack = c("deeppink","brown", "blue","darkolivegreen","gold3","magenta4")
+  Tcolors = c("red","cornflowerblue", "darkolivegreen3","gold","magenta")
+  TcolorsBack = c("deeppink","blue","darkolivegreen","gold3","magenta4")
   TS = list()
   for (k in 1:length(Tcolors)) 
-    TS[[k]] = list(foward=NULL, back=NULL, system=NULL, init=NULL)
+    TS[[k]] = list(foward=NULL, back=NULL, system=DE, init=NULL)
+  TStemp = TS[[1]]
   # An initial condition
   initCond = c(mean(xlim),mean(ylim))
   stateNames = names(formals(DE))
@@ -99,6 +100,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
   npts <- resol*resol;
   xspace <- abs(diff(xlim))/(resol*5);
   yspace <- abs(diff(ylim))/(resol*5);
+  set.seed(10101)
   x <- x + matrix(runif(npts, -xspace, xspace),resol,resol);
   y <- y + matrix(runif(npts, -yspace, yspace),resol,resol);
   z <- fun(x,y);
@@ -150,43 +152,43 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     if( reviseWhatState != reviseWhat ) {
       # state changed, so do something
       reviseWhatState <<- reviseWhat
-      if(!is.null(TS[[Ntraj]]$system)){
-        DE <<- TS[[Ntraj]]$system
-      }
+#       if(!is.null(TS[[Ntraj]]$system)){
+#         DE <<- TS[[Ntraj]]$system
+#       }
       if( reviseWhat >= 0) {
         if(reviseWhat ==0){
-          TS[[1:6]]$system <<- edit(DE)
+          DE <<- edit(DE,title="Editing ALL dynamical systems")
+          for(k in 1:5) TS[[k]]$system <<- DE
         }
         else
-          TS[[reviseWhat+1]]$system <<- edit(DE) 
+          TS[[reviseWhat]]$system <<- edit(TS[[reviseWhat]]$system,title=paste("Editing System",reviseWhat)) 
       }
       
     }
     # ... system editing code here
           
 # Store the results in the currently selected trajectory in "scratch" index 1
-    TS[[1]]$init <<- initCond
-    TS[[1]]$system <<- DE
+    TStemp$init <<- initCond
+    TStemp$system <<- TS[[Ntraj]]$system
     # Find the forward trajectory
     if( tdur > 0 )
-      TS[[1]]$forward <<- .solve.DE( DE, init=initCond, tlim=c(0,tdur) )
-    else TS[[1]]$forward <<- NULL
+      TStemp$forward <<- solve.DE( TStemp$system, init=initCond, tlim=c(0,tdur) )
+    else TStemp$forward <<- NULL
     # Solve the trajectory backward here.  (Does solve.DE do this?  Add a backward flag!)
     if (tback < 0 )
-      TS[[1]]$back <<- .solve.DE( DE, init=initCond, tlim=c(0,tback) )
-    else TS[[1]]$back <<- NULL
+      TStemp$back <<- solve.DE( TStemp$system, init=initCond, tlim=c(0,tback) )
+    else TStemp$back <<- NULL
       
-    TS[[Ntraj]]$init <<- TS[[1]]$init
-    TS[[Ntraj]]$system <<- TS[[1]]$system
-    TS[[Ntraj]]$forward <<- TS[[1]]$forward
-    TS[[Ntraj]]$back <<- TS[[1]]$back
+    TS[[Ntraj]]$init <<- TStemp$init
+    TS[[Ntraj]]$system <<- TStemp$system
+    TS[[Ntraj]]$forward <<- TStemp$forward
+    TS[[Ntraj]]$back <<- TStemp$back
     
     notNull=NULL
-    for(m in 2:6){
+    for(m in 1:5){
       if(!is.null(TS[[m]]$system))
         notNull=c(notNull, m)
     }
-
     TSfull=data.frame(index=seq(1,1000, length=1000))
       for(k in notNull){
         if(!is.null(TS[[k]]$forward)){
@@ -204,15 +206,16 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
         }
       }
        #JACOBIAN
-      .tmax=max(TS[[Ntraj]]$forward$tlim, 0, rm.na=TRUE)
-      .tmin=min(TS[[Ntraj]]$back$tlim, 0, rm.na=TRUE)
+      .tmax=max(TS[[Ntraj]]$forward$tlim*.99999, 0, rm.na=TRUE)
+      .tmin=min(TS[[Ntraj]]$back$tlim*.99999, 0, rm.na=TRUE)
       if(doJacob>0){
         if(doJacob==1) 
-          jake = jacobian(fun=TS[[Ntraj]]$forward$dynfun, x=xstart, y=ystart)
+          jake = jacobian(fun=TS[[Ntraj]]$dynfun, x=xstart, y=ystart)
+        if(doJacob==3){
+          jake = jacobian(fun=TS[[Ntraj]]$dynfun, x=TS[[Ntraj]]$forward[[1]](.tmax), y=TS[[Ntraj]]$forward[[2]](.tmax))
+        }
         if(doJacob==2)
-          jake = jacobian(fun=TS[[Ntraj]]$forward$dynfun, x=.tmax, y=(.tmax))
-        if(doJacob==3)
-          jake = jacobian(fun=TS[[Ntraj]]$back$dynfun, x=.tmin, y=(.tmin))
+          jake = jacobian(fun=TS[[Ntraj]]$dynfun, x=TS[[Ntraj]]$back[[1]](.tmin), y=TS[[Ntraj]]$back[[2]](.tmin))
         eig=eigen(jake)
         print("Jacobian Matrix")
         print(jake)
@@ -228,11 +231,11 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
       # Plot out the flow field
       flow.plot( TS[[flowWhat]]$system, xlim=xlim, ylim=ylim)
       # Plot out the nullclines
-      if( nullclines ) .show.nullclines()
+      if( nullclines ) show.nullclines()
       # plot out the trajectories
       # NEED TO DO BOTH FORWARD AND BACKWARD, maybe alpha different for backward, or darken a bit
       # here is the forward one
-      for( k in 2:length(TS)) {
+      for( k in 1:length(TS)) {
         if( !is.null(TS[[k]]$system)) {
           if( !is.null(TS[[k]]$forward) ){
             if(k==Ntraj){
@@ -259,27 +262,27 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     }
     PP=xyplot(ylim~xlim, panel=myPanel, xlab=NULL, ylab=stateNames[2], main=list(paste(stateNames[1]), cex=.85), scales=list())
     print(PP, position=c(0.1,.48,.9,1), more=TRUE)
-    print(port[[1]], position=c(0, .27, 1, .5), more=TRUE)
-    print(port[[2]], position=c(0, 0, 1, .29), more=FALSE)
+    suppressWarnings(print(port[[1]], position=c(0, .27, 1, .5), more=TRUE))
+    suppressWarnings(print(port[[2]], position=c(0, 0, 1, .29), more=FALSE))
   }
   # =======
   manipulate( doPlot(xstart=xstart, ystart=ystart, 
                      Ntraj=Ntraj,tdur=tdur,tback=tback,
                      nullclines=nullclines,reviseWhat=reviseWhat,
-                     flowWhat=flowWhat, param1=param1,param2=param2, doJacob=doJacob),
-              xstart = slider(xlim[1],xlim[2],init=mean(xlim),label=paste(stateNames[1], "Start")),
-              ystart = slider(ylim[1],ylim[2],init=mean(ylim),label=paste(stateNames[2], "Start")),
-              Ntraj = picker( One=2,Two=3,Three=4,Four=5,Five=6, initial="One",label="Trajectory"),
+                     flowWhat=flowWhat, doJacob=doJacob),
+              xstart = slider(xlim[1],xlim[2],step=diff(range(xlim))/200,init=mean(xlim),label=paste(stateNames[1], "Start")),
+              ystart = slider(ylim[1],ylim[2],step=diff(range(ylim))/200,init=mean(ylim),label=paste(stateNames[2], "Start")),
+              Ntraj = picker( One=1,Two=2,Three=3,Four=4,Five=5, initial="One",label="Current Trajectory"),
               tdur = slider(0,100,init=10,label="Trajectory Duration"),
               tback = slider(-100,0,init=0, label="Go back in time"),
               nullclines = checkbox(initial=FALSE, label="Show Nullclines"),
-              reviseWhat = picker( "None"=-1, "All" = 0, "One"=1, "Two"=2, "Three" = 3,
-                                   "Four"=4, "Five"=5, label="Revise DE for", initial = "None"),
+              reviseWhat = picker("None"=-1,"One"=1,"Two"=2, "Three"=3,
+                                   "Four"=4,"Five"=5,"All"=0, label="Revise DE for", initial = "None"),
               flowWhat= picker("One"=1, "Two"=2, "Three" = 3, "Four"=4, "Five" = 5, 
                                initial = "One", label="What flow to plot?"),
               doJacob= picker("None"=0, "At Start"=1, "At Backward Limit"=2, "At Forward Limit"=3,
-                              label="Jacobian", initial="None"),
-              param1 = slider(.1,10,init=1,label="Parameter 1"),
-              param2 = slider(.1,10,init=1,label="Parameter 2")
+                              label="Jacobian", initial="None")
+#              param1 = slider(.1,10,init=1,label="Parameter 1"),
+#              param2 = slider(.1,10,init=1,label="Parameter 2")
               )
 }

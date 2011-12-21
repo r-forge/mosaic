@@ -1,5 +1,4 @@
 mSIR=function(){
-  if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
   sir = function(p=.1,ncontact=10,N=1000,births=0,gamma=.2,Iinit=1,ndays=100,dt=.1){
   npoints = ceiling( ndays/dt )
   S = rep(0,npoints)
