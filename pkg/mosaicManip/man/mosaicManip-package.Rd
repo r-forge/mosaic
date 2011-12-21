@@ -13,18 +13,18 @@
 \tabular{ll}{
 Package: \tab mosaicManip\cr
 Type: \tab Package\cr
-Version: \tab 0.1-3\cr
-Date: \tab 2011-06-23\cr
+Version: \tab 0.2-1\cr
+Date: \tab 2011-12-21\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }
 }
 \author{
-Daniel Kaplan, Andrew Rich
+Daniel Kaplan, Andrew Rich, Randall Pruim
 
-Maintainer: Daniel Kaplan
+Maintainer: Daniel Kaplan, Randall Pruim
 }
-\seealso{
-code{\link[manipulate:manipulate-package]{manipulate}} 
-}
+%\seealso{
+%code{\link[manipulate:manipulate-package]{manipulate}} 
+%}
 \keyword{ package }
