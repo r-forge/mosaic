@@ -15,7 +15,7 @@ D <- function(expr, ..., ..h..=NULL, numerical=FALSE, method=c("center","right")
     "gamma", "lgamma", "digamma", "trigamma")
   .can.do.symbolic <- all(.ops %in% .allowed.ops)
   if (!numerical & .can.do.symbolic) {
-    .df <- tryCatch(.d.symbolic(fm), error <- function(e){NULL})
+    .df <- tryCatch(.d.symbolic(fm), error = function(e){NULL})
     if( !is.null(.df) ) return(.df)
     warning("Could not do derivative symbolically.  Returning numerical derivative.")
   }

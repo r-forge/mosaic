@@ -43,20 +43,19 @@ Daniel Kaplan (\email{kaplan@macalester.edu})
 }
 
 \examples{
-cat('trouble with examples on 2012-12-20 still needs fixing');
-#D(sin(t) ~ t)
-#D(A*sin(t) ~ t )
-#D(A*sin(2*pi*t/P) ~ t, A=2, P=10) # default values for parameters.
-#f <- D(A*x^3 ~ x + x, A=1) # 2nd order partial -- note, it's a function of x
-#f(x=2)
-#f(x=2,A=10) # override default value of parameter A
-#g = D(f(x=t, A=1)^2 ~ t)  # note: it's a function of t
-#g(t=1) 
-#gg <- D(f(x=t,A=B)^2 ~ t, B=10)  # note: it's a function of t and B
-#gg(t=1)
-#gg(t=1, B=100)
-#F <- antiD( A*exp(-k*t^2 ) ~ t, A=1, k=0.1)
-#F(from=-Inf, to=0)
-#F(from=-Inf, to=Inf)
+D(sin(t) ~ t)
+D(A*sin(t) ~ t )
+D(A*sin(2*pi*t/P) ~ t, A=2, P=10) # default values for parameters.
+f <- D(A*x^3 ~ x + x, A=1) # 2nd order partial -- note, it's a function of x
+f(x=2)
+f(x=2,A=10) # override default value of parameter A
+g = D(f(x=t, A=1)^2 ~ t)  # note: it's a function of t
+g(t=1) 
+gg <- D(f(x=t,A=B)^2 ~ t, B=10)  # note: it's a function of t and B
+gg(t=1)
+gg(t=1, B=100)
+F <- antiD( A*exp(-k*t^2 ) ~ t, A=1, k=0.1)
+F(from=-Inf, to=0)
+F(from=-Inf, to=Inf)
 }
 \keyword{ calculus }
