@@ -20,7 +20,6 @@
 \alias{print.function}
 \alias{connector}
 \alias{dot}
-\alias{distPlot}
 \alias{flowPlot}
 \alias{graphPaper}
 \alias{interpolatingFunction}
