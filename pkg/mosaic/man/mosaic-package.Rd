@@ -16,8 +16,8 @@ but which are usually taught in isolation, if at all.
   \tabular{ll}{
 	Package: \tab mosaic\cr
 	Type: \tab Package\cr
-	Version: \tab 0.1-52\cr
-	Date: \tab 2011-12-12\cr
+	Version: \tab 0.2-2\cr
+	Date: \tab 2011-12-20\cr
 	License: \tab GPL\cr
 	LazyLoad: \tab yes\cr
 	LazyData: \tab yes\cr
