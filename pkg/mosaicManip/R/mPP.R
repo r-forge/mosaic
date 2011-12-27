@@ -79,7 +79,7 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
 
   }
   #=========
-  flow.plot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
+  flowPlot = function(fun,xlim=c(0,1), ylim=c(0,1), resol=10, col="black",
   add=FALSE,EW=NULL,NS=NULL,both=TRUE) {
   current.dyn.system <<- fun
   arg.names = names(formals(fun) )
@@ -172,11 +172,11 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     TStemp$system <<- TS[[Ntraj]]$system
     # Find the forward trajectory
     if( tdur > 0 )
-      TStemp$forward <<- solve.DE( TStemp$system, init=initCond, tlim=c(0,tdur) )
+      TStemp$forward <<- solveDE( TStemp$system, init=initCond, tlim=c(0,tdur) )
     else TStemp$forward <<- NULL
-    # Solve the trajectory backward here.  (Does solve.DE do this?  Add a backward flag!)
+    # Solve the trajectory backward here.  (Does solveDE do this?  Add a backward flag!)
     if (tback < 0 )
-      TStemp$back <<- solve.DE( TStemp$system, init=initCond, tlim=c(0,tback) )
+      TStemp$back <<- solveDE( TStemp$system, init=initCond, tlim=c(0,tback) )
     else TStemp$back <<- NULL
       
     TS[[Ntraj]]$init <<- TStemp$init
@@ -229,9 +229,9 @@ mPP = function( DE=predator.prey, xlim=c(-10,2000),ylim=c(-10,2000)) {
     #=============
     myPanel=function(x,y, ...){
       # Plot out the flow field
-      flow.plot( TS[[flowWhat]]$system, xlim=xlim, ylim=ylim)
+      flowPlot( TS[[flowWhat]]$system, xlim=xlim, ylim=ylim)
       # Plot out the nullclines
-      if( nullclines ) show.nullclines()
+      if( nullclines ) showNullclines()
       # plot out the trajectories
       # NEED TO DO BOTH FORWARD AND BACKWARD, maybe alpha different for backward, or darken a bit
       # here is the forward one
