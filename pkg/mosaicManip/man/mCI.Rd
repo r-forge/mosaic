@@ -8,8 +8,8 @@ intervals computed from many random samples.
 }
 
 \usage{
-mCIprop()
-mCIt()
+mCIprop(...)
+mCIt(...)
 }
 
 \arguments{
