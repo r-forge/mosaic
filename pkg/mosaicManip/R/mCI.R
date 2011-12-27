@@ -1,4 +1,4 @@
-mCIprop <- function(){
+mCIprop <- function(...){
 	if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
 	Wald=function(p.hat, n, conf.level, sd=sqrt(p.hat*(1-p.hat))){
 		error = (qnorm(.5+conf.level/2)*sd)/(sqrt(n))
