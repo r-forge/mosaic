@@ -58,7 +58,7 @@ trajPlot <- function(soln, n=1001, col="red") {
   t <- seq( soln$tlim[1], soln$tlim[2], length=n )
   one <- soln[[1]](t)
   two <- soln[[2]](t)
-  flow.plot( soln$dynfun,
+  flowPlot( soln$dynfun,
             xlim=range(one, na.rm=TRUE),
             ylim=range(two, na.rm=TRUE) )
   llines( one, two, col=col )
