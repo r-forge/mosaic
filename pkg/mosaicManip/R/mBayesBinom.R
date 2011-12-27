@@ -23,9 +23,11 @@ mBayes=function(dat, ...){
     }
     prior=list(uniform, beta)
     prior.pts = prior[[pick.prior]](theta.pts)
+
+	baseCat <- sort(unique(dat))[1]
     #Replicate data so you can sample more than exists! 
     dat = rep(dat, times = 2)
-    nsuccesses=sum(dat[1:samp.size])
+    nsuccesses=sum( dat[1:samp.size] == baseCat ) 
     LL.pts = LL(theta.pts,nsuccesses,samp.size)
     likeli.pts = exp(LL.pts)
     posterior.pts = prior.pts*likeli.pts
