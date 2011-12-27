@@ -13,8 +13,8 @@
 \tabular{ll}{
 Package: \tab mosaicManip\cr
 Type: \tab Package\cr
-Version: \tab 0.2-1\cr
-Date: \tab 2011-12-21\cr
+Version: \tab 0.2-3\cr
+Date: \tab 2011-12-27\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }
