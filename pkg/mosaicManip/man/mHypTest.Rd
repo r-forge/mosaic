@@ -7,10 +7,10 @@ Interactive display for hypothesis testing concepts.
 Displays a sampling distribution and calculates power.
 }
 \usage{
-mHypTest(doF=FALSE)
+mHypTest(useF=FALSE)
 }
 \arguments{
-  \item{doF}{Show the F distribution.  Default: a t-distribution for the sample statistic.}
+  \item{useF}{Show the F distribution.  Default: a t-distribution for the sample statistic.}
 }
 \details{
 Allows the user to set various parameters that govern the sampling distribution, and the 
@@ -24,8 +24,8 @@ Daniel Kaplan (\email{kaplan@macalester.edu})
 }
 
 \examples{
-\dontrun{
-mHypTest()
-mHypTest(doF=TRUE)}
+if(manipulate){
+  mHypTest()
+  mHypTest(useF=TRUE)}
 }
 \keyword{statistics}

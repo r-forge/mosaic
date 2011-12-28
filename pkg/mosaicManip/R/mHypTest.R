@@ -1,26 +1,26 @@
 mHypTest <-
-function(doF=FALSE){
+function(useF=FALSE){
   if( !require(manipulate) ) stop("Must load manipulate package.")
   maxeffect=10
   resid = 10 # just to avoid a missing value.  It's reset by the controller.
   controls = list()
-  if( doF) controls[["effect"]]=slider(0,.99,step=.01,init=.2,label="Effect Size (R^2)")
+  if( useF) controls[["effect"]]=slider(0,.99,step=.01,init=.2,label="Effect Size (R^2)")
   else controls[["effect"]] = slider( -maxeffect, maxeffect, step=.1,init=-1, label="Effect size (coef.)")
   controls[["n"]] =  slider(1,100, step=1,init=50,label="n-m (resid d.f.)")
-  if( doF ) controls[["m"]] = slider(1,20,step=1, init=3,label="m (# of model vectors)")
-  if( !doF) controls[["resid"]] = slider(1,100,init=10,label="Residual Size")
+  if( useF ) controls[["m"]] = slider(1,20,step=1, init=3,label="m (# of model vectors)")
+  if( !useF) controls[["resid"]] = slider(1,100,init=10,label="Residual Size")
   controls[["signif"]] = slider(0.01,0.2,step=.01,init=0.05,label="Significance")
-  if (!doF) controls[["ang"]] = slider(-90,90,init=90,label="Covariate angle")
+  if (!useF) controls[["ang"]] = slider(-90,90,init=90,label="Covariate angle")
   controls[["show.alt"]] = checkbox(FALSE,label="Show Alternative Hyp.")
   
   
     
-  draw.it = function(effect=5,n=10,ang=90,resid=10,m=1,signif=.05,
+  drawIt <- function(effect=5,n=10,ang=90,resid=10,m=1,signif=.05,
    col.null=rgb(0,0,1,.5), col.alt=rgb(1,0,0,.5),show.alt=TRUE, one.sided=FALSE){
-   if( doF ){ # convert R^2 to F
+   if( useF ){ # convert R^2 to F
      effect = (n-m)/(m)*(effect/(1-effect))
    }
-   if( doF ){ # use the F distribution and do things one-sided
+   if( useF ){ # use the F distribution and do things one-sided
    dnorm = function(vals, mean=1, sd=1) {
      df(vals-mean, m, n)
     }
@@ -44,7 +44,7 @@ function(doF=FALSE){
    }
   
   SE = min(1e6,abs(1/sin(ang*pi/180)))*resid/sqrt(n)
-  if (doF) {
+  if (useF) {
     topval = max(df(seq(.05,1,length=10),m,n))*1.1
     xrange = c(-0.5,ifelse(show.alt,effect,0) + qf(.99, m, n) )
   }
@@ -54,7 +54,7 @@ function(doF=FALSE){
   }
   xpts = seq(min(xrange)-diff(xrange),max(xrange)+diff(xrange),length=1000)
   left.threshold = c(min(xrange)-diff(xrange), qnorm(signif/2, mean=0, sd=SE) )
-  if (doF) {
+  if (useF) {
     right.threshold = c( qf(1-signif, m,n), max(xrange) + diff(xrange) )
   }
   else{
@@ -85,19 +85,19 @@ function(doF=FALSE){
 }
 
   sig=  draw.significance( right.threshold[1],right.threshold[2] )
-  if( !doF ) sig = sig + draw.significance( left.threshold[2], left.threshold[1] ) 
+  if( !useF ) sig = sig + draw.significance( left.threshold[2], left.threshold[1] ) 
   # draw the power
   if( show.alt ) {
    power = draw.significance( right.threshold[1],right.threshold[2],center=effect,col=col.alt )
-   if( !doF ) power = power + draw.significance( left.threshold[2], left.threshold[1], center=effect, col=col.alt )
+   if( !useF ) power = power + draw.significance( left.threshold[2], left.threshold[1], center=effect, col=col.alt )
    goo = par('usr')
-   text(ifelse(doF,1,0),goo[4], 
+   text(ifelse(useF,1,0),goo[4], 
     paste("Power=", signif(power,3),sep=""),
      pos=1)
   }
   }
   ang=90 #just in case there's no "ang" control
-  manipulate(draw.it(effect=effect,n=n,ang=ang,resid=resid,signif=signif,m=m,show.alt=show.alt), 
+  manipulate(drawIt(effect=effect,n=n,ang=ang,resid=resid,signif=signif,m=m,show.alt=show.alt), 
    controls)
   
 }
