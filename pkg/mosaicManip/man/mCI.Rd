@@ -13,6 +13,7 @@ mCIt(...)
 }
 
 \arguments{
+	\index{...}{additional arguments}
 }
 
 \details{
