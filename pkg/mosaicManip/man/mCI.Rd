@@ -13,7 +13,7 @@ mCIt(...)
 }
 
 \arguments{
-	\index{...}{additional arguments}
+	\item{...}{additional arguments}
 }
 
 \details{
