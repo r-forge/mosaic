@@ -36,7 +36,7 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan
 }
 
 \examples{
-\dontrun{
+if(require(manipulate)) {
 mApproxPoly2(sin(x*y)~x&y)
 mApproxPoly2(sin(x*y)+cos(x)~x&y, xlim=c(0,5), ylim=c(0,5))
 }

@@ -24,8 +24,9 @@ Daniel Kaplan (\email{kaplan@macalester.edu})
 }
 
 \examples{
-if(manipulate){
-  mHypTest()
-  mHypTest(useF=TRUE)}
+	if(require(manipulate)){
+		mHypTest()
+		mHypTest(useF=TRUE)
+	}
 }
 \keyword{statistics}

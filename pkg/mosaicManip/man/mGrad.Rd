@@ -25,12 +25,12 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-mGrad(x*y~x&y)
-mGrad(sin(x*y)~x&y)
-mGrad(sin(cos(x)+y)~x&y)
-mGrad(cos(x)*sin(y)*y~x&y)
-}
+	if(require(manipulate)){
+		mGrad(x*y~x&y)
+		mGrad(sin(x*y)~x&y)
+		mGrad(sin(cos(x)+y)~x&y)
+		mGrad(cos(x)*sin(y)*y~x&y)
+	}
 }
 \keyword{calculus}
 \keyword{multivariate calculus}

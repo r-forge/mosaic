@@ -25,9 +25,13 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-hawaii=fetchData("hawaii.csv")
-mFitSines(water~time, data=hawaii)
+	if(require(manipulate)){
+		fetchData("hawaii.csv")-> hawaii
+		mFitSigmoidal(water~time, data=hawaii)
+		hawaii=fetchData("hawaii.csv")
+		mFitSines(water~time, data=hawaii)
+	}
 }
-}
+
+
 \keyword{calculus}

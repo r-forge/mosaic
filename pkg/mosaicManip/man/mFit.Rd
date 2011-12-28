@@ -39,7 +39,9 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-data(KidsFeet)
-mFit(width ~ length, data=KidsFeet)
+	if(require(manipulate)){
+		data(KidsFeet)
+		mFit(width ~ length, data=KidsFeet)
+	}
 }
 \keyword{calculus}

@@ -25,9 +25,9 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-hawaii=fetchData("hawaii.csv")
-mFitExp(Girth~Volume, data=trees)
-}
+	if(require(manipulate)){
+		hawaii=fetchData("hawaii.csv")
+		mFitExp(Girth~Volume, data=trees)
+	}
 }
 \keyword{calculus}

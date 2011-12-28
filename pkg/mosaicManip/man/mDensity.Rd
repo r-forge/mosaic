@@ -24,10 +24,10 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-data(trees)
-mDensity(trees$Girth)
-mDensity()
-}
+	if(require(manipulate)){
+		data(trees)
+		mDensity(trees$Girth)
+		mDensity()
+	}
 }
 \keyword{statistics}

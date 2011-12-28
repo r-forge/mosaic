@@ -25,9 +25,9 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-Stan=fetchData("stan-data.csv")
-mFitPoly(temp~time, Stan)
-}
+	if(require(manipulate)){
+		Stan=fetchData("stan-data.csv")
+		mFitPoly(temp~time, Stan)
+	}
 }
 \keyword{calculus}

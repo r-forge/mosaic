@@ -34,8 +34,10 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-data(CPS)
-mBayesBinom(CPS$sex)
+	if(requie(manipulate)) {
+		data(CPS)
+		mBayesBinom(CPS$sex)
+	}
 }
 
 \keyword{statistics}

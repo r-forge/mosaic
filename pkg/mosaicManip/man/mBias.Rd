@@ -24,7 +24,7 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
+if(require(manipulate)) {
 data(CPS)
 mBias(wage~sex+educ+exper, data=CPS)
 }

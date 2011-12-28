@@ -23,8 +23,8 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-mPP(DE=predator.prey)
-}
+	if(require(manipulate)){
+		mPP(DE=predator.prey)
+	}
 }
 \keyword{differential equations}

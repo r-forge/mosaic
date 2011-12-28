@@ -20,8 +20,8 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}),  Daniel Kaplan (\email{kapla
 }
 
 \examples{
-\dontrun{
-mPower()
-}
+	if(require(manipulate)){
+		mPower()
+	}
 }
 \keyword{statistics}

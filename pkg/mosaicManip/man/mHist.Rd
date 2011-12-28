@@ -24,10 +24,10 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-data(trees)
-mHist(trees$Girth)
-mHist()
-}
+	if(require(manipulate)){
+		data(trees)
+		mHist(trees$Girth)
+		mHist()
+	}
 }
 \keyword{statistics}

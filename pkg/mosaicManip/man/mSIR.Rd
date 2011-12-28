@@ -23,9 +23,9 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-mSIR()
-}
+	if(require(manipulate)){
+		mSIR()
+	}
 }
 \keyword{differential equations}
 \keyword{epidemiology}

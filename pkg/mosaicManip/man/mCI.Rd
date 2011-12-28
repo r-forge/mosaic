@@ -38,8 +38,10 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-mCIprop()
-mCIt()
+	if (require(manipulate)) {
+		mCIprop()
+		mCIt()
+	}
 }
 
 \keyword{statistics}
