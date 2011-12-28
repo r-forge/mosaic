@@ -21,7 +21,7 @@ mDensity=function(data=NULL){
                 trans=picker("None"=c, "Log"=log, "Sqrt"=sqrt, "Rank"=rank, "arcCos"=acos, label="Transformation")
              )     
     if(is.null(data)){
-      controls[["dist"]]=picker("Normal Dist."=1, "Uniform"=2, "Exponential"=3, label="What function?")
+      controls[["dist"]]=picker("Normal"=1, "Uniform"=2, "Exponential"=3, label="Distribution")
       controls[["seed"]]=slider(1, 100, step=1, label="Random seed", initial=1)
       controls[["npts"]]=slider(10,1000, step=1, initial=100, label="Number of points")
     }
