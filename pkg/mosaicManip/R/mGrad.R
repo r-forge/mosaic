@@ -18,10 +18,10 @@ mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
  funx = fun
  funx$RHS = funx$RHS[2]     #"make it just the first variable"
  # These two should be mosaic:::.doD
- dx = .doD(funx, ..h..=NULL, numerical=FALSE, method="center",...)
+ dx = mosaic:::.doD(funx, ..h..=NULL, numerical=FALSE, method="center",...)
  funy = fun                 #Partial with respect to the second
  funy$RHS = funy$RHS[3]
- dy = .doD(funy, ..h..=NULL, numerical=FALSE, method="center",...)
+ dy = mosaic:::.doD(funy, ..h..=NULL, numerical=FALSE, method="center",...)
  #============
  get.aspect.ratio = function() {
   a = par("din")
