@@ -34,7 +34,7 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-	if(requie(manipulate)) {
+	if(require(manipulate)) {
 		data(CPS)
 		mBayesBinom(CPS$sex)
 	}
