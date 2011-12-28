@@ -1,21 +1,23 @@
  mDerivs <-
 function(expr, xlim=c(0,10), ...) {
-#packages 
+# packages 
   if (!require("manipulate")) stop("Must run in a manipulate compatible system, e.g. RStudio")
   if (!require("mosaic")) stop("Must install mosaic package.")
-#functions
+# functions
   vals = list(...)
-  .f = .createMathFun( sexpr=substitute(expr), from=0, ...)
+  .f = mosaic:::.createMathFun( sexpr=substitute(expr), from=0, ...)
   f <- .f$fun
   # Use the expression in the calculating the derivative so that 
   # it can be done symbolically, if possible
-  dfdx <- .doD( .f, from=0,...)
+  dfdx <- mosaic:::.doD( .f, from=0,...)
   # Try to do the second derivative symbolically, also
   .ff = .f
   .ff$RHS = c("+", .f$RHS, .f$RHS)
   # That the next variable must be global, suggests that mosaic:::.doD should be changed
   # to include its own environment as an (formal) argument to the returned function.
-  d2fd2x <<- .doD( .ff, from=0,...) # must be global to work with derivative evaluation prgm. That's a bug!
+  # must be global to work with derivative evaluation prgm. That's a bug!  -- danny
+  # Note: seems to work with out global assignment -- rjp on 2011/12/27
+  d2fd2x <- mosaic:::.doD( .ff, from=0,...) 
   d3fd3x <- D(d2fd2x(x)~x, ...)
   antiF <- antiD(f(x)~x,...)
   fset = list(d3fd3x,d2fd2x,dfdx,f,antiF)
@@ -25,8 +27,8 @@ function(expr, xlim=c(0,10), ...) {
                   expression(partialdiff*f/partialdiff*x),
                   expression(f(x)), 
                   expression(integral(f(x)*dx)))
-  #colors used in the display
-  deriv.color2 = rgb(1,0,0,.2)#red, transparent
+  # colors used in the display
+  deriv.color2 = rgb(1,0,0,.2) # red, transparent
   deriv.color = "red" 
   integral.color2 = "blue"
   integral.color= rgb(0,0,1,1)
@@ -36,7 +38,7 @@ function(expr, xlim=c(0,10), ...) {
   neg.integral.line.color = rgb(.4,0,1,.3)
   gray = rgb(0,0,0,.3)
   
-#vplayout for easier layout movement
+# vplayout for easier layout movement
     vplayout = function(x,y){
     viewport(layout.pos.row = x, layout.pos.col = y)
     }
