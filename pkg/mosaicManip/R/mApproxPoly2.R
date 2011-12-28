@@ -1,5 +1,6 @@
 mApproxPoly2 = function(expr, ..., xlim = c(0,1), ylim = c(0,1)){
-  if(!require(manipulate)) stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+  if(!require(manipulate)) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   if (!require("mosaic")) stop("Must install mosaic package.")
 
   vals = list(...) 

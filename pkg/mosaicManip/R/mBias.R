@@ -1,5 +1,7 @@
 mBias=function(expr, data){
-  if (!require(manipulate) | !require(lattice) | !require(grid)| !require(mosaic)) stop("Must have manipulate package.")
+  if(!require(manipulate)) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+  if (!require(lattice) | !require(grid)| !require(mosaic)) stop("Missing Packages.")
   
   A1=FALSE; A2=FALSE; A3=FALSE; A4=FALSE; A5=FALSE; A6=FALSE; A7=FALSE; 
            A8=FALSE; A9=FALSE; A10=FALSE; A11=FALSE; A12=FALSE; A13=FALSE; A14=FALSE;

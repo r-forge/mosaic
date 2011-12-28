@@ -1,4 +1,6 @@
 mEulerIntegrate = function(){
+  if( !require(manipulate) ) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   # Built in dynamical functions
   logistic = function(x,t=0){.2*x*(1-x)}
   exponential = function(x,t=0){ -.8*x }

@@ -1,5 +1,9 @@
 mEcon <- function(xlim=c(0,20)){
-  if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
+  if( !require(manipulate) ) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+  if ( !require(lattice) | !require(grid) ) 
+	  stop("Missing packages.")
+
   x <- seq(min(xlim), max(xlim), length=1000)
   myFun <- function(sup1, sup2, dem1, dem2){
     supFun <- splinefun(c(0,mean(x),max(x)), y=c(0, sup1, sup2)) 

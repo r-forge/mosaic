@@ -1,6 +1,7 @@
 mHypTest <-
 function(useF=FALSE){
-  if( !require(manipulate) ) stop("Must load manipulate package.")
+  if( !require(manipulate) ) 
+		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   maxeffect=10
   resid = 10 # just to avoid a missing value.  It's reset by the controller.
   controls = list()

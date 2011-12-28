@@ -1,7 +1,9 @@
 mPower <- function()  {
-  data=NULL
+  if( !require(manipulate) ) 
+		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+  data <- NULL
   #=================
-  myFun=function(mu=mu, sigma=sigma, n=n)
+  myFun <- function(mu=mu, sigma=sigma, n=n)
   { #set.seed(seed)
     samp <- rnorm(n,mean=mu,sd=sigma)
     mu0 <-5

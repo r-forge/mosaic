@@ -1,6 +1,8 @@
 mGrad = function(expr, ..., xlim = c(0,10), ylim = c(0,10)){
- if(!require(manipulate)) stop("Must use a manipulate-compatible version of R, e.g. RStudio")
- if (!require("mosaic")) stop("Must install mosaic package.")
+  if( !require(manipulate) ) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+  if ( !require("mosaic") ) 
+	 stop("Must install mosaic package.")
 
  vals = list(...)                #Take extra terms, make math function, set xy limits
  fun = mosaic:::.createMathFun(sexpr = substitute(expr), ...)

@@ -1,4 +1,6 @@
 mSIR=function(lwd=3, type='l', ...){
+  if( !require(manipulate) ) 
+		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   sir <- function(p=.1, ncontact=10, N=1000, births=0, gamma=.2, Iinit=1, ndays=100, dt=.1 ){
   npoints = ceiling( ndays/dt )
   S <- rep(0, npoints)

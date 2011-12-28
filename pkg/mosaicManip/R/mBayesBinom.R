@@ -1,5 +1,6 @@
 mBayesBinom=function(dat, ...){  
-  if( !require(manipulate)) stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+  if(!require(manipulate)) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   if (!require("mosaic")) stop("Must install mosaic package.")
   
   nthetapts=1000  #Resolution in theta for thetapts

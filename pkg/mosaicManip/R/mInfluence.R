@@ -3,7 +3,8 @@ mInfluence <- function(expr, data,
 					   groups=NULL, 
 					   col.fitted = 'gray30', 
 					   col.influence='red', ...){
-
+    if( !require(manipulate) ) 
+		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
 	dots <- list(...)
 	groups <- eval(substitute(groups), data, environment(expr))
 	if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")

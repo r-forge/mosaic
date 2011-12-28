@@ -1,4 +1,6 @@
 mGlassPattern = function(npts=3000,seed=NULL){
+  if( !require(manipulate) ) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   if(!is.null(seed)) set.seed(seed)
     xpts = runif(npts,min=-1.4,max=1.4)
     ypts = runif(npts,min=-1.4,max=1.4)

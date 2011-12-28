@@ -1,5 +1,9 @@
 mDensity=function(data=NULL){
-  if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
+  if(!require(manipulate)) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+  if (!require(lattice)) 
+	  stop("Missing packages.")
+
   #=================
   myFun=function(bandwidth, dist, trans, npts, ...){
     if(is.null(data)){

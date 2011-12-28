@@ -1,5 +1,7 @@
 mCIprop <- function(...){
-	if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
+  if(!require(manipulate)) 
+	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+	if (!require(lattice) | !require(grid)) stop("Missing packages.")
 	Wald=function(p.hat, n, conf.level, sd=sqrt(p.hat*(1-p.hat))){
 		error = (qnorm(.5+conf.level/2)*sd)/(sqrt(n))
 		return(list(lower = p.hat-error, upper = p.hat+error))

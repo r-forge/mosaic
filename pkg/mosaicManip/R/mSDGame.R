@@ -2,7 +2,8 @@
 #Unif, t, F, CHI^2, normal, exponential, beta? MY CHOICE, random.
 
 mSDGame=function(){
-  if (!require(manipulate) | !require(lattice) | !require(grid)) stop("Must have manipulate package.")
+  if( !require(manipulate) ) 
+		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   dist.col = rgb(1,0,0,1) #red
   guess.col=rgb(0,0,1,1) #blue
   actual.col = rgb(0,1,0,1) #green

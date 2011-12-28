@@ -1,5 +1,6 @@
 mHist=function(data=NULL){
-  if (!require(manipulate) | !require(lattice)) stop("Must have manipulate package.")
+  if( !require(manipulate) ) 
+		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   newCol=rgb(0,.2,.8,.6)
   oldCol=rgb(.9,.9,0,.3)
   .iter=0

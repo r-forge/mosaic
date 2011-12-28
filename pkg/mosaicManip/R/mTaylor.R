@@ -1,7 +1,7 @@
 mTaylor <- function(expr, xlim = c(-5, 5), ...){
 	# packages
-	if (!require("manipulate")) stop("Must run in a manipulate compatible system, e.g. RStudio")
-	if (!require("mosaic")) stop("Must install mosaic package.")
+    if( !require(manipulate) ) 
+		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
 	# functions
 	vals <- list(...)
 	fm <- mosaic:::.createMathFun( sexpr=substitute(expr), ...)
