@@ -39,9 +39,7 @@ Andrew Rich (\email{andrew.joseph.rich@gmail.com}) and Daniel Kaplan (\email{kap
 }
 
 \examples{
-\dontrun{
-data(Kidsfeet)
-mFit(width ~ length, data=Kidsfeet)
-}
+data(KidsFeet)
+mFit(width ~ length, data=KidsFeet)
 }
 \keyword{calculus}
