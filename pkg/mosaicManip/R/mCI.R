@@ -66,26 +66,31 @@ mCIprop <- function(...){
 
 mCIt <- function(...){
 	ESTIMAND = 10
+	pickerList <- list(
+	  list(rdist=rnorm, args=list(mean=ESTIMAND, sd=1)),
+	  list(rdist=rnorm, args=list(mean=ESTIMAND, sd=3)),
+	  list(rdist=rexp, args=list(rate=1/ESTIMAND)),
+	  list(rdist=rchisq, args=list(df=ESTIMAND))
+	  )
+	names(pickerList) <- c(
+						   paste("Norm(",ESTIMAND,",1)", sep=''), 
+						   paste("Norm(",ESTIMAND,",3)", sep=''), 
+						   paste("Exp(1/",ESTIMAND,")",sep=""),
+						   paste("Chisq(",ESTIMAND,")",sep="") 
+						   )
 	manipulate(
 	  xYplot( Cbind(estimate, lower, upper) ~ sample, 
 			 data=CIsim(n=N, samples=SAMPLES, rdist=DIST$rdist, estimand = ESTIMAND, args = DIST$args), 
 			 groups=cover, ylim=c(ESTIMAND-WIDTH,ESTIMAND+WIDTH),
 			 ylab="",
 			 panel = function(x,y,...) {
-				 panel.abline (h=ESTIMAND, col='red');
+				 panel.abline (h=ESTIMAND, col='gray50');
 				 panel.xYplot(x,y,...)
 			 }
 			 ),
 	  N=slider(1,200,initial=20, label="sample size"),
 	  SAMPLES = slider(1,200, initial=50, label="number of samples"),
-	  DIST = picker(
-					list(
-						 "Norm(10,1)" = list(rdist=rnorm, args=list(mean=10, sd=1)),
-						 "Norm(10,3)" = list(rdist=rnorm, args=list(mean=10, sd=3)),
-						 "Exp(1/10)" = list(rdist=rexp, args=list(rate=1/10)),
-						 "Chisq(10))" = list(rdist=rnorm, args=list(df=10))
-						 )
-	  ),
+	  DIST = picker(pickerList),
 	  WIDTH = slider(1,2*ESTIMAND, initial=round(ESTIMAND/2), step=ESTIMAND/40)
 	  )
 }
