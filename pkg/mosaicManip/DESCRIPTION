@@ -1,8 +1,8 @@
 Package: mosaicManip
 Type: Package
 Title: Project MOSAIC (mosaic-web.org) manipulate examples.  
-Version: 0.2-4
-Date: 2011-12-28
+Version: 0.2-6
+Date: 2011-12-29
 Depends: grid, lattice, Hmisc, methods, mosaic
 Suggests: MASS, manipulate
 Author: Andrew Rich <andrew.joseph.rich@gmail.com>, Daniel Kaplan <kaplan@macalester.edu>, Randall Pruim <rpruim@calvin.edu>
