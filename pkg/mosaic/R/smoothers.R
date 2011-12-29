@@ -49,9 +49,9 @@ interpolatingFunction <- function(formula, data, method="fmm",monotonic=FALSE,co
 }
 # ==============
 spliner <- function(formula, data,method="fmm",monotonic=FALSE) {
-  interpolating.function(formula, data, method=method, monotonic=monotonic)
+  interpolatingFunction(formula, data, method=method, monotonic=monotonic)
 }
 # ==============
 connector <- function(formula, data, method="linear") {
-  interpolating.function(formula, data, connect=TRUE)
+  interpolatingFunction(formula, data, connect=TRUE)
 }
