@@ -1,4 +1,4 @@
-mSIR=function(lwd=3, type='l', ...){
+mSIR <- function(lwd=3, type='l', ...){
   if( !require(manipulate) ) 
 		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   sir <- function(p=.1, ncontact=10, N=1000, births=0, gamma=.2, Iinit=1, ndays=100, dt=.1 ){
@@ -23,8 +23,8 @@ mSIR=function(lwd=3, type='l', ...){
 
   return( data.frame(S=S, I=I, R=R, t=t))
 }
-  myFun<-function(probInfect, nContact, duration, initialI, births){
-    dat<-sir(p=probInfect, ncontact=nContact, gamma=duration, Iinit=initialI, births=births)
+  myFun <- function(probInfect, nContact, duration, initialI, births){
+    dat <- sir(p=probInfect, ncontact=nContact, gamma=duration, Iinit=initialI, births=births)
     lattice::xyplot(S+I+R~t, data=dat, auto.key=list(points=FALSE, lines=TRUE, columns=3), lwd=lwd, type=type,
 		   ...)
   }

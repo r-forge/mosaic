@@ -1,4 +1,14 @@
-mEulerIntegrate = function(){
+mEulerIntegrate <- function() {
+	if( !require(manipulate) ) 
+		stop("Must use a manipulate-compatible version of R, e.g. RStudio")
+	tryCatch( .mEulerIntegrate.core(), 
+			 error=function(e){ 
+				 stop(paste(e,"Need newer version of RStudio", collapse="\n"))
+			 }
+	)
+}
+
+.mEulerIntegrate.core = function(){
   if( !require(manipulate) ) 
 	  stop("Must use a manipulate-compatible version of R, e.g. RStudio")
   # Built in dynamical functions
