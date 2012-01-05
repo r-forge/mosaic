@@ -16,7 +16,7 @@ function (sample, rdata, FUN, direction = NULL,
 	}
     dstat <- FUN(sample)
     cat("Test Stat function: ")
-	cat(deparse(substitute(FUN)))
+	  cat(deparse(substitute(FUN)))
     cat("\n\n")
     stats <- apply(rdata, direction, FUN)
     cat("\nTest Stat applied to sample data = ")
