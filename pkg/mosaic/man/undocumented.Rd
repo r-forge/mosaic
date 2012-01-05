@@ -1,11 +1,5 @@
 \name{undocumented}
 \docType{methods}
-\alias{adapt_seq}
-\alias{CIsim}
-\alias{latlon2xyz}
-\alias{xyz2latlon}
-\alias{rad2deg}
-\alias{deg2rad}
 \alias{statTally}
 \alias{mosaic.getOption}
 \alias{mosaic.options} 
