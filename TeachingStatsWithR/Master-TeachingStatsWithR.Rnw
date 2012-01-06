@@ -341,7 +341,7 @@ source('setup.R')
 
 \include{Chap-MoreExamples}
 
-\include{Chap-Calculus}
+\include{Chap-CalculusForStats}
 
 \appendix
 
