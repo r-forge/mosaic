@@ -9,7 +9,7 @@ RFILES = \
 	  Chap-Manipulate.R \
 	  Chap-SimulationBased.R \
 	  Chap-Core.R \
-	  Chap-Calculus.R \
+	  Chap-CalculusForStats.R \
 	  Chap-RIntro.R \
 	  Chap-MoreR.R \
 	  Chap-Internet.R \
@@ -25,7 +25,7 @@ TEXFILES = \
 	  Chap-ByHand.tex \
 	  Chap-MoreExamples.tex \
 	  Chap-Core.tex \
-	  Chap-Calculus.tex \
+	  Chap-CalculusForStats.tex \
 	  Chap-Misc.tex \
 	  Chap-Handouts.tex \
 	  Chap-RIntro.tex \
@@ -52,7 +52,7 @@ clean:
 	inputs/sfsect.sty inputs/USCOTS.bib
 	bin/knitr.sh -nc $(SWEAVEOPTS) $< 
 
-%.R: %.Rnw inputs/sfsect.sty inputs/USCOTS.bib
+%.R: %.Rnw 
 	bin/knitr.sh -t $(SWEAVEOPTS) $< 
 
 Master-TeachingStatsWithR.pdf: $(TEXFILES) 

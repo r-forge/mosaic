@@ -16,227 +16,102 @@ source('setup.R')
 @ 
 
 
-\chapter{Teaching Calculus (and Beyond) in R}
+\chapter{Teaching Statistics With Calculus and Linear Algebra}
 
-Perhaps you are thinking, ``Why a chapter about teaching
-calculus?''  Statisticians do one thing, mathematicians do
-another.  Indeed, the large majority of introductory statistics
-classes, including the AP statistics class, is taught without any
-mention of calculus-level mathematics.  As if to return the favor, a
-student taking almost any present-day calculus course will find little or no
-reason to think of a relationship to statistics.
+The traditional introductory statistics course does not presume that students know any calculus or linear 
+algebra.  But for courses where students have had (or will be learning) these mathematical tools, \R\ 
+provides the necessary computational tools.
 
-When it comes to software, hardly any calculus-level mathematics
-course is taught with R.  According to the Mathematical Association of
-America (MAA), in 2005, only about 50\% of university-level introductory
-calculus was taught using any computer technology at all, and most of
-that is graphing calculators.  When computers are used, the software
-is generally Mathematica or Maple or Sage (which, like R, is free) or sometimes MATLAB.  
+\section{Calculus in R}
 
-Indeed, if you want to teach calculus the way it is commonly taught,
-there seems to be little reason to consider R.  
+Most people familiar with \R\ assume that it provides no facilities for
+the central operations of calculus: differentiation and integration.
+While it is true that \R\ does not provide a comprehensive computer algebra system
+\authNote{Should we site the bit of symbolic stuff \R\ does have?}%
+capable of symbolic manipulations on a wide variety of functions and expressions,
+it does provide most of the calculus tools needed for work in statistics, including
 
-But do you really want to teach calculus the way it is commonly
-taught?  What do you hope to accomplish by teaching calculus and are you
-successfully accomplishing it using the present techniques?  A recent
-survey by the MAA 
-\cite{bressoud-launchings-May-2011}
-% http://maa.org/columns/launchings/launchings_05_11.html
-of students in introductory calculus in colleges and universities in the US indicates that at the start of the
-semester, 58\% of students expected to get an A and 94\%
- a B or higher.  At the end of the semester, 50\% had gotten a C or
- lower or withdrawn from the course. 
-The majority of students taking introductory calculus have career
-interests outside of the traditional calculus clients: engineering,
-the physical sciences, mathematics itself.  Fully 30\% of
-students surveyed had their main interest in the medical/biological
-sciences.  
-
-Now think about the people you know outside of mathematics or physics
-or engineering.  How many biology faculty have more than the vaguest
-reminiscence of the topics of calculus?  They may remember it,
-positively or negatively, but they don't use it.
-
-What scientists across the board do use is statistics.  This is true
-in almost every field: biological, physical, and social sciences.  And
-it turns out that calculus does have centrally important uses in even
-introductory statistics.  Or, rather, if introductory statistics
-students know some calculus --- certain essential parts of calculus, not the
-large majority of topics featured in almost all of today's courses --- they can develop a
-stronger understanding of statistics and a better ability to use it in practice.
-
-It's likely that the large majority of people reading this book have
-taken calculus at some point and so have a firm idea of what calculus
-is about.  Put aside for the moment what you happened to study in your
-course and think instead of what students might actually need to work
-effectively in a world of complicated systems and massive
-amounts of data. 
-
-What students need:
 \begin{itemize}
-  \item The idea of a function, especially functions of two or more variables.
-  \item An ability to visualize functional relationships graphically.
+	\item A way to define and evaluate functions, 
+		especially functions of two or more variables. [\function{function}]
+	\item An ability to visualize functional relationships graphically. [\function{plotFun}]
   \item A modeling strategy: how to approximate potentially complex
     relationships with simple-to-understand ones.
-  \item Derivatives, especially partial derivatives, to understand
-    relationships and partial relationships.
+  \item A way to (numerically) calculate derivatives (as functions), especially partial derivatives, to understand
+	  relationships and partial relationships. [\function{D}]
+  \item
+	  A way to perform (numerical) integration. [\function{antiD}, \function{integrate}]
+  \item
+	  A way to estimate the roots and extrema of functions. 
+	  [\function{uniroot}, \function{nlmax}, \function{nlmin}]
 \end{itemize}
 
-What they don't need:
-\begin{itemize}
-  \item Limits and formal definitions of continuity.
-  \item Most symbolic algorithms, e.g. elaborate applications of the
-    chain rule in differentiation or almost any symbolic integration.
-  \item A course that leads them to drop the study of mathematics
-    before they see the things that they do need.  
-\end{itemize}
 
-As evidence that this is not an eccentric view, we refer you to the
-MAA report on ``Curriculum Renewal across the First Two Years,'' which
-examined the relationship between mathematics and more than 20
-``partner'' disciplines: ranging from physics to engineering to business to
-biology.\cite{MAA-CRAFTY}
+%What they don't need:
+%\begin{itemize}
+%  \item Limits and formal definitions of continuity.
+%  \item Most symbolic algorithms, e.g. elaborate applications of the
+%    chain rule in differentiation or almost any symbolic integration.
+%\end{itemize}
 
-\authNote{Leave out this chapter for now?}
+%In fact, one can argue that this is the situation in calculus courses as well as in statistics courses.
+%As evidence that this is not an eccentric view, we refer you to the
+%MAA report on ``Curriculum Renewal across the First Two Years,'' which
+%examined the relationship between mathematics and more than 20
+%``partner'' disciplines: ranging from physics to engineering to business to
+%biology.\cite{MAA-CRAFTY}
 
-\section{Calculus}
 
-Most people familiar with R assume that it provides no facilities for
-the central operations of calculus: differentiation and integration.
-Nonsense.  What those people are thinking of is the way
-they learned calculus, where the technology for taking integrals and
-derivatives was based on rules for moving symbols,
-e.g., $\frac{d}{dx} x^n = n x^{n-1}$ or $\int \cos( a x ) dx =
-\frac{1}{a} \sin(a x)$.
+In this chapter we illustrate how to perform the needed operations listed above 
+in the context of statistical applications.
 
-Those rules, and the algebraic notation that underlies them,  seem to
-be so fundamental to people's conception of calculus that they forget
-that differentiation and integration are general operations that
-relate functions to one another, not rules for moving symbols.
 
-To illustrate, consider the following function, which we will call
-\texttt{decay} 
+\subsection{Defining Functions}
+Functions that are described by algebraic formulas are generally easy to describe in \R.  For example, 
+$f(x) = x (1-x)^2$ becomes
+<<def-fun1>>=
+f <- function(x) { x * (1-x)^2 }
+@
+New functions can be evaluated at one or several points just like built-in \R\ functions:
 <<>>=
-k = 0.1
-P = 4
-decay = function(t){ exp(-k*t)*sin(2*pi*t/P) }
-@ 
-Traditional notation is not so different: $e^{-kt} \sin(
-\frac{2\pi}{P} t)$.  
+f(1)
+f(-2:2)
+@
+and can be plotted using \function{plotFun}.
+<<error=TRUE>>=
+plotFun(f(x) ~ x, xlim=range(-1,2))
+@
 
+\subsection{Differentiation and Integration}
 
-With \R\, of course, you can evaluate the function at a given input or
-set of inputs:
+Perhaps we would like to use our function $f$ as the kernel of a distribution on in the interval 
+$[0,1]$.  First we determine the scaling constant involved.  We can use either \function{integrate}
+from the \pkg{stats} package or \function{antiD} from the \pkg{mosaic} pacakge.
 <<>>=
-decay(5)
-decay(1:5)
-@ 
-and you can plot it out over a in interval for the input:
-<<decay-plot,fig.show=hold,include=TRUE,height=3>>=
-curve( decay, 0, 20)
-@ 
-\SuggestionBox{We have a dream... of a better way to plot functions.
-But we're not quite there yet.  Suggestions (and offers to help) 
-appreciated.}%
-
-To find the derivative of this function, use the \function{D} operator:
-<<>>=n
-ddecay = D(decay)
-@ 
-
-Again, you can evaluate and plot such functions:
-<<decay-plot-deriv,fig.show=hold,include=TRUE,height=3>>=
-ddecay(4)
-curve( ddecay, 0, 20)
-@ 
-
-Integration is a little tricker, because there is  a ``constant of
-integration'' to be considers.  The \texttt{mosaic} \function{integral} operator
-let's you compute either a definite or indefinite integral.
-
-Here's an indefinite integral:
-<<decay-plot-integrate,fig.show=hold,include=TRUE,height=3>>=
-f = antiD(decay)
-curve(f, 0, 20)
-@ 
-Of course, there's not just a single indefinite integral.  There is
-the ``constant of integration.''  You can show this directly to students:
+integrate(f, 0, 1)
+integrate(f, 0, 1)$value  # just the value
+F <- antiD(f, from=0)     # returns a function
+F(1)                      # evaluate at 1
+@
+The \function{fractions} function in the \pkg{MASS} package can help identify whether
+decimals are approximating simple fractions.
 <<>>=
-f1 = antiD(decay, 1)
-f2 = antiD(decay, 3)
-f3 = antiD(decay, 6)
-@ 
-
-<<decay-plot-integrate,fig.show=hold,include=TRUE,height=3>>=
-curve(f1, 0, 20, col="red", ylab="Anti-derivs of decay")
-curve(f2, add=TRUE, col="blue")
-curve(f3, add=TRUE, col="green")
-@ 
-
-Each of \texttt{f1}, \texttt{f2}, etc. are functions, and
-like any other functions they have a derivative.  
+fractions(integrate(f, 0, 1)$value)
+fractions(F(1))
+@
+This shows that the scaling constant is $\Sexpr{1/F(1)}$.  Let's redefine $f$ so that it is a pdf:
 <<>>=
-df1 = D(f1)
-df2 = D(f2)
-df3 = D(f3)
-@ 
+f <- function(x) { 12 * x * (1-x)^2 * (x >= 0) * (x <= 1) }
+plotFun(f(x) ~ x, xlim=c(-0.5,1.5), ylim = c(-.5,2.5))
+@
 
-You can plot out these three functions and confirm that they are all
-the same, as you would expect: the derivative operation undoes the anti-derivative operation.
-
-\authNote{DTK: I have an integral function that lets you specify
-neither,  either or both of the endpoints, using \texttt{from} and
-\texttt{to} arguments that can be missing.  That works better for
-indefinite integrals.}
-
-
-
-To calculate a definite integral, you need to specify the boundaries
-of integration.  Currently, the syntax is unnatural.
-<<>>=
-antiD(decay, 140)(150)    
-@ 
-This constructs a particular antiderivative integrating from a lower
-bound of 140, and
-that evaluates that antiderivative at an upper bound of 150.
 
 \InstructorNote{There are different styles for dealing with parameters.}
 
-In this example with \texttt{decay}, we are using a style of defining the 
-parameters {\em outside} of the function itself.  That makes it easy to explore
-different parameter values; just change the assigned values of
-\texttt{P} and \texttt{k}.
-
-Another style is to create a function that itself constructs a function:
-<<>>=
-makeDecay = function(P=3,k=.8){ 
-  function(t){ exp(-k*t)*sin(2*pi*t/P) } 
-}
-@ 
-It's still unclear what are the relative merits of these different
-styles when it comes to teaching.  As the \texttt{mosaic} package
-develops, we'll try to support an effective style for handling parameters.
-
-\authNote{DTK: a generalization of the way curve does things might be
-  nice, so that everything that isn't one of the named variables in
-  the evaluation, plotting, differentiation, integration routines can
-  be assigned a particular numerical value in the function definition.}
-
-What might be troubling to those experienced with traditional ways of
-teaching integration and differentiation is that no formula is being
-given.  But the resulting function is still a function, and you can do
-with it what you need: evaluate it or plot it over an interval,
-differentiate it, integrate it, find where it takes on a specified value.
-
-Keep in mind that not all important functions have formulas that are
-readily interpretable.  Indeed, students learn a set of names for such
-functions and study their properties, rather than learning how to
-identify them from a formula.  The trigonometric functions, $\sin$,
-$\cos$, etc. are examples.
 
 Many important functions do not have integrals that can be expressed
-in terms of a simple formula.  For instance, the normal distribution
-$$ f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left( \frac{(x - mu)^2}{2  \sigma^2}\right) .$$
+in terms of a simple formula.  For instance, the normal pdf 
+$$ f(x) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left( \frac{(x - \mu)^2}{2  \sigma^2}\right) .$$
 
 We could, of course, write this out as the equivalent formula in \R,
 but the function is so important it already has a name in \R: \function{dnorm}.
@@ -247,7 +122,7 @@ f = function(x){dnorm(x, mean=3, sd=1.5) }
 @ 
 This $f$ is a particular member of the family of normal
 distributions.  Here is its cumulative function:
-<<norm-cumulative,fig.show=hold,include=TRUE,height=3>>=
+<<norm-cumulative,include=TRUE,fig.height=3>>=
 fcumulative = antiD(f,-Inf)
 curve(fcumulative, -2,10, lwd=4) # by integration
 curve( pnorm(x, mean=3, sd=1.5), add=TRUE, col="red") # the built-in
@@ -271,6 +146,3 @@ you can use functions generated by splining through data points.
 Showing how to introduce Linear Algebra by taking linear combinations
 of functions to fit a set of data.
 
-\section{Differential Equations}
-
-Showing dynamics in one variable and two, e.g., the phase plane.
