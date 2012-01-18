@@ -11,7 +11,7 @@ submit a set of jobs to an Apple Xgrid, letting the grid deal with scheduling an
 xgrid(grid = "localhost", numsim = 20, ntask = 1, 
   indir = "input", outdir = "output", param = 1, 
   Rcmd = "runjob.R", auth = "None", outfile = "RESULTS.rda", 
-  suffix = "RESULT", throttle = 20, sleeptime = 5, verbose = FALSE)
+  suffix = "RESULT", throttle = 9999, sleeptime = 5, verbose = FALSE)
 }
 
 \arguments{
@@ -46,7 +46,8 @@ directory to return output created by the remote job
 file suffix to use to name individual job results files
 }
   \item{throttle}{
-maximum number of jobs to run at one time (default = 20)
+maximum number of jobs to run at one time (default = 9999), to avoid being greedy
+on a shared Xgrid
 }
   \item{sleeptime}{
 number of seconds to sleep after checking for completion of a remote job (default = 1 second)

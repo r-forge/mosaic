@@ -4,7 +4,7 @@
 
 xgrid = function(grid="localhost", numsim=20, ntask=1, 
    indir="input", outdir="output", param=1, Rcmd="runjob.R", auth="None", 
-   outfile="RESULTS.rda", suffix="RESULT", throttle=20, sleeptime=5, 
+   outfile="RESULTS.rda", suffix="RESULT", throttle=9999, sleeptime=5, 
    verbose=FALSE) {
    # submit a group of jobs to the Xgrid, letting the grid deal with 
    # scheduling and load balancing
@@ -106,14 +106,14 @@ xgrid = function(grid="localhost", numsim=20, ntask=1,
    }
    # load first file (which consists of a data frame called "res0") 
    # then rename it
-   load(paste(outdir, "/", suffix, "-", jobidentifier[1], sep=""))
+   readRDS(paste(outdir, "/", suffix, "-", jobidentifier[1], sep=""))
    res = res0
    # now load up the rest of the files
    for (i in 2:length(jobidentifier)) {
-     load(paste(outdir, "/", suffix, "-", jobidentifier[i], sep=""))
+     readRDS(paste(outdir, "/", suffix, "-", jobidentifier[i], sep=""))
      res[((i-1)*ntask+1):(((i-1)*ntask+1)+ntask-1),] = res0
    }
-   save(res, file=outfile)
+   saveRDS(res, file=outfile)
    return(res)
 }
 
