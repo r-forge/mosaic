@@ -106,11 +106,10 @@ xgrid = function(grid="localhost", numsim=20, ntask=1,
    }
    # load first file (which consists of a data frame called "res0") 
    # then rename it
-   readRDS(paste(outdir, "/", suffix, "-", jobidentifier[1], sep=""))
-   res = res0
+   res = readRDS(paste(outdir, "/", suffix, "-", jobidentifier[1], sep=""))
    # now load up the rest of the files
    for (i in 2:length(jobidentifier)) {
-     readRDS(paste(outdir, "/", suffix, "-", jobidentifier[i], sep=""))
+     res0 = readRDS(paste(outdir, "/", suffix, "-", jobidentifier[i], sep=""))
      res[((i-1)*ntask+1):(((i-1)*ntask+1)+ntask-1),] = res0
    }
    saveRDS(res, file=outfile)
