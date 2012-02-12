@@ -4,7 +4,7 @@
 
 xgrid = function(grid="localhost", numsim=20, ntask=1, 
    indir="input", outdir="output", param=1, Rcmd="runjob.R", auth="None", 
-   outfile="RESULTS.rda", suffix="RESULT", throttle=9999, sleeptime=5, 
+   outfile="RESULTS.rda", prefix="RESULT", throttle=9999, sleeptime=5, 
    verbose=FALSE) {
    # submit a group of jobs to the Xgrid, letting the grid deal with 
    # scheduling and load balancing
@@ -15,7 +15,7 @@ xgrid = function(grid="localhost", numsim=20, ntask=1,
    # Rcmd is the name of the R command to run on the agent
    # auth is the type of authorization ("Kerberos", "Password" or "None")
    # outfile is the filename to store results once collated
-   # suffix is the suffix to prepend to the individual job results
+   # prefix is the string to prepend to the name of the file for individual job results
    # throttle is the maximum number of jobs to queue at any time
    # sleeptime is the number of seconds to wait between status requests
    # verbose controls whether to display xgrid commands
@@ -56,7 +56,7 @@ xgrid = function(grid="localhost", numsim=20, ntask=1,
    # first start to load up the grid
    while (length(activejobs) < throttle & length(pendingjobs) > 0) {
       activejobs = c(activejobs, xgridsubmit(grid, auth, indir, Rcmd, 
-         ntask, param, paste(suffix, "-", pendingjobs[1], sep=""), 
+         ntask, param, paste(prefix, "-", pendingjobs[1], sep=""), 
          verbose))
       pendingjobs = pendingjobs[-1]
    }
@@ -72,7 +72,7 @@ xgrid = function(grid="localhost", numsim=20, ntask=1,
          xgriddelete(grid, auth, activejobs[whichjob], verbose)
          activejobs = activejobs[-whichjob]
          activejobs = c(activejobs, xgridsubmit(grid, auth, indir, Rcmd, 
-            ntask, param, paste(suffix, "-", pendingjobs[1], sep=""), 
+            ntask, param, paste(prefix, "-", pendingjobs[1], sep=""), 
             verbose))  
          pendingjobs = pendingjobs[-1]
       } else {
@@ -106,10 +106,10 @@ xgrid = function(grid="localhost", numsim=20, ntask=1,
    }
    # load first file (which consists of a data frame called "res0") 
    # then rename it
-   res = readRDS(paste(outdir, "/", suffix, "-", jobidentifier[1], sep=""))
+   res = readRDS(paste(outdir, "/", prefix, "-", jobidentifier[1], sep=""))
    # now load up the rest of the files
    for (i in 2:length(jobidentifier)) {
-     res0 = readRDS(paste(outdir, "/", suffix, "-", jobidentifier[i], sep=""))
+     res0 = readRDS(paste(outdir, "/", prefix, "-", jobidentifier[i], sep=""))
      res[((i-1)*ntask+1):(((i-1)*ntask+1)+ntask-1),] = res0
    }
    saveRDS(res, file=outfile)
