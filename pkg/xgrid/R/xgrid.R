@@ -125,25 +125,33 @@ xgriddelete = function(grid, auth, jobnum, verbose=FALSE) {
    retval = system(command, intern=TRUE)
 }
 
-xgridresults = function(grid, auth, jobnum, outdir, verbose=FALSE) {
-   command = paste("xgrid -h ", grid, " -auth ",auth, 
-      " -job results -so job.out -se job.err -out ", outdir," -id ", 
-      jobnum, sep="")
-   if (verbose==TRUE) {
-      cat(command, "\n")
-   }
-   retval = system(command, intern=TRUE)
+xgridresults = function (grid, auth, jobnum, outdir, verbose = FALSE) {
+  command = paste("xgrid -h ", grid, " -auth ", auth, 
+    " -job results -so job.out -se job.err -out ", 
+    outdir, " -id ", jobnum, sep = "")
+  if (verbose == TRUE) { cat(command, "\n") }
+  retval = system(command, intern = TRUE)
+  if (max(grepl("error =", retval)) == 1) { # something bad happened?  
+    stop("Ack: controller inaccessible! Seek help immediately.")
+  } 
+  else { return(retval) }
 }
+
 	
-xgridattr = function(grid, auth, jobnum, verbose=FALSE) {
-   command = paste("xgrid -h ", grid, " -auth ", auth, 
-      " -job attributes -id ", jobnum, sep="")
-   if (verbose==TRUE) {
-      cat(command, "\n")
-   }
-   retval = system(command, intern=TRUE)
-   return(statusline = retval[grep('jobStatus', retval)])
+xgridattr = function (grid, auth, jobnum, verbose = FALSE) {
+  command = paste("xgrid -h ", grid, " -auth ", auth, " -job attributes -id ", 
+    jobnum, sep = "")
+  if (verbose == TRUE) {
+    cat(command, "\n")
+  }
+  retval = system(command, intern = TRUE)
+  if (max(grepl("error =", retval)) == 1) { 
+  # something bad happened? check later
+    if (verbose == TRUE) { cat("unable to check on job.\n") }
+    return(statusline = "Unknown")
+  } else { return(statusline = retval[grep("jobStatus", retval)]) }
 }
+
 
 xgridsubmit = function(grid, auth, indir, Rcmd, ntask, param, 
    resfile, verbose=FALSE) {

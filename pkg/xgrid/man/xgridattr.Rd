@@ -31,7 +31,8 @@ verbose output (default = FALSE)
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-Returns a character string with the job status.
+Returns a character string with the job status (typical values include
+"Finished", "Failed", or "Unknown").
 }
 \references{
 %% ~put references to the literature/web site here ~
