@@ -39,20 +39,11 @@ filename to use to save results from the remote job
 verbose output (default = FALSE)
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{
 Returns an integer representing the Apple Xgrid job identifier.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
 \author{
 Nicholas Horton (\email{nhorton@smith.edu})
-}
-\note{
-%%  ~~further notes~~
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

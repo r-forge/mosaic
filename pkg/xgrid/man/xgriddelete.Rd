@@ -27,20 +27,11 @@ verbose output (default = FALSE)
 
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{
 None.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
 \author{
 Nicholas Horton (\email{nhorton@smith.edu})
-}
-\note{
-%%  ~~further notes~~
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
