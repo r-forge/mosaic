@@ -38,6 +38,8 @@ R script file within the \code{input} directory to be run by the remote agent
 }
   \item{auth}{
 authorization to use to access the grid: options are "None" (default), "Kerberos" or "Password"
+(if "Password" then the environment variable \code{XGRID_CONTROLLER_PASSWORD} should contain 
+the password)
 }
   \item{outfile}{
 directory to return output created by the remote job
@@ -92,7 +94,7 @@ is provided.  This requires that packages are installed into the \code{input} di
 \code{lib.loc} option to \code{library} by the remote job.
 
 Larger values of \code{sleeptime} may lead to longer job latency upon completion, but will 
-provide less of a load on the network.
+provide less of a load on the grid.
 }
 
 \seealso{
