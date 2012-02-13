@@ -38,7 +38,7 @@ R script file within the \code{input} directory to be run by the remote agent
 }
   \item{auth}{
 authorization to use to access the grid: options are "None" (default), "Kerberos" or "Password"
-(if "Password" then the environment variable \code{XGRID_CONTROLLER_PASSWORD} should contain 
+(if "Password" then the environment variable \env{XGRID_CONTROLLER_PASSWORD} should contain 
 the password)
 }
   \item{outfile}{
