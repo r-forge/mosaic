@@ -10,7 +10,7 @@ submit a set of jobs to an Apple Xgrid, letting the grid deal with scheduling an
 \usage{
 xgrid(grid = "localhost", numsim = 20, ntask = 1, 
   indir = "input", outdir = "output", param = 1, 
-  Rcmd = "runjob.R", auth = "None", outfile = "RESULTS.rda", 
+  Rcmd = "runjob.R", auth = "None", outfile = "RESULTS.rds", 
   prefix = "RESULT", throttle = 9999, sleeptime = 5, verbose = FALSE)
 }
 
