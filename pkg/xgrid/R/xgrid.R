@@ -20,6 +20,10 @@ xgrid <- function(grid = "localhost", numsim = 20, ntask = 1,
    # sleeptime is the number of seconds to wait between status requests
    # verbose controls whether to display xgrid commands
 
+   # setting location of add-on packages
+   old.R_LIBS = Sys.getenv("R_LIBS")
+   Sys.setenv(R_LIBS = paste(getwd(), "/input/rlibs", sep = ""))
+  
    numberofjobs <- floor(numsim / ntask)    
 
    if (verbose == TRUE) {
@@ -99,6 +103,9 @@ xgrid <- function(grid = "localhost", numsim = 20, ntask = 1,
          Sys.sleep(sleeptime) 
       }
    }
+   
+   # reset value
+   Sys.setenv(R_LIBS = old.R_LIBS)
       
    # start to collate results
    if (verbose == TRUE) {
@@ -112,7 +119,7 @@ xgrid <- function(grid = "localhost", numsim = 20, ntask = 1,
      res0 <- readRDS(paste(outdir, "/", prefix, "-", jobidentifier[i], sep = ""))
      res[((i-1) * ntask + 1) : (((i - 1) * ntask + 1) + ntask - 1), ] <- res0
    }
-   saveRDS(res, file=outfile)
+   saveRDS(res, file = outfile)
    return(res)
 }
 

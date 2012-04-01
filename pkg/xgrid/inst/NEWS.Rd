@@ -2,7 +2,8 @@
 \title{NEWS file for the xgrid package}
 \section{Changes in version 0.2}{
   \itemize{
-    \item XX
+    \item Modified code to adapt to style conventions
+    \item Simplified interface for arguments and libraries
   }
 }
 \section{Changes in version 0.1}{
