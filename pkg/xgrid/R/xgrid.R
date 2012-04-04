@@ -20,10 +20,6 @@ xgrid <- function(grid = "localhost", numsim = 20, ntask = 1,
    # sleeptime is the number of seconds to wait between status requests
    # verbose controls whether to display xgrid commands
 
-   # setting location of add-on packages
-   old.R_LIBS = Sys.getenv("R_LIBS")
-   Sys.setenv(R_LIBS = paste(getwd(), "/input/rlibs", sep = ""))
-  
    numberofjobs <- floor(numsim / ntask)    
 
    if (verbose == TRUE) {
@@ -103,9 +99,6 @@ xgrid <- function(grid = "localhost", numsim = 20, ntask = 1,
          Sys.sleep(sleeptime) 
       }
    }
-   
-   # reset value
-   Sys.setenv(R_LIBS = old.R_LIBS)
       
    # start to collate results
    if (verbose == TRUE) {
@@ -136,12 +129,12 @@ xgridresults <- function (grid, auth, jobnum, outdir, verbose = FALSE) {
     outdir, " -id ", jobnum, sep = "")
   if (verbose == TRUE) { cat(command, "\n") }
   retval <- system(command, intern = TRUE)
-  cat(retval) # for debugging
-  cat(grepl("error =", retval)) # for debugging
-  if (max(grepl("error =", retval)) == 1) { # something bad happened?  
-    stop("Ack: controller inaccessible! Seek help immediately.")
-  } 
-  else { return(retval) }
+  if (length(retval)) {
+    if (max(grepl("error =", retval)) == 1) { # something bad happened?  
+      stop("Ack: controller inaccessible! Seek help immediately.")
+    }
+  }
+  return(retval) 
 }
 
 	
@@ -150,11 +143,14 @@ xgridattr <- function (grid, auth, jobnum, verbose = FALSE) {
     " -job attributes -id ", jobnum, sep = "")
   if (verbose == TRUE) { cat(command, "\n") }
   retval <- system(command, intern = TRUE)
-  if (max(grepl("error =", retval)) == 1) { 
-    # something bad happened? check later
-    if (verbose == TRUE) { cat("unable to check on job.\n") }
-    return(statusline <- "Unknown")
-  } else { return(statusline <- retval[grep("jobStatus", retval)]) }
+  if (length(retval)) {
+    if (max(grepl("error =", retval)) == 1) { 
+      # something bad happened? check later
+      if (verbose == TRUE) { cat("unable to check on job.\n") }
+      return(statusline <- "Unknown")
+    }
+  } 
+  return(statusline <- retval[grep("jobStatus", retval)]) 
 }
 
 
