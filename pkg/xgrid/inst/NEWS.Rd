@@ -4,6 +4,8 @@
   \itemize{
     \item Modified code to adapt to style conventions
     \item Simplified interface for arguments and libraries
+    \item Updated vignettes
+    \item Fixed warnings when calling grep()
   }
 }
 \section{Changes in version 0.1}{
