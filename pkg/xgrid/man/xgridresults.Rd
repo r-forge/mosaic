@@ -2,11 +2,10 @@
 \alias{xgridresults}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-retrieve job results
+Retrieve Job Results
 }
 \description{
-
-retrieve results from a completed job on an Apple Xgrid
+Retrieve results from a completed job on an Apple Xgrid.
 }
 \usage{
 xgridresults(grid, auth, jobnum, outdir, verbose = FALSE)

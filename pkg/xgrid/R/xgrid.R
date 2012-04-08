@@ -1,6 +1,5 @@
 # functions to help start, track, and grab results from an Xgrid using R
 # Nicholas Horton, nhorton@smith.edu
-# $Id: xgrid.R,v 1.11 2011/07/07 19:17:20 nhorton Exp $
 
 xgrid <- function(grid = "localhost", numsim = 20, ntask = 1, 
   indir = "input", outdir = "output", param = 1, Rcmd = "runjob.R", 

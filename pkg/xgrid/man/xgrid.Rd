@@ -2,10 +2,10 @@
 \alias{xgrid}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-submit a set of jobs to an Apple Xgrid
+Submit a Set of Jobs to an Apple Xgrid
 }
 \description{
-submit a set of jobs to an Apple Xgrid, letting the grid deal with scheduling and load balancing
+Submit a set of jobs to an Apple Xgrid, letting the grid deal with scheduling and load balancing.
 }
 \usage{
 xgrid(grid = "localhost", numsim = 20, ntask = 1, 

@@ -2,11 +2,10 @@
 \alias{xgridattr}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-check job status
+Check Job Status
 }
 \description{
-check the status of a job running on an Apple Xgrid
-
+Check the status of a job running on an Apple Xgrid.
 }
 \usage{
 xgridattr(grid, auth, jobnum, verbose = FALSE)

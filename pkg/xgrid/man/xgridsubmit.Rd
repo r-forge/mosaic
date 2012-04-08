@@ -2,10 +2,10 @@
 \alias{xgridsubmit}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-submit a job
+Submit a Job
 }
 \description{
-submit a job to an Apple Xgrid
+Submit a job to an Apple Xgrid.
 }
 \usage{
 xgridsubmit(grid, auth, indir, Rcmd, ntask, param, resfile, verbose = FALSE)

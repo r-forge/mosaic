@@ -2,10 +2,10 @@
 \alias{xgriddelete}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-delete job
+Delete Job
 }
 \description{
-delete a completed job that was running on an Apple Xgrid
+Delete a completed job that was running on an Apple Xgrid.
 }
 \usage{
 xgriddelete(grid, auth, jobnum, verbose = FALSE)
