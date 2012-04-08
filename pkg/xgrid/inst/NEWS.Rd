@@ -1,5 +1,11 @@
 \name{NEWS}
 \title{NEWS file for the xgrid package}
+\section{Changes in version 1.0}{
+  \itemize{ 
+    \item Updated CITATION to reference R Journal manuscript
+    \item Updated vignettes with references and minor typos
+  }
+}
 \section{Changes in version 0.2}{
   \itemize{
     \item Modified code to adapt to style conventions
