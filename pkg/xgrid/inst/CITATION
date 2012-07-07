@@ -1,0 +1,20 @@
+citHeader("To cite package 'xgrid' in publications use:")
+     
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste("R package version", meta$Version)
+     
+citEntry(entry="article",
+  title = "Xgrid and R: Parallel Distributed Processing Using Heterogeneous Groups of Apple Computers",
+  author = personList(as.person("Sarah C. Anoke"),
+    as.person("Yuting Zhao"),
+    as.person("Rafael Jaeger"),
+    as.person("Nicholas J. Horton")),
+  year = 2012,
+  journal = "R Journal",
+  volume = 4,
+  number = 1,
+  pages = "45--55",
+  month = "June",
+  url = "http://journal.r-project.org/archive/2012-1/RJournal_2012-1_Anoke~et~al.pdf",
+  textVersion = "Sarah C. Anoke, Yuting Zhao, Rafael Jaeger and Nicholas J. Horton (2012).  Xgrid and R: Parallel Distributed Processing Using Heterogeneous Groups of Apple Computers, R Journal, 4(1):45-55, http://journal.r-project.org/archive/2012-1/RJournal_2012-1_Anoke~et~al.pdf."
+)

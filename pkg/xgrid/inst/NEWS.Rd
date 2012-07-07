@@ -2,7 +2,7 @@
 \title{NEWS file for the xgrid package}
 \section{Changes in version 1.0}{
   \itemize{ 
-    \item Updated CITATION to reference R Journal manuscript
+    \item Updated CITATION to reference published R Journal paper
     \item Updated vignettes with references and minor typos
   }
 }
